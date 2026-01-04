@@ -132,8 +132,7 @@
         <p class="muted">Calm, focused reading. No ads. No distractions.</p>
       </div>
 
-      <div class="hero-logo">
-        <!-- Replace with your real logo image later -->
+      <div class="hero-logo" aria-label="KnowStride logo">
         <img class="logo-img" src="/assets/logo.png" alt="KnowStride logo" loading="eager" />
       </div>
 
@@ -185,7 +184,7 @@
           <span class="tag">Balanced by design</span>
         </div>
 
-        <!-- 6 example article headlines (agreed list 4–9) -->
+        <!-- 6 example article headlines -->
         <div class="teaser-card">
           <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
           <p>A defining settlement—often mentioned, rarely understood clearly.</p>
@@ -253,12 +252,18 @@
           <div class="plan-price">$2.99</div>
         </button>
 
-        <button class="plan" data-plan="yearly">
+        <!-- Yearly: now also an Offer (14.99) with struck 19.99 -->
+        <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
           <div class="plan-title">Yearly</div>
-          <div class="plan-price">$19.99</div>
+          <div class="plan-price">
+            <div class="price-row">
+              <span class="price-now">$14.99</span>
+              <span class="price-was">$19.99</span>
+            </div>
+          </div>
         </button>
 
-        <!-- New Year offer plan: show discounted + regular price -->
+        <!-- 3 Years offer -->
         <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
           <div class="plan-title">3 Years</div>
           <div class="plan-price">
