@@ -1,6 +1,7 @@
 function getPlanFromUrl() {
   const u = new URL(window.location.href);
-  return u.searchParams.get("plan") || "yearly";
+  // Viktigt: INGEN default här. Om inget plan valts ska det vara null.
+  return u.searchParams.get("plan"); // null om saknas
 }
 
 function planLabel(plan) {
@@ -14,7 +15,7 @@ function planLabel(plan) {
   return map[plan] || plan;
 }
 
-async function api(path, method="GET", body) {
+async function api(path, method = "GET", body) {
   const opts = { method, headers: {} };
   if (body) {
     opts.headers["Content-Type"] = "application/json";
@@ -28,19 +29,45 @@ async function api(path, method="GET", body) {
   return data;
 }
 
-const plan = getPlanFromUrl();
-document.getElementById("selectedPlanLabel").textContent = planLabel(plan);
+const plan = getPlanFromUrl(); // null om ingen ?plan=
+const selectedPlanLabelEl = document.getElementById("selectedPlanLabel");
+
+// Visa plantext bara om plan finns
+if (plan) {
+  selectedPlanLabelEl.textContent = planLabel(plan);
+} else {
+  selectedPlanLabelEl.textContent = ""; // eller "No plan selected"
+}
+
+// Centralt: en funktion som bestämmer vad vi ska visa
+async function showCorrectViewAfterAuth() {
+  // Om man har valt plan: visa checkout
+  if (plan) {
+    document.getElementById("authBox").style.display = "none";
+    document.getElementById("checkoutBox").style.display = "block";
+    document.getElementById("libraryBox").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    return;
+  }
+
+  // Om inget plan valts: visa bibliotek
+  document.getElementById("authBox").style.display = "none";
+  document.getElementById("checkoutBox").style.display = "none";
+  document.getElementById("logoutBtn").style.display = "inline-block";
+  await loadLibrary();
+}
 
 async function refreshMe() {
   try {
     const me = await api("/api/me");
     if (me?.loggedIn) {
-      document.getElementById("authBox").style.display = "none";
-      document.getElementById("checkoutBox").style.display = "block";
-      document.getElementById("logoutBtn").style.display = "inline-block";
+      // Inloggad: visa rätt vy beroende på om plan finns eller inte
+      await showCorrectViewAfterAuth();
       return true;
     }
   } catch {}
+
+  // Inte inloggad: visa auth, göm resten
   document.getElementById("authBox").style.display = "block";
   document.getElementById("checkoutBox").style.display = "none";
   document.getElementById("libraryBox").style.display = "none";
@@ -50,14 +77,25 @@ async function refreshMe() {
 
 async function loadLibrary() {
   const data = await api("/api/library");
-  document.getElementById("checkoutBox").style.display = "none";
+
   document.getElementById("libraryBox").style.display = "block";
+  document.getElementById("checkoutBox").style.display = "none";
 
   const meta = `Unlocked: ${data.unlockedCount} of ${data.totalBlocksAvailable} • Retention: ${data.retention}`;
   document.getElementById("libraryMeta").textContent = meta;
 
   const list = document.getElementById("blocksList");
   list.innerHTML = "";
+
+  // Om inget upplåst: visa hjälprad istället för tom lista
+  if (!data.blocks || data.blocks.length === 0) {
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.textContent = "Your library is empty. Choose a plan to unlock Block 1.";
+    list.appendChild(p);
+    return;
+  }
+
   data.blocks.forEach(b => {
     const btn = document.createElement("button");
     btn.className = "blockbtn";
@@ -78,10 +116,11 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   const password = fd.get("password");
   const msg = document.getElementById("authMsg");
   msg.textContent = "Creating account...";
+
   try {
     await api("/api/signup", "POST", { email, password });
     msg.textContent = "Account created. Proceeding…";
-    await refreshMe();
+    await refreshMe(); // kommer nu visa checkout om plan finns annars library
   } catch (err) {
     msg.textContent = err.message;
   }
@@ -94,10 +133,11 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const password = fd.get("password");
   const msg = document.getElementById("authMsg");
   msg.textContent = "Logging in...";
+
   try {
     await api("/api/login", "POST", { email, password });
     msg.textContent = "Logged in. Proceeding…";
-    await refreshMe();
+    await refreshMe(); // kommer nu visa checkout om plan finns annars library
   } catch (err) {
     msg.textContent = err.message;
   }
@@ -110,6 +150,13 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 
 document.getElementById("checkoutBtn").addEventListener("click", async () => {
   const msg = document.getElementById("checkoutMsg");
+
+  // Skydd: om någon lyckas komma hit utan plan
+  if (!plan) {
+    msg.textContent = "No plan selected. Go back and choose a plan.";
+    return;
+  }
+
   msg.textContent = "Creating Stripe checkout…";
   try {
     const out = await api("/api/create-checkout-session", "POST", { plan });
@@ -120,9 +167,5 @@ document.getElementById("checkoutBtn").addEventListener("click", async () => {
 });
 
 (async () => {
-  const loggedIn = await refreshMe();
-  if (loggedIn) {
-    // Optional: if user already paid, you can go straight to library.
-    // For MVP we show checkout box first; after successful payment Stripe will redirect back and then library loads.
-  }
+  await refreshMe();
 })();
