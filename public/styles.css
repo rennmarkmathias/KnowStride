@@ -10,6 +10,11 @@
 }
 
 *{ box-sizing:border-box; }
+
+html, body{
+  overflow-x: hidden;
+}
+
 body{
   margin:0;
   background: var(--bg);
@@ -17,6 +22,8 @@ body{
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   line-height:1.55;
 }
+
+/* ================= TOP BAR ================= */
 
 .topbar{
   max-width: var(--max);
@@ -28,8 +35,37 @@ body{
   gap:12px;
 }
 
-.brand{ font-weight:800; letter-spacing:.2px; }
-.toplink{ text-decoration:none; color:inherit; border:1px solid var(--line); padding:10px 12px; border-radius:999px; background:#fff; }
+.brand{
+  font-weight:800;
+  letter-spacing:.2px;
+}
+
+.topnav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.toplink{
+  text-decoration:none;
+  color:inherit;
+  border:1px solid var(--line);
+  padding:10px 12px;
+  border-radius:999px;
+  background:#fff;
+}
+
+.toplink.secondary{
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.18);
+}
+
+.toplink.secondary:hover{
+  border-color: rgba(0,0,0,0.30);
+  transform: translateY(-1px);
+}
+
+/* ================= LAYOUT ================= */
 
 .container{
   max-width: var(--max);
@@ -46,6 +82,11 @@ body{
   margin: 16px 0;
 }
 
+.muted{ color: var(--muted); }
+.small{ font-size: 0.95rem; }
+
+/* ================= HERO ================= */
+
 .hero{
   display:grid;
   grid-template-columns: 1fr 320px 1fr;
@@ -54,22 +95,43 @@ body{
   padding: 18px 0;
 }
 
-.hero-col h1{ margin:0 0 8px; font-size: 28px; }
-.hero-col h2{ margin:0 0 8px; font-size: 20px; }
-
-.logo-placeholder{
-  border:1px dashed var(--line);
-  border-radius: var(--radius);
-  height: 220px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color: var(--muted);
-  background:#fff;
+.hero-col h1{
+  margin:0 0 8px;
+  font-size: clamp(2.0rem, 4.2vw, 3.0rem);
+  line-height: 1.08;
 }
 
-.muted{ color: var(--muted); }
-.small{ font-size: 0.95rem; }
+.hero-col h2{
+  margin:0 0 8px;
+  font-size: clamp(1.15rem, 2.4vw, 1.35rem);
+  line-height: 1.18;
+}
+
+/* ================= HERO LOGO ================= */
+
+.hero-logo{
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+  padding: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img{
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  max-height: 60vh;      /* desktop cap */
+  object-fit: contain;   /* show entire image */
+  display: block;
+  border-radius: 12px;
+}
+
+/* ================= CONTENT GRIDS ================= */
 
 .collage-grid{
   display:grid;
@@ -77,6 +139,7 @@ body{
   gap: 10px;
   margin-top: 10px;
 }
+
 .tile{
   border:1px solid var(--line);
   border-radius: 12px;
@@ -92,6 +155,7 @@ body{
   gap: 10px;
   margin-top: 10px;
 }
+
 .plan{
   border:1px solid var(--line);
   border-radius: 14px;
@@ -100,19 +164,19 @@ body{
   text-align:left;
   cursor:pointer;
 }
+
 .plan.best{
   border-width: 2px;
 }
-.badge{
-  display:inline-block;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 999px;
-  border:1px solid var(--line);
-  margin-bottom: 6px;
+
+.plan-title{
+  font-weight: 800;
 }
-.plan-title{ font-weight: 800; }
-.plan-price{ color: var(--muted); margin-top: 6px; }
+
+.plan-price{
+  color: var(--muted);
+  margin-top: 6px;
+}
 
 .grid2{
   display:grid;
@@ -120,7 +184,15 @@ body{
   gap: 16px;
 }
 
-label{ display:block; font-size: 0.9rem; margin-top: 10px; color: var(--muted); }
+/* ================= FORMS / BUTTONS ================= */
+
+label{
+  display:block;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
 input{
   width:100%;
   padding: 10px 12px;
@@ -128,6 +200,7 @@ input{
   border:1px solid var(--line);
   margin-top: 6px;
 }
+
 button{
   margin-top: 12px;
   padding: 10px 12px;
@@ -138,12 +211,15 @@ button{
   font-weight: 650;
 }
 
+/* ================= READER ================= */
+
 .blocks{
   display:flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
+
 .blockbtn{
   border-radius: 999px;
   padding: 10px 12px;
@@ -157,32 +233,59 @@ button{
   background:#fff;
 }
 
+/* ================= MOBILE / TABLET ================= */
+
 @media (max-width: 900px){
-  .hero{ grid-template-columns: 1fr; }
-  .plans{ grid-template-columns: 1fr; }
-  .collage-grid{ grid-template-columns: 1fr; }
-  .grid2{ grid-template-columns: 1fr; }
+
+  .hero{
+    grid-template-columns: 1fr;
+  }
+
+  .plans{
+    grid-template-columns: 1fr;
+  }
+
+  .collage-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .grid2{
+    grid-template-columns: 1fr;
+  }
+
+  /* Top bar wraps cleanly */
+  .topbar{
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .topnav{
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Logo: smaller on mobile so content below is visible */
+  .logo-img{
+    max-height: 45vh;
+  }
 }
 
+/* ================= LEGAL ================= */
 
-.topnav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.toplink.secondary{
-  opacity:0.95;
-  background: transparent;
-  border: 1px solid rgba(0,0,0,0.18);
-  color: var(--ink);
-}
-.toplink.secondary:hover{
-  border-color: rgba(0,0,0,0.30);
-  transform: translateY(-1px);
+.legal{
+  margin-top: 3rem;
+  padding: 1.25rem 0 2.25rem;
+  border-top: 1px solid rgba(0,0,0,.08);
 }
 
+.legal-inner{
+  max-width: 920px;
+  margin: 0 auto;
+}
 
-/* Legal sections (anchor jump targets) */
-.legal{ margin-top: 3rem; padding: 1.25rem 0 2.25rem; border-top: 1px solid rgba(0,0,0,.08); }
-.legal-inner{ max-width: 920px; margin: 0 auto; }
-.legal h3{ margin: 1.25rem 0 .5rem; font-size: 1.05rem; }
+.legal h3{
+  margin: 1.25rem 0 .5rem;
+  font-size: 1.05rem;
+}
