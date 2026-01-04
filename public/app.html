@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnowStride — Library</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Back</a>
+    <div class="brand">KnowStride</div>
+    <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
+  </header>
+
+  <main class="container">
+    <section id="authBox" class="card">
+      <h1 id="authTitle">Create account</h1>
+      <p class="muted">After signup/login, you’ll proceed directly to checkout for your selected plan.</p>
+
+      <div class="grid2">
+        <div>
+          <h2>Create account</h2>
+          <form id="signupForm">
+            <label>Email</label>
+            <input name="email" type="email" required />
+            <label>Password</label>
+            <input name="password" type="password" required minlength="8" />
+            <button type="submit">Create account</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>Log in</h2>
+          <form id="loginForm">
+            <label>Email</label>
+            <input name="email" type="email" required />
+            <label>Password</label>
+            <input name="password" type="password" required />
+            <button type="submit">Log in</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="authMsg" class="muted"></div>
+    </section>
+
+    <section id="checkoutBox" class="card" style="display:none;">
+      <h1>Checkout</h1>
+      <p class="muted">Selected plan: <strong id="selectedPlanLabel"></strong></p>
+      <button id="checkoutBtn">Continue to secure Stripe checkout</button>
+      <div id="checkoutMsg" class="muted"></div>
+    </section>
+
+    <section id="libraryBox" class="card" style="display:none;">
+      <h1>Your library</h1>
+      <p class="muted">You can access your most recent 52 blocks.</p>
+
+      <div id="libraryMeta" class="muted"></div>
+      <div id="blocksList" class="blocks"></div>
+
+      <hr />
+      <div id="reader" class="reader"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

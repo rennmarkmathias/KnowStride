@@ -1,0 +1,3 @@
+Place your weekly block HTML files here.
+Naming: knowstride1.html, knowstride2.html, ...
+Update manifest.json 'latest' to the highest block number you have uploaded.
