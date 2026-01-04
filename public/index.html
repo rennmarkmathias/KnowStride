@@ -16,15 +16,20 @@
       flex-wrap:wrap;
       justify-content:center;
     }
+
+    /* ✅ DISCOUNTED PRICE (red, emphasized) */
     .plan-price .price-now{
-      font-weight:700;
+      font-weight:800;
+      color:#b00020;
     }
+
+    /* ✅ REGULAR PRICE (grey, struck through) */
     .plan-price .price-was{
       text-decoration:line-through;
-      color:#b00020;
-      opacity:.85;
-      font-weight:600;
+      color:rgba(0,0,0,.55);
+      font-weight:650;
     }
+
     .plan.offer{
       position:relative;
       border-width:2px;
@@ -112,6 +117,7 @@
     .footer a{ text-decoration: underline; }
   </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">KnowStride</div>
@@ -146,99 +152,6 @@
       </div>
     </section>
 
-    <!-- Teasers / previews (edit text here anytime) -->
-    <section class="teasers" aria-label="Teasers">
-      <h2>What you get</h2>
-      <p class="muted">
-        One weekly block, designed for steady progress—serious, calm, and surprisingly addictive over time.
-      </p>
-
-      <div class="teasers-grid">
-        <!-- 3 informative teasers -->
-        <div class="teaser-card">
-          <h3>Build solid general knowledge over time</h3>
-          <p>
-            Each weekly block corresponds to about <strong>50 book pages</strong> (≈15,000 words) — roughly one to one-and-a-half hours of focused reading.
-            The pace is deliberate, allowing knowledge to accumulate naturally over time.
-            Each block combines engaging articles with subjects that may seem less exciting at first, but are <strong>essential to understanding how the world works</strong>.
-          </p>
-          <span class="tag">≈ 1–1.5 hours / week</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Short on time? Read the summaries</h3>
-          <p>
-            Every article includes a clear summary. Reading only the summaries takes about <strong>15 minutes</strong>,
-            making it easy to stay oriented even during busy weeks, without losing the broader context.
-          </p>
-          <span class="tag">Summaries-only: ≈ 15 minutes</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Designed to open new horizons</h3>
-          <p>
-            KnowStride is built to expand perspective, connect ideas across subjects, and inspire further reading —
-            without noise, hype, or endless scrolling.
-            Alongside engaging topics, every block includes material that rewards patience and attention.
-          </p>
-          <span class="tag">Balanced by design</span>
-        </div>
-
-        <!-- 6 example article headlines -->
-        <div class="teaser-card">
-          <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
-          <p>A defining settlement—often mentioned, rarely understood clearly.</p>
-          <span class="tag">Example headline</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
-          <p>Everyday technology with deep historical and economic consequences.</p>
-          <span class="tag">Example headline</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
-          <p>Serious ideas, explained plainly—without academic fog.</p>
-          <span class="tag">Example headline</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
-          <p>One of those “boring but essential” topics that makes headlines readable.</p>
-          <span class="tag">Essential topic</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
-          <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
-          <span class="tag">Essential topic</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>The Kalashnikov: How One Design Shaped Global Conflict and Politics</h3>
-          <p>Not “weapons trivia”—a story of design, production, and geopolitical impact.</p>
-          <span class="tag">Example headline</span>
-        </div>
-      </div>
-
-      <p class="note">Tip: you can edit these teaser cards directly in this file anytime.</p>
-    </section>
-
-    <section class="how">
-      <h2>How it works</h2>
-      <ol>
-        <li>Create an account (email + password).</li>
-        <li>Choose a plan. You receive <strong>Block 1 immediately</strong>.</li>
-        <li>Your next block unlocks <strong>exactly one week after your signup time</strong> (individual schedule).</li>
-        <li>Blocks and articles are numbered for easy orientation.</li>
-      </ol>
-
-      <p class="muted">
-        Access includes your <strong>most recent 52 blocks</strong> (about one year).
-      </p>
-    </section>
-
     <section class="pricing" id="pricing">
       <h2>New Year offer</h2>
       <p class="muted">
@@ -252,8 +165,7 @@
           <div class="plan-price">$2.99</div>
         </button>
 
-        <!-- Yearly: now also an Offer (14.99) with struck 19.99 -->
-        <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
+        <button class="plan offer" data-plan="yearly">
           <div class="plan-title">Yearly</div>
           <div class="plan-price">
             <div class="price-row">
@@ -263,8 +175,7 @@
           </div>
         </button>
 
-        <!-- 3 Years offer -->
-        <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
+        <button class="plan offer" data-plan="3y">
           <div class="plan-title">3 Years</div>
           <div class="plan-price">
             <div class="price-row">
@@ -291,60 +202,10 @@
       </p>
     </section>
 
-    <section class="trust">
-      <h2>Trust & positioning</h2>
-      <ul>
-        <li>Completely ad-free</li>
-        <li>Neutral international English</li>
-        <li>Designed for long-term learning</li>
-        <li><strong>First two years:</strong> across the first two years, each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects, including standalone articles on history and geography.</li>
-      </ul>
-    </section>
-
-    <!-- Terms + Privacy (one-page, minimal, collapsible) -->
-    <section class="legal" id="legal" aria-label="Terms and Privacy">
-      <h2>Terms & Privacy</h2>
-      <p class="muted">Short and readable. Click to expand.</p>
-
-      <details id="terms">
-        <summary>Terms</summary>
-        <div class="legal-body">
-          <p><strong>No binding period.</strong> You can cancel anytime. Access remains active until the end of your paid period.</p>
-          <ul>
-            <li>Subscriptions provide personal, non-transferable access to KnowStride content while active.</li>
-            <li>Payments are processed securely via Stripe. We do not store full payment card details.</li>
-            <li>All content is for personal use. Copying, redistribution, or resale is not permitted.</li>
-            <li>We may update features and pricing over time. Changes apply to future purchases/renewals.</li>
-          </ul>
-          <p>Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
-      </details>
-
-      <details id="privacy">
-        <summary>Privacy</summary>
-        <div class="legal-body">
-          <p>We collect only what’s needed to run the service.</p>
-          <ul>
-            <li><strong>Account data:</strong> email and a securely stored password hash.</li>
-            <li><strong>Payments:</strong> handled by Stripe; we receive confirmation of payment status.</li>
-            <li><strong>Service use:</strong> basic technical logs may be kept for security and reliability.</li>
-          </ul>
-          <p>We do not sell personal data. For requests or questions, contact <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
-      </details>
-    </section>
-
     <footer class="footer">
       <div>All content © KnowStride</div>
       <div class="muted">
-        Customer support: <a href="mailto:service@knowstride.com">service@knowstride.com</a> (response within 24 business hours).
-      </div>
-      <div class="muted">
-        <span>Secure checkout via Stripe.</span>
-        &nbsp;·&nbsp;
-        <a href="#terms">Terms</a>
-        &nbsp;·&nbsp;
-        <a href="#privacy">Privacy</a>
+        Customer support: <a href="mailto:service@knowstride.com">service@knowstride.com</a>
       </div>
     </footer>
   </main>
