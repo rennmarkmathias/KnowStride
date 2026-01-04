@@ -1,8 +1,9 @@
 {
-  "name": "knowstride-functions",
+  "name": "knowstride",
   "private": true,
-  "type": "module",
   "dependencies": {
     "stripe": "^14.0.0"
   }
 }
+
+
