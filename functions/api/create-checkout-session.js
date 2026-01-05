@@ -14,22 +14,20 @@ export async function onRequestPost({ request, env }) {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" });
   const origin = new URL(request.url).origin;
 
-  const isSub = isRecurring(plan);
+  const isSub = plan === "monthly" || plan === "yearly";
 
   const session = await stripe.checkout.sessions.create({
     mode: isSub ? "subscription" : "payment",
     line_items: [{ price: priceId, quantity: 1 }],
 
-    // (Du ville ev. ta bort rabattkod-snack – då tar vi även bort allow_promotion_codes)
+    // Ingen promo-code om du vill hålla det städat
     // allow_promotion_codes: true,
 
-    // Viktigt: efter success ska man INTE landa på checkout-läget igen
     success_url: `${origin}/app.html?success=1`,
     cancel_url: `${origin}/app.html?canceled=1&plan=${encodeURIComponent(plan)}`,
 
     metadata: { user_id: auth.userId, plan },
 
-    // Kritisk för renewals: metadata på subscription-nivå också
     ...(isSub
       ? {
           subscription_data: {
@@ -40,10 +38,6 @@ export async function onRequestPost({ request, env }) {
   });
 
   return json({ url: session.url }, 200);
-}
-
-function isRecurring(plan) {
-  return plan === "monthly" || plan === "yearly";
 }
 
 function getPriceId(plan, env) {
