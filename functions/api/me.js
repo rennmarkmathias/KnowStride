@@ -27,7 +27,6 @@ async function readAuth(request, env) {
   const ok = await verifyHmacBase64Url(data, sig, env.JWT_SECRET);
   if (!ok) return null;
 
-  // b är base64url, så vi måste decode base64url
   let payload;
   try {
     payload = JSON.parse(base64UrlDecodeToString(b));
@@ -39,10 +38,6 @@ async function readAuth(request, env) {
 }
 
 // ---------- Base64url helpers ----------
-function base64UrlEncodeFromBinaryString(binStr) {
-  return btoa(binStr).replace(/=+$/,"").replace(/\+/g,"-").replace(/\//g,"_");
-}
-
 function base64UrlToBase64(b64url) {
   let s = b64url.replace(/-/g, "+").replace(/_/g, "/");
   while (s.length % 4) s += "=";
