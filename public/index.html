@@ -16,15 +16,14 @@
       flex-wrap:wrap;
       justify-content:center;
     }
-    /* Nu-pris ska vara rött */
     .plan-price .price-now{
-      font-weight:800;
-      color:#b00020;
+      font-weight:700;
+      color:#b00020; /* NOW is red */
     }
-    /* Förr-pris ska vara struket och mer diskret */
     .plan-price .price-was{
       text-decoration:line-through;
-      color:rgba(0,0,0,.55);
+      color:#666;     /* WAS is gray */
+      opacity:.85;
       font-weight:600;
     }
     .plan.offer{
@@ -41,7 +40,7 @@
       border-radius:999px;
       background:rgba(176,0,32,.10);
       color:#b00020;
-      font-weight:800;
+      font-weight:700;
     }
 
     /* Teasers (simple, thinner frames) */
@@ -82,6 +81,15 @@
       opacity: .78;
     }
 
+    /* Callout */
+    .callout{
+      margin-top: 12px;
+      border: 1px solid rgba(0,0,0,.14);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.55);
+    }
+
     /* Terms/Privacy area (compact + collapsible) */
     .legal{
       margin-top: 2.2rem;
@@ -96,7 +104,7 @@
     }
     .legal summary{
       cursor:pointer;
-      font-weight: 800;
+      font-weight: 700;
       list-style: none;
     }
     .legal summary::-webkit-details-marker{ display:none; }
@@ -114,7 +122,6 @@
     .footer a{ text-decoration: underline; }
   </style>
 </head>
-
 <body>
   <header class="topbar">
     <div class="brand">KnowStride</div>
@@ -130,9 +137,7 @@
         <h1>Curated knowledge, one week at a time.</h1>
         <p>
           KnowStride delivers <strong>one carefully curated reading block per week</strong>.
-          Each block contains <strong>12 articles</strong> across world history, geography,
-          countries, science, culture, technology, key ideas, and significant historical and
-          contemporary figures — designed to build real general knowledge over time.
+          Each block contains <strong>12 articles</strong> across world history, geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures — designed to build real general knowledge over time.
         </p>
         <p class="muted">Calm, focused reading. No ads. No distractions.</p>
       </div>
@@ -158,7 +163,14 @@
         One weekly block, designed for steady progress—serious, calm, and surprisingly addictive over time.
       </p>
 
+      <div class="callout">
+        <p style="margin:0; line-height:1.45;">
+          <strong>First two years:</strong> across the first two years, each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects, including standalone articles on history and geography.
+        </p>
+      </div>
+
       <div class="teasers-grid">
+        <!-- 3 informative teasers -->
         <div class="teaser-card">
           <h3>Build solid general knowledge over time</h3>
           <p>
@@ -188,44 +200,37 @@
           <span class="tag">Balanced by design</span>
         </div>
 
+        <!-- 6 example article headlines (no tags underneath) -->
         <div class="teaser-card">
           <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
           <p>A defining settlement—often mentioned, rarely understood clearly.</p>
-          <span class="tag">Example headline</span>
         </div>
 
         <div class="teaser-card">
           <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
           <p>Everyday technology with deep historical and economic consequences.</p>
-          <span class="tag">Example headline</span>
         </div>
 
         <div class="teaser-card">
           <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
           <p>Serious ideas, explained plainly—without academic fog.</p>
-          <span class="tag">Example headline</span>
         </div>
 
         <div class="teaser-card">
           <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
           <p>One of those “boring but essential” topics that makes headlines readable.</p>
-          <span class="tag">Essential topic</span>
         </div>
 
         <div class="teaser-card">
           <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
           <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
-          <span class="tag">Essential topic</span>
         </div>
 
         <div class="teaser-card">
           <h3>The Kalashnikov: How One Design Shaped Global Conflict and Politics</h3>
           <p>Not “weapons trivia”—a story of design, production, and geopolitical impact.</p>
-          <span class="tag">Example headline</span>
         </div>
       </div>
-
-      <p class="note">Tip: you can edit these teaser cards directly in this file anytime.</p>
     </section>
 
     <section class="how">
@@ -245,9 +250,10 @@
     <section class="pricing" id="pricing">
       <h2>New Year offer</h2>
       <p class="muted">
-        Secure checkout via Stripe. Discount codes and gift codes supported.
+        Secure checkout via Stripe.
         <strong>Valid until January 18.</strong>
       </p>
+      <p class="muted"><strong>No binding period.</strong> Cancel anytime.</p>
 
       <div class="plans">
         <button class="plan" data-plan="monthly">
@@ -255,6 +261,7 @@
           <div class="plan-price">$2.99</div>
         </button>
 
+        <!-- Yearly: Offer (14.99) with struck 19.99 -->
         <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
           <div class="plan-title">Yearly</div>
           <div class="plan-price">
@@ -265,6 +272,7 @@
           </div>
         </button>
 
+        <!-- 3 Years offer -->
         <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
           <div class="plan-title">3 Years</div>
           <div class="plan-price">
@@ -302,6 +310,7 @@
       </ul>
     </section>
 
+    <!-- Terms + Privacy -->
     <section class="legal" id="legal" aria-label="Terms and Privacy">
       <h2>Terms & Privacy</h2>
       <p class="muted">Short and readable. Click to expand.</p>
