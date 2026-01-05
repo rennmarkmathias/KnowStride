@@ -1,4 +1,6 @@
 export async function onRequestGet({ env }) {
+  // Frontend behöver den publika Clerk-nyckeln för att kunna mounta UI:t.
+  // (Den här är OK att exponera.)
   return json({
     clerkPublishableKey: env.CLERK_PUBLISHABLE_KEY || "",
   });
