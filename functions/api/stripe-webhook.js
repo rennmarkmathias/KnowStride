@@ -1,16 +1,14 @@
 import Stripe from "stripe";
 
 /**
- * Stripe webhook for Cloudflare Pages / Workers (NO Buffer usage)
+ * Stripe webhook for Cloudflare Pages / Workers
+ * - Uses constructEventAsync (required with SubtleCrypto/WebCrypto)
+ * - No Buffer usage
  * Handles:
  * - checkout.session.completed
  * - invoice.payment_succeeded
  * - invoice.paid
  * - customer.subscription.deleted
- *
- * Writes:
- * - access(user_id, start_time, access_until, stripe_customer_id?, stripe_subscription_id?, plan?)
- * - purchases(id=event.id, user_id, stripe_event_id, stripe_session_id, plan, amount_total, currency, created_at)
  */
 
 export async function onRequestPost({ request, env }) {
@@ -22,12 +20,13 @@ export async function onRequestPost({ request, env }) {
   const sig = request.headers.get("stripe-signature");
   if (!sig) return new Response("Missing stripe-signature", { status: 400 });
 
-  // IMPORTANT: Use raw body EXACTLY (no JSON parsing)
+  // IMPORTANT: raw body exactly (no JSON parsing)
   const rawBody = await request.text();
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
+    // Cloudflare Workers: must use async variant
+    event = await stripe.webhooks.constructEventAsync(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     return new Response(`Webhook signature error: ${err?.message || String(err)}`, { status: 400 });
   }
@@ -38,7 +37,6 @@ export async function onRequestPost({ request, env }) {
         await handleCheckoutCompleted(stripe, event, env);
         break;
 
-      // Some accounts send one or the other depending on settings
       case "invoice.payment_succeeded":
       case "invoice.paid":
         await handleInvoicePaid(stripe, event, env);
@@ -49,7 +47,6 @@ export async function onRequestPost({ request, env }) {
         break;
 
       default:
-        // ignore
         break;
     }
   } catch (err) {
@@ -69,18 +66,12 @@ async function handleCheckoutCompleted(stripe, event, env) {
   if (!userId || !plan) return;
 
   const nowMs = Date.now();
-
-  // Compute initial access window
   const accessUntilMs = computeAccessUntilMs(plan, nowMs);
 
-  // Optional: store these if columns exist (see SQL step below)
   const stripeCustomerId = session.customer || null;
   const stripeSubscriptionId = session.subscription || null;
 
-  // 1) Upsert access
-  // - keep earliest start_time if already present
-  // - extend access_until if new is later
-  // - store customer/subscription/plan if columns exist
+  // Upsert access (tries extended schema, falls back to base)
   await upsertAccess(env, {
     userId,
     nowMs,
@@ -90,7 +81,7 @@ async function handleCheckoutCompleted(stripe, event, env) {
     plan,
   });
 
-  // 2) Log purchase event idempotently (purchases.id = event.id)
+  // Log purchase idempotently (purchases.id = event.id)
   const amountTotal = typeof session.amount_total === "number" ? session.amount_total : null;
   const currency = session.currency || null;
 
@@ -99,16 +90,7 @@ async function handleCheckoutCompleted(stripe, event, env) {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO NOTHING
   `)
-    .bind(
-      event.id,
-      userId,
-      event.id,
-      session.id,
-      plan,
-      amountTotal,
-      currency,
-      nowMs
-    )
+    .bind(event.id, userId, event.id, session.id, plan, amountTotal, currency, nowMs)
     .run();
 }
 
@@ -117,34 +99,26 @@ async function handleInvoicePaid(stripe, event, env) {
 
   const subId = invoice.subscription || null;
   const customerId = invoice.customer || null;
-
-  // If no subscription/customer, nothing to extend
   if (!subId && !customerId) return;
 
-  // We prefer subscription-based lookup
+  // Find user by stored subscription/customer ids (if columns exist)
   let row = null;
+  if (subId) row = await tryFindAccessBy(env, "stripe_subscription_id", subId);
+  if (!row && customerId) row = await tryFindAccessBy(env, "stripe_customer_id", customerId);
+  if (!row) return;
 
-  // Requires columns to exist (see SQL step)
-  if (subId) {
-    row = await tryFindAccessBy(env, "stripe_subscription_id", subId);
-  }
-  if (!row && customerId) {
-    row = await tryFindAccessBy(env, "stripe_customer_id", customerId);
-  }
-  if (!row) return; // can't map invoice -> user yet
-
-  // Best source of truth: subscription current_period_end
+  // Best: Stripe subscription current_period_end
   let newUntilMs = null;
   if (subId) {
     try {
       const sub = await stripe.subscriptions.retrieve(subId);
       if (sub?.current_period_end) newUntilMs = sub.current_period_end * 1000;
     } catch {
-      // ignore, fall back below
+      // fall back below
     }
   }
 
-  // Fallback: invoice line period end
+  // Fallback: invoice lines period end
   if (!newUntilMs) {
     const line = invoice?.lines?.data?.[0];
     const periodEnd = line?.period?.end;
@@ -153,7 +127,6 @@ async function handleInvoicePaid(stripe, event, env) {
 
   if (!newUntilMs) return;
 
-  // Update access_until only if later than existing
   await env.DB.prepare(`
     UPDATE access
     SET access_until = CASE
@@ -169,19 +142,22 @@ async function handleSubscriptionDeleted(event, env) {
   const subId = sub?.id;
   if (!subId) return;
 
-  // Optional: clear stored subscription id / plan (if columns exist)
-  // Do NOT reduce access_until — user keeps access until already paid end.
-  await tryUpdateAccessOnCancel(env, subId);
+  // Do not reduce access_until. Only clear linkage if columns exist.
+  try {
+    await env.DB.prepare(`
+      UPDATE access
+      SET stripe_subscription_id = NULL, plan = NULL
+      WHERE stripe_subscription_id = ?
+    `).bind(subId).run();
+  } catch {
+    // ignore if columns don't exist
+  }
 }
 
 /* ---------------- DB helpers ---------------- */
 
 async function upsertAccess(env, { userId, nowMs, accessUntilMs, stripeCustomerId, stripeSubscriptionId, plan }) {
-  // We don’t know if optional columns exist; try “extended” write first, else fallback to base schema.
-  // Base schema: access(user_id, start_time, access_until)
-  // Extended schema (recommended): + stripe_customer_id, stripe_subscription_id, plan
-
-  // Attempt extended upsert
+  // Try extended schema first
   try {
     await env.DB.prepare(`
       INSERT INTO access (user_id, start_time, access_until, stripe_customer_id, stripe_subscription_id, plan)
@@ -198,7 +174,7 @@ async function upsertAccess(env, { userId, nowMs, accessUntilMs, stripeCustomerI
     // fall back below
   }
 
-  // Fallback (base schema)
+  // Base schema fallback
   await env.DB.prepare(`
     INSERT INTO access (user_id, start_time, access_until)
     VALUES (?, ?, ?)
@@ -217,28 +193,14 @@ async function tryFindAccessBy(env, col, val) {
   }
 }
 
-async function tryUpdateAccessOnCancel(env, subId) {
-  try {
-    await env.DB.prepare(`
-      UPDATE access
-      SET stripe_subscription_id = NULL, plan = NULL
-      WHERE stripe_subscription_id = ?
-    `).bind(subId).run();
-  } catch {
-    // ignore if columns don't exist
-  }
-}
-
 /* ---------------- Plan durations ---------------- */
 
 function computeAccessUntilMs(plan, nowMs) {
   const day = 24 * 60 * 60 * 1000;
 
-  // recurring: set initial window; renewal extends via invoice events
   if (plan === "monthly") return nowMs + 31 * day;
   if (plan === "yearly") return nowMs + 366 * day;
 
-  // one-time longer plans
   if (plan === "3y") return nowMs + 3 * 366 * day;
   if (plan === "6y") return nowMs + 6 * 366 * day;
   if (plan === "9y") return nowMs + 9 * 366 * day;
