@@ -1,19 +1,30 @@
-function getPlanFromUrl() {
-  const u = new URL(window.location.href);
-  // Viktigt: INGEN default här. Om inget plan valts ska det vara null.
-  return u.searchParams.get("plan"); // null om saknas
-}
-
 function planLabel(plan) {
   const map = {
     monthly: "Monthly ($2.99)",
-    yearly: "Yearly ($19.99)",
-    "3y": "3 Years ($29.99)",
+    yearly: "Yearly ($14.99)",
+    "3y": "3 Years ($24.99)",
     "6y": "6 Years ($39.99)",
     "9y": "9 Years ($49.99)",
   };
   return map[plan] || plan;
 }
+
+function getParams() {
+  const u = new URL(window.location.href);
+  return {
+    plan: u.searchParams.get("plan"),
+    success: u.searchParams.get("success") === "1",
+    canceled: u.searchParams.get("canceled") === "1",
+  };
+}
+
+function replaceUrlWithoutParams(keys) {
+  const u = new URL(window.location.href);
+  keys.forEach(k => u.searchParams.delete(k));
+  window.history.replaceState({}, "", u.toString());
+}
+
+let clerkToken = null;
 
 async function api(path, method = "GET", body) {
   const opts = { method, headers: {} };
@@ -21,151 +32,183 @@ async function api(path, method = "GET", body) {
     opts.headers["Content-Type"] = "application/json";
     opts.body = JSON.stringify(body);
   }
+  if (clerkToken) {
+    opts.headers["Authorization"] = `Bearer ${clerkToken}`;
+  }
   const res = await fetch(path, opts);
   const txt = await res.text();
-  let data = null;
+  let data;
   try { data = JSON.parse(txt); } catch { data = { raw: txt }; }
   if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
   return data;
 }
 
-const plan = getPlanFromUrl(); // null om ingen ?plan=
-const selectedPlanLabelEl = document.getElementById("selectedPlanLabel");
+/* ---------------- Clerk loader ---------------- */
 
-// Visa plantext bara om plan finns
-if (plan) {
-  selectedPlanLabelEl.textContent = planLabel(plan);
-} else {
-  selectedPlanLabelEl.textContent = ""; // eller "No plan selected"
+async function loadClerk() {
+  const cfg = await fetch("/api/config").then(r => r.json());
+  const pk = cfg?.clerkPublishableKey;
+  if (!pk) throw new Error("Missing CLERK_PUBLISHABLE_KEY on server.");
+
+  await new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://js.clerk.com/v4/clerk.browser.js";
+    s.setAttribute("data-clerk-publishable-key", pk);
+    s.onload = resolve;
+    s.onerror = () => reject(new Error("Failed to load Clerk script."));
+    document.head.appendChild(s);
+  });
+
+  await window.Clerk.load();
+  return window.Clerk;
 }
 
-// Centralt: en funktion som bestämmer vad vi ska visa
-async function showCorrectViewAfterAuth() {
-  // Om man har valt plan: visa checkout
-  if (plan) {
-    document.getElementById("authBox").style.display = "none";
-    document.getElementById("checkoutBox").style.display = "block";
-    document.getElementById("libraryBox").style.display = "none";
-    document.getElementById("logoutBtn").style.display = "inline-block";
-    return;
-  }
+/* ---------------- UI helpers ---------------- */
 
-  // Om inget plan valts: visa bibliotek
-  document.getElementById("authBox").style.display = "none";
-  document.getElementById("checkoutBox").style.display = "none";
-  document.getElementById("logoutBtn").style.display = "inline-block";
-  await loadLibrary();
+function show(id, on) {
+  document.getElementById(id).style.display = on ? "block" : "none";
 }
 
-async function refreshMe() {
-  try {
-    const me = await api("/api/me");
-    if (me?.loggedIn) {
-      // Inloggad: visa rätt vy beroende på om plan finns eller inte
-      await showCorrectViewAfterAuth();
-      return true;
-    }
-  } catch {}
-
-  // Inte inloggad: visa auth, göm resten
-  document.getElementById("authBox").style.display = "block";
-  document.getElementById("checkoutBox").style.display = "none";
-  document.getElementById("libraryBox").style.display = "none";
-  document.getElementById("logoutBtn").style.display = "none";
-  return false;
+function setLogoutVisible(on) {
+  document.getElementById("logoutBtn").style.display = on ? "inline-block" : "none";
 }
 
-async function loadLibrary() {
-  const data = await api("/api/library");
+async function renderLibrary() {
+  show("authBox", false);
+  show("checkoutBox", false);
+  show("libraryBox", true);
+  setLogoutVisible(true);
 
-  document.getElementById("libraryBox").style.display = "block";
-  document.getElementById("checkoutBox").style.display = "none";
-
-  const meta = `Unlocked: ${data.unlockedCount} of ${data.totalBlocksAvailable} • Retention: ${data.retention}`;
-  document.getElementById("libraryMeta").textContent = meta;
-
+  const meta = document.getElementById("libraryMeta");
   const list = document.getElementById("blocksList");
-  list.innerHTML = "";
+  const reader = document.getElementById("reader");
 
-  // Om inget upplåst: visa hjälprad istället för tom lista
-  if (!data.blocks || data.blocks.length === 0) {
-    const p = document.createElement("p");
-    p.className = "muted";
-    p.textContent = "Your library is empty. Choose a plan to unlock Block 1.";
-    list.appendChild(p);
+  meta.textContent = "Loading…";
+  list.innerHTML = "";
+  reader.innerHTML = "";
+
+  const lib = await api("/api/library");
+
+  if (!lib.hasPaid) {
+    meta.textContent = "Your library is empty. Choose a plan to unlock Block 1.";
     return;
   }
 
-  data.blocks.forEach(b => {
+  meta.textContent = `Unlocked: ${lib.blocks.length} • Retention: ${lib.retention} • Access until: ${new Date(lib.accessUntil).toLocaleString()}`;
+
+  lib.blocks.forEach(b => {
     const btn = document.createElement("button");
-    btn.className = "blockbtn";
+    btn.className = "blockBtn";
     btn.textContent = `Block ${b.number}`;
     btn.addEventListener("click", async () => {
-      const out = await api(`/api/library?block=${b.number}`);
-      document.getElementById("reader").innerHTML = out.html;
-      window.scrollTo({ top: document.getElementById("reader").offsetTop - 20, behavior: "smooth" });
+      const data = await api(`/api/library?block=${b.number}`);
+      reader.innerHTML = data.html;
+      reader.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     list.appendChild(btn);
   });
 }
 
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const fd = new FormData(e.target);
-  const email = fd.get("email");
-  const password = fd.get("password");
-  const msg = document.getElementById("authMsg");
-  msg.textContent = "Creating account...";
+async function renderCheckout(plan) {
+  show("authBox", false);
+  show("checkoutBox", true);
+  show("libraryBox", false);
+  setLogoutVisible(true);
 
-  try {
-    await api("/api/signup", "POST", { email, password });
-    msg.textContent = "Account created. Proceeding…";
-    await refreshMe(); // kommer nu visa checkout om plan finns annars library
-  } catch (err) {
-    msg.textContent = err.message;
-  }
-});
+  document.getElementById("selectedPlanLabel").textContent = planLabel(plan);
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const fd = new FormData(e.target);
-  const email = fd.get("email");
-  const password = fd.get("password");
-  const msg = document.getElementById("authMsg");
-  msg.textContent = "Logging in...";
-
-  try {
-    await api("/api/login", "POST", { email, password });
-    msg.textContent = "Logged in. Proceeding…";
-    await refreshMe(); // kommer nu visa checkout om plan finns annars library
-  } catch (err) {
-    msg.textContent = err.message;
-  }
-});
-
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  await api("/api/logout", "POST");
-  window.location.href = "/";
-});
-
-document.getElementById("checkoutBtn").addEventListener("click", async () => {
   const msg = document.getElementById("checkoutMsg");
+  msg.textContent = "";
 
-  // Skydd: om någon lyckas komma hit utan plan
-  if (!plan) {
-    msg.textContent = "No plan selected. Go back and choose a plan.";
+  document.getElementById("checkoutBtn").onclick = async () => {
+    try {
+      msg.textContent = "Opening Stripe…";
+      const r = await api("/api/create-checkout-session", "POST", { plan });
+      window.location.href = r.url;
+    } catch (e) {
+      msg.textContent = e.message;
+    }
+  };
+}
+
+async function ensureToken(Clerk) {
+  if (!Clerk.session) return null;
+  clerkToken = await Clerk.session.getToken();
+  return clerkToken;
+}
+
+async function pollUntilAccess(maxMs = 30000) {
+  const start = Date.now();
+  const meta = document.getElementById("libraryMeta");
+
+  while (Date.now() - start < maxMs) {
+    const lib = await api("/api/library");
+    if (lib.hasPaid) return true;
+    meta.textContent = "Thanks! Activating your access… (this can take a few seconds)";
+    await new Promise(r => setTimeout(r, 2000));
+  }
+  meta.textContent = "Payment received, but access is still pending. Please refresh in a minute or contact support.";
+  return false;
+}
+
+/* ---------------- Boot ---------------- */
+
+(async function main() {
+  const authMsg = document.getElementById("authMsg");
+  const { plan, success, canceled } = getParams();
+
+  const Clerk = await loadClerk();
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await Clerk.signOut();
+    clerkToken = null;
+    window.location.href = "/app.html";
+  });
+
+  if (!Clerk.user) {
+    // Not signed in => show Clerk sign-in
+    show("authBox", true);
+    show("checkoutBox", false);
+    show("libraryBox", false);
+    setLogoutVisible(false);
+
+    authMsg.textContent = "";
+
+    Clerk.mountSignIn(document.getElementById("clerkMount"), {
+      // Efter inlogg: tillbaka hit (behåll plan-param om du kom från pricing)
+      redirectUrl: plan ? `/app.html?plan=${encodeURIComponent(plan)}` : "/app.html",
+      signUpUrl: plan ? `/app.html?plan=${encodeURIComponent(plan)}#signup` : "/app.html#signup",
+    });
+
     return;
   }
 
-  msg.textContent = "Creating Stripe checkout…";
-  try {
-    const out = await api("/api/create-checkout-session", "POST", { plan });
-    window.location.href = out.url;
-  } catch (err) {
-    msg.textContent = err.message;
-  }
-});
+  // Signed in => get token
+  await ensureToken(Clerk);
 
-(async () => {
-  await refreshMe();
+  // Success: gå direkt till library + poll tills webhooken satt access
+  if (success) {
+    // städa URL så det inte ser konstigt ut
+    replaceUrlWithoutParams(["success", "plan"]);
+    await renderLibrary();
+    await pollUntilAccess();
+    await renderLibrary();
+    return;
+  }
+
+  // Cancel: visa checkout igen om plan fanns
+  if (canceled && plan) {
+    // ta bort canceled-flaggan så sidan känns normal
+    replaceUrlWithoutParams(["canceled"]);
+    await renderCheckout(plan);
+    return;
+  }
+
+  // Normal: plan => checkout, annars => library
+  if (plan) {
+    await renderCheckout(plan);
+  } else {
+    await renderLibrary();
+  }
 })();
