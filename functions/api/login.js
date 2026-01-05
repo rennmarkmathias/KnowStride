@@ -55,14 +55,12 @@ async function hashPassword(password, salt) {
   const data = enc.encode(`${salt}:${password}`);
   const digest = await crypto.subtle.digest("SHA-256", data);
   return [...new Uint8Array(digest)]
-    .map(b => b.toString(16).padStart(2, "0"))
+    .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 }
 
 // ---------- JWT: base64url everywhere ----------
 function base64UrlEncode(str) {
-  // input: normal string -> utf8 bytes -> binary string -> base64url
-  // (för JSON header/body är detta OK)
   return btoa(str).replace(/=+$/,"").replace(/\+/g,"-").replace(/\//g,"_");
 }
 
@@ -90,6 +88,6 @@ async function hmacSignBase64Url(data, secret) {
   const sigBuf = await crypto.subtle.sign("HMAC", key, enc.encode(data));
   const bytes = new Uint8Array(sigBuf);
   let bin = "";
-  bytes.forEach(b => (bin += String.fromCharCode(b)));
+  bytes.forEach((b) => (bin += String.fromCharCode(b)));
   return base64UrlEncodeFromBinaryString(bin);
 }
