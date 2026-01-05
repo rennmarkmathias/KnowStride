@@ -8,7 +8,6 @@ export async function onRequestGet({ request, env }) {
 
   const nowMs = Date.now();
 
-  // Paid-status kommer från access-tabellen (skrivs av stripe-webhook.js)
   const access = await env.DB.prepare(
     "SELECT start_time, access_until FROM access WHERE user_id = ?"
   ).bind(auth.userId).first();
@@ -17,7 +16,9 @@ export async function onRequestGet({ request, env }) {
 
   if (!hasPaid) {
     return json({
-      startedAt: access?.start_time ? new Date(Number(access.start_time)).toISOString() : null,
+      startedAt: access?.start_time
+        ? new Date(Number(access.start_time)).toISOString()
+        : null,
       unlockedCount: 0,
       firstAvailable: 0,
       retention: 52,
@@ -30,21 +31,23 @@ export async function onRequestGet({ request, env }) {
   const startedAt = new Date(Number(access.start_time));
   const now = new Date(nowMs);
 
-  // 1 block unlock per 7 days from start_time
   const days = Math.floor((now - startedAt) / (1000 * 60 * 60 * 24));
   const unlockedCount = Math.max(1, Math.floor(days / 7) + 1);
 
   const retention = 52;
   const firstAvailable = Math.max(1, unlockedCount - retention + 1);
 
-  // Total blocks available (manifest)
   let totalBlocksAvailable = unlockedCount;
   try {
     const manifestUrl = new URL("/blocks/manifest.json", url);
-    const m = await fetch(manifestUrl.toString(), { cf: { cacheTtl: 300, cacheEverything: true } });
+    const m = await fetch(manifestUrl.toString(), {
+      cf: { cacheTtl: 300, cacheEverything: true },
+    });
     if (m.ok) {
       const j = await m.json();
-      if (typeof j.latest === "number" && j.latest > 0) totalBlocksAvailable = j.latest;
+      if (typeof j.latest === "number" && j.latest > 0) {
+        totalBlocksAvailable = j.latest;
+      }
     }
   } catch (_) {}
 
@@ -53,7 +56,6 @@ export async function onRequestGet({ request, env }) {
   const blocks = [];
   for (let n = maxUnlocked; n >= firstAvailable; n--) blocks.push({ number: n });
 
-  // If specific block requested, return its HTML
   const blockParam = url.searchParams.get("block");
   if (blockParam) {
     const n = Number(blockParam);
@@ -61,7 +63,9 @@ export async function onRequestGet({ request, env }) {
     if (n < firstAvailable || n > maxUnlocked) return json({ error: "Not unlocked or not available" }, 403);
 
     const blockUrl = new URL(`/blocks/knowstride${n}.html`, url);
-    const r = await fetch(blockUrl.toString(), { cf: { cacheTtl: 300, cacheEverything: true } });
+    const r = await fetch(blockUrl.toString(), {
+      cf: { cacheTtl: 300, cacheEverything: true },
+    });
     if (!r.ok) return json({ error: "Block file not found. Upload it to /public/blocks first." }, 404);
 
     const html = await r.text();
