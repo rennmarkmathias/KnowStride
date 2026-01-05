@@ -5,6 +5,7 @@ export async function requireClerkAuth(request, env) {
   const token = auth.slice("Bearer ".length).trim();
   if (!token) return null;
 
+  // Verifiera session-token via Clerk Backend API
   const verify = await fetch("https://api.clerk.com/v1/sessions/verify", {
     method: "POST",
     headers: {
