@@ -2,16 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KnowStride – Library</title>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnowStride — Library</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- Clerk MUST be loaded like this -->
-  <script
-    src="https://js.clerk.com/v4/clerk.browser.js"
-    crossorigin="anonymous"
-  ></script>
 </head>
 
 <body>
@@ -27,15 +20,18 @@
       <h1>Log in</h1>
       <p class="muted">Use Google or email.</p>
 
-      <div id="clerkMount" style="margin-top:16px;"></div>
-      <p id="authError" class="muted" style="color:#b00020;margin-top:12px;"></p>
+      <p id="authStatus" class="muted" style="margin-top:12px;">Loading…</p>
+
+      <!-- IMPORTANT: this is where Clerk mounts -->
+      <div id="clerkMount" style="margin-top:14px;"></div>
+
+      <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
 
     <!-- APP -->
     <section id="appBox" class="card" style="display:none;">
-      <h2>Library</h2>
-      <p class="muted">You are logged in.</p>
-      <div id="appContent"></div>
+      <h2 id="appTitle">Library</h2>
+      <div id="appContent" style="margin-top:12px;"></div>
     </section>
   </main>
 
