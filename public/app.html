@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KnowStride — Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- 🔑 CLERK SCRIPT (ABSOLUT KRITISKT) -->
+  <script async src="https://js.clerk.com/v4/clerk.browser.js"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Back</a>
     <div class="brand">KnowStride</div>
-    <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
   </header>
 
   <main class="container">
@@ -20,35 +22,10 @@
         Use Google or email — you’ll go to checkout after selecting a plan.
       </p>
 
-      <!-- Clerk mounts HERE -->
-      <div
-        id="clerkMount"
-        style="min-height:420px; width:100%;"
-      ></div>
+      <!-- Clerk mount point -->
+      <div id="clerk-root"></div>
 
-      <div id="authMsg" class="muted"></div>
-    </section>
-
-    <section id="checkoutBox" class="card" style="display:none;">
-      <h1>Checkout</h1>
-      <p class="muted">
-        Selected plan: <strong id="selectedPlanLabel"></strong>
-      </p>
-      <button id="checkoutBtn">
-        Continue to secure Stripe checkout
-      </button>
-      <div id="checkoutMsg" class="muted"></div>
-    </section>
-
-    <section id="libraryBox" class="card" style="display:none;">
-      <h1>Your library</h1>
-      <p class="muted">You can access your most recent 52 blocks.</p>
-
-      <div id="libraryMeta" class="muted"></div>
-      <div id="blocksList" class="blocks"></div>
-
-      <hr />
-      <div id="reader" class="reader"></div>
+      <p id="error" class="error"></p>
     </section>
   </main>
 
