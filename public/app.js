@@ -1,220 +1,303 @@
-(() => {
-  const $ = (sel) => document.querySelector(sel);
+function planLabel(plan) {
+  const map = {
+    monthly: "Monthly ($2.99)",
+    yearly: "Yearly ($14.99)",
+    "3y": "3 Years ($24.99)",
+    "6y": "6 Years ($39.99)",
+    "9y": "9 Years ($49.99)",
+  };
+  return map[plan] || plan;
+}
 
-  const logoutBtn = $("#logoutBtn");
-  const authBox = $("#authBox");
-  const authStatus = $("#authStatus");
-  const authError = $("#authError");
-  const clerkMount = $("#clerk-components");
+function $(id) {
+  return document.getElementById(id);
+}
 
-  const appBox = $("#appBox");
-  const appTitle = $("#appTitle");
-  const appContent = $("#appContent");
+function show(el, yes) {
+  if (!el) return;
+  el.style.display = yes ? "" : "none";
+}
 
-  function getParam(name) {
-    const u = new URL(window.location.href);
-    return u.searchParams.get(name);
+function setText(el, txt) {
+  if (!el) return;
+  el.textContent = txt;
+}
+
+function getParams() {
+  const u = new URL(window.location.href);
+  return {
+    plan: u.searchParams.get("plan"),
+    success: u.searchParams.get("success") === "1",
+  };
+}
+
+async function apiGet(path) {
+  const r = await fetch(path, { credentials: "include" });
+  if (!r.ok) throw new Error(`${path} ${r.status}`);
+  return r.json();
+}
+
+async function apiPost(path, body) {
+  const r = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(body || {}),
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data?.error || `${path} ${r.status}`);
+  return data;
+}
+
+async function loadClerk() {
+  const cfg = await fetch("/api/config").then((r) => r.json());
+  const pk = cfg?.clerkPublishableKey;
+
+  if (!pk || typeof pk !== "string") {
+    throw new Error("Missing/invalid CLERK_PUBLISHABLE_KEY on server.");
   }
 
-  function buildReturnUrl() {
-    // Behåll plan-parametern om den finns, så att man hamnar tillbaka rätt efter login.
-    const u = new URL(window.location.href);
-    const plan = u.searchParams.get("plan");
-    const canceled = u.searchParams.get("canceled");
-    const success = u.searchParams.get("success");
+  // Flera källor (pga ISP/DNS-strul som du såg tidigare)
+  const sources = [
+    "https://clerk.knowstride.com/npm/@clerk/clerk-js@4/dist/clerk.browser.js",
+    "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@4/dist/clerk.browser.js",
+    "https://unpkg.com/@clerk/clerk-js@4/dist/clerk.browser.js",
+    "https://js.clerk.com/v4/clerk.browser.js",
+  ];
 
-    // “Rensa” success/canceled så man inte fastnar i loopar
-    u.searchParams.delete("success");
-    u.searchParams.delete("canceled");
+  let lastErr = null;
 
-    // Men behåll plan
-    if (plan) u.searchParams.set("plan", plan);
-
-    // Om någon manuellt hade success/canceled, ta inte med dem
-    if (canceled) u.searchParams.delete("canceled");
-    if (success) u.searchParams.delete("success");
-
-    return u.toString();
-  }
-
-  async function fetchJSON(url, opts = {}) {
-    const res = await fetch(url, opts);
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error(`${url} failed (${res.status}): ${txt || res.statusText}`);
-    }
-    return res.json();
-  }
-
-  async function ensureClerkScript() {
-    if (window.Clerk) return;
-
-    // Ladda Clerk från jsDelivr (inte js.clerk.com)
-    await new Promise((resolve, reject) => {
-      const s = document.createElement("script");
-      s.async = true;
-      s.crossOrigin = "anonymous";
-      s.src = "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
-      s.onload = resolve;
-      s.onerror = () => reject(new Error("Failed to load Clerk script from jsDelivr"));
-      document.head.appendChild(s);
-    });
-
-    if (!window.Clerk) throw new Error("Clerk script loaded, but window.Clerk is missing.");
-  }
-
-  async function getToken() {
-    if (!window.Clerk?.session) return null;
-    return await window.Clerk.session.getToken();
-  }
-
-  async function api(url, opts = {}) {
-    const token = await getToken();
-    const headers = new Headers(opts.headers || {});
-    if (token) headers.set("Authorization", `Bearer ${token}`);
-    return fetch(url, { ...opts, headers });
-  }
-
-  function setAuthUI({ signedIn, message = "" }) {
-    authStatus.textContent = message || (signedIn ? "Signed in." : "Not logged in.");
-    logoutBtn.style.display = signedIn ? "" : "none";
-    appBox.style.display = signedIn ? "" : "none";
-  }
-
-  async function renderLibrary() {
-    appTitle.textContent = "Library";
-    appContent.innerHTML = `<p class="muted">Loading library…</p>`;
-
-    const res = await api("/api/library");
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      appContent.innerHTML = `<p style="color:#b00020;">Failed to load library: ${res.status} ${txt}</p>`;
-      return;
-    }
-
-    const data = await res.json();
-    const items = Array.isArray(data?.items) ? data.items : [];
-
-    if (!items.length) {
-      appContent.innerHTML = `<p class="muted">No items yet.</p>`;
-      return;
-    }
-
-    appContent.innerHTML = `
-      <ul style="padding-left:18px;">
-        ${items.map(it => `<li>${escapeHtml(it.title || "Untitled")}</li>`).join("")}
-      </ul>
-    `;
-  }
-
-  async function renderCheckout(plan) {
-    appTitle.textContent = "Checkout";
-    appContent.innerHTML = `<p class="muted">Starting checkout…</p>`;
-
-    const res = await api("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan })
-    });
-
-    const txt = await res.text().catch(() => "");
-    if (!res.ok) {
-      appContent.innerHTML = `<p style="color:#b00020;">Checkout failed: ${res.status} ${txt}</p>`;
-      return;
-    }
-
-    let data;
-    try { data = JSON.parse(txt); } catch { data = {}; }
-
-    if (data?.url) {
-      window.location.href = data.url;
-      return;
-    }
-
-    appContent.innerHTML = `<p style="color:#b00020;">Checkout failed: missing URL.</p>`;
-  }
-
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  async function mountSignIn(returnUrl) {
-    clerkMount.innerHTML = "";
-    authError.textContent = "";
-
-    // Mounta Clerk sign-in i din egen sida
-    window.Clerk.mountSignIn(clerkMount, {
-      appearance: { elements: { footer: { display: "none" } } },
-      afterSignInUrl: returnUrl,
-      afterSignUpUrl: returnUrl
-    });
-  }
-
-  async function main() {
+  for (const src of sources) {
     try {
-      setAuthUI({ signedIn: false, message: "Loading sign-in…" });
-
-      // 1) Hämta publishable key från ditt API
-      const cfg = await fetchJSON("/api/config");
-      const publishableKey = cfg?.clerkPublishableKey;
-      if (!publishableKey) throw new Error("Missing clerkPublishableKey from /api/config");
-
-      // 2) Ladda Clerk-script + init
-      await ensureClerkScript();
-
-      // Viktigt: vänta på Clerk.load()
-      await window.Clerk.load({ publishableKey });
-
-      // 3) Logout-knapp
-      logoutBtn.addEventListener("click", async () => {
-        try {
-          await window.Clerk.signOut();
-          window.location.href = "/app";
-        } catch (e) {
-          console.error(e);
-        }
+      await new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.async = true;
+        s.src = src;
+        s.setAttribute("data-clerk-publishable-key", pk.trim());
+        s.onload = resolve;
+        s.onerror = () => reject(new Error("Failed to load: " + src));
+        document.head.appendChild(s);
       });
 
-      // 4) Lyssna på auth-status (så vi inte fastnar i “user null”)
-      const rerender = async () => {
-        const signedIn = !!window.Clerk.user;
-        setAuthUI({ signedIn, message: signedIn ? "Signed in." : "Not logged in." });
+      if (!window.Clerk) throw new Error("Clerk script loaded but window.Clerk is missing.");
 
-        const plan = getParam("plan");
+      // vissa builds tar publishableKey i load(), andra inte – kör robust
+      try {
+        await window.Clerk.load({ publishableKey: pk.trim() });
+      } catch {
+        await window.Clerk.load();
+      }
 
-        if (!signedIn) {
-          appBox.style.display = "none";
-          const returnUrl = buildReturnUrl();
-          await mountSignIn(returnUrl);
-          return;
-        }
-
-        // Inloggad => visa app
-        authBox.style.display = "none";
-        appBox.style.display = "";
-
-        if (plan) {
-          await renderCheckout(plan);
-        } else {
-          await renderLibrary();
-        }
-      };
-
-      // Kör direkt + vid förändringar
-      await rerender();
-      window.Clerk.addListener(() => rerender());
-
-    } catch (err) {
-      console.error(err);
-      authError.textContent = String(err?.message || err);
-      authStatus.textContent = "Failed to initialize login.";
+      return window.Clerk;
+    } catch (e) {
+      lastErr = e;
     }
   }
 
-  main();
+  throw lastErr || new Error("Failed to load Clerk.");
+}
+
+function renderPlanButtons(me) {
+  const planBox = $("planBox");
+  if (!planBox) return;
+
+  planBox.innerHTML = "";
+
+  if (!me?.hasAccess) {
+    planBox.innerHTML = `
+      <div class="muted" style="margin-top:6px;">
+        Choose a plan to access the library.
+      </div>
+      <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/app?plan=monthly">Monthly</a>
+        <a class="btn" href="/app?plan=yearly">Yearly</a>
+        <a class="btn" href="/app?plan=3y">3 Years</a>
+        <a class="btn" href="/app?plan=6y">6 Years</a>
+        <a class="btn" href="/app?plan=9y">9 Years</a>
+      </div>
+    `;
+  } else {
+    planBox.innerHTML = `<div class="muted">Access: active</div>`;
+  }
+}
+
+function renderLibrary(items) {
+  const libraryList = $("libraryList");
+  if (!libraryList) return;
+
+  const safe = Array.isArray(items) ? items : [];
+  libraryList.innerHTML = safe
+    .map(
+      (it) => `
+      <div class="row" style="padding:10px 0; border-top:1px solid rgba(0,0,0,0.06);">
+        <div>
+          <div style="font-weight:600;">${it.title || "Untitled"}</div>
+          <div class="muted">${it.subtitle || ""}</div>
+        </div>
+        ${it.url ? `<a class="btn" href="${it.url}">Open</a>` : ""}
+      </div>
+    `
+    )
+    .join("");
+
+  if (!safe.length) {
+    libraryList.innerHTML = `<div class="muted">No items yet.</div>`;
+  }
+}
+
+async function mountSignIn() {
+  const authError = $("authError");
+  const authStatus = $("authStatus");
+  const mount = $("clerkMount");
+
+  try {
+    setText(authStatus, "Loading sign-in…");
+    show(authError, false);
+
+    const Clerk = await loadClerk();
+
+    if (!mount) throw new Error("Missing #clerkMount in app.html");
+    mount.innerHTML = "";
+
+    // SUPERviktigt:
+    // Säg explicit vart Clerk ska skicka tillbaka efter OAuth/sign-in,
+    // annars kan du hamna på / (eller Account Portal) och “studsa”.
+    Clerk.mountSignIn(mount, {
+      afterSignInUrl: "/app",
+      afterSignUpUrl: "/app",
+      redirectUrl: "/app",
+    });
+
+    // När användaren blir inloggad: ladda appen direkt
+    Clerk.addListener(async (e) => {
+      if (e?.user) {
+        await loadLibrary(); // refresh UI + plan flow
+      }
+    });
+
+    setText(authStatus, "");
+  } catch (e) {
+    show(authError, true);
+    authError.textContent = String(e?.message || e);
+
+    setText(
+      authStatus,
+      "Inloggningen kunde inte laddas (Clerk script). Prova att ladda om sidan."
+    );
+  }
+}
+
+async function startCheckout(plan) {
+  const authError = $("authError");
+  try {
+    const res = await apiPost("/api/create-checkout-session", { plan });
+    if (res?.url) window.location.href = res.url;
+    else throw new Error("No checkout URL returned.");
+  } catch (e) {
+    show(authError, true);
+    authError.textContent = String(e?.message || e);
+  }
+}
+
+async function handlePlanPurchase() {
+  const { plan, success } = getParams();
+  if (!plan) return;
+
+  // Stripe returnerar ofta success=1 när du kommer tillbaka
+  if (success) {
+    const u = new URL(location.href);
+    u.searchParams.delete("success");
+    u.searchParams.delete("plan");
+    history.replaceState({}, "", u.toString());
+    return;
+  }
+
+  // Om användaren inte är inloggad: spara plan och visa sign-in.
+  // När login blir klart plockar vi upp pending-plan och fortsätter checkout.
+  try {
+    const me = await apiGet("/api/me");
+    if (!me?.signedIn) {
+      sessionStorage.setItem("pendingPlan", plan);
+      // rensa urlen lite så vi inte loopar
+      const u = new URL(location.href);
+      u.searchParams.delete("plan");
+      history.replaceState({}, "", u.toString());
+      return;
+    }
+
+    await startCheckout(plan);
+  } catch {
+    sessionStorage.setItem("pendingPlan", plan);
+  }
+}
+
+async function maybeContinuePendingPlan() {
+  const pending = sessionStorage.getItem("pendingPlan");
+  if (!pending) return;
+
+  try {
+    const me = await apiGet("/api/me");
+    if (me?.signedIn) {
+      sessionStorage.removeItem("pendingPlan");
+      await startCheckout(pending);
+    }
+  } catch {
+    // ignore
+  }
+}
+
+async function loadLibrary() {
+  const authBox = $("authBox");
+  const libraryBox = $("libraryBox");
+  const logoutBtn = $("logoutBtn");
+  const libraryMeta = $("libraryMeta");
+
+  try {
+    const me = await apiGet("/api/me");
+
+    if (!me?.signedIn) {
+      show(libraryBox, false);
+      show(authBox, true);
+      if (logoutBtn) logoutBtn.style.visibility = "hidden";
+      await mountSignIn();
+      return;
+    }
+
+    show(authBox, false);
+    show(libraryBox, true);
+    if (logoutBtn) logoutBtn.style.visibility = "visible";
+
+    setText(libraryMeta, me?.email ? `Signed in as ${me.email}` : "Signed in");
+
+    renderPlanButtons(me);
+
+    const lib = await apiGet("/api/library");
+    renderLibrary(lib?.items);
+
+    // Om user blev inloggad pga OAuth nu: fortsätt ev. checkout
+    await maybeContinuePendingPlan();
+  } catch (e) {
+    // fallback: visa auth
+    show($("libraryBox"), false);
+    show($("authBox"), true);
+    await mountSignIn();
+  }
+}
+
+async function wireLogout() {
+  const btn = $("logoutBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", async () => {
+    try {
+      await apiPost("/api/logout", {});
+    } catch {}
+    location.href = "/app";
+  });
+}
+
+(async function main() {
+  await wireLogout();
+  await handlePlanPurchase();
+  await loadLibrary();
 })();
