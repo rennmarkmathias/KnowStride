@@ -1,9 +1,6 @@
 # API routes
 /api/* /api/:splat 200
 
-# App route (viktigt!)
+# App route
 /app /app.html 200
 /app/* /app.html 200
-
-# Default SPA fallback
-/* /index.html 200
