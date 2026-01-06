@@ -1,39 +1,43 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>KnowStride — Library</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnowStride — Library</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
 
-  <body>
-    <header class="topbar">
-      <a class="toplink" href="/">← Back</a>
-      <div class="brand">KnowStride</div>
-      <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
-    </header>
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Back</a>
+    <div class="brand">KnowStride</div>
+    <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
+  </header>
 
-    <main class="container">
-      <!-- AUTH BOX -->
-      <section id="authBox" class="card">
-        <h1>Log in</h1>
-        <p class="muted">Use Google or email.</p>
+  <main class="container">
+    <section id="authBox" class="card">
+      <h1>Log in</h1>
+      <p class="muted">Use Google or email.</p>
 
-        <p id="authStatus" class="muted" style="margin-top:12px;">Loading sign-in…</p>
-        <!-- IMPORTANT: app.js expects this ID -->
-        <div id="clerkMount" style="margin-top:14px;"></div>
+      <p id="authStatus" class="muted" style="margin-top:12px;">Loading sign-in…</p>
 
-        <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
-      </section>
+      <!-- Clerk mounts here -->
+      <div id="clerk-components" style="margin-top:14px;"></div>
 
-      <!-- APP BOX -->
-      <section id="appBox" class="card" style="display:none;">
-        <h2 id="appTitle">Library</h2>
-        <div id="appContent" style="margin-top:12px;"></div>
-      </section>
-    </main>
+      <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
+    </section>
 
-    <script src="/app.js"></script>
-  </body>
+    <section id="appBox" class="card" style="display:none;">
+      <h2 id="appTitle">Library</h2>
+      <div id="appContent" style="margin-top:12px;"></div>
+    </section>
+  </main>
+
+  <!-- IMPORTANT:
+       js.clerk.com fails for you (DNS/resolve). Use unpkg which works. -->
+  <script defer src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+
+  <!-- Your app logic -->
+  <script defer src="/app.js"></script>
+</body>
 </html>
