@@ -20,8 +20,9 @@ export async function onRequestPost({ request, env }) {
     mode: isSub ? "subscription" : "payment",
     line_items: [{ price: priceId, quantity: 1 }],
 
-    success_url: `${origin}/app?success=1`,
-    cancel_url: `${origin}/app?canceled=1&plan=${encodeURIComponent(plan)}`,
+    success_url: `${origin}/app.html?success=1`,
+    cancel_url: `${origin}/app.html?canceled=1&plan=${encodeURIComponent(plan)}`,
+
 
     metadata: { user_id: auth.userId, plan },
 
@@ -54,3 +55,4 @@ function json(obj, status = 200) {
     headers: { "Content-Type": "application/json" },
   });
 }
+
