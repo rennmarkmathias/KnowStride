@@ -1,34 +1,39 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KnowStride — Library</title>
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body>
-  <header class="topbar">
-    <a class="toplink" href="/">← Back</a>
-    <div class="brand">KnowStride</div>
-    <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KnowStride — Library</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
 
-  <main class="container">
-    <section id="authBox" class="card">
-      <h1>Log in</h1>
-      <p class="muted">Use Google or email.</p>
+  <body>
+    <header class="topbar">
+      <a class="toplink" href="/">← Back</a>
+      <div class="brand">KnowStride</div>
+      <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
+    </header>
 
-      <p id="authStatus" class="muted" style="margin-top:12px;">Loading…</p>
-      <div id="clerk-components" style="margin-top:14px;"></div>
-      <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
-    </section>
+    <main class="container">
+      <!-- AUTH BOX -->
+      <section id="authBox" class="card">
+        <h1>Log in</h1>
+        <p class="muted">Use Google or email.</p>
 
-    <section id="appBox" class="card" style="display:none;">
-      <h2 id="appTitle">Loading…</h2>
-      <div id="appContent" style="margin-top:12px;"></div>
-    </section>
-  </main>
+        <p id="authStatus" class="muted" style="margin-top:12px;">Loading sign-in…</p>
+        <!-- IMPORTANT: app.js expects this ID -->
+        <div id="clerkMount" style="margin-top:14px;"></div>
 
-  <script src="/app.js"></script>
-</body>
+        <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
+      </section>
+
+      <!-- APP BOX -->
+      <section id="appBox" class="card" style="display:none;">
+        <h2 id="appTitle">Library</h2>
+        <div id="appContent" style="margin-top:12px;"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
 </html>
