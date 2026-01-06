@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KnowStride — Library</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnowStride — Logga in</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
+
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Back</a>
@@ -14,51 +15,15 @@
   </header>
 
   <main class="container">
-    <!-- AUTH -->
     <section id="authBox" class="card">
       <h1>Log in</h1>
       <p class="muted">Use Google or email — you’ll go to checkout after selecting a plan.</p>
-      <div id="clerkMount" class="clerk"></div>
-      <p id="authErr" class="error" style="display:none;"></p>
-    </section>
 
-    <!-- CHECKOUT -->
-    <section id="checkoutBox" class="card" style="display:none;">
-      <h1>Choose a plan</h1>
-      <p class="muted">You get Block 1 immediately. Next blocks unlock weekly.</p>
+      <!-- Här mountar Clerk sin UI -->
+      <div id="clerkRoot"></div>
 
-      <div class="plans">
-        <button class="plan" data-plan="monthly">Monthly</button>
-        <button class="plan" data-plan="yearly">Yearly</button>
-        <button class="plan" data-plan="3y">3 years</button>
-        <button class="plan" data-plan="6y">6 years</button>
-        <button class="plan" data-plan="9y">9 years</button>
-      </div>
-
-      <p id="checkoutErr" class="error" style="display:none;"></p>
-    </section>
-
-    <!-- LIBRARY -->
-    <section id="libraryBox" class="card" style="display:none;">
-      <div class="row">
-        <h1>Your library</h1>
-        <a class="btn" href="/app">Refresh</a>
-      </div>
-
-      <p id="libraryMeta" class="muted"></p>
-
-      <div class="split">
-        <div class="list">
-          <h2>Blocks</h2>
-          <div id="blocksList"></div>
-        </div>
-        <div class="reader">
-          <h2 id="readerTitle">Open a block</h2>
-          <div id="reader"></div>
-        </div>
-      </div>
-
-      <p id="libraryErr" class="error" style="display:none;"></p>
+      <!-- Här skriver vi ut fel om scriptet inte går att ladda -->
+      <p id="authError" class="muted" style="margin-top:16px;"></p>
     </section>
   </main>
 
