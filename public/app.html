@@ -2,30 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>KnowStride — Library</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KnowStride — Library</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- 🔑 CLERK SCRIPT (ABSOLUT KRITISKT) -->
-  <script async src="https://js.clerk.com/v4/clerk.browser.js"></script>
 </head>
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Back</a>
     <div class="brand">KnowStride</div>
+    <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
   </header>
 
   <main class="container">
+    <!-- AUTH -->
     <section id="authBox" class="card">
       <h1>Log in</h1>
-      <p class="muted">
-        Use Google or email — you’ll go to checkout after selecting a plan.
-      </p>
+      <p class="muted">Use Google or email — you’ll go to checkout after selecting a plan.</p>
+      <div id="clerkMount" class="clerk"></div>
+      <p id="authErr" class="error" style="display:none;"></p>
+    </section>
 
-      <!-- Clerk mount point -->
-      <div id="clerk-root"></div>
+    <!-- CHECKOUT -->
+    <section id="checkoutBox" class="card" style="display:none;">
+      <h1>Choose a plan</h1>
+      <p class="muted">You get Block 1 immediately. Next blocks unlock weekly.</p>
 
-      <p id="error" class="error"></p>
+      <div class="plans">
+        <button class="plan" data-plan="monthly">Monthly</button>
+        <button class="plan" data-plan="yearly">Yearly</button>
+        <button class="plan" data-plan="3y">3 years</button>
+        <button class="plan" data-plan="6y">6 years</button>
+        <button class="plan" data-plan="9y">9 years</button>
+      </div>
+
+      <p id="checkoutErr" class="error" style="display:none;"></p>
+    </section>
+
+    <!-- LIBRARY -->
+    <section id="libraryBox" class="card" style="display:none;">
+      <div class="row">
+        <h1>Your library</h1>
+        <a class="btn" href="/app">Refresh</a>
+      </div>
+
+      <p id="libraryMeta" class="muted"></p>
+
+      <div class="split">
+        <div class="list">
+          <h2>Blocks</h2>
+          <div id="blocksList"></div>
+        </div>
+        <div class="reader">
+          <h2 id="readerTitle">Open a block</h2>
+          <div id="reader"></div>
+        </div>
+      </div>
+
+      <p id="libraryErr" class="error" style="display:none;"></p>
     </section>
   </main>
 
