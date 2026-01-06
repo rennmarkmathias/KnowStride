@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>KnowStride — Library</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
@@ -11,7 +11,7 @@
     <header class="topbar">
       <a class="toplink" href="/">← Back</a>
       <div class="brand">KnowStride</div>
-      <button id="logoutBtn" class="toplink" style="visibility:hidden">Log out</button>
+      <button id="logoutBtn" class="toplink" style="display:none;">Log out</button>
     </header>
 
     <main class="container">
@@ -19,22 +19,17 @@
         <h1>Log in</h1>
         <p class="muted">Use Google or email.</p>
 
-        <div id="authError" class="error" style="display:none"></div>
+        <p id="authStatus" class="muted" style="margin-top:12px;">Loading…</p>
 
-        <!-- VIKTIGT: app.js letar efter exakt detta id -->
-        <div id="clerkMount" style="margin-top:16px"></div>
+        <!-- IMPORTANT: app.js expects this exact id -->
+        <div id="clerkMount" style="margin-top:14px;"></div>
 
-        <p id="authStatus" class="muted" style="margin-top:12px"></p>
+        <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
       </section>
 
-      <section id="libraryBox" class="card" style="display:none">
-        <div class="row" style="justify-content:space-between; align-items:center;">
-          <h2 style="margin:0;">Library</h2>
-          <div id="libraryMeta" class="muted"></div>
-        </div>
-
-        <div id="planBox" style="margin-top:12px"></div>
-        <div id="libraryList" style="margin-top:16px"></div>
+      <section id="appBox" class="card" style="display:none;">
+        <h2 id="appTitle">Library</h2>
+        <div id="appContent" style="margin-top:12px;"></div>
       </section>
     </main>
 
