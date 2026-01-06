@@ -20,11 +20,8 @@ export async function onRequestPost({ request, env }) {
     mode: isSub ? "subscription" : "payment",
     line_items: [{ price: priceId, quantity: 1 }],
 
-    // Ingen promo-code om du vill hålla det städat
-    // allow_promotion_codes: true,
-
-    success_url: `${origin}/app.html?success=1`,
-    cancel_url: `${origin}/app.html?canceled=1&plan=${encodeURIComponent(plan)}`,
+    success_url: `${origin}/app?success=1`,
+    cancel_url: `${origin}/app?canceled=1&plan=${encodeURIComponent(plan)}`,
 
     metadata: { user_id: auth.userId, plan },
 
