@@ -1,9 +1,3 @@
-/* public/app.js
-   Robust Clerk loader + mount + basic signed-in UI.
-   - Fetches publishable key from /api/config
-   - Loads Clerk script with fallback if js.clerk.com fails
-*/
-
 const $ = (id) => document.getElementById(id);
 
 const authBox = $("authBox");
@@ -13,29 +7,31 @@ const authError = $("authError");
 const appContent = $("appContent");
 const logoutBtn = $("logoutBtn");
 
-function setStatus(text) {
-  authStatus.textContent = text || "";
-}
-
-function setError(text) {
-  authError.textContent = text || "";
-}
-
-function showAuthedUI() {
-  authBox.style.display = "none";
-  appBox.style.display = "";
-  logoutBtn.style.display = "";
-}
-
-function showLoginUI() {
+function showLogin() {
   authBox.style.display = "";
   appBox.style.display = "none";
   logoutBtn.style.display = "none";
 }
 
+function showApp(user) {
+  authBox.style.display = "none";
+  appBox.style.display = "";
+  logoutBtn.style.display = "";
+
+  const email =
+    user.primaryEmailAddress?.emailAddress ||
+    user.emailAddresses?.[0]?.emailAddress ||
+    "Unknown";
+
+  appContent.innerHTML = `
+    <p class="muted">Logged in as <strong>${email}</strong></p>
+    <p style="margin-top:12px;">✅ Authentication works.</p>
+  `;
+}
+
 async function fetchConfig() {
-  const res = await fetch("/api/config", { credentials: "include" });
-  if (!res.ok) throw new Error(`/api/config failed (${res.status})`);
+  const res = await fetch("/api/config");
+  if (!res.ok) throw new Error("Failed to load /api/config");
   return res.json();
 }
 
@@ -46,205 +42,66 @@ function loadScript(src) {
     s.async = true;
     s.crossOrigin = "anonymous";
     s.onload = () => resolve(src);
-    s.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    s.onerror = () => reject(new Error(`Failed to load ${src}`));
     document.head.appendChild(s);
   });
 }
 
-async function loadClerkScriptWithFallback() {
-  const candidates = [
-    "https://js.clerk.com/v4/clerk.browser.js",
-    // Fallback (if js.clerk.com has DNS/CDN issues)
-    "https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js",
+async function loadClerk() {
+  const urls = [
+    "https://js.clerk.com/clerk.browser.js",
+    "https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"
   ];
 
-  let lastErr = null;
-  for (const url of candidates) {
+  for (const url of urls) {
     try {
-      const loaded = await loadScript(url);
-      return loaded;
-    } catch (e) {
-      lastErr = e;
-      // try next
-    }
-  }
-  throw lastErr || new Error("Failed to load Clerk script");
-}
-
-function getPlanFromUrl() {
-  const url = new URL(window.location.href);
-  const plan = url.searchParams.get("plan");
-  return plan && ["monthly", "yearly"].includes(plan) ? plan : null;
-}
-
-async function mountClerk(publishableKey) {
-  if (!window.Clerk) {
-    throw new Error("Clerk global not found after script load.");
+      await loadScript(url);
+      if (window.Clerk) return;
+    } catch {}
   }
 
-  // NOTE: v4 uses Clerk.load({ publishableKey })
-  await window.Clerk.load({ publishableKey });
-
-  // Mount Clerk sign-in UI
-  const mountEl = $("clerkMount");
-  if (!mountEl) {
-    throw new Error("Missing #clerkMount in app.html");
-  }
-
-  // Clean mount in case of reload
-  mountEl.innerHTML = "";
-
-  // Use SignIn component
-  window.Clerk.mountSignIn(mountEl, {
-    routing: "hash",
-    signUpUrl: "/app",
-    afterSignInUrl: "/app",
-    afterSignUpUrl: "/app",
-  });
-
-  // Logout button
-  logoutBtn.onclick = async () => {
-    try {
-      await window.Clerk.signOut();
-      // hard refresh to reset state
-      window.location.href = "/app";
-    } catch (e) {
-      console.error(e);
-      setError("Logout failed.");
-    }
-  };
-}
-
-async function renderAppIfSignedIn() {
-  // Clerk might not be ready immediately
-  const clerk = window.Clerk;
-  if (!clerk) return;
-
-  const isSignedIn = !!clerk.user;
-  if (!isSignedIn) {
-    showLoginUI();
-    setStatus("Not logged in.");
-    return;
-  }
-
-  showAuthedUI();
-  setStatus("");
-
-  // Simple “you are logged in” indicator
-  const email =
-    clerk.user?.primaryEmailAddress?.emailAddress ||
-    clerk.user?.emailAddresses?.[0]?.emailAddress ||
-    "(no email)";
-  appContent.innerHTML = `
-    <div class="muted" style="margin-bottom:10px;">
-      Logged in as <strong>${escapeHtml(email)}</strong>
-    </div>
-    <div id="postLoginArea" class="muted">Loading…</div>
-  `;
-
-  const plan = getPlanFromUrl();
-  const postLoginArea = document.getElementById("postLoginArea");
-
-  if (plan) {
-    // If you already have a backend endpoint to create checkout:
-    // You can implement /api/create-checkout-session?plan=monthly|yearly
-    postLoginArea.textContent = `Plan selected: ${plan}. Starting checkout…`;
-
-    try {
-      const r = await fetch(`/api/create-checkout-session?plan=${encodeURIComponent(plan)}`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          // Optional: if you verify Clerk tokens server-side later
-          // "Authorization": `Bearer ${await clerk.session?.getToken()}`
-        },
-      });
-
-      if (!r.ok) {
-        const t = await r.text().catch(() => "");
-        throw new Error(`Checkout failed (${r.status}): ${t}`);
-      }
-
-      const data = await r.json();
-      if (!data || !data.url) throw new Error("Missing checkout URL from backend.");
-
-      window.location.href = data.url;
-      return;
-    } catch (e) {
-      console.error(e);
-      postLoginArea.textContent = "Checkout failed. See console.";
-      return;
-    }
-  }
-
-  // Default “library” area (replace later with your API call)
-  postLoginArea.innerHTML = `
-    <div style="margin-top:8px;">
-      ✅ You are logged in. Next step: load your library content here.
-    </div>
-  `;
-}
-
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, (c) => {
-    switch (c) {
-      case "&": return "&amp;";
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case "\"": return "&quot;";
-      case "'": return "&#039;";
-      default: return c;
-    }
-  });
+  throw new Error("Clerk script could not be loaded (CDN blocked)");
 }
 
 async function main() {
   try {
-    setError("");
-    showLoginUI();
-    setStatus("Loading configuration…");
+    authStatus.textContent = "Loading configuration…";
+    const { clerkPublishableKey } = await fetchConfig();
 
-    const cfg = await fetchConfig();
-    const publishableKey = cfg?.clerkPublishableKey;
-
-    if (!publishableKey || typeof publishableKey !== "string") {
-      throw new Error("Missing clerkPublishableKey from /api/config");
+    if (!clerkPublishableKey?.startsWith("pk_")) {
+      throw new Error("Invalid Clerk publishable key");
     }
 
-    setStatus("Loading Clerk…");
-    await loadClerkScriptWithFallback();
+    authStatus.textContent = "Loading authentication…";
+    await loadClerk();
 
-    setStatus("Initializing Clerk…");
-    await mountClerk(publishableKey);
+    await window.Clerk.load({ publishableKey: clerkPublishableKey });
 
-    // Keep UI in sync
-    // Clerk emits events; but simplest: poll small period after init
-    setStatus("Ready.");
-    await renderAppIfSignedIn();
+    window.Clerk.mountSignIn($("#clerkMount"), {
+      afterSignInUrl: "/app",
+      afterSignUpUrl: "/app"
+    });
 
-    // Re-check on navigation/hash changes or after sign-in flow
-    window.addEventListener("hashchange", () => renderAppIfSignedIn());
-    window.addEventListener("focus", () => renderAppIfSignedIn());
+    logoutBtn.onclick = async () => {
+      await window.Clerk.signOut();
+      location.href = "/app";
+    };
 
-    // Also listen to Clerk events if available
-    if (window.Clerk?.addListener) {
-      window.Clerk.addListener(() => renderAppIfSignedIn());
+    window.Clerk.addListener(({ user }) => {
+      if (user) showApp(user);
+      else showLogin();
+    });
+
+    if (window.Clerk.user) {
+      showApp(window.Clerk.user);
+    } else {
+      showLogin();
+      authStatus.textContent = "Not logged in.";
     }
-  } catch (e) {
-    console.error(e);
-    showLoginUI();
-
-    // Show the most useful error to you
-    setStatus("");
-    setError(e?.message || "Authentication failed to load.");
-
-    // If script load failed, make that super obvious
-    if ((e?.message || "").includes("Failed to load script")) {
-      setError(
-        (e?.message || "") +
-        " — This is usually DNS/adblock/network blocking. Try switching network or disable blockers, or we keep the unpkg fallback."
-      );
-    }
+  } catch (err) {
+    console.error(err);
+    authStatus.textContent = "";
+    authError.textContent = err.message;
   }
 }
 
