@@ -1,5 +1,4 @@
-// public/app.js
-(async () => {
+(() => {
   const $ = (id) => document.getElementById(id);
 
   const authBox = $("authBox");
@@ -8,16 +7,8 @@
   const authError = $("authError");
   const clerkMount = $("clerkMount");
   const logoutBtn = $("logoutBtn");
+  const appTitle = $("appTitle");
   const appContent = $("appContent");
-
-  if (!clerkMount) {
-    // This is the error you’re seeing right now.
-    if (authError) authError.textContent = "Missing #clerkMount in app.html";
-    return;
-  }
-
-  const qs = new URLSearchParams(window.location.search);
-  const plan = qs.get("plan"); // e.g. monthly, yearly, etc.
 
   function setStatus(msg) {
     if (authStatus) authStatus.textContent = msg || "";
@@ -26,198 +17,226 @@
     if (authError) authError.textContent = msg || "";
   }
 
-  function showAuth() {
-    authBox.style.display = "";
-    appBox.style.display = "none";
-    logoutBtn.style.display = "none";
-  }
-
-  function showApp() {
-    authBox.style.display = "none";
-    appBox.style.display = "";
-    logoutBtn.style.display = "";
-  }
-
-  async function getConfig() {
-    const res = await fetch("/api/config", { cache: "no-store" });
-    if (!res.ok) throw new Error(`Config failed: ${res.status}`);
-    return res.json();
+  function parseQuery() {
+    const q = new URLSearchParams(window.location.search);
+    return Object.fromEntries(q.entries());
   }
 
   async function loadScript(src) {
     return new Promise((resolve, reject) => {
+      const existing = [...document.scripts].find((s) => s.src === src);
+      if (existing) return resolve();
+
       const s = document.createElement("script");
       s.src = src;
       s.async = true;
-      s.crossOrigin = "anonymous";
       s.onload = () => resolve();
-      s.onerror = () => reject(new Error(`Failed to load ${src}`));
+      s.onerror = () => reject(new Error("Failed to load script: " + src));
       document.head.appendChild(s);
     });
   }
 
-  async function loadClerkBrowser() {
-    // We try your Clerk domain first, then fall back to jsDelivr.
-    const candidates = [
-      // Your Clerk frontend domain (as you configured in Clerk dashboard)
-      "https://clerk.knowstride.com/npm/@clerk/clerk-js@latest/dist/clerk.browser.js",
-      // Fallback CDN
-      "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js",
-    ];
+  async function apiFetch(path, { method = "GET", body, token } = {}) {
+    const headers = { "Content-Type": "application/json" };
+    if (token) headers.Authorization = `Bearer ${token}`;
 
-    let lastErr;
-    for (const src of candidates) {
-      try {
-        await loadScript(src);
-        if (window.Clerk) return;
-      } catch (e) {
-        lastErr = e;
-      }
-    }
-    throw lastErr || new Error("Clerk failed to load");
-  }
-
-  async function getBearerToken() {
-    // Clerk sets Clerk.session when signed in
-    if (!window.Clerk || !window.Clerk.session) return null;
-    try {
-      return await window.Clerk.session.getToken();
-    } catch {
-      return null;
-    }
-  }
-
-  async function apiFetch(path, options = {}) {
-    const token = await getBearerToken();
-    const headers = new Headers(options.headers || {});
-    if (token) headers.set("Authorization", `Bearer ${token}`);
-    headers.set("Content-Type", "application/json");
-    return fetch(path, { ...options, headers, cache: "no-store" });
-  }
-
-  async function apiGet(path) {
-    const res = await apiFetch(path, { method: "GET" });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.error || `GET ${path} failed (${res.status})`);
-    return data;
-  }
-
-  async function apiPost(path, bodyObj) {
-    const res = await apiFetch(path, {
-      method: "POST",
-      body: JSON.stringify(bodyObj || {}),
+    const res = await fetch(path, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+      credentials: "include",
     });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.error || `POST ${path} failed (${res.status})`);
+
+    const txt = await res.text();
+    let data;
+    try { data = txt ? JSON.parse(txt) : null; } catch { data = { raw: txt }; }
+
+    if (!res.ok) {
+      const msg = (data && (data.error || data.message)) || `HTTP ${res.status}`;
+      throw new Error(msg);
+    }
     return data;
   }
 
-  async function renderApp() {
-    // Example: show something simple + your library endpoint
-    appContent.innerHTML = "";
-    const me = await apiGet("/api/me");
+  async function getConfig() {
+    return apiFetch("/api/config");
+  }
 
-    const p = document.createElement("p");
-    p.className = "muted";
-    p.textContent = me?.email ? `Signed in as ${me.email}` : "Signed in";
-    appContent.appendChild(p);
+  function maskKey(k) {
+    if (!k || typeof k !== "string") return String(k);
+    if (k.length <= 10) return k;
+    return k.slice(0, 6) + "…" + k.slice(-4);
+  }
 
-    // Load library list (if you have it)
-    try {
-      const lib = await apiGet("/api/library");
-      const pre = document.createElement("pre");
-      pre.style.whiteSpace = "pre-wrap";
-      pre.textContent = JSON.stringify(lib, null, 2);
-      appContent.appendChild(pre);
-    } catch (e) {
-      const err = document.createElement("p");
-      err.style.color = "#b00020";
-      err.textContent = `Library error: ${e.message}`;
-      appContent.appendChild(err);
+  async function initClerk(cfg) {
+    if (!clerkMount) {
+      throw new Error("Missing #clerkMount in app.html");
+    }
+
+    const pk = cfg?.clerkPublishableKey;
+
+    // Stop early with a friendly message (prevents Clerk throwing cryptic errors)
+    if (!pk || typeof pk !== "string") {
+      throw new Error(
+        "Missing CLERK publishable key. Open /api/config and verify clerkPublishableKey is present."
+      );
+    }
+    if (!pk.startsWith("pk_")) {
+      throw new Error(
+        `CLERK publishable key looks wrong: ${maskKey(pk)} (should start with "pk_").`
+      );
+    }
+
+    // Load Clerk browser SDK
+    await loadScript("https://js.clerk.com/v4/clerk.browser.js");
+
+    if (!window.Clerk) {
+      throw new Error("Clerk script loaded, but window.Clerk is missing.");
+    }
+
+    // Initialize Clerk
+    await window.Clerk.load({
+      publishableKey: pk,
+    });
+
+    return window.Clerk;
+  }
+
+  function showAuthedUI(user) {
+    authBox.style.display = "none";
+    appBox.style.display = "block";
+    logoutBtn.style.display = "inline-block";
+
+    const email =
+      user?.primaryEmailAddress?.emailAddress ||
+      user?.emailAddresses?.[0]?.emailAddress ||
+      "(no email)";
+
+    appTitle.textContent = "Library";
+    appContent.innerHTML = `
+      <p class="muted">Signed in as <strong>${escapeHtml(email)}</strong></p>
+      <p style="margin-top:10px;">
+        If you came here to buy a plan, you'll be redirected automatically.
+      </p>
+    `;
+  }
+
+  function showAuthUI() {
+    authBox.style.display = "block";
+    appBox.style.display = "none";
+    logoutBtn.style.display = "none";
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    }[c]));
+  }
+
+  async function maybeStartCheckout(clerk, plan) {
+    if (!plan) return;
+
+    // Only allow known plans
+    const allowed = new Set(["monthly", "yearly", "3y", "6y", "9y"]);
+    if (!allowed.has(plan)) return;
+
+    setStatus("Starting checkout…");
+
+    // Optional: attach who is buying (works even if backend doesn't require it)
+    const token = await clerk.session?.getToken?.();
+
+    const data = await apiFetch("/api/create-checkout-session", {
+      method: "POST",
+      body: { plan },
+      token,
+    });
+
+    if (!data?.url) throw new Error("Checkout session created, but no URL returned.");
+    window.location.href = data.url;
+  }
+
+  async function mountAuth(clerk) {
+    const q = parseQuery();
+    const mode = q.mode; // "signup" to force sign-up view
+
+    // Always clear mount first
+    clerkMount.innerHTML = "";
+
+    const common = {
+      // Keep user on your app route
+      afterSignInUrl: "/app",
+      afterSignUpUrl: "/app",
+      signInUrl: "/app",
+      signUpUrl: "/app?mode=signup",
+    };
+
+    if (mode === "signup") {
+      setStatus("Sign up…");
+      clerk.mountSignUp(clerkMount, common);
+    } else {
+      setStatus("Sign in…");
+      clerk.mountSignIn(clerkMount, common);
     }
   }
 
-  async function handlePlanPurchase(selectedPlan) {
-    if (!selectedPlan) return;
-    setStatus("Starting checkout…");
+  async function main() {
+    showAuthUI();
     setError("");
+    setStatus("Loading…");
 
-    const me = await apiGet("/api/me");
-    if (!me?.signedIn) {
-      setStatus("Please sign in first.");
+    // Helpful click handler
+    logoutBtn?.addEventListener("click", async () => {
+      try {
+        if (window.Clerk) await window.Clerk.signOut();
+        window.location.href = "/app";
+      } catch {
+        window.location.href = "/app";
+      }
+    });
+
+    const q = parseQuery();
+    const plan = q.plan || null;
+
+    const cfg = await getConfig();
+
+    // Init Clerk
+    const clerk = await initClerk(cfg);
+
+    // If already signed in
+    if (clerk.user) {
+      showAuthedUI(clerk.user);
+      await maybeStartCheckout(clerk, plan);
       return;
     }
 
-    const out = await apiPost("/api/create-checkout-session", { plan: selectedPlan });
-    if (!out?.url) throw new Error("No checkout URL returned from server.");
-    window.location.href = out.url;
-  }
+    // Not signed in → mount auth UI and wait for sign-in
+    await mountAuth(clerk);
+    showAuthUI();
 
-  try {
-    showAuth();
-    setStatus("Loading config…");
-    const cfg = await getConfig();
-
-    if (!cfg?.clerkPublishableKey) {
-      throw new Error("Missing clerkPublishableKey from /api/config");
-    }
-
-    setStatus("Loading Clerk…");
-    await loadClerkBrowser();
-
-    setStatus("Initializing…");
-    await window.Clerk.load({
-      publishableKey: cfg.clerkPublishableKey,
-    });
-
-    // Always mount SignIn UI on this page.
-    // IMPORTANT: Force redirect back to this /app URL after sign-in/up.
-    const here = window.location.href;
-
-    // If you want sign-up too, Clerk SignIn includes link to sign-up by default.
-    window.Clerk.mountSignIn(clerkMount, {
-      redirectUrl: here,
-      afterSignInUrl: here,
-      afterSignUpUrl: here,
-    });
-
-    // React to auth state changes
-    const updateUI = async () => {
-      setError("");
-
-      if (window.Clerk.user && window.Clerk.session) {
-        showApp();
-        setStatus("");
-        await renderApp();
-
-        // Auto-checkout if plan=... is present
-        if (plan) {
-          await handlePlanPurchase(plan);
+    // When a user signs in, Clerk updates state; poll briefly (simple & robust for static sites)
+    const startedAt = Date.now();
+    const timer = setInterval(async () => {
+      if (clerk.user) {
+        clearInterval(timer);
+        showAuthedUI(clerk.user);
+        try {
+          await maybeStartCheckout(clerk, plan);
+        } catch (e) {
+          setError(String(e?.message || e));
         }
-      } else {
-        showAuth();
-        setStatus("Not signed in.");
       }
-    };
-
-    // Initial paint
-    await updateUI();
-
-    // Listener for sign-in/out changes
-    window.Clerk.addListener(() => {
-      updateUI().catch((e) => setError(e.message));
-    });
-
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await window.Clerk.signOut();
-      } finally {
-        window.location.href = "/";
-      }
-    });
-  } catch (e) {
-    showAuth();
-    setStatus("");
-    setError(e?.message || String(e));
+      // stop after 2 minutes
+      if (Date.now() - startedAt > 120000) clearInterval(timer);
+    }, 500);
   }
+
+  main().catch((err) => {
+    console.error(err);
+    setStatus("");
+    setError(err?.message ? err.message : String(err) || "Clerk failed to load");
+  });
 })();
