@@ -1,25 +1,46 @@
 import { requireClerkAuth } from "./_auth";
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+  return new Response(JSON.stringify(data), {
     status,
     headers: { "Content-Type": "application/json" },
   });
 }
 
+async function fetchManifest(request, env) {
+  const url = new URL(request.url);
+  const manifestUrl = `${url.origin}/blocks/manifest.json`;
+  const manifestReq = new Request(manifestUrl);
+
+  // Prefer Pages static assets binding if available
+  if (env?.ASSETS?.fetch) {
+    return env.ASSETS.fetch(manifestReq);
+  }
+  // Fallback (should still work on Pages)
+  return fetch(manifestReq);
+}
+
 export async function onRequestGet({ request, env }) {
   try {
-    // ✅ Viktigt: requireClerkAuth tar ett objekt { request, env }
-    const auth = await requireClerkAuth({ request, env });
+    // ✅ IMPORTANT: _auth.js expects (request, env) — not an object
+    const auth = await requireClerkAuth(request, env);
 
-    const userId = auth.userId;
+    const userId = auth?.userId || null;
 
-    // 1) Läs access från D1
+    // If not signed in, return a non-error payload (keeps UI calm)
+    if (!userId) {
+      return json({
+        accessGranted: false,
+        reason: "not_signed_in",
+        userId: null,
+      });
+    }
+
+    // 1) Check access in D1
     const nowSec = Math.floor(Date.now() / 1000);
 
-    // Plocka senaste raden för användaren (ifall ni råkat få flera)
     const row = await env.DB.prepare(
-      `SELECT user_id, status, access_until, plan, stripe_customer_id, stripe_subscription_id
+      `SELECT status, access_until
        FROM access
        WHERE user_id = ?1
        ORDER BY access_until DESC
@@ -28,56 +49,37 @@ export async function onRequestGet({ request, env }) {
       .bind(userId)
       .first();
 
-    // Normalisera access_until (ms eller sek)
-    let untilSec = null;
-    if (row?.access_until != null) {
-      const raw = Number(row.access_until);
-      untilSec = raw > 1e12 ? Math.floor(raw / 1000) : raw; // ms -> sec
+    let accessGranted = false;
+
+    if (row) {
+      let until = Number(row.access_until);
+
+      // Normalize ms → sec if needed
+      if (until > 1e12) until = Math.floor(until / 1000);
+
+      accessGranted =
+        String(row.status || "").toLowerCase() === "active" && until > nowSec;
     }
-
-    const status = row?.status ? String(row.status).toLowerCase() : null;
-
-    const accessGranted = Boolean(
-      row &&
-        status === "active" &&
-        typeof untilSec === "number" &&
-        untilSec > nowSec
-    );
 
     if (!accessGranted) {
-      // ✅ Returnera tydlig orsak + debug så vi kan se mismatch direkt i Network
-      return json(
-        {
-          accessGranted: false,
-          reason: !row
-            ? "no_row_for_user"
-            : status !== "active"
-              ? "status_not_active"
-              : "expired_or_invalid_time",
-          debug: {
-            userId,
-            nowSec,
-            dbRow: row || null,
-            computed: { status, untilSec },
-          },
-        },
-        200
-      );
+      return json({
+        accessGranted: false,
+        reason: "no_active_subscription",
+        userId,
+      });
     }
 
-    // 2) Bygg items från manifest
-    const url = new URL(request.url);
-    const manifestReq = new Request(`${url.origin}/blocks/manifest.json`);
-
-    // env.ASSETS finns normalt på Pages Functions. Om den saknas, fallback till vanlig fetch.
-    const manifestRes = env.ASSETS?.fetch
-      ? await env.ASSETS.fetch(manifestReq)
-      : await fetch(manifestReq);
-
+    // 2) Build library items from /public/blocks/manifest.json
     let latest = 1;
-    if (manifestRes?.ok) {
-      const manifest = await manifestRes.json();
-      latest = Number(manifest.latest || 1);
+    try {
+      const manifestRes = await fetchManifest(request, env);
+      if (manifestRes.ok) {
+        const manifest = await manifestRes.json();
+        latest = Number(manifest.latest || 1);
+      }
+    } catch {
+      // If manifest fails, still return at least #1
+      latest = 1;
     }
 
     const items = Array.from({ length: latest }, (_, i) => {
@@ -89,19 +91,10 @@ export async function onRequestGet({ request, env }) {
       };
     });
 
-    return json({
-      accessGranted: true,
-      userId,
-      items,
-      debug: {
-        nowSec,
-        dbRow: row,
-        computed: { status, untilSec },
-      },
-    });
+    return json({ accessGranted: true, userId, items });
   } catch (err) {
     const msg = err?.message || String(err);
-    const status = msg.toLowerCase().includes("unauthorized") ? 401 : 500;
-    return json({ error: msg }, status);
+    // Return JSON error but keep shape predictable
+    return json({ accessGranted: false, error: msg }, 500);
   }
 }
