@@ -1,2 +1,2 @@
 /*
-  Content-Security-Policy: script-src 'self' https://unpkg.com https://*.clerk.com https://js.clerk.com 'unsafe-inline'; connect-src 'self' https://*.clerk.com https://js.clerk.com; frame-src https://*.clerk.com https://js.clerk.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline';
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://*.clerk.com https://js.clerk.com; connect-src 'self' https://*.clerk.com https://js.clerk.com https://clerk.knowstride.com; frame-src https://*.clerk.com https://js.clerk.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data: https:; worker-src 'self' blob:; child-src blob:
