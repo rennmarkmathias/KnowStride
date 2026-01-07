@@ -1,7 +1,7 @@
 import { requireClerkAuth } from "./_auth";
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
+  return new Response(JSON.stringify(data, null, 2), {
     status,
     headers: { "Content-Type": "application/json" },
   });
@@ -9,22 +9,17 @@ function json(data, status = 200) {
 
 export async function onRequestGet({ request, env }) {
   try {
-    const auth = await requireClerkAuth(request, env);
-
-    // Viktigt: _auth.js returnerar { isSignedIn:false } istället för att throw:a
-    if (!auth?.isSignedIn || !auth?.userId) {
-      return json(
-        { accessGranted: false, reason: "not_signed_in", userId: null, email: null },
-        401
-      );
-    }
+    // ✅ Viktigt: requireClerkAuth tar ett objekt { request, env }
+    const auth = await requireClerkAuth({ request, env });
 
     const userId = auth.userId;
-    const email = auth.email || null;
 
-    // 1) Hämta senaste access-raden för användaren
+    // 1) Läs access från D1
+    const nowSec = Math.floor(Date.now() / 1000);
+
+    // Plocka senaste raden för användaren (ifall ni råkat få flera)
     const row = await env.DB.prepare(
-      `SELECT status, access_until, plan
+      `SELECT user_id, status, access_until, plan, stripe_customer_id, stripe_subscription_id
        FROM access
        WHERE user_id = ?1
        ORDER BY access_until DESC
@@ -33,52 +28,54 @@ export async function onRequestGet({ request, env }) {
       .bind(userId)
       .first();
 
-    if (!row) {
-      // Ingen rad i DB för denna Clerk-userId
-      return json({
-        accessGranted: false,
-        reason: "no_row_for_user",
-        userId,
-        email,
-      });
+    // Normalisera access_until (ms eller sek)
+    let untilSec = null;
+    if (row?.access_until != null) {
+      const raw = Number(row.access_until);
+      untilSec = raw > 1e12 ? Math.floor(raw / 1000) : raw; // ms -> sec
     }
 
-    // access_until kan vara ms (t.ex. 1770266647000) eller sek (t.ex. 1770266647)
-    let untilMs = Number(row.access_until || 0);
-    if (untilMs > 0 && untilMs < 1e12) {
-      // Ser ut som sekunder -> konvertera till ms
-      untilMs *= 1000;
-    }
+    const status = row?.status ? String(row.status).toLowerCase() : null;
 
-    const statusStr = String(row.status || "").toLowerCase();
-    const nowMs = Date.now();
-
-    const isActive = statusStr === "active";
-    const notExpired = untilMs > nowMs;
-
-    const accessGranted = isActive && notExpired;
+    const accessGranted = Boolean(
+      row &&
+        status === "active" &&
+        typeof untilSec === "number" &&
+        untilSec > nowSec
+    );
 
     if (!accessGranted) {
-      const reason = !isActive ? "status_not_active" : "expired";
-      return json({
-        accessGranted: false,
-        reason,
-        userId,
-        email,
-        status: row.status ?? null,
-        access_until: row.access_until ?? null,
-        plan: row.plan ?? null,
-        now: nowMs,
-      });
+      // ✅ Returnera tydlig orsak + debug så vi kan se mismatch direkt i Network
+      return json(
+        {
+          accessGranted: false,
+          reason: !row
+            ? "no_row_for_user"
+            : status !== "active"
+              ? "status_not_active"
+              : "expired_or_invalid_time",
+          debug: {
+            userId,
+            nowSec,
+            dbRow: row || null,
+            computed: { status, untilSec },
+          },
+        },
+        200
+      );
     }
 
-    // 2) Bygg biblioteket från /public/blocks/manifest.json
+    // 2) Bygg items från manifest
     const url = new URL(request.url);
     const manifestReq = new Request(`${url.origin}/blocks/manifest.json`);
-    const manifestRes = await env.ASSETS.fetch(manifestReq);
+
+    // env.ASSETS finns normalt på Pages Functions. Om den saknas, fallback till vanlig fetch.
+    const manifestRes = env.ASSETS?.fetch
+      ? await env.ASSETS.fetch(manifestReq)
+      : await fetch(manifestReq);
 
     let latest = 1;
-    if (manifestRes.ok) {
+    if (manifestRes?.ok) {
       const manifest = await manifestRes.json();
       latest = Number(manifest.latest || 1);
     }
@@ -95,12 +92,16 @@ export async function onRequestGet({ request, env }) {
     return json({
       accessGranted: true,
       userId,
-      email,
-      plan: row.plan ?? null,
       items,
+      debug: {
+        nowSec,
+        dbRow: row,
+        computed: { status, untilSec },
+      },
     });
   } catch (err) {
     const msg = err?.message || String(err);
-    return json({ error: msg }, 500);
+    const status = msg.toLowerCase().includes("unauthorized") ? 401 : 500;
+    return json({ error: msg }, status);
   }
 }
