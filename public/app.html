@@ -34,10 +34,9 @@
   </main>
 
   <!-- IMPORTANT:
-       js.clerk.com fails for you (DNS/resolve). Use unpkg which works. -->
-  <script defer src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
-
-  <!-- Your app logic -->
+       Do NOT load Clerk here.
+       app.js will fetch /api/config, then inject clerk.browser.js WITH the publishable key.
+  -->
   <script defer src="/app.js"></script>
 </body>
 </html>
