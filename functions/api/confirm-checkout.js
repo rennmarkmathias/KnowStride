@@ -10,7 +10,7 @@ function json(data, status = 200) {
 
 export async function onRequestGet({ request, env }) {
   try {
-    const auth = await requireClerkAuth({ request, env });
+    const auth = await requireClerkAuth(request, env);
     const userId = auth.userId;
 
     const url = new URL(request.url);
