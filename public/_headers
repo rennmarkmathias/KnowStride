@@ -14,7 +14,8 @@
       'unsafe-inline'
       'unsafe-eval'
       https://unpkg.com
-      https://*.clerk.com;
+      https://*.clerk.com
+      https://clerk.knowstride.com;
 
     style-src
       'self'
@@ -24,7 +25,8 @@
       'self'
       data:
       https:
-      https://*.clerk.com;
+      https://*.clerk.com
+      https://clerk.knowstride.com;
 
     font-src
       'self'
@@ -34,11 +36,13 @@
     connect-src
       'self'
       https://*.clerk.com
+      https://clerk.knowstride.com
       https://api.stripe.com
       https://*.stripe.com;
 
     frame-src
       https://*.clerk.com
+      https://clerk.knowstride.com
       https://accounts.google.com
       https://*.stripe.com;
 
