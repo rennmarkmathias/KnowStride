@@ -142,11 +142,11 @@
       <div style="margin-top:14px;">
         <h3 style="margin:0 0 8px 0;">Choose a plan</h3>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" data-plan="monthly">Monthly</button>
-          <button class="btn" data-plan="yearly">Yearly</button>
-          <button class="btn" data-plan="3y">3 years</button>
-          <button class="btn" data-plan="6y">6 years</button>
-          <button class="btn" data-plan="9y">9 years</button>
+          <button class="btn" data-plan="monthly">Monthly <span class="price">$2.99</span></button>
+          <button class="btn" data-plan="yearly">Yearly <span class="price">$14.99</span></button>
+          <button class="btn" data-plan="3y">3 years <span class="price">$24.99</span></button>
+          <button class="btn" data-plan="6y">6 years <span class="price">$39.99</span></button>
+          <button class="btn" data-plan="9y">9 years <span class="price">$49.99</span></button>
         </div>
         <p class="muted" style="margin-top:10px;">
           After purchase, refresh will unlock the library automatically.
@@ -163,6 +163,7 @@
     const style = document.createElement("style");
     style.textContent = `
       .btn { padding:10px 14px; border-radius:12px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+      .btn .price { opacity:0.75; margin-left:6px; font-weight:500; }
       .btn:hover { filter: brightness(0.98); }
     `;
     document.head.appendChild(style);
@@ -246,9 +247,20 @@
     // If user came back from Stripe success, we may need to wait for webhook -> D1
     const params = new URLSearchParams(location.search);
     const isSuccess = params.get("success") === "1";
+    const sessionId = params.get("session_id");
 
     if (isSuccess) {
       setStatus("Payment received. Activating your access…");
+
+      // Best-effort confirmation to unlock immediately even if the webhook is delayed/missed.
+      if (sessionId) {
+        try {
+          await apiFetchJson(`/api/confirm-checkout?session_id=${encodeURIComponent(sessionId)}`);
+        } catch (err) {
+          // Non-fatal; we'll still poll /api/library below.
+          console.warn("confirm-checkout failed", err);
+        }
+      }
     } else {
       setStatus("Loading your library…");
     }
