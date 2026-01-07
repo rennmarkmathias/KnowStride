@@ -1,128 +1,88 @@
 import Stripe from "stripe";
-import { requireClerkAuth } from "./_auth.js";
+import { requireClerkAuth } from "./_auth";
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-function assertEnv(env, key) {
-  if (!env?.[key]) throw new Error(`Missing env var: ${key}`);
-}
-
-function addMonths(date, months) {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
-}
-function addYears(date, years) {
-  const d = new Date(date);
-  d.setFullYear(d.getFullYear() + years);
-  return d;
-}
-
-// Fallback om vi inte kan läsa Stripe current_period_end (borde sällan hända)
-function computeAccessUntilMs(nowMs, plan) {
-  const now = new Date(nowMs);
-  switch (plan) {
-    case "monthly":
-      return addMonths(now, 1).getTime();
-    case "yearly":
-      return addYears(now, 1).getTime();
-    case "3y":
-      return addYears(now, 3).getTime();
-    case "6y":
-      return addYears(now, 6).getTime();
-    case "9y":
-      return addYears(now, 9).getTime();
-    default:
-      return addMonths(now, 1).getTime();
-  }
-}
-
-async function getCheckoutSession(stripe, sessionId) {
-  return await stripe.checkout.sessions.retrieve(sessionId, {
-    expand: ["subscription"],
-  });
-}
-
-async function getSubscription(stripe, maybeSub) {
-  if (!maybeSub) return null;
-  if (typeof maybeSub === "object" && maybeSub.id) return maybeSub;
-  if (typeof maybeSub === "string") return await stripe.subscriptions.retrieve(maybeSub);
-  return null;
-}
-
-/**
- * Kallas från client efter retur från Stripe:
- *   /app?success=1&session_id=cs_...
- */
 export async function onRequestGet(context) {
   try {
     const { request, env } = context;
 
-    assertEnv(env, "STRIPE_SECRET_KEY");
+    const auth = await requireClerkAuth(request, env);
+    if (!auth) return new Response("Unauthorized", { status: 401 });
 
-    const { userId } = requireClerkAuth(context);
+    const { userId } = auth;
 
     const url = new URL(request.url);
     const sessionId = url.searchParams.get("session_id");
-    if (!sessionId) return json({ ok: false, error: "Missing session_id" }, 400);
+    if (!sessionId) return new Response("Missing session_id", { status: 400 });
 
-    const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
+    const stripeKey = env.STRIPE_SECRET_KEY;
+    if (!stripeKey) return new Response("Missing STRIPE_SECRET_KEY", { status: 500 });
 
-    const session = await getCheckoutSession(stripe, sessionId);
+    const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["subscription"],
+    });
 
     if (session.payment_status !== "paid") {
-      return json(
-        { ok: false, error: `Checkout session not paid (status=${session.payment_status})` },
-        400
-      );
+      return new Response(JSON.stringify({ ok: false, reason: "not_paid" }), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
     }
 
-    const plan =
-      session?.metadata?.plan ||
-      session?.subscription?.metadata?.plan ||
-      "monthly";
+    const metaUserId = session?.metadata?.user_id;
+    if (!metaUserId) return new Response("Missing user_id in session metadata", { status: 400 });
+    if (metaUserId !== userId) return new Response("Forbidden", { status: 403 });
 
-    const customerId =
-      typeof session.customer === "string" ? session.customer : session.customer?.id || null;
-
-    const subscriptionObj = await getSubscription(stripe, session.subscription);
-    const subscriptionId =
-      subscriptionObj?.id || (typeof session.subscription === "string" ? session.subscription : null);
-
-    const nowMs = Date.now();
-
-    // Stripe är “source of truth” (period slut)
-    let accessUntilMs = null;
-    if (subscriptionObj?.current_period_end) {
-      accessUntilMs = Number(subscriptionObj.current_period_end) * 1000;
-    }
-    if (!accessUntilMs || !Number.isFinite(accessUntilMs)) {
-      accessUntilMs = computeAccessUntilMs(nowMs, plan);
+    const subscription = session.subscription;
+    if (!subscription || typeof subscription !== "object") {
+      return new Response("Missing subscription on session", { status: 400 });
     }
 
-    await env.DB.prepare(
-      `
-      INSERT INTO access (user_id, start_time, access_until, plan, stripe_customer_id, stripe_subscription_id, status)
-      VALUES (?, ?, ?, ?, ?, ?, 'active')
-      ON CONFLICT(user_id) DO UPDATE SET
-        start_time=excluded.start_time,
-        access_until=excluded.access_until,
-        plan=excluded.plan,
-        stripe_customer_id=excluded.stripe_customer_id,
-        stripe_subscription_id=excluded.stripe_subscription_id,
-        status='active'
-      `
+    const plan = session?.metadata?.plan || "monthly";
+
+    // Stripe ger seconds, vi sparar ms
+    const start_time = Date.now();
+    const access_until = (subscription.current_period_end || 0) * 1000;
+
+    if (!access_until) {
+      return new Response("Missing subscription current_period_end", { status: 400 });
+    }
+
+    const db = env.DB;
+    if (!db) return new Response("Missing DB binding", { status: 500 });
+
+    const stripe_customer_id = session.customer || null;
+    const stripe_subscription_id = subscription.id || null;
+
+    await db.prepare(
+      `INSERT INTO access (user_id, start_time, access_until, plan, stripe_customer_id, stripe_subscription_id, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'active')
+       ON CONFLICT(user_id) DO UPDATE SET
+         start_time=excluded.start_time,
+         access_until=excluded.access_until,
+         plan=excluded.plan,
+         stripe_customer_id=excluded.stripe_customer_id,
+         stripe_subscription_id=excluded.stripe_subscription_id,
+         status='active'`
     )
-      .bind(userId, nowMs, accessUntilMs, plan, customerId, subscriptionId)
-      .run();
+    .bind(
+      userId,
+      start_time,
+      access_until,
+      plan,
+      stripe_customer_id,
+      stripe_subscription_id
+    )
+    .run();
 
-    return json({ ok: true, userId, plan, accessUntil: accessUntilMs });
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
-    return json({ ok: false, error: err?.message || String(err) }, 500);
+    return new Response(
+      JSON.stringify({ error: err?.message || String(err) }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
