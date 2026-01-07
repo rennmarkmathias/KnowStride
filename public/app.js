@@ -9,7 +9,8 @@
   const logoutBtn = $("logoutBtn");
   const appContent = $("appContent");
 
-  const APP_URL = "/app.html"; // IMPORTANT: avoid /app (you currently have redirect loops there)
+  // Använd /app.html som "sanna" URL tills allt är stabilt
+  const APP_URL = "/app.html";
 
   function showError(msg) {
     authError.textContent = msg || "";
@@ -32,35 +33,31 @@
   }
 
   async function fetchPublishableKey() {
-  const res = await fetch("/api/config", {
-    method: "GET",
-    cache: "no-store",
-    headers: {
-      "Accept": "application/json"
+    const res = await fetch("/api/config", {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch /api/config (${res.status})`);
     }
-  });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch /api/config (${res.status})`);
-  }
+    const data = await res.json();
 
-  const data = await res.json();
+    console.log("Config response from /api/config:", data);
 
-  console.log("Config response from /api/config:", data);
+    if (
+      !data ||
+      typeof data.clerkPublishableKey !== "string" ||
+      !data.clerkPublishableKey.startsWith("pk_")
+    ) {
+      throw new Error("Invalid or missing clerkPublishableKey from /api/config");
+    }
 
-  if (
-    !data ||
-    typeof data.clerkPublishableKey !== "string" ||
-    !data.clerkPublishableKey.startsWith("pk_")
-  ) {
-    throw new Error(
-      "Invalid or missing clerkPublishableKey from /api/config"
-    );
-  }
-
-  return data.clerkPublishableKey;
-}
-
+    return data.clerkPublishableKey;
   }
 
   async function waitForClerkGlobal(timeoutMs = 12000) {
@@ -75,7 +72,9 @@
   function renderSignedIn(user) {
     showApp();
     appContent.innerHTML = `
-      <p class="muted">Logged in as: <strong>${user?.primaryEmailAddress?.emailAddress || user?.username || "Unknown"}</strong></p>
+      <p class="muted">Logged in as: <strong>${
+        user?.primaryEmailAddress?.emailAddress || user?.username || "Unknown"
+      }</strong></p>
       <p style="margin-top:10px;">✅ Auth works. Next step is to protect paid content / plans with your existing Stripe logic.</p>
     `;
   }
@@ -84,7 +83,8 @@
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignIn(clerkMount, {
       appearance: { elements: {} },
-      signUpUrl: APP_URL,
+      // Tips: om du vill kunna tvinga signup-vy via länk
+      signUpUrl: `${APP_URL}?signup=1`,
       redirectUrl: APP_URL,
       afterSignInUrl: APP_URL,
       afterSignUpUrl: APP_URL,
@@ -107,16 +107,16 @@
       showError("");
       setStatus("Loading authentication…");
 
-      // 1) Wait until Clerk global exists (script is defer-loaded in app.html)
+      // 1) Vänta tills Clerk global finns (script är defer i app.html)
       await waitForClerkGlobal();
 
-      // 2) Fetch publishable key
+      // 2) Hämta publishable key
       const publishableKey = await fetchPublishableKey();
 
-      // 3) Load Clerk
+      // 3) Ladda Clerk
       await window.Clerk.load({ publishableKey });
 
-      // Logout button
+      // Logout-knapp
       logoutBtn.addEventListener("click", async () => {
         try {
           await window.Clerk.signOut({ redirectUrl: "/" });
@@ -126,7 +126,7 @@
         }
       });
 
-      // 4) Decide what to show
+      // 4) Avgör vad som ska visas
       const user = window.Clerk.user;
       if (user) {
         setStatus("");
@@ -134,11 +134,11 @@
         return;
       }
 
-      // Not signed in -> show auth UI
+      // Inte inloggad -> visa auth UI
       showAuth();
       setStatus("");
 
-      // If URL has ?signup=1, show sign-up instead (optional)
+      // Om URL har ?signup=1, visa sign-up istället
       const params = new URLSearchParams(location.search);
       if (params.get("signup") === "1") {
         await mountSignUp();
@@ -149,7 +149,6 @@
       console.error(err);
       showAuth();
 
-      // More helpful message for exactly your situation
       const msg = String(err?.message || err);
       if (msg.toLowerCase().includes("clerk script")) {
         showError("Clerk failed to load. (Script/CDN issue)");
