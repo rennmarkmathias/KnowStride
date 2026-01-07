@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: script-src 'self' https://unpkg.com https://*.clerk.com https://js.clerk.com 'unsafe-inline'; connect-src 'self' https://*.clerk.com https://js.clerk.com; frame-src https://*.clerk.com https://js.clerk.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline';
