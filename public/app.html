@@ -21,7 +21,6 @@
 
       <p id="authStatus" class="muted" style="margin-top:12px;">Loading sign-in…</p>
 
-      <!-- Clerk mounts here -->
       <div id="clerk-components" style="margin-top:14px;"></div>
 
       <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
@@ -33,10 +32,10 @@
     </section>
   </main>
 
-  <!-- IMPORTANT:
-       Do NOT load Clerk here.
-       app.js will fetch /api/config, then inject clerk.browser.js WITH the publishable key.
-  -->
+  <!-- Clerk from unpkg -->
+  <script defer src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+
+  <!-- App logic -->
   <script defer src="/app.js"></script>
 </body>
 </html>
