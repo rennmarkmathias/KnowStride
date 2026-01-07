@@ -32,11 +32,35 @@
   }
 
   async function fetchPublishableKey() {
-    const res = await fetch("/api/config", { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to fetch /api/config (${res.status})`);
-    const data = await res.json();
-    if (!data || !data.clerkPublishableKey) throw new Error("Missing clerkPublishableKey in /api/config");
-    return data.clerkPublishableKey;
+  const res = await fetch("/api/config", {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch /api/config (${res.status})`);
+  }
+
+  const data = await res.json();
+
+  console.log("Config response from /api/config:", data);
+
+  if (
+    !data ||
+    typeof data.clerkPublishableKey !== "string" ||
+    !data.clerkPublishableKey.startsWith("pk_")
+  ) {
+    throw new Error(
+      "Invalid or missing clerkPublishableKey from /api/config"
+    );
+  }
+
+  return data.clerkPublishableKey;
+}
+
   }
 
   async function waitForClerkGlobal(timeoutMs = 12000) {
