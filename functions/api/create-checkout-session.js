@@ -20,8 +20,12 @@ export async function onRequestPost({ request, env }) {
     mode: isSub ? "subscription" : "payment",
     line_items: [{ price: priceId, quantity: 1 }],
 
-    success_url: `${origin}/app.html?success=1`,
-    cancel_url: `${origin}/app.html?canceled=1&plan=${encodeURIComponent(plan)}`,
+    // Prefer the pretty route; Cloudflare Pages will still serve /app.html, but
+    // returning to /app avoids odd caching/redirect differences across browsers.
+    // Stripe will replace {CHECKOUT_SESSION_ID} automatically.
+    // We use this on the client to confirm & unlock access even if the webhook is delayed.
+    success_url: `${origin}/app?success=1&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/app?canceled=1&plan=${encodeURIComponent(plan)}`,
 
 
     metadata: { user_id: auth.userId, plan },
