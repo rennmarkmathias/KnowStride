@@ -1,92 +1,113 @@
-import { requireClerkAuth } from "./_auth";
+import Stripe from "stripe";
+import { requireClerkAuth } from "./_auth.js";
 
-export async function onRequestGet({ request, env }) {
-  const url = new URL(request.url);
-
-  const auth = await requireClerkAuth(request, env);
-  if (!auth) return json({ error: "Not logged in." }, 401);
-
-  const nowMs = Date.now();
-
-  const access = await env.DB.prepare(
-    "SELECT start_time, access_until FROM access WHERE user_id = ?"
-  ).bind(auth.userId).first();
-
-  const hasPaid = !!access && Number(access.access_until) > nowMs;
-
-  if (!hasPaid) {
-    return json({
-      startedAt: access?.start_time
-        ? new Date(Number(access.start_time)).toISOString()
-        : null,
-      unlockedCount: 0,
-      firstAvailable: 0,
-      retention: 52,
-      totalBlocksAvailable: 0,
-      blocks: [],
-      hasPaid: false,
-    });
-  }
-
-  const startedAt = new Date(Number(access.start_time));
-  const now = new Date(nowMs);
-
-  const days = Math.floor((now - startedAt) / (1000 * 60 * 60 * 24));
-  const unlockedCount = Math.max(1, Math.floor(days / 7) + 1);
-
-  const retention = 52;
-  const firstAvailable = Math.max(1, unlockedCount - retention + 1);
-
-  let totalBlocksAvailable = unlockedCount;
-  try {
-    const manifestUrl = new URL("/blocks/manifest.json", url);
-    const m = await fetch(manifestUrl.toString(), {
-      cf: { cacheTtl: 300, cacheEverything: true },
-    });
-    if (m.ok) {
-      const j = await m.json();
-      if (typeof j.latest === "number" && j.latest > 0) {
-        totalBlocksAvailable = j.latest;
-      }
-    }
-  } catch (_) {}
-
-  const maxUnlocked = Math.min(unlockedCount, totalBlocksAvailable);
-
-  const blocks = [];
-  for (let n = maxUnlocked; n >= firstAvailable; n--) blocks.push({ number: n });
-
-  const blockParam = url.searchParams.get("block");
-  if (blockParam) {
-    const n = Number(blockParam);
-    if (!Number.isFinite(n) || n < 1) return json({ error: "Invalid block number" }, 400);
-    if (n < firstAvailable || n > maxUnlocked) return json({ error: "Not unlocked or not available" }, 403);
-
-    const blockUrl = new URL(`/blocks/knowstride${n}.html`, url);
-    const r = await fetch(blockUrl.toString(), {
-      cf: { cacheTtl: 300, cacheEverything: true },
-    });
-    if (!r.ok) return json({ error: "Block file not found. Upload it to /public/blocks first." }, 404);
-
-    const html = await r.text();
-    return json({ html, block: n });
-  }
-
-  return json({
-    startedAt: startedAt.toISOString(),
-    unlockedCount: maxUnlocked,
-    firstAvailable,
-    retention,
-    totalBlocksAvailable,
-    blocks,
-    hasPaid: true,
-    accessUntil: new Date(Number(access.access_until)).toISOString(),
-  });
-}
-
-function json(obj, status = 200) {
-  return new Response(JSON.stringify(obj), {
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+async function fetchAccess(env, userId) {
+  const res = await env.DB.prepare(
+    "SELECT user_id, start_time, access_until, plan, stripe_customer_id, stripe_subscription_id, status FROM access WHERE user_id = ?"
+  )
+    .bind(userId)
+    .first();
+  return res || null;
+}
+
+function isActive(accessRow) {
+  if (!accessRow) return false;
+  const until = Number(accessRow.access_until);
+  return Number.isFinite(until) && until > Date.now() && (accessRow.status || "active") === "active";
+}
+
+// För att få “auto-unlock” utan refresh: om D1 saknar aktiv access,
+// kolla Stripe efter en aktiv subscription kopplad till userId i metadata.
+async function trySyncFromStripe(env, userId) {
+  if (!env?.STRIPE_SECRET_KEY) return { synced: false };
+
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
+
+  // Kräver Stripe Search API (subscriptions/search). Funkar bra för detta upplägg.
+  const query = `metadata['user_id']:'${userId}' AND status:'active'`;
+  const result = await stripe.subscriptions.search({ query, limit: 1 });
+
+  const sub = result?.data?.[0];
+  if (!sub) return { synced: false };
+
+  const plan = sub?.metadata?.plan || "monthly";
+  const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer?.id || null;
+  const subscriptionId = sub.id;
+  const accessUntilMs = Number(sub.current_period_end) * 1000; // unix seconds -> ms
+
+  if (!Number.isFinite(accessUntilMs)) return { synced: false };
+
+  const nowMs = Date.now();
+
+  await env.DB.prepare(
+    `
+    INSERT INTO access (user_id, start_time, access_until, plan, stripe_customer_id, stripe_subscription_id, status)
+    VALUES (?, ?, ?, ?, ?, ?, 'active')
+    ON CONFLICT(user_id) DO UPDATE SET
+      start_time=excluded.start_time,
+      access_until=excluded.access_until,
+      plan=excluded.plan,
+      stripe_customer_id=excluded.stripe_customer_id,
+      stripe_subscription_id=excluded.stripe_subscription_id,
+      status='active'
+    `
+  )
+    .bind(userId, nowMs, accessUntilMs, plan, customerId, subscriptionId)
+    .run();
+
+  return { synced: true, plan, accessUntil: accessUntilMs };
+}
+
+export async function onRequestGet(context) {
+  try {
+    const { env } = context;
+    const { userId, email } = requireClerkAuth(context);
+
+    // 1) Läs från D1
+    let access = await fetchAccess(env, userId);
+    if (isActive(access)) {
+      return json({
+        ok: true,
+        loggedIn: true,
+        userId,
+        email,
+        hasAccess: true,
+        accessUntil: Number(access.access_until),
+        plan: access.plan || null,
+      });
+    }
+
+    // 2) Om ej aktiv: försök synka från Stripe (auto-unlock)
+    const sync = await trySyncFromStripe(env, userId);
+    if (sync.synced) {
+      return json({
+        ok: true,
+        loggedIn: true,
+        userId,
+        email,
+        hasAccess: true,
+        accessUntil: sync.accessUntil,
+        plan: sync.plan,
+        syncedFromStripe: true,
+      });
+    }
+
+    // 3) Annars: ingen access
+    return json({
+      ok: true,
+      loggedIn: true,
+      userId,
+      email,
+      hasAccess: false,
+    });
+  } catch (err) {
+    return json({ ok: false, error: err?.message || String(err) }, 401);
+  }
 }
