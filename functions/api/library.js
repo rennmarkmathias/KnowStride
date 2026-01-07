@@ -15,9 +15,8 @@ export async function onRequestGet({ request, env }) {
     const email = auth.email || null;
 
     // 1) Check access in D1
-    // NOTE: your table uses `status` (e.g. "active"), not `active` (1/0)
-    // Also: access_until in your screenshot looks like milliseconds (e.g. 1770266647000),
-    // while we compare against seconds. We normalize below.
+    // Table uses `status` (e.g. "active"), not `active` (1/0)
+    // access_until may be milliseconds -> normalize to seconds
     const nowSec = Math.floor(Date.now() / 1000);
 
     const row = await env.DB.prepare(
@@ -40,7 +39,8 @@ export async function onRequestGet({ request, env }) {
         until = Math.floor(until / 1000);
       }
 
-      accessGranted = String(row.status).toLowerCase() === "active" && until > nowSec;
+      accessGranted =
+        String(row.status).toLowerCase() === "active" && until > nowSec;
     }
 
     if (!accessGranted) {
@@ -48,14 +48,22 @@ export async function onRequestGet({ request, env }) {
     }
 
     // 2) Build library items from /public/blocks/manifest.json
+    // IMPORTANT: Do NOT use env.ASSETS here (not guaranteed to exist).
+    // Fetch the static asset from the same origin instead.
     const url = new URL(request.url);
-    const manifestReq = new Request(`${url.origin}/blocks/manifest.json`);
-    const manifestRes = await env.ASSETS.fetch(manifestReq);
 
     let latest = 1;
-    if (manifestRes.ok) {
-      const manifest = await manifestRes.json();
-      latest = Number(manifest.latest || 1);
+    try {
+      const manifestRes = await fetch(`${url.origin}/blocks/manifest.json`, {
+        headers: { "Accept": "application/json" },
+      });
+
+      if (manifestRes.ok) {
+        const manifest = await manifestRes.json();
+        latest = Number(manifest.latest || 1);
+      }
+    } catch {
+      // If manifest is missing or fails, we still return a sane default (latest = 1)
     }
 
     const items = Array.from({ length: latest }, (_, i) => {
