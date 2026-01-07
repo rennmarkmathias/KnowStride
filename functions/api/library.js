@@ -1,37 +1,60 @@
-// public/js/library.js
+import { requireClerkAuth } from "./_auth";
 
-export async function loadLibrary() {
-  const statusEl = document.getElementById("library-status");
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
 
+export async function onRequestGet({ request, env }) {
   try {
-    const res = await fetch("/api/library", {
-      credentials: "include"
+    const auth = await requireClerkAuth({ request, env });
+
+    const userId = auth.userId;
+    const email = auth.email || null;
+
+    // 1) Check access in D1
+    const now = Math.floor(Date.now() / 1000);
+    const row = await env.DB.prepare(
+      "SELECT active, access_until FROM access WHERE user_id = ?1"
+    )
+      .bind(userId)
+      .first();
+
+    const accessGranted =
+      !!row && Number(row.active) === 1 && Number(row.access_until) > now;
+
+    if (!accessGranted) {
+      return json({ accessGranted: false, email });
+    }
+
+    // 2) Build library items from /public/blocks/manifest.json
+    // Cloudflare Pages Functions exposes static assets via env.ASSETS
+    const url = new URL(request.url);
+    const manifestReq = new Request(`${url.origin}/blocks/manifest.json`);
+    const manifestRes = await env.ASSETS.fetch(manifestReq);
+
+    let latest = 1;
+    if (manifestRes.ok) {
+      const manifest = await manifestRes.json();
+      latest = Number(manifest.latest || 1);
+    }
+
+    const items = Array.from({ length: latest }, (_, i) => {
+      const n = i + 1;
+      return {
+        id: n,
+        title: `KnowStride #${n}`,
+        url: `/blocks/knowstride${n}.html`,
+      };
     });
 
-    if (res.status === 401) {
-      showPlans();
-      return;
-    }
-
-    const data = await res.json();
-
-    if (data?.hasAccess) {
-      showLibrary();
-    } else {
-      showPlans();
-    }
+    return json({ accessGranted: true, email, items });
   } catch (err) {
-    console.error("Library load error", err);
-    showPlans();
+    // If auth fails, _auth throws -> return 401 JSON
+    const msg = err?.message || String(err);
+    const status = msg.toLowerCase().includes("unauthorized") ? 401 : 500;
+    return json({ error: msg }, status);
   }
-}
-
-function showLibrary() {
-  document.getElementById("library-content").style.display = "block";
-  document.getElementById("plans").style.display = "none";
-}
-
-function showPlans() {
-  document.getElementById("library-content").style.display = "none";
-  document.getElementById("plans").style.display = "block";
 }
