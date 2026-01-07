@@ -3,4 +3,44 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: interest-cohort=()
   X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' https://unpkg.com https://*.clerk.com 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.clerk.com https://clerk.knowstride.com https://*.clerk.accounts.dev; frame-src https://*.clerk.com; worker-src 'self' blob:;
+
+  Content-Security-Policy:
+    default-src 'self';
+    base-uri 'self';
+    object-src 'none';
+
+    script-src
+      'self'
+      'unsafe-inline'
+      'unsafe-eval'
+      https://unpkg.com
+      https://*.clerk.com;
+
+    style-src
+      'self'
+      'unsafe-inline';
+
+    img-src
+      'self'
+      data:
+      https:
+      https://*.clerk.com;
+
+    font-src
+      'self'
+      data:
+      https:;
+
+    connect-src
+      'self'
+      https://*.clerk.com
+      https://api.stripe.com
+      https://*.stripe.com;
+
+    frame-src
+      https://*.clerk.com
+      https://accounts.google.com
+      https://*.stripe.com;
+
+    worker-src
+      blob:;
