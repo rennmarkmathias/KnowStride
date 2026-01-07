@@ -4,7 +4,15 @@ export async function requireClerkAuth(request, env) {
   if (!m) return null;
 
   const token = m[1].trim();
-  const payload = await verifyClerkJwt(token, env.CLERK_JWKS_PUBLIC_KEY);
+  // Cloudflare Pages env-var names can differ depending on how they were added.
+  // We accept a few common variants to avoid "works in one deploy, breaks in another".
+  const jwkPublicPem =
+    env.CLERK_JWKS_PUBLIC_KEY ||
+    env.JWKS_PUBLIC_KEY ||
+    env["JWKS Public Key"] ||
+    env["JWKS_PUBLIC_KEY"];
+
+  const payload = await verifyClerkJwt(token, jwkPublicPem);
   if (!payload) return null;
 
   // Clerk brukar ha userId i "sub"
