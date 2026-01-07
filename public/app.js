@@ -9,7 +9,6 @@
   const logoutBtn = $("logoutBtn");
   const appContent = $("appContent");
 
-  // Använd /app.html som "sanna" URL tills allt är stabilt
   const APP_URL = "/app.html";
 
   function showError(msg) {
@@ -36,37 +35,60 @@
     const res = await fetch("/api/config", {
       method: "GET",
       cache: "no-store",
-      headers: {
-        Accept: "application/json",
-      },
+      headers: { Accept: "application/json" },
     });
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch /api/config (${res.status})`);
-    }
+    if (!res.ok) throw new Error(`Failed to fetch /api/config (${res.status})`);
 
     const data = await res.json();
-
     console.log("Config response from /api/config:", data);
 
-    if (
-      !data ||
-      typeof data.clerkPublishableKey !== "string" ||
-      !data.clerkPublishableKey.startsWith("pk_")
-    ) {
+    const key = data?.clerkPublishableKey;
+    if (typeof key !== "string" || !key.startsWith("pk_")) {
       throw new Error("Invalid or missing clerkPublishableKey from /api/config");
     }
+    return key;
+  }
 
-    return data.clerkPublishableKey;
+  function loadClerkScript(publishableKey) {
+    return new Promise((resolve, reject) => {
+      // Om den redan finns (t.ex. vid reload), återanvänd
+      if (window.Clerk) return resolve();
+
+      const existing = document.querySelector('script[data-knowstride-clerk="1"]');
+      if (existing) {
+        existing.addEventListener("load", () => resolve());
+        existing.addEventListener("error", () => reject(new Error("Failed to load Clerk script")));
+        return;
+      }
+
+      const s = document.createElement("script");
+      s.async = true;
+      s.crossOrigin = "anonymous";
+
+      // VIKTIGT: publishable key måste finnas VID script-load
+      s.setAttribute("data-clerk-publishable-key", publishableKey);
+
+      // Markera så vi kan hitta scriptet vid reload
+      s.setAttribute("data-knowstride-clerk", "1");
+
+      // Använd unpkg (eftersom js.clerk.com varit strul hos dig)
+      s.src = "https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js";
+
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error("Failed to load Clerk script (network/CDN)"));
+
+      document.head.appendChild(s);
+    });
   }
 
   async function waitForClerkGlobal(timeoutMs = 12000) {
     const start = Date.now();
     while (Date.now() - start < timeoutMs) {
-      if (window.Clerk && typeof window.Clerk.load === "function") return;
+      if (window.Clerk && typeof window.Clerk.mountSignIn === "function") return;
       await new Promise((r) => setTimeout(r, 50));
     }
-    throw new Error("Clerk script loaded but window.Clerk is still missing.");
+    throw new Error("Clerk did not initialize (window.Clerk missing).");
   }
 
   function renderSignedIn(user) {
@@ -75,15 +97,13 @@
       <p class="muted">Logged in as: <strong>${
         user?.primaryEmailAddress?.emailAddress || user?.username || "Unknown"
       }</strong></p>
-      <p style="margin-top:10px;">✅ Auth works. Next step is to protect paid content / plans with your existing Stripe logic.</p>
+      <p style="margin-top:10px;">✅ Auth works. Next step: protect paid content / plans with Stripe.</p>
     `;
   }
 
   async function mountSignIn() {
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignIn(clerkMount, {
-      appearance: { elements: {} },
-      // Tips: om du vill kunna tvinga signup-vy via länk
       signUpUrl: `${APP_URL}?signup=1`,
       redirectUrl: APP_URL,
       afterSignInUrl: APP_URL,
@@ -94,7 +114,6 @@
   async function mountSignUp() {
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignUp(clerkMount, {
-      appearance: { elements: {} },
       signInUrl: APP_URL,
       redirectUrl: APP_URL,
       afterSignInUrl: APP_URL,
@@ -107,16 +126,18 @@
       showError("");
       setStatus("Loading authentication…");
 
-      // 1) Vänta tills Clerk global finns (script är defer i app.html)
-      await waitForClerkGlobal();
-
-      // 2) Hämta publishable key
+      // 1) Hämta nyckeln först
       const publishableKey = await fetchPublishableKey();
 
-      // 3) Ladda Clerk
-      await window.Clerk.load({ publishableKey });
+      // 2) Ladda Clerk-scriptet med data-clerk-publishable-key
+      await loadClerkScript(publishableKey);
 
-      // Logout-knapp
+      // 3) Vänta tills Clerk verkligen initat
+      await waitForClerkGlobal();
+
+      // 4) (Valfritt men bra) kör load utan key (key kom via data-attribut)
+      await window.Clerk.load();
+
       logoutBtn.addEventListener("click", async () => {
         try {
           await window.Clerk.signOut({ redirectUrl: "/" });
@@ -126,7 +147,6 @@
         }
       });
 
-      // 4) Avgör vad som ska visas
       const user = window.Clerk.user;
       if (user) {
         setStatus("");
@@ -134,11 +154,9 @@
         return;
       }
 
-      // Inte inloggad -> visa auth UI
       showAuth();
       setStatus("");
 
-      // Om URL har ?signup=1, visa sign-up istället
       const params = new URLSearchParams(location.search);
       if (params.get("signup") === "1") {
         await mountSignUp();
@@ -148,13 +166,7 @@
     } catch (err) {
       console.error(err);
       showAuth();
-
-      const msg = String(err?.message || err);
-      if (msg.toLowerCase().includes("clerk script")) {
-        showError("Clerk failed to load. (Script/CDN issue)");
-      } else {
-        showError(msg);
-      }
+      showError(String(err?.message || err));
       setStatus("");
     }
   }
