@@ -1,6 +1,2 @@
 # API routes
 /api/* /api/:splat 200
-
-# App route
-/app /app.html 200
-/app/* /app.html 200
