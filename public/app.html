@@ -32,10 +32,16 @@
     </section>
   </main>
 
-  <!-- Clerk from unpkg -->
-  <script defer src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+  <!-- ClerkJS (stable) -->
+  <!-- VIKTIGT: klistra in DIN pk_live_... här -->
+  <script
+    id="clerkjs"
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js">
+  </script>
 
-  <!-- App logic -->
   <script defer src="/app.js"></script>
 </body>
 </html>
