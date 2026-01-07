@@ -9,7 +9,7 @@
   const logoutBtn = $("logoutBtn");
   const appContent = $("appContent");
 
-  const APP_URL = "/app.html";
+  const APP_URL = "/app"; // you are serving /app as the page (Cloudflare Pages)
 
   function showError(msg) {
     authError.textContent = msg || "";
@@ -31,219 +31,133 @@
     logoutBtn.style.display = "none";
   }
 
+  async function waitForClerkGlobal(timeoutMs = 15000) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      if (window.Clerk && typeof window.Clerk.load === "function") return;
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    throw new Error("Clerk script loaded but window.Clerk is still missing.");
+  }
+
   async function fetchPublishableKey() {
     const res = await fetch("/api/config", {
       method: "GET",
       cache: "no-store",
-      headers: { Accept: "application/json" },
+      headers: { "Accept": "application/json" },
     });
+
     if (!res.ok) throw new Error(`Failed to fetch /api/config (${res.status})`);
     const data = await res.json();
-    const key = data?.clerkPublishableKey;
-    if (typeof key !== "string" || !key.startsWith("pk_")) {
+
+    if (!data || typeof data.clerkPublishableKey !== "string" || !data.clerkPublishableKey.startsWith("pk_")) {
       throw new Error("Invalid or missing clerkPublishableKey from /api/config");
     }
-    return key;
-  }
-
-  function loadClerkScript(publishableKey) {
-    return new Promise((resolve, reject) => {
-      if (window.Clerk) return resolve();
-
-      const existing = document.querySelector('script[data-knowstride-clerk="1"]');
-      if (existing) {
-        existing.addEventListener("load", () => resolve());
-        existing.addEventListener("error", () => reject(new Error("Failed to load Clerk script")));
-        return;
-      }
-
-      const s = document.createElement("script");
-      s.async = true;
-      s.crossOrigin = "anonymous";
-      s.setAttribute("data-clerk-publishable-key", publishableKey);
-      s.setAttribute("data-knowstride-clerk", "1");
-      s.src = "https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js";
-      s.onload = () => resolve();
-      s.onerror = () => reject(new Error("Failed to load Clerk script (network/CDN)"));
-      document.head.appendChild(s);
-    });
-  }
-
-  async function waitForClerkGlobal(timeoutMs = 12000) {
-    const start = Date.now();
-    while (Date.now() - start < timeoutMs) {
-      if (window.Clerk && typeof window.Clerk.mountSignIn === "function") return;
-      await new Promise((r) => setTimeout(r, 50));
-    }
-    throw new Error("Clerk did not initialize (window.Clerk missing).");
+    return data.clerkPublishableKey;
   }
 
   async function getAuthToken() {
-    // Kräver en aktiv session
-    const sess = window.Clerk?.session;
-    if (!sess || typeof sess.getToken !== "function") return null;
-    return await sess.getToken();
+    // Requires Clerk.load() already done
+    const session = window.Clerk.session;
+    if (!session) return null;
+
+    // Default template works if you used Clerk JWT template defaults;
+    // If you created a custom JWT template name in Clerk, set it here:
+    // return await session.getToken({ template: "YOUR_TEMPLATE_NAME" });
+    return await session.getToken();
   }
 
-  async function apiFetch(path, { method = "GET", body } = {}) {
+  async function apiFetch(path, opts = {}) {
     const token = await getAuthToken();
-    if (!token) throw new Error("No session token (not logged in).");
-
-    const headers = { Accept: "application/json", Authorization: `Bearer ${token}` };
-    let payload;
-    if (body !== undefined) {
-      headers["Content-Type"] = "application/json";
-      payload = JSON.stringify(body);
+    if (!token) {
+      const err = new Error("Not logged in.");
+      err.status = 401;
+      throw err;
     }
 
-    const res = await fetch(path, { method, headers, body: payload, cache: "no-store" });
-    const data = await res.json().catch(() => null);
+    const headers = new Headers(opts.headers || {});
+    headers.set("Authorization", `Bearer ${token}`);
+    if (!headers.has("Accept")) headers.set("Accept", "application/json");
 
-    if (!res.ok) {
-      const msg = data?.error || `${res.status} ${res.statusText}`;
-      throw new Error(msg);
-    }
-    return data;
+    return fetch(path, { ...opts, headers });
   }
 
-  function planButtonsHtml() {
-    const plans = [
-      { id: "monthly", label: "Monthly" },
-      { id: "yearly", label: "Yearly" },
-      { id: "3y", label: "3 years" },
-      { id: "6y", label: "6 years" },
-      { id: "9y", label: "9 years" },
-    ];
-
-    return `
-      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-        ${plans
-          .map(
-            (p) => `
-          <button class="toplink" data-plan="${p.id}" style="padding:10px 14px; border-radius:12px;">
-            Buy ${p.label}
-          </button>`
-          )
-          .join("")}
-      </div>
-      <p class="muted" style="margin-top:10px;">
-        When payment completes, you’ll be redirected back here and access unlocks automatically.
-      </p>
-    `;
-  }
-
-  async function startCheckout(plan) {
-    // Skapar Stripe Checkout Session via din Pages Function
-    const data = await apiFetch("/api/create-checkout-session", {
-      method: "POST",
-      body: { plan },
-    });
-
-    if (!data?.url) throw new Error("Stripe session URL missing.");
-    window.location.href = data.url;
-  }
-
-  function renderPaywall(userEmail, reason) {
-    showApp();
-    appContent.innerHTML = `
-      <p class="muted">Logged in as: <strong>${userEmail}</strong></p>
-      <h3 style="margin-top:14px;">Locked</h3>
-      <p class="muted" style="margin-top:6px;">
-        ${reason || "You need an active plan to access the library."}
-      </p>
-      ${planButtonsHtml()}
-    `;
-
-    appContent.querySelectorAll("button[data-plan]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const plan = btn.getAttribute("data-plan");
-        btn.disabled = true;
-        btn.textContent = "Redirecting…";
-        try {
-          await startCheckout(plan);
-        } catch (e) {
-          console.error(e);
-          alert(String(e?.message || e));
-          btn.disabled = false;
-          btn.textContent = `Buy ${plan}`;
-        }
-      });
-    });
-  }
-
-  async function renderLibrary(userEmail) {
+  function renderSignedIn(user, access) {
     showApp();
 
-    const data = await apiFetch("/api/library");
+    const email =
+      user?.primaryEmailAddress?.emailAddress ||
+      user?.emailAddresses?.[0]?.emailAddress ||
+      user?.username ||
+      "Unknown";
 
-    if (!data?.hasPaid) {
-      renderPaywall(userEmail, "No active subscription found.");
+    if (access?.hasPaid) {
+      appContent.innerHTML = `
+        <p class="muted">Logged in as: <strong>${email}</strong></p>
+        <p style="margin-top:10px;">✅ Subscription active (${access.plan || "paid"}).</p>
+        <div style="margin-top:14px;">
+          <a class="toplink" href="/" style="display:inline-block;">Go to homepage</a>
+        </div>
+      `;
       return;
     }
 
-    const blocks = Array.isArray(data.blocks) ? data.blocks : [];
-    const info = `
-      <p class="muted">Logged in as: <strong>${userEmail}</strong></p>
-      <p class="muted" style="margin-top:6px;">
-        Access until: <strong>${data.accessUntil || "—"}</strong>
-      </p>
-    `;
+    // Not paid -> show paywall + buttons
+    appContent.innerHTML = `
+      <p class="muted">Logged in as: <strong>${email}</strong></p>
+      <p style="margin-top:10px;">🔒 Your plan is not active yet. Choose a subscription:</p>
 
-    const list = `
-      <div style="margin-top:14px;">
-        <h3>Blocks</h3>
-        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-          ${blocks
-            .map(
-              (b) => `
-                <button class="toplink" data-block="${b.number}" style="padding:10px 14px; border-radius:12px;">
-                  Block ${b.number}
-                </button>`
-            )
-            .join("")}
-        </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;">
+        <button id="buyMonthly" class="toplink">Start Monthly</button>
+        <button id="buyYearly" class="toplink">Start Yearly</button>
       </div>
-      <div id="blockView" style="margin-top:18px;"></div>
+
+      <p class="muted" style="margin-top:12px;">After payment you’ll return here automatically.</p>
+      <p id="payError" class="muted" style="margin-top:12px;color:#b00020;"></p>
     `;
 
-    appContent.innerHTML = info + list;
+    const payError = document.getElementById("payError");
 
-    const blockView = $("blockView");
-    appContent.querySelectorAll("button[data-block]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const n = btn.getAttribute("data-block");
-        blockView.innerHTML = `<p class="muted">Loading block ${n}…</p>`;
-        try {
-          const r = await apiFetch(`/api/library?block=${encodeURIComponent(n)}`);
-          blockView.innerHTML = r?.html || "<p class='muted'>No content.</p>";
-          window.scrollTo({ top: blockView.offsetTop - 20, behavior: "smooth" });
-        } catch (e) {
-          console.error(e);
-          blockView.innerHTML = `<p class="muted" style="color:#b00020;">${String(
-            e?.message || e
-          )}</p>`;
+    async function startCheckout(plan) {
+      try {
+        payError.textContent = "";
+        const res = await apiFetch("/api/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            plan,
+            // send user back to /app after Stripe
+            successUrl: `${location.origin}${APP_URL}?success=1`,
+            cancelUrl: `${location.origin}${APP_URL}?canceled=1`,
+          }),
+        });
+
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`Checkout failed (${res.status}): ${txt}`);
         }
-      });
-    });
+
+        const data = await res.json();
+        if (!data?.url) throw new Error("Missing checkout url from server.");
+        location.href = data.url;
+      } catch (e) {
+        console.error(e);
+        payError.textContent = String(e?.message || e);
+      }
+    }
+
+    document.getElementById("buyMonthly").addEventListener("click", () => startCheckout("monthly"));
+    document.getElementById("buyYearly").addEventListener("click", () => startCheckout("yearly"));
   }
 
   async function mountSignIn() {
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignIn(clerkMount, {
-      signUpUrl: `${APP_URL}?signup=1`,
-      redirectUrl: APP_URL,
+      signUpUrl: APP_URL,
       afterSignInUrl: APP_URL,
       afterSignUpUrl: APP_URL,
-    });
-  }
-
-  async function mountSignUp() {
-    clerkMount.innerHTML = "";
-    await window.Clerk.mountSignUp(clerkMount, {
-      signInUrl: APP_URL,
-      redirectUrl: APP_URL,
-      afterSignInUrl: APP_URL,
-      afterSignUpUrl: APP_URL,
+      fallbackRedirectUrl: APP_URL,
+      forceRedirectUrl: APP_URL,
     });
   }
 
@@ -252,10 +166,10 @@
       showError("");
       setStatus("Loading authentication…");
 
-      const publishableKey = await fetchPublishableKey();
-      await loadClerkScript(publishableKey);
       await waitForClerkGlobal();
-      await window.Clerk.load();
+
+      const publishableKey = await fetchPublishableKey();
+      await window.Clerk.load({ publishableKey });
 
       logoutBtn.addEventListener("click", async () => {
         try {
@@ -270,37 +184,38 @@
       if (!user) {
         showAuth();
         setStatus("");
-        const params = new URLSearchParams(location.search);
-        if (params.get("signup") === "1") await mountSignUp();
-        else await mountSignIn();
+        await mountSignIn();
         return;
       }
 
-      // Inloggad → visa library/paywall
+      // Signed in -> ask backend if user has paid access
       setStatus("");
-      const email =
-        user?.primaryEmailAddress?.emailAddress || user?.username || "Unknown";
 
-      // Om man kommer från landing med ?plan=monthly → starta checkout direkt (men bara om man inte redan har access)
-      const qs = new URLSearchParams(location.search);
-      const plan = (qs.get("plan") || "").toLowerCase();
-
-      if (plan) {
-        // Kolla först om redan betald — annars checkout
-        const lib = await apiFetch("/api/library").catch(() => null);
-        if (lib?.hasPaid) {
-          await renderLibrary(email);
+      let access = null;
+      try {
+        const res = await apiFetch("/api/library", { method: "GET" });
+        if (res.ok) {
+          access = await res.json();
+        } else if (res.status === 401) {
+          // token missing/invalid
+          throw new Error("Not logged in.");
         } else {
-          await startCheckout(plan);
+          const txt = await res.text();
+          throw new Error(`Failed to load library (${res.status}): ${txt}`);
         }
-        return;
+      } catch (e) {
+        console.error(e);
+        // still allow rendering as not paid if backend errors
+        access = { hasPaid: false };
       }
 
-      await renderLibrary(email);
+      renderSignedIn(user, access);
     } catch (err) {
       console.error(err);
       showAuth();
-      showError(String(err?.message || err));
+
+      const msg = String(err?.message || err);
+      showError(msg);
       setStatus("");
     }
   }
