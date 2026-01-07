@@ -1,28 +1,37 @@
-import { requireClerkAuth } from "./_auth";
+// public/js/library.js
 
-export async function onRequestGet(context) {
-  const { request, env } = context;
+export async function loadLibrary() {
+  const statusEl = document.getElementById("library-status");
 
-  const auth = await requireClerkAuth(request, env);
-  if (!auth) return new Response("Unauthorized", { status: 401 });
+  try {
+    const res = await fetch("/api/library", {
+      credentials: "include"
+    });
 
-  const { userId } = auth;
-  const db = env.DB;
-  if (!db) return new Response("Missing DB binding", { status: 500 });
+    if (res.status === 401) {
+      showPlans();
+      return;
+    }
 
-  const row = await db
-    .prepare(`SELECT access_until, status FROM access WHERE user_id = ?`)
-    .bind(userId)
-    .first();
+    const data = await res.json();
 
-  const now = Date.now();
+    if (data?.hasAccess) {
+      showLibrary();
+    } else {
+      showPlans();
+    }
+  } catch (err) {
+    console.error("Library load error", err);
+    showPlans();
+  }
+}
 
-  const accessUntil = row?.access_until ? Number(row.access_until) : 0;
-  const status = row?.status || "inactive";
+function showLibrary() {
+  document.getElementById("library-content").style.display = "block";
+  document.getElementById("plans").style.display = "none";
+}
 
-  const hasAccess = status === "active" && accessUntil > now;
-
-  return new Response(JSON.stringify({ hasAccess, accessUntil, status }), {
-    headers: { "Content-Type": "application/json" },
-  });
+function showPlans() {
+  document.getElementById("library-content").style.display = "none";
+  document.getElementById("plans").style.display = "block";
 }
