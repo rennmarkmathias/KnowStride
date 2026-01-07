@@ -9,9 +9,12 @@
   const logoutBtn = $("logoutBtn");
   const appContent = $("appContent");
 
-  // Håll detta till /app (inte /app.html) om du använder /app i prod.
-  // Om du vill köra /app.html istället: byt alla APP_URL till "/app.html"
+  // Håll /app (route) som din app-sida. (Du använder redan /app i prod.)
   const APP_URL = "/app";
+
+  // ✅ Publishable key är OK att exponera (det är så Clerk fungerar).
+  // Byt gärna till env via /api/config senare, men först: stabilt.
+  const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k";
 
   function showError(msg) {
     authError.textContent = msg || "";
@@ -33,6 +36,15 @@
     logoutBtn.style.display = "none";
   }
 
+  async function waitForClerkGlobal(timeoutMs = 15000) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      if (window.Clerk && typeof window.Clerk.load === "function") return;
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    throw new Error("Clerk script loaded but window.Clerk is still missing.");
+  }
+
   function renderSignedIn(user) {
     showApp();
     appContent.innerHTML = `
@@ -41,25 +53,10 @@
     `;
   }
 
-  function waitForClerkGlobal(timeoutMs = 60000) {
-    return new Promise((resolve, reject) => {
-      const start = Date.now();
-
-      (function tick() {
-        if (window.Clerk && typeof window.Clerk.load === "function") return resolve();
-        if (Date.now() - start > timeoutMs) {
-          return reject(new Error("Clerk script loaded but window.Clerk is still missing."));
-        }
-        setTimeout(tick, 50);
-      })();
-    });
-  }
-
   async function mountSignIn() {
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignIn(clerkMount, {
-      signUpUrl: APP_URL + "?signup=1",
-      redirectUrl: APP_URL,
+      signUpUrl: APP_URL,
       afterSignInUrl: APP_URL,
       afterSignUpUrl: APP_URL,
     });
@@ -69,7 +66,6 @@
     clerkMount.innerHTML = "";
     await window.Clerk.mountSignUp(clerkMount, {
       signInUrl: APP_URL,
-      redirectUrl: APP_URL,
       afterSignInUrl: APP_URL,
       afterSignUpUrl: APP_URL,
     });
@@ -80,11 +76,11 @@
       showError("");
       setStatus("Loading authentication…");
 
-      // 1) Vänta på att Clerk verkligen finns
+      // 1) Vänta på Clerk global (scripten är defer)
       await waitForClerkGlobal();
 
-      // 2) Ladda Clerk — publishable key tas nu från script-taggen (data-clerk-publishable-key)
-      await window.Clerk.load();
+      // 2) Ladda Clerk med publishableKey explicit (stabilast över browsers + cache)
+      await window.Clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
 
       // Logout
       logoutBtn.addEventListener("click", async () => {
@@ -96,7 +92,7 @@
         }
       });
 
-      // 3) Inloggad?
+      // 3) Visa rätt UI
       const user = window.Clerk.user;
       if (user) {
         setStatus("");
@@ -104,7 +100,6 @@
         return;
       }
 
-      // 4) Visa auth UI
       showAuth();
       setStatus("");
 
