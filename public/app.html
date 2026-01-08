@@ -20,7 +20,6 @@
       <p class="muted">Use Google or email.</p>
 
       <p id="authStatus" class="muted" style="margin-top:12px;">Loading sign-in…</p>
-
       <div id="clerk-components" style="margin-top:14px;"></div>
 
       <p id="authError" class="muted" style="margin-top:12px;color:#b00020;"></p>
@@ -32,14 +31,13 @@
     </section>
   </main>
 
-  <!-- ClerkJS (stable) -->
-  <!-- VIKTIGT: klistra in DIN pk_live_... här -->
+  <!-- ClerkJS (PINNA version – undvik @latest i prod) -->
   <script
     id="clerkjs"
     defer
     crossorigin="anonymous"
-    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
-    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js">
+    data-clerk-publishable-key="PK_LIVE_HÄR"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
   </script>
 
   <script defer src="/app.js"></script>
