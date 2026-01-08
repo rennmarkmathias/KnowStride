@@ -1,375 +1,227 @@
-(() => {
-  const $ = (id) => document.getElementById(id);
+// public/app.js
 
-  const authBox = $("authBox");
-  const appBox = $("appBox");
-  const authStatus = $("authStatus");
-  const authError = $("authError");
-  const clerkMount = $("clerk-components");
-  const logoutBtn = $("logoutBtn");
-  const appContent = $("appContent");
+const $ = (id) => document.getElementById(id);
 
-  // Keep it simple: one canonical app URL
-  const APP_URL = "/app.html";
+function getOrigin() {
+  return window.location.origin;
+}
 
-  // If you already have a hardcoded pk_ that works, keep it here:
-  // (We still try /api/config first, but will fall back to this.)
-  const FALLBACK_PUBLISHABLE_KEY = "pk_live_REPLACE_ME_IF_NEEDED";
+function pathStartsWith(p) {
+  return window.location.pathname === p || window.location.pathname.startsWith(p + "/");
+}
 
-  function showError(msg) {
-    authError.textContent = msg || "";
+// These should match what you set in Clerk Dashboard → Paths
+const SIGN_IN_PATH = "/app";
+const SIGN_UP_PATH = "/sign-up";
+
+// After auth, send user to the library
+const AFTER_AUTH_PATH = "/app";
+
+function setAuthStatus(text) {
+  const el = $("authStatus");
+  if (el) el.textContent = text || "";
+}
+
+function setAuthError(text) {
+  const el = $("authError");
+  if (el) el.textContent = text || "";
+}
+
+function showAuth() {
+  $("authBox").style.display = "";
+  $("appBox").style.display = "none";
+  $("logoutBtn").style.display = "none";
+}
+
+function showApp() {
+  $("authBox").style.display = "none";
+  $("appBox").style.display = "";
+  $("logoutBtn").style.display = "";
+}
+
+async function apiFetchJson(url, opts = {}) {
+  const res = await fetch(url, {
+    ...opts,
+    headers: {
+      Accept: "application/json",
+      ...(opts.headers || {}),
+    },
+  });
+
+  let data = null;
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) {
+    data = await res.json().catch(() => null);
+  } else {
+    const text = await res.text().catch(() => "");
+    data = { error: text };
   }
 
-  function setStatus(msg) {
-    authStatus.textContent = msg || "";
+  if (!res.ok) {
+    const msg = data?.error || `Request failed: ${res.status}`;
+    throw new Error(msg);
   }
+  return data;
+}
 
-  function showApp() {
-    authBox.style.display = "none";
-    appBox.style.display = "block";
-    logoutBtn.style.display = "inline-block";
-  }
+function renderPlans(container) {
+  container.innerHTML = `
+    <h2>Choose a plan</h2>
+    <div class="plans">
+      <button class="plan" data-plan="monthly">Monthly <span>$2.99</span></button>
+      <button class="plan" data-plan="yearly">Yearly <span>$14.99</span></button>
+      <button class="plan" data-plan="3years">3 years <span>$24.99</span></button>
+      <button class="plan" data-plan="6years">6 years <span>$39.99</span></button>
+      <button class="plan" data-plan="9years">9 years <span>$49.99</span></button>
+    </div>
+    <p class="muted" style="margin-top:10px;">
+      After purchase, refresh will unlock the library automatically.
+    </p>
+  `;
 
-  function showAuth() {
-    authBox.style.display = "block";
-    appBox.style.display = "none";
-    logoutBtn.style.display = "none";
-  }
-
-  function getPlanFromUrl() {
-    const plan = new URLSearchParams(location.search).get("plan");
-    // Allowed plans (match backend)
-    const allowed = new Set(["monthly", "yearly", "3y", "6y", "9y"]);
-    return allowed.has(plan) ? plan : null;
-  }
-
-  function sleep(ms) {
-    return new Promise((r) => setTimeout(r, ms));
-  }
-
-  async function waitForClerkGlobal(timeoutMs = 15000) {
-    const start = Date.now();
-    while (Date.now() - start < timeoutMs) {
-      if (window.Clerk && typeof window.Clerk.load === "function") return;
-      await sleep(50);
-    }
-    throw new Error("Clerk script loaded but window.Clerk is still missing.");
-  }
-
-  async function fetchPublishableKey() {
-    // Prefer /api/config if available
-    try {
-      const res = await fetch("/api/config", {
-        method: "GET",
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const pk = data?.clerkPublishableKey;
-        if (typeof pk === "string" && pk.startsWith("pk_")) return pk;
-      }
-    } catch (_) {
-      // ignore and fall back
-    }
-
-    if (
-      typeof FALLBACK_PUBLISHABLE_KEY === "string" &&
-      FALLBACK_PUBLISHABLE_KEY.startsWith("pk_") &&
-      !FALLBACK_PUBLISHABLE_KEY.includes("REPLACE_ME")
-    ) {
-      return FALLBACK_PUBLISHABLE_KEY;
-    }
-
-    throw new Error(
-      "Missing Clerk publishable key. Fix /api/config or set FALLBACK_PUBLISHABLE_KEY in app.js."
-    );
-  }
-
-  async function getAuthToken() {
-    // Requires user to be signed in
-    const session = window.Clerk?.session;
-    if (!session || typeof session.getToken !== "function") return null;
-    return await session.getToken();
-  }
-
-  async function apiFetchJson(url, { method = "GET", body } = {}) {
-    const token = await getAuthToken();
-    if (!token) {
-      const err = new Error("Not logged in.");
-      err.status = 401;
-      throw err;
-    }
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: body ? JSON.stringify(body) : undefined,
-      cache: "no-store",
-    });
-
-    const text = await res.text();
-    let data = null;
-    try {
-      data = text ? JSON.parse(text) : null;
-    } catch (_) {
-      // non-json
-    }
-
-    if (!res.ok) {
-      const msg =
-        data?.error ||
-        data?.message ||
-        `Request failed: ${res.status} ${res.statusText}`;
-      const err = new Error(msg);
-      err.status = res.status;
-      err.data = data;
-      throw err;
-    }
-
-    return data;
-  }
-
-  function renderPaywall({ planFromUrl = null } = {}) {
-    showApp();
-    appContent.innerHTML = `
-      <p class="muted">✅ You are signed in, but you don’t have an active subscription yet.</p>
-
-      <div style="margin-top:14px;">
-        <h3 style="margin:0 0 8px 0;">Choose a plan</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" data-plan="monthly">Monthly <span class="price">$2.99</span></button>
-          <button class="btn" data-plan="yearly">Yearly <span class="price">$14.99</span></button>
-          <button class="btn" data-plan="3y">3 years <span class="price">$24.99</span></button>
-          <button class="btn" data-plan="6y">6 years <span class="price">$39.99</span></button>
-          <button class="btn" data-plan="9y">9 years <span class="price">$49.99</span></button>
-        </div>
-        <p class="muted" style="margin-top:10px;">
-          After purchase, refresh will unlock the library automatically.
-        </p>
-        ${
-          planFromUrl
-            ? `<p class="muted" style="margin-top:10px;">Plan from URL detected: <strong>${planFromUrl}</strong> — starting checkout…</p>`
-            : ""
-        }
-      </div>
-    `;
-
-    // simple button styling if you don't have .btn
-    const style = document.createElement("style");
-    style.textContent = `
-      .btn { padding:10px 14px; border-radius:12px; border:1px solid #ddd; background:#fff; cursor:pointer; }
-      .btn .price { opacity:0.75; margin-left:6px; font-weight:500; }
-      .btn:hover { filter: brightness(0.98); }
-    `;
-    document.head.appendChild(style);
-
-    appContent.querySelectorAll("button[data-plan]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const plan = btn.getAttribute("data-plan");
-        await startCheckout(plan);
-      });
-    });
-  }
-
-  function renderLibrary(items, meta) {
-    showApp();
-
-    const until = meta?.accessUntil ? new Date(meta.accessUntil) : null;
-
-    const list = (items || [])
-      .map(
-        (it) => `
-        <article class="card" style="margin-top:12px;">
-          <h3 style="margin:0 0 6px 0;">${escapeHtml(it.title || "")}</h3>
-          <p class="muted" style="margin:0 0 10px 0;">${escapeHtml(
-            it.summary || ""
-          )}</p>
-          ${
-            it.url
-              ? `<a href="${escapeAttr(
-                  it.url
-                )}" target="_blank" rel="noopener noreferrer">Open</a>`
-              : ""
-          }
-        </article>
-      `
-      )
-      .join("");
-
-    appContent.innerHTML = `
-      <p class="muted">Logged in as: <strong>${escapeHtml(
-        window.Clerk?.user?.primaryEmailAddress?.emailAddress ||
-          window.Clerk?.user?.username ||
-          "Unknown"
-      )}</strong></p>
-      <p style="margin-top:8px;">
-        ✅ Subscription active${until ? ` (until ${until.toLocaleString()})` : ""}.
-      </p>
-
-      <div style="margin-top:14px;">
-        <h3 style="margin:0;">This week’s library</h3>
-        ${list || `<p class="muted" style="margin-top:10px;">No items yet.</p>`}
-      </div>
-    `;
-  }
-
-  async function startCheckout(plan) {
-    try {
-      setStatus("Starting Stripe checkout…");
-      showError("");
-
-      const successUrl = `${location.origin}/app?success=1`;
-      const cancelUrl = `${location.origin}/app?canceled=1`;
-
-      const data = await apiFetchJson("/api/create-checkout-session", {
-        method: "POST",
-        body: { plan, successUrl, cancelUrl },
-      });
-
-      if (!data?.url) throw new Error("Stripe session URL missing.");
-      location.href = data.url;
-    } catch (err) {
-      console.error(err);
-      setStatus("");
-      showError(err?.message || String(err));
-    }
-  }
-
-  async function loadLibraryOrPaywall() {
-    // Called after Clerk is loaded and user is signed in
-    const planFromUrl = getPlanFromUrl();
-
-    // If user came back from Stripe success, we may need to wait for webhook -> D1
-    const params = new URLSearchParams(location.search);
-    const isSuccess = params.get("success") === "1";
-    const sessionId = params.get("session_id");
-
-    if (isSuccess) {
-      setStatus("Payment received. Activating your access…");
-
-      // Best-effort confirmation to unlock immediately even if the webhook is delayed/missed.
-      if (sessionId) {
-        try {
-          await apiFetchJson(`/api/confirm-checkout?session_id=${encodeURIComponent(sessionId)}`);
-        } catch (err) {
-          // Non-fatal; we'll still poll /api/library below.
-          console.warn("confirm-checkout failed", err);
-        }
-      }
-    } else {
-      setStatus("Loading your library…");
-    }
-
-    // Poll a few times if needed (webhook may lag)
-    const maxTries = isSuccess ? 10 : 1;
-    for (let i = 0; i < maxTries; i++) {
+  container.querySelectorAll("button.plan").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const plan = btn.getAttribute("data-plan");
       try {
-        const data = await apiFetchJson("/api/library");
-        if (data?.accessGranted) {
-          setStatus("");
-          renderLibrary(data.items, data);
-          return;
-        }
-        // Not granted
-        if (isSuccess) await sleep(1200);
-      } catch (err) {
-        // If not logged in on backend -> show auth again
-        if (err?.status === 401) throw err;
-        console.error(err);
-        if (isSuccess) await sleep(1200);
+        btn.disabled = true;
+        btn.textContent = "Loading…";
+
+        // Your checkout endpoint (adjust if your project uses another route)
+        const out = await apiFetchJson("/api/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan }),
+        });
+
+        if (out?.url) window.location.href = out.url;
+        else throw new Error("Missing checkout URL from server.");
+      } catch (e) {
+        alert(e?.message || String(e));
+      } finally {
+        btn.disabled = false;
+        // restore label on rerender if needed
       }
-    }
-
-    setStatus("");
-    renderPaywall({ planFromUrl });
-
-    // If plan in URL, auto-start checkout (only once, after UI is shown)
-    if (planFromUrl) {
-      await sleep(200);
-      await startCheckout(planFromUrl);
-    }
-  }
-
-  async function mountSignIn() {
-    clerkMount.innerHTML = "";
-    await window.Clerk.mountSignIn(clerkMount, {
-      signUpUrl: APP_URL,
-      // Newer Clerk recommends these instead of deprecated afterSignInUrl/redirectUrl
-      fallbackRedirectUrl: APP_URL,
-      forceRedirectUrl: APP_URL,
     });
+  });
+}
+
+function renderLibrary(container, items = []) {
+  if (!items.length) {
+    container.innerHTML = `<p class="muted">No library items available yet.</p>`;
+    return;
   }
 
-  async function mountSignUp() {
-    clerkMount.innerHTML = "";
-    await window.Clerk.mountSignUp(clerkMount, {
-      signInUrl: APP_URL,
-      fallbackRedirectUrl: APP_URL,
-      forceRedirectUrl: APP_URL,
-    });
+  container.innerHTML = `
+    <h3>This week’s library</h3>
+    <div class="library-list">
+      ${items
+        .map(
+          (it) => `
+        <div class="library-item">
+          <div class="library-title">${it.title}</div>
+          <a class="library-link" href="${it.url}">Open</a>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+async function loadLibrary(clerk) {
+  const token = await clerk.session?.getToken();
+  if (!token) throw new Error("No session token available.");
+
+  return await apiFetchJson("/api/library", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+async function boot() {
+  showAuth();
+  setAuthError("");
+  setAuthStatus("Loading authentication…");
+
+  if (!window.Clerk) {
+    setAuthStatus("");
+    setAuthError("Clerk failed to load.");
+    return;
   }
 
-  async function boot() {
-    try {
-      showError("");
-      setStatus("Loading authentication…");
+  // Init Clerk
+  await window.Clerk.load();
+  const clerk = window.Clerk;
 
-      await waitForClerkGlobal();
-      const publishableKey = await fetchPublishableKey();
-      await window.Clerk.load({ publishableKey });
+  // Logout button
+  $("logoutBtn").addEventListener("click", async () => {
+    await clerk.signOut({ redirectUrl: "/" });
+  });
 
-      logoutBtn.addEventListener("click", async () => {
-        try {
-          await window.Clerk.signOut({ redirectUrl: "/" });
-        } catch (e) {
-          console.error(e);
-          alert("Failed to sign out.");
-        }
+  // Decide which component to mount based on the current path
+  const isSignUpPage = pathStartsWith(SIGN_UP_PATH);
+  const isSignInPage = pathStartsWith(SIGN_IN_PATH);
+
+  // If the user is not signed in → show SignIn/SignUp depending on URL
+  if (!clerk.user || !clerk.session) {
+    setAuthStatus("");
+
+    const mountEl = $("clerk-components");
+    mountEl.innerHTML = "";
+
+    if (isSignUpPage) {
+      clerk.mountSignUp(mountEl, {
+        signInUrl: `${getOrigin()}${SIGN_IN_PATH}`,
+        afterSignUpUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
+        afterSignInUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
       });
-
-      const user = window.Clerk.user;
-      if (user) {
-        await loadLibraryOrPaywall();
-        return;
-      }
-
-      // Not signed in -> show auth UI
-      showAuth();
-      setStatus("");
-
-      const params = new URLSearchParams(location.search);
-      if (params.get("signup") === "1") {
-        await mountSignUp();
-      } else {
-        await mountSignIn();
-      }
-    } catch (err) {
-      console.error(err);
-      showAuth();
-
-      const msg = String(err?.message || err);
-      showError(msg);
-      setStatus("");
+    } else {
+      // default to SignIn on /app (or any other page that uses this bundle)
+      clerk.mountSignIn(mountEl, {
+        signUpUrl: `${getOrigin()}${SIGN_UP_PATH}`,
+        afterSignInUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
+        afterSignUpUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
+      });
     }
+
+    return;
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+  // User is signed in → show library / plans
+  showApp();
 
-  function escapeAttr(s) {
-    return escapeHtml(s);
-  }
+  const appContent = $("appContent");
+  appContent.innerHTML = `<p class="muted">Loading your library…</p>`;
 
-  boot();
-})();
+  try {
+    const data = await loadLibrary(clerk);
+
+    // Show email & status
+    const email = data?.email || clerk.user?.primaryEmailAddress?.emailAddress || "";
+    const header = `
+      <div style="margin-bottom:10px;">
+        ${email ? `<div class="muted">Logged in as: <strong>${email}</strong></div>` : ""}
+        <div style="margin-top:6px;">${data.accessGranted ? "✅ Subscription active." : "✅ You are signed in, but you don’t have an active subscription yet."}</div>
+      </div>
+    `;
+
+    if (!data.accessGranted) {
+      appContent.innerHTML = header;
+      const wrap = document.createElement("div");
+      appContent.appendChild(wrap);
+      renderPlans(wrap);
+      return;
+    }
+
+    appContent.innerHTML = header;
+    const wrap = document.createElement("div");
+    appContent.appendChild(wrap);
+    renderLibrary(wrap, data.items || []);
+  } catch (e) {
+    appContent.innerHTML = `<p class="muted" style="color:#b00020;">${e?.message || String(e)}</p>`;
+  }
+}
+
+boot().catch((e) => {
+  setAuthStatus("");
+  setAuthError(e?.message || String(e));
+});
