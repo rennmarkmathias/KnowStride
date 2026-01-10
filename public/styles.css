@@ -412,6 +412,17 @@ button:hover{
   }
 }
 
+/* HERO IMAGE — clean, no frame */
+.hero-logo{
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.logo-img{
+  border-radius: 16px; /* behåll mjuka hörn, justera vid behov */
+}
 
 
 
