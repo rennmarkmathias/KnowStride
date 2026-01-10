@@ -401,10 +401,17 @@ button:hover{
 
 @media (max-width: 900px){
   .hero-logo{
-    padding: 4px;
+    padding: 0;
     background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .logo-img{
+    border-radius: 14px;  /* eller 0 om du vill helt kantig */
   }
 }
+
 
 
 
