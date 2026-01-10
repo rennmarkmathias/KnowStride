@@ -352,3 +352,50 @@ button:hover{
   justify-content: space-between;
   align-items: center;
 }
+
+/* ===== Library list layout ===== */
+
+.library-list{
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.library-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.library-title{
+  font-weight: 650;
+  color: var(--ink);
+  min-width: 0;
+}
+
+.library-num{
+  display: inline-block;
+  min-width: 5ch;               /* räcker för #500 (4 tecken) + lite luft */
+  text-align: right;
+  font-variant-numeric: tabular-nums;  /* jämna siffror */
+  color: var(--muted);
+}
+
+.library-link{
+  color: #6b4a1f;               /* lite mörkare “warm” ton */
+  text-decoration: underline;   /* tydlig länk */
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Valfritt: liten pil för mer “polish” */
+.library-link::after{
+  content: " →";
+}
+
