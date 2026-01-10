@@ -346,3 +346,9 @@ button:hover{
 .library-link:hover{
   color: #000;
 }
+
+.library-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
