@@ -1,291 +1,168 @@
-:root{
-  --bg:#fbfaf7;
-  --panel:#ffffff;
-  --ink:#1a1a1a;
-  --muted:#5b5b5b;
-  --line:#e6e1d7;
-  --shadow: 0 12px 30px rgba(0,0,0,0.08);
+/* =========================
+   KnowStride – Core Styles
+   Reading-room aesthetic
+   ========================= */
+
+:root {
+  --bg-main: #f6f1ea;        /* warm ivory */
+  --bg-card: #ffffff;
+  --border-soft: #e3d8c8;    /* parchment line */
+  --accent-warm: #8a6a3f;    /* muted gold/brown */
+  --text-main: #1f1f1f;
+  --text-muted: #6b6258;
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
   --radius: 16px;
-  --max: 1100px;
 }
 
-*{ box-sizing:border-box; }
-
-html, body{
-  overflow-x: hidden;
+/* Reset */
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  background: var(--bg);
-  color:var(--ink);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  line-height:1.55;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
 }
 
-/* ================= TOP BAR ================= */
+/* =========================
+   Top bar
+   ========================= */
 
-.topbar{
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 16px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.brand{
-  font-weight:800;
-  letter-spacing:.2px;
-}
-
-.topnav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.toplink{
-  text-decoration:none;
-  color:inherit;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  border-radius:999px;
-  background:#fff;
-}
-
-.toplink.secondary{
-  background: transparent;
-  border: 1px solid rgba(0,0,0,0.18);
-}
-
-.toplink.secondary:hover{
-  border-color: rgba(0,0,0,0.30);
-  transform: translateY(-1px);
-}
-
-/* ================= LAYOUT ================= */
-
-.container{
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 0 18px 60px;
-}
-
-.card{
-  background: var(--panel);
-  border:1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 18px;
-  margin: 16px 0;
-}
-
-.muted{ color: var(--muted); }
-.small{ font-size: 0.95rem; }
-
-/* ================= HERO ================= */
-
-.hero{
-  display:grid;
-  grid-template-columns: 1fr 320px 1fr;
-  gap: 16px;
-  align-items: start;
-  padding: 18px 0;
-}
-
-.hero-col h1{
-  margin:0 0 8px;
-  font-size: clamp(2.0rem, 4.2vw, 3.0rem);
-  line-height: 1.08;
-}
-
-.hero-col h2{
-  margin:0 0 8px;
-  font-size: clamp(1.15rem, 2.4vw, 1.35rem);
-  line-height: 1.18;
-}
-
-/* ================= HERO LOGO ================= */
-
-.hero-logo{
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
-  box-shadow: var(--shadow);
-  padding: 12px;
-  overflow: hidden;
+.topbar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg-main);
 }
 
-.logo-img{
-  width: 100%;
-  max-width: 520px;
-  height: auto;
-  max-height: 60vh;      /* desktop cap */
-  object-fit: contain;   /* show entire image */
-  display: block;
-  border-radius: 12px;
+.brand {
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-/* ================= CONTENT GRIDS ================= */
-
-.collage-grid{
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
+.toplink {
+  text-decoration: none;
+  color: var(--accent-warm);
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
 }
 
-.tile{
-  border:1px solid var(--line);
-  border-radius: 12px;
-  background:#fff;
-  padding: 16px;
-  color: var(--muted);
-  min-height: 70px;
+.toplink:hover {
+  text-decoration: underline;
 }
 
-.plans{
-  display:grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
+/* =========================
+   Layout
+   ========================= */
 
-.plan{
-  border:1px solid var(--line);
-  border-radius: 14px;
-  background:#fff;
-  padding: 14px;
-  text-align:left;
-  cursor:pointer;
-}
-
-.plan.best{
-  border-width: 2px;
-}
-
-.plan-title{
-  font-weight: 800;
-}
-
-.plan-price{
-  color: var(--muted);
-  margin-top: 6px;
-}
-
-.grid2{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-/* ================= FORMS / BUTTONS ================= */
-
-label{
-  display:block;
-  font-size: 0.9rem;
-  margin-top: 10px;
-  color: var(--muted);
-}
-
-input{
-  width:100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border:1px solid var(--line);
-  margin-top: 6px;
-}
-
-button{
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border:1px solid var(--line);
-  background:#fff;
-  cursor:pointer;
-  font-weight: 650;
-}
-
-/* ================= READER ================= */
-
-.blocks{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.blockbtn{
-  border-radius: 999px;
-  padding: 10px 12px;
-}
-
-.reader{
-  margin-top: 14px;
-  padding: 14px;
-  border:1px solid var(--line);
-  border-radius: 14px;
-  background:#fff;
-}
-
-/* ================= MOBILE / TABLET ================= */
-
-@media (max-width: 900px){
-
-  .hero{
-    grid-template-columns: 1fr;
-  }
-
-  .plans{
-    grid-template-columns: 1fr;
-  }
-
-  .collage-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .grid2{
-    grid-template-columns: 1fr;
-  }
-
-  /* Top bar wraps cleanly */
-  .topbar{
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .topnav{
-    width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-
-  /* Logo: smaller on mobile so content below is visible */
-  .logo-img{
-    max-height: 45vh;
-  }
-}
-
-/* ================= LEGAL ================= */
-
-.legal{
-  margin-top: 3rem;
-  padding: 1.25rem 0 2.25rem;
-  border-top: 1px solid rgba(0,0,0,.08);
-}
-
-.legal-inner{
-  max-width: 920px;
+.container {
+  max-width: 960px;
   margin: 0 auto;
+  padding: 24px 16px 64px;
 }
 
-.legal h3{
-  margin: 1.25rem 0 .5rem;
-  font-size: 1.05rem;
+/* =========================
+   Cards (Library / Auth)
+   ========================= */
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-soft);
+  margin-bottom: 24px;
+}
+
+.card h1,
+.card h2 {
+  margin-top: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.card h2 {
+  margin-bottom: 12px;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* =========================
+   Library items
+   ========================= */
+
+#appContent > div {
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #fbf8f4 100%
+  );
+  margin-bottom: 14px;
+}
+
+#appContent strong {
+  font-weight: 600;
+}
+
+#appContent a {
+  color: var(--accent-warm);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#appContent a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   Status indicators
+   ========================= */
+
+.status-ok {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.status-warn {
+  color: #9a6a00;
+  font-weight: 500;
+}
+
+/* =========================
+   Clerk embeds harmony
+   ========================= */
+
+#clerk-components {
+  margin-top: 8px;
+}
+
+#clerk-components iframe {
+  border-radius: 12px !important;
+}
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 600px) {
+  .container {
+    padding: 16px 12px 48px;
+  }
+
+  .card {
+    padding: 22px;
+  }
 }
