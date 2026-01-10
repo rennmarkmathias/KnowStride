@@ -399,3 +399,11 @@ button:hover{
   content: " →";
 }
 
+@media (max-width: 900px){
+  .hero-logo{
+    padding: 4px;
+    background: transparent;
+  }
+}
+
+
