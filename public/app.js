@@ -119,7 +119,7 @@ function renderLibrary(container, items = []) {
           (it) => `
         <div class="library-item">
           <div class="library-title">${it.title}</div>
-          <a class="library-link" href="${it.url}">Open →</a>
+          <a class="library-link" href="${it.url}">Open</a>
         </div>
       `
         )
