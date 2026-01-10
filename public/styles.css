@@ -1,168 +1,337 @@
-/* =========================
-   KnowStride – Core Styles
-   Reading-room aesthetic
-   ========================= */
-
-:root {
-  --bg-main: #f6f1ea;        /* warm ivory */
-  --bg-card: #ffffff;
-  --border-soft: #e3d8c8;    /* parchment line */
-  --accent-warm: #8a6a3f;    /* muted gold/brown */
-  --text-main: #1f1f1f;
-  --text-muted: #6b6258;
-  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+:root{
+  /* Warm reading-room palette (safe drop-in) */
+  --bg:#f6f1ea;            /* warm ivory */
+  --panel:#ffffff;         /* card */
+  --ink:#1a1a1a;
+  --muted:#5f564c;
+  --line:#e3d8c8;          /* parchment border */
+  --accent:#8a6a3f;        /* muted gold/brown */
+  --shadow: 0 12px 30px rgba(0,0,0,0.08);
   --radius: 16px;
+  --max: 1100px;
 }
 
-/* Reset */
-* {
-  box-sizing: border-box;
+*{ box-sizing:border-box; }
+
+html, body{
+  overflow-x: hidden;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg-main);
-  color: var(--text-main);
-  line-height: 1.6;
+body{
+  margin:0;
+  background: var(--bg);
+  color:var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  line-height:1.55;
 }
 
-/* =========================
-   Top bar
-   ========================= */
+/* ================= TOP BAR ================= */
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--bg-main);
+.topbar{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 16px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 
-.brand {
-  font-weight: 600;
-  letter-spacing: 0.02em;
+.brand{
+  font-weight:800;
+  letter-spacing:.2px;
 }
 
-.toplink {
-  text-decoration: none;
-  color: var(--accent-warm);
+.topnav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.toplink{
+  text-decoration:none;
+  color:inherit;
+  border:1px solid var(--line);
+  padding:10px 12px;
+  border-radius:999px;
+  background:#fff;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.toplink:hover{
+  border-color: rgba(0,0,0,0.22);
+  transform: translateY(-1px);
+}
+
+.toplink.secondary{
   background: transparent;
-  border: none;
-  font-size: 0.95rem;
-  cursor: pointer;
+  border: 1px solid rgba(0,0,0,0.18);
 }
 
-.toplink:hover {
+.toplink.secondary:hover{
+  border-color: rgba(0,0,0,0.30);
+  transform: translateY(-1px);
+}
+
+/* ================= LAYOUT ================= */
+
+.container{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 18px 60px;
+}
+
+.card{
+  background: var(--panel);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.muted{ color: var(--muted); }
+.small{ font-size: 0.95rem; }
+
+/* Links (site-wide, safe) */
+a{
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover{
   text-decoration: underline;
 }
 
-/* =========================
-   Layout
-   ========================= */
+/* ================= HERO ================= */
 
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px 16px 64px;
+.hero{
+  display:grid;
+  grid-template-columns: 1fr 320px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 18px 0;
 }
 
-/* =========================
-   Cards (Library / Auth)
-   ========================= */
+.hero-col h1{
+  margin:0 0 8px;
+  font-size: clamp(2.0rem, 4.2vw, 3.0rem);
+  line-height: 1.08;
+}
 
-.card {
-  background: var(--bg-card);
+.hero-col h2{
+  margin:0 0 8px;
+  font-size: clamp(1.15rem, 2.4vw, 1.35rem);
+  line-height: 1.18;
+}
+
+/* ================= HERO LOGO ================= */
+
+.hero-logo{
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--border-soft);
-  margin-bottom: 24px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  padding: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.card h1,
-.card h2 {
-  margin-top: 0;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.card h2 {
-  margin-bottom: 12px;
-}
-
-.muted {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-/* =========================
-   Library items
-   ========================= */
-
-#appContent > div {
-  padding: 18px 20px;
+.logo-img{
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  max-height: 60vh;      /* desktop cap */
+  object-fit: contain;   /* show entire image */
+  display: block;
   border-radius: 12px;
-  border: 1px solid var(--border-soft);
-  background: linear-gradient(
-    to bottom,
-    #ffffff 0%,
-    #fbf8f4 100%
-  );
+}
+
+/* ================= CONTENT GRIDS ================= */
+
+.collage-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tile{
+  border:1px solid var(--line);
+  border-radius: 12px;
+  background:#fff;
+  padding: 16px;
+  color: var(--muted);
+  min-height: 70px;
+}
+
+/* Plans: restore your original layout + add subtle warmth */
+.plans{
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.plan{
+  border:1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(to bottom, #ffffff 0%, #fbf8f4 100%);
+  padding: 14px;
+  text-align:left;
+  cursor:pointer;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.plan:hover{
+  transform: translateY(-1px);
+  border-color: rgba(0,0,0,0.22);
+}
+
+.plan.best{
+  border-width: 2px;
+}
+
+.plan-title{
+  font-weight: 800;
+}
+
+.plan-price{
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ================= FORMS / BUTTONS ================= */
+
+label{
+  display:block;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+input{
+  width:100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border:1px solid var(--line);
+  margin-top: 6px;
+  background: #fff;
+}
+
+button{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  font-weight: 650;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+button:hover{
+  transform: translateY(-1px);
+  border-color: rgba(0,0,0,0.22);
+}
+
+/* ================= READER ================= */
+
+.blocks{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.blockbtn{
+  border-radius: 999px;
+  padding: 10px 12px;
+}
+
+.reader{
+  margin-top: 14px;
+  padding: 14px;
+  border:1px solid var(--line);
+  border-radius: 14px;
+  background:#fff;
+}
+
+/* ================= LIBRARY (app.html) ================= */
+/* Safe enhancement: only affects the items you render into #appContent */
+#appContent > div{
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(to bottom, #ffffff 0%, #fbf8f4 100%);
   margin-bottom: 14px;
 }
 
-#appContent strong {
-  font-weight: 600;
+#appContent a{
+  color: var(--accent);
+  font-weight: 650;
 }
 
-#appContent a {
-  color: var(--accent-warm);
-  text-decoration: none;
-  font-weight: 500;
-}
+/* ================= MOBILE / TABLET ================= */
 
-#appContent a:hover {
-  text-decoration: underline;
-}
+@media (max-width: 900px){
 
-/* =========================
-   Status indicators
-   ========================= */
-
-.status-ok {
-  color: #2e7d32;
-  font-weight: 500;
-}
-
-.status-warn {
-  color: #9a6a00;
-  font-weight: 500;
-}
-
-/* =========================
-   Clerk embeds harmony
-   ========================= */
-
-#clerk-components {
-  margin-top: 8px;
-}
-
-#clerk-components iframe {
-  border-radius: 12px !important;
-}
-
-/* =========================
-   Mobile
-   ========================= */
-
-@media (max-width: 600px) {
-  .container {
-    padding: 16px 12px 48px;
+  .hero{
+    grid-template-columns: 1fr;
   }
 
-  .card {
-    padding: 22px;
+  .plans{
+    grid-template-columns: 1fr;
   }
+
+  .collage-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .grid2{
+    grid-template-columns: 1fr;
+  }
+
+  /* Top bar wraps cleanly */
+  .topbar{
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .topnav{
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Logo: smaller on mobile so content below is visible */
+  .logo-img{
+    max-height: 45vh;
+  }
+}
+
+/* ================= LEGAL ================= */
+
+.legal{
+  margin-top: 3rem;
+  padding: 1.25rem 0 2.25rem;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.legal-inner{
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.legal h3{
+  margin: 1.25rem 0 .5rem;
+  font-size: 1.05rem;
 }
