@@ -335,3 +335,14 @@ button:hover{
   margin: 1.25rem 0 .5rem;
   font-size: 1.05rem;
 }
+
+.library-link{
+  color: #3b3b3b;               /* mörkare än body-text */
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.library-link:hover{
+  color: #000;
+}
