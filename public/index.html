@@ -90,6 +90,63 @@
       background: rgba(255,255,255,.55);
     }
 
+    /* Example blocks + mobile dropdown */
+    .examples-wrap{
+      margin-top: 14px;
+    }
+    .examples-desktop{ display:block; }
+    .examples-mobile{ display:none; }
+
+    @media (max-width: 900px){
+      .examples-desktop{ display:none; }
+      .examples-mobile{ display:block; }
+    }
+
+    .examples-mobile details{
+      margin-top: 10px;
+      border: 1px solid rgba(0,0,0,.14);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.55);
+    }
+    .examples-mobile summary{
+      cursor:pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+    .examples-mobile summary::-webkit-details-marker{ display:none; }
+
+    /* Weekly free article dropdown */
+    .free-article{
+      margin-top: 14px;
+      border: 1px solid rgba(0,0,0,.14);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.55);
+    }
+    .free-article summary{
+      cursor:pointer;
+      font-weight: 800;
+      list-style: none;
+    }
+    .free-article summary::-webkit-details-marker{ display:none; }
+
+    .free-article .free-article-body{
+      margin-top: 12px;
+      line-height: 1.55;
+    }
+    .free-article .free-article-body h3{
+      margin: 14px 0 6px;
+      font-size: 1.05rem;
+    }
+    .free-article .free-article-body p{
+      margin: 0 0 10px;
+    }
+    .free-article-cta{
+      margin-top: 10px;
+      font-weight: 650;
+    }
+
     /* Terms/Privacy area (compact + collapsible) */
     .legal{
       margin-top: 2.2rem;
@@ -122,6 +179,7 @@
     .footer a{ text-decoration: underline; }
   </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">KnowStride</div>
@@ -138,7 +196,6 @@
         <p>
           KnowStride delivers <strong>one carefully curated reading block per week</strong>.
           Each block contains <strong>12 articles</strong> across world history, geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures — designed to build a stronger general knowledge over time.
-
         </p>
         <p class="muted">Calm, focused reading. No ads. No distractions.</p>
       </div>
@@ -161,23 +218,22 @@
     <section class="teasers" aria-label="Teasers">
       <h2>What you get</h2>
       <p class="muted">
-        One weekly block, designed for steady progress—serious, calm, and surprisingly addictive over time.
+        One weekly block, designed for steady progress—calm, structured, and easy to keep up with.
       </p>
 
       <div class="callout">
         <p style="margin:0; line-height:1.45;">
-          <strong>First two years:</strong> across the first two years, each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects, including standalone articles on history and geography.
+          <strong>First two years:</strong> each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects.
         </p>
       </div>
 
       <div class="teasers-grid">
-        <!-- 3 informative teasers -->
+        <!-- 3 core teasers (shorter, less “coaching”) -->
         <div class="teaser-card">
           <h3>Build solid general knowledge over time</h3>
           <p>
-            Each weekly block corresponds to about <strong>50 book pages</strong> (≈15,000 words) — roughly one to one-and-a-half hours of focused reading.
-            The pace is deliberate, allowing knowledge to accumulate naturally over time.
-            Each block combines engaging articles with subjects that may seem less exciting at first, but are <strong>essential to understanding how the world works</strong>.
+            Each weekly block is about <strong>50 book pages</strong> (≈15,000 words).
+            It’s designed to accumulate into real, usable knowledge—week by week.
           </p>
           <span class="tag">≈ 1–1.5 hours / week</span>
         </div>
@@ -185,8 +241,8 @@
         <div class="teaser-card">
           <h3>Short on time? Read the summaries</h3>
           <p>
-            Every article includes a clear summary. Reading only the summaries takes about <strong>15 minutes</strong>,
-            making it easy to stay oriented even during busy weeks, without losing the broader context.
+            Every article includes a clear summary.
+            Summaries-only takes about <strong>15 minutes</strong> per week.
           </p>
           <span class="tag">Summaries-only: ≈ 15 minutes</span>
         </div>
@@ -194,42 +250,148 @@
         <div class="teaser-card">
           <h3>Designed to open new horizons</h3>
           <p>
-            KnowStride is built to expand perspective, connect ideas across subjects, and inspire further reading —
+            A balanced mix of “interesting” and “important” topics,
             without noise, hype, or endless scrolling.
-            Alongside engaging topics, every block includes material that rewards patience and attention.
           </p>
           <span class="tag">Balanced by design</span>
         </div>
+      </div>
 
-        <!-- 6 example article headlines (no tags underneath) -->
-        <div class="teaser-card">
-          <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
-          <p>A defining settlement—often mentioned, rarely understood clearly.</p>
+      <!-- Examples heading + desktop vs mobile rendering -->
+      <div class="examples-wrap">
+        <h2 style="margin: 18px 0 6px;">Examples of headlines</h2>
+        <p class="muted" style="margin:0;">A small sample of the kind of topics you’ll get.</p>
+
+        <!-- DESKTOP: show all 6 (no dropdown) -->
+        <div class="examples-desktop">
+          <div class="teasers-grid" style="margin-top:12px;">
+            <div class="teaser-card">
+              <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
+              <p>A defining settlement—often mentioned, rarely understood clearly.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
+              <p>Everyday technology with deep historical and economic consequences.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
+              <p>Serious ideas, explained plainly—without academic fog.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
+              <p>One of those topics that makes headlines readable.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
+              <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>Cyrus the Great: Persia’s Expansion and Legacy</h3>
+              <p>How an empire is built—and how it stays together.</p>
+            </div>
+          </div>
         </div>
 
-        <div class="teaser-card">
-          <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
-          <p>Everyday technology with deep historical and economic consequences.</p>
+        <!-- MOBILE: show 2 + dropdown for the rest -->
+        <div class="examples-mobile">
+          <div class="teasers-grid" style="margin-top:12px;">
+            <div class="teaser-card">
+              <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
+              <p>A defining settlement—often mentioned, rarely understood clearly.</p>
+            </div>
+
+            <div class="teaser-card">
+              <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
+              <p>Everyday technology with deep historical and economic consequences.</p>
+            </div>
+          </div>
+
+          <details>
+            <summary>Show more examples</summary>
+            <div class="teasers-grid" style="margin-top:12px;">
+              <div class="teaser-card">
+                <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
+                <p>Serious ideas, explained plainly—without academic fog.</p>
+              </div>
+
+              <div class="teaser-card">
+                <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
+                <p>One of those topics that makes headlines readable.</p>
+              </div>
+
+              <div class="teaser-card">
+                <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
+                <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
+              </div>
+
+              <div class="teaser-card">
+                <h3>Cyrus the Great: Persia’s Expansion and Legacy</h3>
+                <p>How an empire is built—and how it stays together.</p>
+              </div>
+            </div>
+          </details>
         </div>
 
-        <div class="teaser-card">
-          <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
-          <p>Serious ideas, explained plainly—without academic fog.</p>
-        </div>
+        <!-- Weekly free article (dropdown, works everywhere) -->
+        <div style="margin-top: 14px;">
+          <h2 style="margin: 18px 0 6px;">This week’s free article</h2>
+          <p class="muted" style="margin:0;">A small preview of the writing style and structure.</p>
 
-        <div class="teaser-card">
-          <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
-          <p>One of those “boring but essential” topics that makes headlines readable.</p>
-        </div>
+          <details class="free-article">
+            <summary>7. Cossack Hetmanate — Leadership and Military Tradition</summary>
+            <div class="free-article-body">
+              <p><strong>A frontier polity built around arms and negotiation</strong></p>
+              <p>
+                In the middle of the 1600s, a new political order appeared on the steppe and forest-steppe borderlands of Eastern Europe:
+                the Cossack Hetmanate. It emerged from a society shaped by river crossings, raids, seasonal campaigns, and the practical
+                demands of defending scattered settlements. Leadership in this environment was never simply “civil” or “military.”
+                The same figures who negotiated with neighboring powers also raised regiments, managed supply lines, and enforced discipline.
+              </p>
+              <p>
+                At its height in the later 1600s, the Hetmanate controlled much of central Ukraine, particularly on the Left Bank of the Dnipro River.
+                Its armed forces—organized in territorial regiments—were both an army and an administrative framework.
+              </p>
 
-        <div class="teaser-card">
-          <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
-          <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
-        </div>
+              <h3>From uprising to Hetmanate: a brief background</h3>
+              <p>
+                The Hetmanate arose from the Khmelnytsky Uprising of 1648, led by Bohdan Khmelnytsky (1595–1657), against the Polish-Lithuanian Commonwealth.
+                The 1654 alignment with Muscovy created a new strategic framework, but did not end the Hetmanate’s balancing act.
+              </p>
 
-        <div class="teaser-card">
-          <h3>The Kalashnikov: How One Design Shaped Global Conflict and Politics</h3>
-          <p>Not “weapons trivia”—a story of design, production, and geopolitical impact.</p>
+              <h3>The hetman and the “starshyna”: who led, and how</h3>
+              <p>
+                The hetman was simultaneously head of government, chief diplomat, and commander-in-chief. In principle, the office rested on election
+                by a general assembly, but authority tended to concentrate in the hands of a small circle of senior officers.
+              </p>
+
+              <h3>Regiments as both army and state</h3>
+              <p>
+                The Hetmanate’s basic unit was the regiment (<em>polk</em>), functioning as both a territorial district and a military formation.
+                Mobilized forces could reach tens of thousands, though numbers varied with season, supply, and political unity.
+              </p>
+
+              <h3>Training, tactics, and the steppe-war repertoire</h3>
+              <p>
+                Mobility was central: detachments could move quickly, forage locally, and exploit knowledge of riverbanks, wetlands, and forest edges.
+                Defensive traditions—wagon laagers, field entrenchments, and fortified towns—reflected an expectation of sudden attack.
+              </p>
+
+              <h3>Summary</h3>
+              <p>
+                The Cossack Hetmanate fused leadership and warfare into a single political language. Regiments served as both districts and fighting units,
+                and legitimacy remained tightly linked to military competence and rapid mobilization.
+              </p>
+
+              <p class="free-article-cta">
+                To read this week’s other 11 articles, <a href="#pricing">buy a plan</a>.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -237,7 +399,7 @@
     <section class="how">
       <h2>How it works</h2>
       <ol>
-        <li>Create an account (email + password) or login with Google.</li>
+        <li>Create an account (email + password) or log in with Google.</li>
         <li>Choose a plan. You receive <strong>Block 1 immediately</strong>.</li>
         <li>Your next block unlocks <strong>exactly one week after your signup time</strong> (individual schedule).</li>
         <li>Blocks and articles are numbered for easy orientation.</li>
@@ -262,7 +424,6 @@
           <div class="plan-price">$2.99</div>
         </button>
 
-        <!-- Yearly: Offer (14.99) with struck 19.99 -->
         <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
           <div class="plan-title">Yearly</div>
           <div class="plan-price">
@@ -273,7 +434,6 @@
           </div>
         </button>
 
-        <!-- 3 Years offer -->
         <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
           <div class="plan-title">3 Years</div>
           <div class="plan-price">
@@ -307,11 +467,13 @@
         <li>Completely ad-free</li>
         <li>Neutral international English</li>
         <li>Designed for long-term learning</li>
-        <li><strong>First two years:</strong> across the first two years, each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects, including standalone articles on history and geography.</li>
+        <li>
+          <strong>First two years:</strong> each weekly block continues the core series in world history and world geography —
+          alongside coverage of all countries and a wide mix of other subjects.
+        </li>
       </ul>
     </section>
 
-    <!-- Terms + Privacy -->
     <section class="legal" id="legal" aria-label="Terms and Privacy">
       <h2>Terms & Privacy</h2>
       <p class="muted">Short and readable. Click to expand.</p>
@@ -321,14 +483,13 @@
         <div class="legal-body">
           <p><strong>No binding period.</strong> You can cancel anytime. Access remains active until the end of your paid period.</p>
           <ul>
-  <li>Subscriptions provide personal, non-transferable access to KnowStride content while active.</li>
-  <li>Payments are processed securely via Stripe. We do not store full payment card details.</li>
-  <li>All content is for personal use. Copying, redistribution, or resale is not permitted.</li>
-  <li>We may update features and pricing over time. Changes apply to future purchases/renewals.</li>
-  <li>To cancel your subscription, email us from the email address you used to sign up.</li>
-  <li>Your access remains active until the end of your paid period.</li>
-</ul>
-
+            <li>Subscriptions provide personal, non-transferable access to KnowStride content while active.</li>
+            <li>Payments are processed securely via Stripe. We do not store full payment card details.</li>
+            <li>All content is for personal use. Copying, redistribution, or resale is not permitted.</li>
+            <li>We may update features and pricing over time. Changes apply to future purchases/renewals.</li>
+            <li>To cancel your subscription, email us from the email address you used to sign up.</li>
+            <li>Your access remains active until the end of your paid period.</li>
+          </ul>
           <p>Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
         </div>
       </details>
