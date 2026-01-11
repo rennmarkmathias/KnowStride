@@ -40,10 +40,23 @@ function showApp() {
 }
 
 async function apiFetchJson(url, opts = {}) {
+  // Our backend endpoints (/functions/api/*) require Clerk auth via a Bearer token.
+  // If the user is signed in, attach the session token.
+  let authHeaders = {};
+  try {
+    if (window.Clerk && Clerk.session) {
+      const token = await Clerk.session.getToken();
+      if (token) authHeaders = { Authorization: `Bearer ${token}` };
+    }
+  } catch (_) {
+    // If token retrieval fails, fall back to unauthenticated requests.
+  }
+
   const res = await fetch(url, {
     ...opts,
     headers: {
       Accept: "application/json",
+      ...authHeaders,
       ...(opts.headers || {}),
     },
   });
@@ -70,9 +83,10 @@ function renderPlans(container) {
     <div class="plans">
       <button class="plan" data-plan="monthly">Monthly <span>$2.99</span></button>
       <button class="plan" data-plan="yearly">Yearly <span>$14.99</span></button>
-      <button class="plan" data-plan="3years">3 years <span>$24.99</span></button>
-      <button class="plan" data-plan="6years">6 years <span>$39.99</span></button>
-      <button class="plan" data-plan="9years">9 years <span>$49.99</span></button>
+      <!-- Must match server-side plan keys (functions/api/create-checkout-session.js) -->
+      <button class="plan" data-plan="3y">3 years <span>$24.99</span></button>
+      <button class="plan" data-plan="6y">6 years <span>$39.99</span></button>
+      <button class="plan" data-plan="9y">9 years <span>$49.99</span></button>
     </div>
     <p class="muted" style="margin-top:10px;">
       After purchase, refresh will unlock the library automatically.
@@ -86,7 +100,6 @@ function renderPlans(container) {
         btn.disabled = true;
         btn.textContent = "Loading…";
 
-        // Your checkout endpoint (adjust if your project uses another route)
         const out = await apiFetchJson("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
