@@ -39,18 +39,22 @@ function showApp() {
   $("logoutBtn").style.display = "";
 }
 
-async function apiFetchJson(url, opts = {}) {
-  // Our backend endpoints (/functions/api/*) require Clerk auth via a Bearer token.
-  // If the user is signed in, attach the session token.
-  let authHeaders = {};
+async function getAuthHeaders() {
   try {
     if (window.Clerk && Clerk.session) {
       const token = await Clerk.session.getToken();
-      if (token) authHeaders = { Authorization: `Bearer ${token}` };
+      if (token) return { Authorization: `Bearer ${token}` };
     }
-  } catch (_) {
-    // If token retrieval fails, fall back to unauthenticated requests.
-  }
+  } catch (_) {}
+  return {};
+}
+
+/**
+ * Fetch JSON from API with Clerk auth when available.
+ * If we get 401/403, retry once (token can occasionally be briefly unavailable).
+ */
+async function apiFetchJson(url, opts = {}, retryOnce = true) {
+  const authHeaders = await getAuthHeaders();
 
   const res = await fetch(url, {
     ...opts,
@@ -60,6 +64,13 @@ async function apiFetchJson(url, opts = {}) {
       ...(opts.headers || {}),
     },
   });
+
+  // If unauthorized, retry once after attempting to re-read token
+  if ((res.status === 401 || res.status === 403) && retryOnce) {
+    // Small delay helps in rare cases where session is "just about to" be ready.
+    await new Promise((r) => setTimeout(r, 250));
+    return apiFetchJson(url, opts, false);
+  }
 
   let data = null;
   const ct = res.headers.get("content-type") || "";
@@ -71,9 +82,16 @@ async function apiFetchJson(url, opts = {}) {
   }
 
   if (!res.ok) {
+    // Provide a nicer message for common auth issues
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(
+        "Unauthorized. Please refresh the page and try again. If it happens again, sign out and sign in once more."
+      );
+    }
     const msg = data?.error || `Request failed: ${res.status}`;
     throw new Error(msg);
   }
+
   return data;
 }
 
@@ -96,6 +114,8 @@ function renderPlans(container) {
   container.querySelectorAll("button.plan").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const plan = btn.getAttribute("data-plan");
+      const originalHTML = btn.innerHTML;
+
       try {
         btn.disabled = true;
         btn.textContent = "Loading…";
@@ -106,13 +126,17 @@ function renderPlans(container) {
           body: JSON.stringify({ plan }),
         });
 
-        if (out?.url) window.location.href = out.url;
-        else throw new Error("Missing checkout URL from server.");
+        if (out?.url) {
+          window.location.href = out.url;
+        } else {
+          throw new Error("Missing checkout URL from server.");
+        }
       } catch (e) {
         alert(e?.message || String(e));
       } finally {
+        // In case user stays on the page, restore button appearance
         btn.disabled = false;
-        // restore label on rerender if needed
+        btn.innerHTML = originalHTML;
       }
     });
   });
@@ -141,13 +165,8 @@ function renderLibrary(container, items = []) {
   `;
 }
 
-async function loadLibrary(clerk) {
-  const token = await clerk.session?.getToken();
-  if (!token) throw new Error("No session token available.");
-
-  return await apiFetchJson("/api/library", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+async function loadLibrary() {
+  return await apiFetchJson("/api/library");
 }
 
 async function boot() {
@@ -206,14 +225,18 @@ async function boot() {
   appContent.innerHTML = `<p class="muted">Loading your library…</p>`;
 
   try {
-    const data = await loadLibrary(clerk);
+    const data = await loadLibrary();
 
     // Show email & status
     const email = data?.email || clerk.user?.primaryEmailAddress?.emailAddress || "";
     const header = `
       <div style="margin-bottom:10px;">
         ${email ? `<div class="muted">Logged in as: <strong>${email}</strong></div>` : ""}
-        <div style="margin-top:6px;">${data.accessGranted ? "✅ Subscription active." : "✅ You are signed in, but you don’t have an active subscription yet."}</div>
+        <div style="margin-top:6px;">${
+          data.accessGranted
+            ? "✅ Subscription active."
+            : "✅ You are signed in, but you don’t have an active subscription yet."
+        }</div>
       </div>
     `;
 
