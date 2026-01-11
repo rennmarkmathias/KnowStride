@@ -3,181 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="KnowStride delivers one curated reading block per week—12 substantial articles that build real general knowledge over time." />
+  <meta name="description" content="KnowStride delivers one curated reading block per week—12 substantial articles that build strong general knowledge over time." />
   <title>KnowStride — Curated knowledge, one week at a time</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- Small, self-contained styling for the New Year offer price display + teaser cards + legal sections -->
-  <style>
-    .plan-price .price-row{
-      display:flex;
-      align-items:baseline;
-      gap:.5rem;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    .plan-price .price-now{
-      font-weight:700;
-      color:#b00020; /* NOW is red */
-    }
-    .plan-price .price-was{
-      text-decoration:line-through;
-      color:#666;     /* WAS is gray */
-      opacity:.85;
-      font-weight:600;
-    }
-    .plan.offer{
-      position:relative;
-      border-width:2px;
-    }
-    .plan.offer::after{
-      content:"Offer";
-      position:absolute;
-      top:10px;
-      right:10px;
-      font-size:.75rem;
-      padding:.2rem .45rem;
-      border-radius:999px;
-      background:rgba(176,0,32,.10);
-      color:#b00020;
-      font-weight:700;
-    }
-
-    /* Teasers (simple, thinner frames) */
-    .teasers {
-      margin-top: 2rem;
-    }
-    .teasers-grid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 12px;
-    }
-    @media (max-width: 900px){
-      .teasers-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 640px){
-      .teasers-grid{ grid-template-columns: 1fr; }
-    }
-    .teaser-card{
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 14px 14px 12px;
-      background: rgba(255,255,255,.55);
-    }
-    .teaser-card h3{
-      margin: 0 0 8px;
-      font-size: 1rem;
-      line-height: 1.25;
-    }
-    .teaser-card p{
-      margin: 0;
-      line-height: 1.45;
-    }
-    .teaser-card .tag{
-      display:inline-block;
-      margin-top: 10px;
-      font-size: .78rem;
-      opacity: .78;
-    }
-
-    /* Callout */
-    .callout{
-      margin-top: 12px;
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-    }
-
-    /* Example blocks + mobile dropdown */
-    .examples-wrap{
-      margin-top: 14px;
-    }
-    .examples-desktop{ display:block; }
-    .examples-mobile{ display:none; }
-
-    @media (max-width: 900px){
-      .examples-desktop{ display:none; }
-      .examples-mobile{ display:block; }
-    }
-
-    .examples-mobile details{
-      margin-top: 10px;
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: rgba(255,255,255,.55);
-    }
-    .examples-mobile summary{
-      cursor:pointer;
-      font-weight: 700;
-      list-style: none;
-    }
-    .examples-mobile summary::-webkit-details-marker{ display:none; }
-
-    /* Weekly free article dropdown */
-    .free-article{
-      margin-top: 14px;
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-    }
-    .free-article summary{
-      cursor:pointer;
-      font-weight: 800;
-      list-style: none;
-    }
-    .free-article summary::-webkit-details-marker{ display:none; }
-
-    .free-article .free-article-body{
-      margin-top: 12px;
-      line-height: 1.55;
-    }
-    .free-article .free-article-body h3{
-      margin: 14px 0 6px;
-      font-size: 1.05rem;
-    }
-    .free-article .free-article-body p{
-      margin: 0 0 10px;
-    }
-    .free-article-cta{
-      margin-top: 10px;
-      font-weight: 650;
-    }
-
-    /* Terms/Privacy area (compact + collapsible) */
-    .legal{
-      margin-top: 2.2rem;
-      padding-top: .6rem;
-    }
-    .legal details{
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-      margin-top: 10px;
-    }
-    .legal summary{
-      cursor:pointer;
-      font-weight: 700;
-      list-style: none;
-    }
-    .legal summary::-webkit-details-marker{ display:none; }
-    .legal .legal-body{
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-    .legal .legal-body p{
-      margin: 0 0 10px;
-    }
-    .legal .legal-body ul{
-      margin: 0 0 10px 18px;
-      padding: 0;
-    }
-    .footer a{ text-decoration: underline; }
-  </style>
 </head>
 
 <body>
@@ -190,339 +18,175 @@
   </header>
 
   <main class="container">
+
+    <!-- HERO -->
     <section class="hero">
       <div class="hero-col">
-        <h1>Curated knowledge, one week at a time.</h1>
+        <h1>Curated knowledge,<br>one week at a time.</h1>
         <p>
           KnowStride delivers <strong>one carefully curated reading block per week</strong>.
-          Each block contains <strong>12 articles</strong> across world history, geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures — designed to build a stronger general knowledge over time.
+          Each block contains <strong>12 articles</strong> across world history, geography,
+          countries, science, culture, technology, key ideas, and significant historical
+          and contemporary figures — designed to build a stronger general knowledge over time.
         </p>
         <p class="muted">Calm, focused reading. No ads. No distractions.</p>
       </div>
 
-      <div class="hero-logo" aria-label="KnowStride logo">
-        <img class="logo-img" src="/assets/logo.png" alt="KnowStride logo" loading="eager" />
+      <div class="hero-logo">
+        <img class="logo-img" src="/assets/logo.png" alt="KnowStride" />
       </div>
 
       <div class="hero-col">
         <h2>Why it matters</h2>
         <p>
-          A stronger general knowledge helps to understand news, history, and the world’s connections.
-          KnowStride is built for long-term learning — not clickbait.
+          A stronger general knowledge helps to understand news, history,
+          and the world’s connections. KnowStride is built for long-term
+          learning — not clickbait.
         </p>
         <p class="muted">Works on all devices via the web. Apps may follow later.</p>
       </div>
     </section>
 
-    <!-- Teasers / previews -->
-    <section class="teasers" aria-label="Teasers">
+    <!-- WHAT YOU GET -->
+    <section>
       <h2>What you get</h2>
       <p class="muted">
-        One weekly block, designed for steady progress—calm, structured, and easy to keep up with.
+        One weekly block, designed for steady progress — calm, cumulative, and durable over time.
       </p>
 
-      <div class="callout">
-        <p style="margin:0; line-height:1.45;">
-          <strong>First two years:</strong> each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects.
-        </p>
-      </div>
-
-      <div class="teasers-grid">
-        <!-- 3 core teasers (shorter, less “coaching”) -->
-        <div class="teaser-card">
-          <h3>Build solid general knowledge over time</h3>
-          <p>
-            Each weekly block is about <strong>50 book pages</strong> (≈15,000 words).
-            It’s designed to accumulate into real, usable knowledge—week by week.
-          </p>
-          <span class="tag">≈ 1–1.5 hours / week</span>
+      <div class="grid2">
+        <div class="tile">
+          <strong>Build solid general knowledge</strong><br>
+          About 50 book pages per week (≈15,000 words), designed for long-term retention.
         </div>
-
-        <div class="teaser-card">
-          <h3>Short on time? Read the summaries</h3>
-          <p>
-            Every article includes a clear summary.
-            Summaries-only takes about <strong>15 minutes</strong> per week.
-          </p>
-          <span class="tag">Summaries-only: ≈ 15 minutes</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Designed to open new horizons</h3>
-          <p>
-            A balanced mix of “interesting” and “important” topics,
-            without noise, hype, or endless scrolling.
-          </p>
-          <span class="tag">Balanced by design</span>
-        </div>
-      </div>
-
-      <!-- Examples heading + desktop vs mobile rendering -->
-      <div class="examples-wrap">
-        <h2 style="margin: 18px 0 6px;">Examples of headlines</h2>
-        <p class="muted" style="margin:0;">A small sample of the kind of topics you’ll get.</p>
-
-        <!-- DESKTOP: show all 6 (no dropdown) -->
-        <div class="examples-desktop">
-          <div class="teasers-grid" style="margin-top:12px;">
-            <div class="teaser-card">
-              <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
-              <p>A defining settlement—often mentioned, rarely understood clearly.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
-              <p>Everyday technology with deep historical and economic consequences.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
-              <p>Serious ideas, explained plainly—without academic fog.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
-              <p>One of those topics that makes headlines readable.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
-              <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>Cyrus the Great: Persia’s Expansion and Legacy</h3>
-              <p>How an empire is built—and how it stays together.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- MOBILE: show 2 + dropdown for the rest -->
-        <div class="examples-mobile">
-          <div class="teasers-grid" style="margin-top:12px;">
-            <div class="teaser-card">
-              <h3>The Congress of Vienna (1814–1815): How Europe Tried to Redesign Itself After Napoleon</h3>
-              <p>A defining settlement—often mentioned, rarely understood clearly.</p>
-            </div>
-
-            <div class="teaser-card">
-              <h3>The Otto Engine: The Invention That Still Powers the Modern World</h3>
-              <p>Everyday technology with deep historical and economic consequences.</p>
-            </div>
-          </div>
-
-          <details>
-            <summary>Show more examples</summary>
-            <div class="teasers-grid" style="margin-top:12px;">
-              <div class="teaser-card">
-                <h3>Hannah Arendt: Power, Responsibility, and the Nature of Political Action</h3>
-                <p>Serious ideas, explained plainly—without academic fog.</p>
-              </div>
-
-              <div class="teaser-card">
-                <h3>Diplomatic Immunity: Why Some Laws Stop at the Embassy Gate</h3>
-                <p>One of those topics that makes headlines readable.</p>
-              </div>
-
-              <div class="teaser-card">
-                <h3>Measurement Units: Why the World Still Uses Two Systems</h3>
-                <p>Unglamorous, extremely useful—and it shows up everywhere.</p>
-              </div>
-
-              <div class="teaser-card">
-                <h3>Cyrus the Great: Persia’s Expansion and Legacy</h3>
-                <p>How an empire is built—and how it stays together.</p>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- Weekly free article (dropdown, works everywhere) -->
-        <div style="margin-top: 14px;">
-          <h2 style="margin: 18px 0 6px;">This week’s free article</h2>
-          <p class="muted" style="margin:0;">A small preview of the writing style and structure.</p>
-
-          <details class="free-article">
-            <summary>7. Cossack Hetmanate — Leadership and Military Tradition</summary>
-            <div class="free-article-body">
-              <p><strong>A frontier polity built around arms and negotiation</strong></p>
-              <p>
-                In the middle of the 1600s, a new political order appeared on the steppe and forest-steppe borderlands of Eastern Europe:
-                the Cossack Hetmanate. It emerged from a society shaped by river crossings, raids, seasonal campaigns, and the practical
-                demands of defending scattered settlements. Leadership in this environment was never simply “civil” or “military.”
-                The same figures who negotiated with neighboring powers also raised regiments, managed supply lines, and enforced discipline.
-              </p>
-              <p>
-                At its height in the later 1600s, the Hetmanate controlled much of central Ukraine, particularly on the Left Bank of the Dnipro River.
-                Its armed forces—organized in territorial regiments—were both an army and an administrative framework.
-              </p>
-
-              <h3>From uprising to Hetmanate: a brief background</h3>
-              <p>
-                The Hetmanate arose from the Khmelnytsky Uprising of 1648, led by Bohdan Khmelnytsky (1595–1657), against the Polish-Lithuanian Commonwealth.
-                The 1654 alignment with Muscovy created a new strategic framework, but did not end the Hetmanate’s balancing act.
-              </p>
-
-              <h3>The hetman and the “starshyna”: who led, and how</h3>
-              <p>
-                The hetman was simultaneously head of government, chief diplomat, and commander-in-chief. In principle, the office rested on election
-                by a general assembly, but authority tended to concentrate in the hands of a small circle of senior officers.
-              </p>
-
-              <h3>Regiments as both army and state</h3>
-              <p>
-                The Hetmanate’s basic unit was the regiment (<em>polk</em>), functioning as both a territorial district and a military formation.
-                Mobilized forces could reach tens of thousands, though numbers varied with season, supply, and political unity.
-              </p>
-
-              <h3>Training, tactics, and the steppe-war repertoire</h3>
-              <p>
-                Mobility was central: detachments could move quickly, forage locally, and exploit knowledge of riverbanks, wetlands, and forest edges.
-                Defensive traditions—wagon laagers, field entrenchments, and fortified towns—reflected an expectation of sudden attack.
-              </p>
-
-              <h3>Summary</h3>
-              <p>
-                The Cossack Hetmanate fused leadership and warfare into a single political language. Regiments served as both districts and fighting units,
-                and legitimacy remained tightly linked to military competence and rapid mobilization.
-              </p>
-
-              <p class="free-article-cta">
-                To read this week’s other 11 articles, <a href="#pricing">buy a plan</a>.
-              </p>
-            </div>
-          </details>
+        <div class="tile">
+          <strong>Short on time?</strong><br>
+          Every article includes a clear summary for fast orientation.
         </div>
       </div>
     </section>
 
-    <section class="how">
+    <!-- EXAMPLE HEADLINES -->
+    <section style="margin-top:2rem;">
+      <h2>Example article topics</h2>
+
+      <div class="teasers-grid">
+        <div class="teaser-card">
+          <h3>The Congress of Vienna (1814–1815)</h3>
+          <p>How Europe tried to redesign itself after Napoleon.</p>
+        </div>
+
+        <div class="teaser-card">
+          <h3>The Otto Engine</h3>
+          <p>The invention that still powers the modern world.</p>
+        </div>
+
+        <div class="teaser-card">
+          <h3>Hannah Arendt</h3>
+          <p>Power, responsibility, and political action.</p>
+        </div>
+
+        <div class="teaser-card">
+          <h3>Diplomatic Immunity</h3>
+          <p>Why some laws stop at the embassy gate.</p>
+        </div>
+
+        <div class="teaser-card">
+          <h3>Measurement Units</h3>
+          <p>Why the world still uses two systems.</p>
+        </div>
+
+        <div class="teaser-card">
+          <h3>Cossack Hetmanate</h3>
+          <p>Leadership and military tradition on Europe’s frontier.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREVIEW -->
+    <section class="card" style="margin-top:2rem;">
+      <h2>A small preview of the writing style and structure</h2>
+      <p class="muted">
+        Excerpt from an article included in the first block. Full article: 1,287 words.
+      </p>
+
+      <details style="margin-top:12px;">
+        <summary style="cursor:pointer; font-weight:800;">
+          7. Cossack Hetmanate — Leadership and Military Tradition
+        </summary>
+
+        <div style="margin-top:14px;">
+          <p>
+            In the middle of the 1600s, a new political order appeared on the steppe and forest-steppe
+            borderlands of Eastern Europe: the Cossack Hetmanate. It emerged from a society shaped by
+            river crossings, raids, seasonal campaigns, and the practical demands of defending
+            scattered settlements.
+          </p>
+
+          <p>
+            Leadership in this environment was never simply “civil” or “military”.
+            The same figures who negotiated with neighboring powers also raised regiments,
+            managed supply lines, and enforced discipline.
+          </p>
+
+          <p>
+            <strong>
+              To read the full article (included in the first block), and the other 11 articles,
+              <a href="#pricing">buy a plan</a>.
+            </strong>
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section style="margin-top:2rem;">
       <h2>How it works</h2>
       <ol>
         <li>Create an account (email + password) or log in with Google.</li>
-        <li>Choose a plan. You receive <strong>Block 1 immediately</strong>.</li>
-        <li>Your next block unlocks <strong>exactly one week after your signup time</strong> (individual schedule).</li>
-        <li>Blocks and articles are numbered for easy orientation.</li>
+        <li>Choose a plan. You receive Block 1 immediately.</li>
+        <li>Your next block unlocks exactly one week after signup.</li>
+        <li>Access includes your most recent 52 blocks.</li>
       </ol>
-
-      <p class="muted">
-        Access includes your <strong>most recent 52 blocks</strong>.
-      </p>
     </section>
 
-    <section class="pricing" id="pricing">
+    <!-- PRICING -->
+    <section id="pricing" style="margin-top:2rem;">
       <h2>New Year offer</h2>
-      <p class="muted">
-        Secure checkout via Stripe.
-        <strong>Valid until January 31.</strong>
-      </p>
       <p class="muted"><strong>No binding period.</strong> Cancel anytime.</p>
 
       <div class="plans">
-        <button class="plan" data-plan="monthly">
-          <div class="plan-title">Monthly</div>
-          <div class="plan-price">$2.99</div>
-        </button>
-
-        <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
-          <div class="plan-title">Yearly</div>
-          <div class="plan-price">
-            <div class="price-row">
-              <span class="price-now">$14.99</span>
-              <span class="price-was">$19.99</span>
-            </div>
-          </div>
-        </button>
-
-        <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
-          <div class="plan-title">3 Years</div>
-          <div class="plan-price">
-            <div class="price-row">
-              <span class="price-now">$24.99</span>
-              <span class="price-was">$29.99</span>
-            </div>
-          </div>
-        </button>
-
-        <button class="plan" data-plan="6y">
-          <div class="plan-title">6 Years</div>
-          <div class="plan-price">$39.99</div>
-        </button>
-
-        <button class="plan best" data-plan="9y">
-          <div class="plan-title">9 Years</div>
-          <div class="plan-price">$49.99</div>
-        </button>
+        <button class="plan">Monthly<br>$2.99</button>
+        <button class="plan offer">Yearly<br>$14.99</button>
+        <button class="plan offer">3 Years<br>$24.99</button>
+        <button class="plan">6 Years<br>$39.99</button>
+        <button class="plan best">9 Years<br>$49.99</button>
       </div>
-
-      <p class="muted small">
-        Taxes & VAT: VAT for EU customers may apply depending on location and is handled automatically at checkout.
-        Customers outside the EU are not charged EU VAT.
-      </p>
     </section>
 
-    <section class="trust">
-      <h2>Trust & positioning</h2>
-      <ul>
-        <li>Completely ad-free</li>
-        <li>Neutral international English</li>
-        <li>Designed for long-term learning</li>
-        <li>
-          <strong>First two years:</strong> each weekly block continues the core series in world history and world geography —
-          alongside coverage of all countries and a wide mix of other subjects.
-        </li>
-      </ul>
-    </section>
-
-    <section class="legal" id="legal" aria-label="Terms and Privacy">
+    <!-- LEGAL -->
+    <section class="legal">
       <h2>Terms & Privacy</h2>
       <p class="muted">Short and readable. Click to expand.</p>
 
-      <details id="terms">
+      <details>
         <summary>Terms</summary>
-        <div class="legal-body">
-          <p><strong>No binding period.</strong> You can cancel anytime. Access remains active until the end of your paid period.</p>
-          <ul>
-            <li>Subscriptions provide personal, non-transferable access to KnowStride content while active.</li>
-            <li>Payments are processed securely via Stripe. We do not store full payment card details.</li>
-            <li>All content is for personal use. Copying, redistribution, or resale is not permitted.</li>
-            <li>We may update features and pricing over time. Changes apply to future purchases/renewals.</li>
-            <li>To cancel your subscription, email us from the email address you used to sign up.</li>
-            <li>Your access remains active until the end of your paid period.</li>
-          </ul>
-          <p>Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
+        <p>You can cancel anytime. Access remains active until the end of your paid period.</p>
       </details>
 
-      <details id="privacy">
+      <details>
         <summary>Privacy</summary>
-        <div class="legal-body">
-          <p>We collect only what’s needed to run the service.</p>
-          <ul>
-            <li><strong>Account data:</strong> email and a securely stored password hash.</li>
-            <li><strong>Payments:</strong> handled by Stripe; we receive confirmation of payment status.</li>
-            <li><strong>Service use:</strong> basic technical logs may be kept for security and reliability.</li>
-          </ul>
-          <p>We do not sell personal data. For requests or questions, contact <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
+        <p>We collect only what’s needed to run the service. No ads. No tracking.</p>
       </details>
     </section>
 
     <footer class="footer">
       <div>All content © KnowStride</div>
       <div class="muted">
-        Customer support: <a href="mailto:service@knowstride.com">service@knowstride.com</a> (response within 24 business hours).
-      </div>
-      <div class="muted">
-        <span>Secure checkout via Stripe.</span>
-        &nbsp;·&nbsp;
-        <a href="#terms">Terms</a>
-        &nbsp;·&nbsp;
-        <a href="#privacy">Privacy</a>
+        Support: <a href="mailto:service@knowstride.com">service@knowstride.com</a>
       </div>
     </footer>
-  </main>
 
-  <script src="/landing.js"></script>
+  </main>
 </body>
 </html>
