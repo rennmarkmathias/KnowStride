@@ -124,14 +124,13 @@ a:hover{
   line-height: 1.18;
 }
 
-/* ================= HERO LOGO ================= */
+/* ================= HERO IMAGE — clean, no frame ================= */
 
 .hero-logo{
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
-  box-shadow: var(--shadow);
-  padding: 12px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -145,7 +144,7 @@ a:hover{
   max-height: 60vh;      /* desktop cap */
   object-fit: contain;   /* show entire image */
   display: block;
-  border-radius: 12px;
+  border-radius: 16px;   /* soft corners */
 }
 
 /* ================= CONTENT GRIDS ================= */
@@ -279,6 +278,51 @@ button:hover{
   font-weight: 650;
 }
 
+/* ===== Library list layout ===== */
+
+.library-list{
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.library-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.library-title{
+  font-weight: 650;
+  color: var(--ink);
+  min-width: 0;
+}
+
+.library-num{
+  display: inline-block;
+  min-width: 5ch;               /* enough for #500 + breathing room */
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.library-link{
+  color: #6b4a1f;
+  text-decoration: underline;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.library-link::after{
+  content: " →";
+}
+
 /* ================= MOBILE / TABLET ================= */
 
 @media (max-width: 900px){
@@ -335,94 +379,3 @@ button:hover{
   margin: 1.25rem 0 .5rem;
   font-size: 1.05rem;
 }
-
-.library-link{
-  color: #3b3b3b;               /* mörkare än body-text */
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.library-link:hover{
-  color: #000;
-}
-
-.library-item{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* ===== Library list layout ===== */
-
-.library-list{
-  display: grid;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.library-item{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-
-  padding: 14px 16px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-}
-
-.library-title{
-  font-weight: 650;
-  color: var(--ink);
-  min-width: 0;
-}
-
-.library-num{
-  display: inline-block;
-  min-width: 5ch;               /* räcker för #500 (4 tecken) + lite luft */
-  text-align: right;
-  font-variant-numeric: tabular-nums;  /* jämna siffror */
-  color: var(--muted);
-}
-
-.library-link{
-  color: #6b4a1f;               /* lite mörkare “warm” ton */
-  text-decoration: underline;   /* tydlig länk */
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-/* Valfritt: liten pil för mer “polish” */
-.library-link::after{
-  content: " →";
-}
-
-@media (max-width: 900px){
-  .hero-logo{
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-  }
-
-  .logo-img{
-    border-radius: 14px;  /* eller 0 om du vill helt kantig */
-  }
-}
-
-/* HERO IMAGE — clean, no frame */
-.hero-logo{
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  padding: 0;
-}
-
-.logo-img{
-  border-radius: 16px; /* behåll mjuka hörn, justera vid behov */
-}
-
-
-
