@@ -67,7 +67,6 @@ async function apiFetchJson(url, opts = {}, retryOnce = true) {
 
   // If unauthorized, retry once after attempting to re-read token
   if ((res.status === 401 || res.status === 403) && retryOnce) {
-    // Small delay helps in rare cases where session is "just about to" be ready.
     await new Promise((r) => setTimeout(r, 250));
     return apiFetchJson(url, opts, false);
   }
@@ -82,7 +81,6 @@ async function apiFetchJson(url, opts = {}, retryOnce = true) {
   }
 
   if (!res.ok) {
-    // Provide a nicer message for common auth issues
     if (res.status === 401 || res.status === 403) {
       throw new Error(
         "Unauthorized. Please refresh the page and try again. If it happens again, sign out and sign in once more."
@@ -97,17 +95,32 @@ async function apiFetchJson(url, opts = {}, retryOnce = true) {
 
 function renderPlans(container) {
   container.innerHTML = `
-    <h2>Choose a plan</h2>
+    <h2>Buy plan</h2>
+    <p class="muted"><strong>No binding period.</strong> Cancel anytime.</p>
+
     <div class="plans">
-      <button class="plan" data-plan="monthly">Monthly <span>$2.99</span></button>
-      <button class="plan" data-plan="yearly">Yearly <span>$14.99</span></button>
+      <button class="plan" data-plan="monthly" aria-label="Monthly subscription: $1.99 per month">
+        <div class="plan-title">Monthly</div>
+        <div class="plan-price">$1.99</div>
+        <div class="muted small" style="margin-top:6px;">Subscription</div>
+      </button>
+
+      <button class="plan best" data-plan="yearly" aria-label="Yearly subscription: $9.99 per year">
+        <div class="plan-title">Yearly</div>
+        <div class="plan-price">$9.99</div>
+        <div class="muted small" style="margin-top:6px;">Subscription</div>
+      </button>
+
       <!-- Must match server-side plan keys (functions/api/create-checkout-session.js) -->
-      <button class="plan" data-plan="3y">3 years <span>$24.99</span></button>
-      <button class="plan" data-plan="6y">6 years <span>$39.99</span></button>
-      <button class="plan" data-plan="9y">9 years <span>$49.99</span></button>
+      <button class="plan" data-plan="3y" aria-label="3-year access: $18.99 one-time payment">
+        <div class="plan-title">3 Years</div>
+        <div class="plan-price">$18.99</div>
+        <div class="muted small" style="margin-top:6px;">One-time payment</div>
+      </button>
     </div>
-    <p class="muted" style="margin-top:10px;">
-      After purchase, refresh will unlock the library automatically.
+
+    <p class="muted small" style="margin-top:10px;">
+      After purchase, your access updates automatically when you return. If needed, refresh once.
     </p>
   `;
 
@@ -134,7 +147,6 @@ function renderPlans(container) {
       } catch (e) {
         alert(e?.message || String(e));
       } finally {
-        // In case user stays on the page, restore button appearance
         btn.disabled = false;
         btn.innerHTML = originalHTML;
       }
@@ -191,7 +203,6 @@ async function boot() {
 
   // Decide which component to mount based on the current path
   const isSignUpPage = pathStartsWith(SIGN_UP_PATH);
-  const isSignInPage = pathStartsWith(SIGN_IN_PATH);
 
   // If the user is not signed in → show SignIn/SignUp depending on URL
   if (!clerk.user || !clerk.session) {
@@ -207,7 +218,7 @@ async function boot() {
         afterSignInUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
       });
     } else {
-      // default to SignIn on /app (or any other page that uses this bundle)
+      // default to SignIn on /app
       clerk.mountSignIn(mountEl, {
         signUpUrl: `${getOrigin()}${SIGN_UP_PATH}`,
         afterSignInUrl: `${getOrigin()}${AFTER_AUTH_PATH}`,
@@ -227,7 +238,6 @@ async function boot() {
   try {
     const data = await loadLibrary();
 
-    // Show email & status
     const email = data?.email || clerk.user?.primaryEmailAddress?.emailAddress || "";
     const header = `
       <div style="margin-bottom:10px;">
