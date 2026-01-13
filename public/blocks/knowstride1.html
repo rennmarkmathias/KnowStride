@@ -1,66 +1,290 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<title>KnowStride 1</title>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<style>
-body {
-  font-family: Arial, sans-serif;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>knowstride1 — KnowStride</title>
+  <style>
+:root{
+  --bg:#f3e4d3;
+  --paper:#f7eee3;
+  --ink:#2a1b12;
+  --muted:rgba(42,27,18,.70);
+  --link:#6b3f1d;           /* brown */
+  --link-hover:#8a5629;
+  --frame:rgba(42,27,18,.18);
+  --frame-strong:rgba(42,27,18,.28);
+  --shadow:rgba(0,0,0,.12);
+  --card:#fbf3e9;
+  --card2:#f6eadc;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+  color:var(--ink);
+  background: radial-gradient(1200px 900px at 30% 10%, rgba(255,255,255,.55), rgba(255,255,255,0)),
+              linear-gradient(180deg, var(--bg), #ead6c2);
+}
+
+.container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 26px 18px 64px;
+}
+
+.header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  padding: 14px 14px 10px;
+  border: 1px solid var(--frame);
+  border-radius: 16px;
+  background: rgba(255,255,255,.45);
+  box-shadow: 0 8px 26px var(--shadow);
+}
+
+.header h1{
+  margin:0;
+  font-size: 28px;
+  letter-spacing:.2px;
+}
+
+.header .hint{
+  margin:6px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.header .meta{
+  text-align:right;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.header .meta a{color:var(--link); text-decoration:none; font-weight:600}
+.header .meta a:hover{color:var(--link-hover); text-decoration:underline}
+
+.toc{
+  margin-top: 18px;
+  padding: 18px 16px;
+  border: 1px solid var(--frame);
+  border-radius: 16px;
+  background: rgba(255,255,255,.50);
+  box-shadow: 0 8px 26px var(--shadow);
+}
+
+.toc h2{
+  margin:0 0 10px;
+  font-size: 18px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  letter-spacing:.2px;
+}
+
+.toc p{
+  margin:0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+/* "Bookshelf light" grid */
+.toc-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+@media (max-width: 720px){
+  .toc-grid{ grid-template-columns: 1fr; }
+}
+
+/* Each item feels like a small book spine/card */
+.toc-item{
+  display:flex;
+  align-items:stretch;
+  border-radius: 12px;
+  overflow:hidden;
+  border: 1px solid var(--frame);
+  background: linear-gradient(180deg, var(--card), var(--card2));
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  text-decoration:none;
+  color: var(--ink);
+  transition: transform .08s ease, border-color .08s ease, box-shadow .08s ease;
+}
+
+.toc-item:hover{
+  transform: translateY(-1px);
+  border-color: var(--frame-strong);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+
+.spine{
+  width: 42px;
+  flex: 0 0 42px;
+  background: linear-gradient(180deg, rgba(107,63,29,.22), rgba(107,63,29,.10));
+  border-right: 1px solid var(--frame);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-weight: 700;
+  color: rgba(42,27,18,.72);
+}
+
+.toc-text{
+  padding: 10px 12px;
+  display:flex;
+  align-items:center;
+  min-height: 44px;
+  line-height: 1.25;
+  font-size: 14px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+/* Make links "brown and nice" */
+a{ color: var(--link); }
+a:hover{ color: var(--link-hover); }
+
+/* Articles area */
+.articles{
+  margin-top: 18px;
+}
+
+.article-wrap{
+  display:none;
+  margin-top: 14px;
+  padding: 18px 18px;
+  border: 1px solid var(--frame);
+  border-radius: 16px;
+  background: rgba(255,255,255,.62);
+  box-shadow: 0 8px 26px var(--shadow);
+}
+
+.article-wrap.active{
+  display:block;
+}
+
+/* Preserve article typography */
+.article-wrap article{
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.article-wrap h1{
+  margin-top:0;
+  font-size: 26px;
+}
+
+.article-wrap h2{
+  margin-top: 18px;
+  font-size: 18px;
+}
+
+.article-wrap p{
   line-height: 1.6;
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 1rem;
+  font-size: 16px;
 }
 
-h1 { font-size: 1.8rem; margin-top: 2rem; }
-h2 { font-size: 1.3rem; margin-top: 1.2rem; }
-article { margin-bottom: 3rem; }
-
-.block-number {
-  text-align: center;
-  font-size: 2.3rem;
-  margin: 0 0 1rem 0;
-  letter-spacing: 1px;
-  font-family: "Trajan Pro", "Cinzel", "Garamond", "Times New Roman", serif;
-}
-.block-divider {
-  margin: 0.2rem 0 1.8rem 0;
-  border: none;
-  border-top: 1px solid #e6e6e6;
+/* Small top action row inside article */
+.article-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin: 0 auto 10px;
+  max-width: 760px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 13px;
+  color: var(--muted);
 }
 
-.facts {
-  background: #f5f5f5;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+.article-actions a{
+  text-decoration:none;
+  font-weight:700;
 }
-table.facts-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
-}
-table.facts-table th, table.facts-table td {
-  text-align: left;
-  padding: 4px 6px;
-  vertical-align: top;
-}
-table.facts-table th {
-  width: 40%;
-  font-weight: bold;
-}
-table.facts-table tr:nth-child(odd) {
-  background: #f0f0f0;
+.article-actions a:hover{ text-decoration:underline; }
+
+.footer{
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+  text-align:center;
 }
 </style>
 </head>
 <body>
+  <a id="top"></a>
+  <main class="container">
 
-<div class="block-number">1</div>
-<hr class="block-divider"/>
-<!-- Article 1: country, tier A, 2059 words (min 1300) -->
-<article>
+    <header class="header">
+      <div>
+        <h1>KnowStride 1</h1>
+        <p class="hint">Click an item to open that article. (You can share a direct link — the URL hash will point to it.)</p>
+      </div>
+      <div class="meta">
+        <div><strong>KnowStride</strong></div>
+        <div><a href="https://knowstride.com">knowstride.com</a></div>
+      </div>
+    </header>
+
+    <section class="toc" aria-label="Block contents">
+      <h2>Block contents</h2>
+      <p>Two-column “bookshelf” view for quick scanning.</p>
+      <div class="toc-grid">
+        <a class="toc-item" href="#a1" data-target="a1">
+  <div class="spine">1</div>
+  <div class="toc-text">1. Brazil</div>
+</a><a class="toc-item" href="#a2" data-target="a2">
+  <div class="spine">2</div>
+  <div class="toc-text">2. World Prehistory — Early Humans and Global Spread</div>
+</a><a class="toc-item" href="#a3" data-target="a3">
+  <div class="spine">3</div>
+  <div class="toc-text">3. Earth Geography — Maps Continents Landforms</div>
+</a><a class="toc-item" href="#a4" data-target="a4">
+  <div class="spine">4</div>
+  <div class="toc-text">4. Austria-Hungary Rise Structure and Collapse</div>
+</a><a class="toc-item" href="#a5" data-target="a5">
+  <div class="spine">5</div>
+  <div class="toc-text">5. Altitude Measurement — Methods and Historical Development</div>
+</a><a class="toc-item" href="#a6" data-target="a6">
+  <div class="spine">6</div>
+  <div class="toc-text">6. African Elephant</div>
+</a><a class="toc-item" href="#a7" data-target="a7">
+  <div class="spine">7</div>
+  <div class="toc-text">7. Cossack Hetmanate — Leadership and Military Tradition</div>
+</a><a class="toc-item" href="#a8" data-target="a8">
+  <div class="spine">8</div>
+  <div class="toc-text">8. Car Brands — Toyota History Innovation Impact</div>
+</a><a class="toc-item" href="#a9" data-target="a9">
+  <div class="spine">9</div>
+  <div class="toc-text">9. Dubrovnik</div>
+</a><a class="toc-item" href="#a10" data-target="a10">
+  <div class="spine">10</div>
+  <div class="toc-text">10. Lake Victoria — History, Geography and Ecology</div>
+</a><a class="toc-item" href="#a11" data-target="a11">
+  <div class="spine">11</div>
+  <div class="toc-text">11. Cyrus the Great Persia Expansion and Legacy</div>
+</a><a class="toc-item" href="#a12" data-target="a12">
+  <div class="spine">12</div>
+  <div class="toc-text">12. Entresol rooms — Servant Spaces and Historical Architecture</div>
+</a>
+      </div>
+    </section>
+
+    <section class="articles" aria-label="Articles">
+      
+<section class="article-wrap" id="wrap-a1" data-article="a1">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 1 of 12</span>
+  </div>
+  <article id="a1">
   <h1>1. Brazil</h1>
 
   <div class="facts">
@@ -136,7 +360,14 @@ table.facts-table tr:nth-child(odd) {
   <p>Brazil is the largest country in South America, defined by continental scale, ecological diversity, and a long Atlantic coastline. Its geography spans the Amazon Basin, highlands, savannas, wetlands, and temperate-influenced southern regions, producing climates that range from equatorial heat and heavy rainfall to semiarid drought-prone zones and cooler subtropical winters.</p>
   <p>Highly urbanized and culturally diverse, Brazil reflects Indigenous origins, Portuguese colonial foundations, and the profound legacies of African diaspora communities and later global immigration. Historically, Brazil moved from colony to empire to republic, with 20th-century industrialization and periods of authoritarian rule followed by democratic consolidation under the 1988 Constitution; slavery, notably, was abolished relatively late in 1888.</p>
   <p>Economically, Brazil combines a large service sector with significant industry and globally important agribusiness, supported by hydropower and substantial natural resources. Contemporary priorities include reducing inequality, improving infrastructure and public services, managing metropolitan growth, and balancing development with environmental protection—issues that also shape Brazil’s international profile. Small map-versus-reality details capture this variety well: São Paulo sits around 750 m (about 2,460 ft) above sea level despite being relatively near the coast, and while snow is rare, it can occasionally fall on Brazil’s higher plateaus and southern highlands.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a2" data-article="a2">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 2 of 12</span>
+  </div>
+  <article id="a2">
   <h1>2. World Prehistory — Early Humans and Global Spread</h1>
 
   <h2>Opening: A Deep Past Hidden in Plain Sight</h2>
@@ -175,7 +406,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>World prehistory spans millions of years of toolmaking and evolution, culminating in the emergence of <em>Homo sapiens</em> about 300,000 years ago and a global dispersal largely after roughly 70,000 years ago. Human expansion was shaped by shifting climates, lower sea levels (often about 60–120 m / 200–390 ft below present), and encounters with other human groups, including interbreeding with Neanderthals and Denisovans. Reaching Sahul by at least about 50,000 years ago and spreading through the Americas by at least about 13,000 years ago marked key steps toward a worldwide presence, requiring planning, social coordination, and adaptation to new ecologies. Prehistory is reconstructed through archaeology, environmental records, and increasingly ancient DNA, yielding a complex picture of repeated movements, innovations, and contacts. Its modern relevance lies in explaining the deep roots of human cooperation and mobility, the historical shaping of genetic diversity, and the long record of human adaptation across a changing planet.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a3" data-article="a3">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 3 of 12</span>
+  </div>
+  <article id="a3">
   <h1>3. Earth Geography — Maps Continents Landforms</h1>
 
   <h2>What Geography Studies: Space, Place, and Scale</h2>
@@ -204,7 +442,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Earth geography links physical processes—plate tectonics, erosion, river and coastal dynamics, glaciation, and climate patterns—to the human realities of settlement, agriculture, transport, resources, and hazards. Maps make this complexity legible, but their projections, scales, and symbols shape what is emphasized or distorted. Continents and oceans reflect deep geological structure and slow plate motion of roughly 2–10 cm per year (0.8–4 in per year), while landforms evolve through uplift and erosion acting over vast timescales. Human geography emerges from these constraints and opportunities: fertile plains and coasts attract population and trade, while mountains, deserts, and hazard zones influence infrastructure choices and risk management. Together, maps, continents, and landforms provide a practical framework for understanding how Earth works and why human activity concentrates where it does.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a4" data-article="a4">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 4 of 12</span>
+  </div>
+  <article id="a4">
   <h1>4. Austria-Hungary Rise Structure and Collapse</h1>
 
   <h2>Why a “Vanished Empire” Still Feels Present</h2>
@@ -244,7 +489,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Austria-Hungary (1867–1918) was a dual state created to preserve Habsburg power while accommodating Hungarian autonomy after military and political shocks in the mid-19th century. Its distinctive structure combined two largely separate governments with common institutions for foreign policy, the army, and shared finances, periodically renegotiated through constitutional bargaining. The monarchy managed extraordinary linguistic and cultural diversity, but language and nationality became central political issues, often contested through legal and administrative mechanisms. Modernization accelerated after 1867, with major growth in railways, industry, and urban culture, though development remained uneven across regions. Foreign policy entanglements in the Balkans and the pressures of World War I exposed the state’s internal fragilities, leading to rapid breakdown in 1918 as defeat and secession reinforced each other. The empire’s dissolution redrew Central Europe into successor states that inherited many imperial institutions; parts of present-day western Ukraine were once within the Habsburg borderlands, where imperial-era administration, education, and a religious mix that includes Catholic communities remain visible legacies.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a5" data-article="a5">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 5 of 12</span>
+  </div>
+  <article id="a5">
   <h1>5. Altitude Measurement — Methods and Historical Development</h1>
 
   <h2>Why altitude is hard to measure</h2>
@@ -258,7 +510,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Altitude measurement has long depended on pairing a physical principle with a stable reference surface. Traditional surveying infers height through geometry and careful leveling, while barometric methods estimate altitude from pressure changes but require corrections for temperature and weather. Modern needs—especially in aviation and navigation—added standardized barometric practices, radio-based height-above-ground measurements, and satellite-derived altitudes that must be converted from ellipsoidal to sea-level references. Across eras, accuracy hinges on calibration and consistent reference systems.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a6" data-article="a6">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 6 of 12</span>
+  </div>
+  <article id="a6">
   <h1>6. African Elephant</h1>
 
   <h2>Overview and why elephants stand out</h2>
@@ -286,7 +545,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>African elephants—both bush and forest species—are the largest living land mammals, with adults commonly reaching about 3.0–3.5 m (9.8–11.5 ft) at the shoulder and weighing several thousand kilograms. Their trunks, tusks, and large ears are highly specialized tools for feeding, communication, and temperature control. Elephants can travel tens to hundreds of kilometers (miles) seasonally, consume roughly 100–150 kg (220–330 lb) of plants per day, and drink up to around 50–150 L (13–40 gal) when water is available. Socially, they live in matriarch-led family groups with slow reproduction, including a ~22-month pregnancy and long calf dependence. Ecologically, elephants reshape habitats and disperse seeds, influencing entire plant and animal communities. Their future depends on maintaining large connected habitats and reducing poaching and human–elephant conflict across the regions where they still roam.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a7" data-article="a7">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 7 of 12</span>
+  </div>
+  <article id="a7">
   <h1>7. Cossack Hetmanate — Leadership and Military Tradition</h1>
 
   <h2>A frontier polity built around arms and negotiation</h2>
@@ -314,7 +580,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>The Cossack Hetmanate fused leadership and warfare into a single political language. The hetman and senior officers governed through institutions that were simultaneously administrative and martial, with regiments serving as both districts and fighting units. Elective traditions and public councils provided a recurring ideal of collective legitimacy, while the demands of campaigning pushed authority toward experienced commanders and elite networks. The Hetmanate’s military tradition emphasized mobility, rapid mobilization, and practical defenses suited to river corridors and open-steppe frontiers. Over the 1600s and 1700s, the same strengths that made the Hetmanate adaptable—its blend of negotiation, patronage, and battlefield readiness—also exposed it to factional splits, tightening imperial oversight, and debates over how self-governance should be defined and secured in law.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a8" data-article="a8">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 8 of 12</span>
+  </div>
+  <article id="a8">
   <h1>8. Car Brands — Toyota History Innovation Impact</h1>
 
   <h2>From Looms to Automobiles: An Unusual Origin</h2>
@@ -341,7 +614,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Toyota developed from an unusual origin in textile machinery into a global automotive leader, shaped by early constraints that rewarded efficiency and disciplined engineering. The Toyota Production System became one of the company’s most significant exports, influencing “lean” practices worldwide. Toyota’s innovation is often characterized by steady, scalable improvement—especially visible in its long-term commitment to hybrid technology—rather than dependence on dramatic one-off breakthroughs. Through global expansion, a multi-brand strategy that includes Lexus, and sustained high production volumes—symbolized for many people by high-volume staples like the Corolla—Toyota has helped set consumer expectations for reliability and pushed industry competitors toward higher quality and more efficient manufacturing.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a9" data-article="a9">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 9 of 12</span>
+  </div>
+  <article id="a9">
   <h1>9. Dubrovnik</h1>
 
   <h2>Setting: A Walled City Between Mountains and Sea</h2>
@@ -369,7 +649,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Dubrovnik is a historic Adriatic city defined by a compact walled core, a strategic coastal setting, and a legacy of maritime self-government once known as the Republic of Ragusa. Its roughly 2-kilometer (1.2-mile) circuit of fortifications encloses a carefully managed stone cityscape shaped by rebuilding after the 1667 earthquake and sustained by long traditions of civic administration. The city’s Mediterranean climate brings hot summers—around 28–30&nbsp;°C (82–86&nbsp;°F) by day—and mild winters, with annual rainfall commonly about 1,000–1,500 millimeters (40–60 inches), reinforcing a strong seasonal rhythm. Dubrovnik’s cultural reputation rests on its archives, architecture, and a literary and scientific tradition associated with figures such as Marin Držić (1508–1567), Ivan Gundulić (1589–1638), and Ruđer Bošković (1711–1787). Across centuries of political change, it has remained a concentrated place where geography, trade, and urban form meet at a memorable edge of sea and stone.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a10" data-article="a10">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 10 of 12</span>
+  </div>
+  <article id="a10">
   <h1>10. Lake Victoria — History, Geography and Ecology</h1>
 
   <h2>Overview</h2>
@@ -397,7 +684,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Lake Victoria is a vast tropical lake—about 68,800 km² (26,600 sq mi)—whose shallow, wind-mixed waters sit on a high plateau and drain northward through the Victoria Nile. Historically, it linked regional kingdoms and later became central to 19th-century exploration debates about the Nile’s headwaters, with figures such as John Hanning Speke (1827–1864) bringing it global attention. Ecologically, it combines wetlands, shallow shelves, and open water that once supported extraordinary cichlid diversity, but it has experienced major change from eutrophication, invasive species, and the rise of Nile perch as a dominant predator. Today, the lake remains economically and culturally vital through a large inland fishery and busy shore communities, while its future depends on coordinated basin-wide management of water quality, habitats, and shared resources.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a11" data-article="a11">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 11 of 12</span>
+  </div>
+  <article id="a11">
   <h1>11. Cyrus the Great Persia Expansion and Legacy</h1>
 
   <h2>From a Small Kingdom to an Imperial Idea</h2>
@@ -421,7 +715,14 @@ table.facts-table tr:nth-child(odd) {
 
   <h2>Summary</h2>
   <p>Cyrus the Great (c. 600–530 BCE) transformed Persia from a regional power into the core of the Achaemenid Empire within roughly three decades, building an imperial realm spanning thousands of kilometers and covering several million square kilometers. His conquests—especially in Anatolia and Mesopotamia—were matched by a governing style that relied on local institutions and elites, aiming for stability as much as domination. Ancient portrayals, from Near Eastern inscriptions to Greek political literature such as Xenophon (c. 430–354 BCE), helped shape Cyrus’s enduring reputation as a pragmatic and legitimizing ruler. Although later kings such as Darius I (c. 550–486 BCE) refined the empire’s administration, Cyrus’s foundational achievement was creating an imperial framework that could manage diversity and distance. His legacy persists as both a historical turning point in Eurasian politics and a long-lived symbol of effective kingship.</p>
-</article><article>
+</article>
+</section>
+<section class="article-wrap" id="wrap-a12" data-article="a12">
+  <div class="article-actions">
+    <a href="#top">← Block contents</a>
+    <span>Article 12 of 12</span>
+  </div>
+  <article id="a12">
   <h1>12. Entresol rooms — Servant Spaces and Historical Architecture</h1>
 
   <h2>Entresol rooms: Servant spaces hidden in plain sight</h2>
@@ -446,6 +747,60 @@ video (YouTube)
 </p>
 </p>
 </article>
+</section>
+    </section>
 
+    <div class="footer">© KnowStride</div>
+  </main>
+
+  <script>
+(function(){
+  function showFromHash(){
+    var hash = window.location.hash || "";
+    var id = hash.replace("#","").trim();
+    if(!id){
+      // default: show nothing (TOC only), or show first article if you prefer.
+      // We'll show nothing to keep it "contents-first".
+      document.querySelectorAll(".article-wrap").forEach(function(el){
+        el.classList.remove("active");
+      });
+      return;
+    }
+    // show matching
+    var any = false;
+    document.querySelectorAll(".article-wrap").forEach(function(el){
+      if(el.getAttribute("data-article") === id){
+        el.classList.add("active");
+        any = true;
+        // Scroll into view nicely
+        setTimeout(function(){
+          el.scrollIntoView({behavior:"smooth", block:"start"});
+        }, 30);
+      } else {
+        el.classList.remove("active");
+      }
+    });
+    // If hash doesn't match, do nothing (keep TOC)
+    if(!any){
+      document.querySelectorAll(".article-wrap").forEach(function(el){
+        el.classList.remove("active");
+      });
+    }
+  }
+
+  window.addEventListener("hashchange", showFromHash);
+
+  // Ensure TOC clicks work even if the browser doesn't scroll (we manage visibility)
+  document.querySelectorAll(".toc-item").forEach(function(a){
+    a.addEventListener("click", function(){
+      // Let hash update happen; visibility handled by hashchange, but call immediately too.
+      setTimeout(showFromHash, 0);
+    });
+  });
+
+  // Initial
+  showFromHash();
+})();
+</script>
 </body>
 </html>
