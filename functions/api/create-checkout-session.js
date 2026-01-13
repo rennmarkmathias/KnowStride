@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
     const priceMap = {
       monthly: "price_1SojhyBGIoJDnx09wsl1Bc3W",
       yearly: "price_1SojlSBGIoJDnx09SJEFYE0d",
-      "3y":   "price_1SojpGBGIoJDnx09PFoceWJv",
+      "3y": "price_1SojpGBGIoJDnx09PFoceWJv",
     };
 
     const price = priceMap[plan];
@@ -50,6 +50,11 @@ export async function onRequestPost(context) {
         user_id: userId,
         plan,
       },
+
+      // ✅ 14-day trial ONLY for yearly subscriptions
+      ...(plan === "yearly"
+        ? { subscription_data: { trial_period_days: 14 } }
+        : {}),
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
