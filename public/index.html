@@ -3,71 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="KnowStride delivers one reading block per week—12 articles that gradually build stronger general knowledge over time." />
-  <title>KnowStride — General knowledge, one week at a time</title>
+  <meta name="description" content="KnowStride delivers one curated reading block per week—12 substantial articles that build real general knowledge over time." />
+  <title>KnowStride — Curated knowledge, one week at a time</title>
   <link rel="stylesheet" href="/styles.css" />
 
-  <!-- Small, self-contained styling for the New Year offer price display + teaser cards + legal sections
-       + (NEW) mobile-only example dropdown behaviour -->
+  <!-- Small, self-contained styling for pricing + teaser cards + legal sections
+       + (NEW) mobile-only example dropdown behaviour
+       + (NEW) two expandable rows for samples + how articles are created -->
   <style>
-    /* Preview: keep typography consistent (prevents huge text on mobile) */
-.preview-card details{
-  font-size: 1rem;
-}
-
-.preview-card details h1,
-.preview-card details h2,
-.preview-card details h3,
-.preview-card details h4{
-  font-size: 1.05rem;
-  line-height: 1.25;
-  margin: 12px 0 6px;
-}
-
-.preview-card details p,
-.preview-card details li{
-  font-size: 1rem;
-  line-height: 1.55;
-}
-
-.preview-card details summary{
-  font-size: 1rem;
-}
-
-    .plan-price .price-row{
-      display:flex;
-      align-items:baseline;
-      gap:.5rem;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    .plan-price .price-now{
-      font-weight:700;
-      color:#b00020; /* NOW is red */
-    }
-    .plan-price .price-was{
-      text-decoration:line-through;
-      color:#666;     /* WAS is gray */
-      opacity:.85;
-      font-weight:600;
-    }
-    .plan.offer{
-      position:relative;
-      border-width:2px;
-    }
-    .plan.offer::after{
-      content:"Offer";
-      position:absolute;
-      top:10px;
-      right:10px;
-      font-size:.75rem;
-      padding:.2rem .45rem;
-      border-radius:999px;
-      background:rgba(176,0,32,.10);
-      color:#b00020;
-      font-weight:700;
-    }
-
     /* Teasers */
     .teasers {
       margin-top: 2rem;
@@ -146,7 +89,7 @@
     }
     .footer a{ text-decoration: underline; }
 
-    /* ===== NEW: Example headlines layout (desktop vs mobile) ===== */
+    /* ===== Example headlines layout (desktop vs mobile) ===== */
     .example-desktop { display: block; }
     .example-mobile  { display: none; }
 
@@ -174,22 +117,42 @@
       }
     }
 
-    /* Preview (keep in same style) */
-    .preview-card{
+    /* ===== Two simple expandable rows ===== */
+    .expanders{
       margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+    .expander{
       border: 1px solid rgba(0,0,0,.14);
       border-radius: 12px;
-      padding: 14px 14px 12px;
+      padding: 12px 14px;
       background: rgba(255,255,255,.55);
     }
-    .preview-muted{
-      margin: 6px 0 0;
+    .expander summary{
+      cursor: pointer;
+      font-weight: 800;
+      list-style: none;
+    }
+    .expander summary::-webkit-details-marker{ display:none; }
+    .expander .expander-body{
+      margin-top: 10px;
+      line-height: 1.55;
+    }
+    .expander .expander-body p{
+      margin: 0 0 10px;
+    }
+    .expander .expander-body ul{
+      margin: 0 0 10px 18px;
+      padding: 0;
+    }
+    .expander .expander-body li{
+      margin: 8px 0;
+    }
+    .expander .mutedline{
       opacity: .78;
       font-size: .92rem;
-    }
-    .preview-cta{
-      margin-top: 12px;
-      font-weight: 700;
+      margin-top: 6px;
     }
   </style>
 </head>
@@ -206,9 +169,9 @@
   <main class="container">
     <section class="hero">
       <div class="hero-col">
-        <h1>General knowledge, one week at a time.</h1>
+        <h1>Curated knowledge, one week at a time.</h1>
         <p>
-          KnowStride delivers <strong>one reading block per week</strong>.
+          KnowStride delivers <strong>one carefully curated reading block per week</strong>.
           Each block contains <strong>12 articles</strong> across world history, geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures — designed to build a stronger general knowledge over time.
         </p>
         <p class="muted">Calm, focused reading. No ads. No distractions.</p>
@@ -349,33 +312,217 @@
         </details>
       </div>
 
-      <!-- Preview card (NOT “this week’s free article”) -->
-      <div class="preview-card">
-        <h3 style="margin:0;">A small preview of the writing style and structure</h3>
-        <p class="preview-muted">
-          Excerpt from an article included in the first block. Full article: 1,287 words.
-        </p>
+      <!-- FULL-LENGTH SAMPLE ARTICLES + CREATION INFO -->
+<div class="expanders" aria-label="Samples and article creation">
 
-        <details style="margin-top:12px;">
-          <summary style="cursor:pointer; font-weight:800;">
-            7. Cossack Hetmanate — Leadership and Military Tradition
-          </summary>
+  <!-- ===== FULL-LENGTH SAMPLE ARTICLES ===== -->
+  <details class="expander">
+    <summary>Read four full-length sample articles</summary>
 
-          <div style="margin-top:14px; line-height:1.55;">
-            <p><strong>A frontier polity built around arms and negotiation</strong> — In the mid-1600s, the Cossack Hetmanate emerged along Eastern Europe’s steppe frontier, where raids, river crossings, and seasonal campaigns shaped daily security. Leadership was never purely “civil” or “military”: the same figures negotiated with neighbors, raised regiments, managed supply, and enforced discipline. At its height, the Hetmanate controlled much of central Ukraine; its territorial regiments functioned as both armed forces and administration.</p>
+    <div class="expander-body">
+      <p class="mutedline">
+        Full-length samples (not excerpts). Open one article at a time.
+      </p>
 
-            <p><strong>From uprising to Hetmanate: a brief background</strong> — The state grew out of the Khmelnytsky Uprising (1648) against the Polish-Lithuanian Commonwealth, as demands for autonomy and protection hardened into a political structure. The 1654 alignment with Muscovy created a new strategic frame without ending the need to balance patrons and rivals. Civil war, shifting coalitions, and later imperial tightening narrowed autonomy over time, until abolition came in stages during the 1700s.</p>
+      <!-- ARTICLE 1 -->
+      <details>
+        <summary>1. Greenland: Inuits, Vikings, Norway, Denmark and the Treaty of Kiel (1814)</summary>
+        <div class="article-body">
+          <!-- ⬇️ Greenland as a Borderland of People, Ice, and Law</h2>
+  <p>Greenland’s political story is sometimes presented as a straightforward extension of Denmark: a distant Arctic territory with a small population and an outsized presence on maps. In reality, Greenland has long functioned as a borderland where the movement of peoples, the constraints of climate, and the reach of law repeatedly meet—and sometimes conflict. The island’s modern status—self-government with an elected parliament and government, alongside a continuing constitutional link to the Danish state—rests on centuries of layered histories: Inuit settlement and continuity, Norse colonization and collapse, medieval Norwegian and later Danish-Norwegian royal authority, and the diplomatic aftermath of the Napoleonic era.</p>
+  <p>A key turning point is the Treaty of Kiel (1814). While the treaty transferred Norway from Denmark to Sweden, it explicitly left Greenland (together with Iceland and the Faroe Islands) under the Danish crown. That clause still shapes how Greenland’s constitutional position is described today. This section is intended only to provide historical context for how Greenland became legally anchored to Denmark in European diplomacy. A clarifying note: the current situation and any contemporary political dynamics involving Greenland, the United States, and Denmark are deliberately not included here. The focus is strictly historical and does not address or reflect present-day developments, negotiations, or disputes.</p>
 
-            <p><strong>The hetman and the “starshyna”: who led, and how</strong> — The hetman served as head of government, chief diplomat, and commander-in-chief. Elections existed in principle, but power often concentrated among senior officers (the <em>starshyna</em>) who controlled logistics, justice, and the chancery. Rule depended on reputation, patronage, and the ability to hold regimental loyalty. In this world, legitimacy tracked military competence—especially control of towns and river corridors.</p>
+  <h2>Inuit Greenland: Settlement, Adaptation, and Continuity</h2>
+  <p>Greenland’s human history is dominated by Arctic Indigenous societies whose presence predates European arrival by centuries. The ancestors of today’s Kalaallit (Greenlandic Inuit) developed lifeways adapted to sea ice and coastal ecologies, with hunting, travel, and social organization shaped by a highly seasonal environment. Much of the island is not readily habitable: Greenland’s interior ice sheet covers roughly 1.7 million sq km (about 656,000 sq mi), concentrating long-term settlement along narrow coastal corridors where marine mammals, fish, and migratory birds could be harvested.</p>
+  <p>Inuit settlement in Greenland is commonly associated with the Thule expansion, beginning around the late 1st millennium and consolidating over subsequent centuries. These communities were not isolated or static. They maintained networks across the Arctic, exchanged materials and knowledge, and adapted to regional differences—especially between west and east Greenland. This continuity matters for understanding governance: later states could assert sovereignty in formal terms, but Inuit presence created the enduring social reality in which any administration had to operate. Greenland’s political history, therefore, cannot be reduced to decisions made in Copenhagen or Oslo; it also rests on local societies’ ability to persist and reorganize under changing conditions.</p>
 
-            <p><strong>Regiments as both army and state</strong> — The regiment (<em>polk</em>) was a district and a fighting unit, made up of companies and led by colonels who were administrators as well as commanders. Mobilization could reach tens of thousands, but numbers rose and fell with season, supply, and unity. Councils and oath-taking anchored a public ideal of consent, while campaigns demanded hierarchy. That constant negotiation shaped both resilience and internal fracture.</p>
+  <h2>Vikings in Greenland: Norse Colonies and Their Limits</h2>
+  <p>European involvement begins with Norse expansion across the North Atlantic. Erik the Red (c. 950–c. 1003) is traditionally linked to founding Norse settlements in Greenland in the late 10th century, following earlier Scandinavian movement into Iceland. The Norse settlements—often described as the Eastern and Western Settlements—were not urban colonies but dispersed farming communities. They relied on livestock, limited agriculture in favorable microclimates, and trade routes connecting Greenland to Iceland and Norway. Their presence shows that Greenland was not only an Arctic hunting landscape; in some coastal areas it could support marginal European-style farming for several centuries.</p>
+  <p>At the same time, the Norse experience illustrates Greenland’s vulnerability to distance, climate, and shifting networks. The sailing route across the North Atlantic was long—roughly 1,000–1,500 km (about 620–930 mi) depending on staging points—and depended on seasonal windows and relative stability along the route. Norse Greenland was integrated into European religious and political structures; a bishopric at Garðar signaled connection to Latin Christian institutions. But the settlement system remained thinly resourced, and its survival depended on continued trade and support that could weaken when European priorities changed.</p>
+  <p>By the 15th century, the Norse settlements had disappeared. Explanations typically point to a combination of factors: cooling conditions in the later medieval period, changes in trade and demand, ecological strain in a marginal environment, and possible conflict or competition. Whatever the precise mix, the outcome created a lasting ambiguity: European monarchs could cite historical ties, but there was no continuous European population on the ground to sustain those claims. Inuit communities remained, and their patterns of life increasingly defined Greenland’s lived reality.</p>
 
-            <p><strong>Training, tactics, and the steppe-war repertoire</strong> — Cossack warfare was built for mobility: fast marches, local foraging, and intimate knowledge of rivers, wetlands, and forest edges. Defense mattered as much as attack—wagon laagers, field works, and fortified towns assumed sudden pressure. The Hetmanate also absorbed methods from Polish-Lithuanian, Ottoman, Tatar, and Muscovite/Russian warfare, and later faced growing imperial standardization in drills, ranks, and supply.</p>
+  <h2>From Norway to Denmark-Norway: Claims, Church, and Commerce</h2>
+  <p>Medieval Scandinavian state formation and church authority provided the framework for European claims to Greenland. Norway’s kings asserted connections to the Norse Atlantic world, and Greenland was treated as part of the Norwegian crown’s sphere during the Middle Ages. Over time, however, Scandinavian political unions changed how these affiliations functioned in practice. Under the composite monarchy often called Denmark-Norway, Greenland—historically framed as a “Norwegian” dependency—was administered within a shared realm whose political and administrative center increasingly lay in Copenhagen.</p>
+  <p>In the early modern period Greenland’s economic role in European commerce was limited but symbolically significant. Claims to Greenland were intertwined with rights to trade, the prestige of overseas possessions, and the practical ability to supply and govern distant stations. Missionary and trading initiatives became key instruments of state presence. A notable revival of Danish-Norwegian engagement is linked to Hans Egede (1686–1758), a missionary whose early 18th-century efforts helped re-establish a sustained European foothold after the end of the medieval Norse colonies. Mission work, trade regulation, and administrative oversight gradually produced a colonial-style structure oriented toward coastal settlements and maritime supply.</p>
+  <p>This renewed engagement was not only cultural or religious; it also created institutional evidence of governance. Regularized trade, recognized officials, and documented administration made it easier for Denmark-Norway—and later Denmark alone—to argue that Greenland was governed rather than “empty.” At the same time, Inuit communities were drawn into new economic relationships that reshaped settlement and subsistence, including trade in seal products and other Arctic goods.</p>
 
-            <p><strong>Summary</strong> — The Hetmanate fused governance and warfare into one political language: officers governed because they could mobilize, protect, and negotiate. Its strengths—adaptability, readiness, and a workable blend of councils and command—also made it vulnerable to factional splits and external oversight. The long debate was never only military: it was about how self-rule should be defined, defended, and anchored in institutions.</p>
+  <h2>The Treaty of Kiel (1814): A European Settlement with Arctic Consequences</h2>
+  <p>The Treaty of Kiel, signed in January 1814, formed part of the diplomatic settlement that followed the Napoleonic Wars. Denmark, aligned with Napoleon for much of the conflict, faced defeat and pressure from the anti-Napoleonic coalition. Sweden, seeking compensation for earlier territorial losses, negotiated to receive Norway from Denmark. The treaty thus severed a centuries-old political union by transferring Norway to Swedish rule.</p>
+  <p>Crucially, the treaty did not transfer everything historically associated with Norway. Greenland, Iceland, and the Faroe Islands were explicitly left under the Danish crown. In practice, this clause mattered because it converted what might have remained a debate about “Norwegian dependencies” into a clearer Danish possession in the language of international diplomacy. Greenland’s external status was therefore shaped not through local consent mechanisms—ideas that would become politically central much later—but through a European peace settlement aimed at stabilizing postwar Scandinavia.</p>
+  <p>Two broad consequences followed. First, Denmark’s sovereignty over Greenland became more legible in diplomatic terms at a moment when sovereignty was being reassigned and defined among European states. Second, Norway’s later national narrative, after separation from Denmark and subsequent constitutional developments, could treat Greenland as part of a historical Norwegian sphere that had been detached by treaty. The result was a lasting undercurrent: Greenland was Danish in law, while remaining entangled in Scandinavian historical memory.</p>
 
-            <p class="preview-cta">
-              To read the full article (included in the first block), and the other 11 articles <a href="#pricing">buy a plan</a>.
+  <h2>Why Kiel Still Matters: Sovereignty, Self-Government, and Historical Frames</h2>
+  <p>Greenland’s contemporary constitutional arrangements emerged from layered histories rather than a single founding moment. The Treaty of Kiel matters because it is one of the clearest legal junctions in Greenland’s external status: it anchored Greenland to Denmark at the moment Norway’s state trajectory diverged. Later developments—administrative reforms, modernization policies, and the gradual growth of Greenlandic political institutions—took place within that Danish constitutional frame.</p>
+  <p>In the 20th and 21st centuries, Greenland’s status evolved through increased autonomy and recognition of Greenlanders as a people with a right to self-determination within the kingdom’s constitutional order. Historically, sovereignty determines who negotiates, who regulates, and who benefits from economic activity. These questions matter in an Arctic setting where jurisdiction extends across vast maritime spaces even though the population is small. Greenland’s coastline stretches for tens of thousands of kilometers—often cited at roughly 44,000 km (about 27,000 mi) including fjords and islands—so legal authority intersects with fisheries, shipping access, and resource governance.</p>
+  <p>Kiel also clarifies why Greenland is not constitutionally Norwegian despite deep historical ties to the medieval Norse Atlantic. That clarity narrowed one category of interstate uncertainty, even as other debates persisted within Greenland’s Danish constitutional setting: how far self-government should extend, how revenues should be shared, and how external relationships should be managed. At the same time, Greenland’s deeper history complicates any view that legitimacy is only a European inheritance. Inuit continuity means political authority cannot be understood solely through treaties. In this sense, the Treaty of Kiel is pivotal, but it is one hinge in a longer sequence of settlement, adaptation, and changing state forms.</p>
+
+  <h2>Summary</h2>
+  <p>Greenland’s political history reflects overlapping human and legal geographies. Inuit societies established enduring settlement and adaptation in an environment dominated by a roughly 1.7 million sq km (about 656,000 sq mi) ice sheet and narrow coastal living zones. Norse colonization, associated with Erik the Red (c. 950–c. 1003), connected Greenland to medieval European networks, but the colonies eventually disappeared, leaving a gap between historical claims and on-the-ground governance. Under Denmark-Norway, renewed missionary and trading efforts—linked to figures such as Hans Egede (1686–1758)—helped create sustained European administration. The Treaty of Kiel in 1814, designed to transfer Norway to Sweden, explicitly retained Greenland with Denmark, turning a historic “Norwegian dependency” into a clearer Danish possession in international law. This section has focused solely on that historical pathway and deliberately does not address present-day political developments or disputes; its purpose is to explain the origins of Greenland’s constitutional link to Denmark in the context of long-term settlement, shifting power, and European diplomacy. ⬇️ -->
+        </div>
+      </details>
+
+      <!-- ARTICLE 2 -->
+      <details>
+        <summary>2. The Congress of Vienna (1814–1815)</summary>
+        <div class="article-body">
+          <!-- ⬇️ Why Vienna Became Europe’s Repair Workshop</h2>
+  <p>In the autumn of 1814, Europe’s most powerful states sent their leading diplomats to Vienna to solve a problem that was both practical and existential: how to end a generation of war without leaving behind the conditions for the next one. The Napoleonic era had redrawn frontiers, toppled dynasties, mobilized mass armies, and spread a volatile mix of state power and political expectations. By the time the Congress of Vienna opened, millions of soldiers had marched across the continent over roughly 20 years of conflict, and the collapse of Napoleon’s empire had created a vacuum from the North Sea to northern Italy. The gathering that followed was not a single conference session but months of bargaining, social ritual, and crisis management, culminating in a set of treaties finalized in 1815.</p>
+  <p>The Congress mattered because it attempted something more durable than a victor’s peace. Its architects aimed to build a framework that could absorb shocks—revolutions, succession disputes, and renewed great-power rivalry—without reverting immediately to continent-wide war. The results were imperfect and often conservative, yet the settlement helped structure European international politics for decades. Many later concepts—collective management of security, legitimacy as a diplomatic principle, and the strategic use of buffer states—were refined in Vienna’s salons and committee rooms, then tested across the 19th century.</p>
+
+  <h2>Metternich’s Worldview and the Congress’s Key Players</h2>
+  <p>Vienna was hosted by the Habsburg monarchy, and its most famous conductor was the Austrian foreign minister Klemens von Metternich (1773–1859). Metternich’s diplomacy rested on the assumption that Europe’s stability depended on containing ideologies that threatened dynastic states and on preventing any single power from dominating the continent. He did not “invent” the balance of power, but he treated it as a practical operating system: alliances should shift as needed, legitimacy should be restored where possible, and security should be achieved through a web of interests rather than through moral crusades.</p>
+  <p>Metternich was only one of several central figures. Britain’s principal representative, Robert Stewart, Viscount Castlereagh (1769–1822), pushed for a settlement that balanced continental stability with British interests: secure trade routes, limits on any hegemon, and a manageable postwar order that did not require permanent British military commitment on land. Russia arrived under Tsar Alexander I (1777–1825), whose power and ambition—especially in Poland—made Russia both a partner and a potential threat in the eyes of other states. France, despite having been defeated, re-entered high diplomacy through Charles-Maurice de Talleyrand (1754–1838), who used arguments about legitimacy and legal continuity to restore France’s status and to divide the victors when their interests clashed.</p>
+  <p>These men operated within a larger cast: Prussia sought compensation and security after years of war; smaller German, Italian, and Dutch actors tried to preserve autonomy; and Austria itself faced the challenge of governing a multiethnic empire whose cohesion depended on managing both internal diversity and external threats. The Congress, in other words, was not merely about punishing France. It was about redesigning Europe’s political geometry.</p>
+
+  <h2>How the Negotiations Worked: Principles, Bargains, and a Near-Crisis</h2>
+  <p>The Congress’s public image—balls, ceremonies, and crowded drawing rooms—can obscure its real method: a layered negotiation in which the largest powers handled core questions while smaller states lobbied, protested, and sometimes extracted concessions. Its guiding principles were not fully consistent, which is partly why the settlement proved adaptable. “Legitimacy” suggested restoring overthrown dynasties and legal continuity; “compensation” meant awarding territory to offset losses elsewhere; and “balance of power” demanded that no single state gain overwhelming advantage.</p>
+  <p>The most serious dispute exposed the tension among these principles: the fate of Poland and Saxony. Russia wanted a dominant position in a reconstituted Polish kingdom, while Prussia sought to annex Saxony as compensation. Austria and Britain feared that a Russian-Polish bloc combined with an expanded Prussia would tilt the balance in central Europe. This dispute brought the victors close to armed confrontation even before the settlement was complete—an early demonstration that the “postwar order” was not a natural harmony but a negotiated equilibrium. The eventual compromise left Russia with significant influence in a new Polish entity, while Prussia gained substantial territory but not all it demanded. The outcome did not eliminate rivalry, but it prevented an immediate rupture among the coalition that had defeated Napoleon.</p>
+  <p>One episode that clarified the Congress’s fragility was Napoleon’s return from exile in early 1815, which forced negotiators to accelerate decisions and to reaffirm unity. The interruption underscored a reality that shaped Vienna’s choices: legitimacy and stability were not abstractions. They were urgent tools for mobilizing states to act together when a renewed threat appeared.</p>
+
+  <h2>The Settlement on the Map: Buffer States, Germany, and Italy</h2>
+  <p>The Congress’s territorial settlement aimed to make Europe harder to conquer quickly. Around France, the negotiators strengthened neighbors and created buffers. The United Kingdom of the Netherlands was enlarged to include territories that would become Belgium, forming a northern barrier. To the southeast, arrangements in northern Italy and along the Alps were designed to complicate any future French expansion. France itself, while reduced from Napoleonic reach, was not dismantled; the goal was reintegration into a stable system rather than permanent ostracism.</p>
+  <p>In the German-speaking lands, the old Holy Roman Empire was not restored. Instead, the German Confederation was created as a loose association of dozens of states under Austrian presidency. This structure avoided a single, unified Germany—something Austria and several smaller states feared—while still providing a framework for coordination. The confederal design mattered because it preserved a balance between Austria and Prussia, the two powers most capable of shaping central Europe. It also left open questions that later generations would contest: how much unity, under whose leadership, and with what constitutional form.</p>
+  <p>In Italy, the Congress favored restored dynasties and Austrian influence, especially in the north. The settlement did not “freeze” Italy, but it reinforced fragmentation at a moment when new nationalist ideas and administrative reforms from the Napoleonic period had begun to circulate. The result was a map that prioritized strategic depth and dynastic continuity over popular sovereignty—an approach that helped avert immediate great-power war while storing political pressures that would surface later in the century.</p>
+
+  <h2>The Concert of Europe: A New Style of Great-Power Management</h2>
+  <p>Vienna’s most enduring innovation was not a border line but a diplomatic habit: the idea that the great powers should consult regularly to manage crises. This practice, later called the Concert of Europe, did not function as a formal international organization with binding rules. It was a flexible expectation that major disputes—revolutions, territorial claims, succession issues—could be handled through congresses and conferences rather than automatically through war.</p>
+  <p>In practical terms, this meant that war was no longer the default mechanism for adjusting power, even though war remained possible and sometimes frequent. Over the roughly 40 years after 1815, Europe avoided a continent-wide conflict on the scale of the Napoleonic Wars. That record was not simply the result of goodwill; it reflected deterrence, exhaustion, and the fact that the settlement gave multiple powers a stake in preserving the general framework. Britain, with its naval and financial strength, often acted as an offshore balancer. Austria tried to prevent ideological contagion and to maintain the central European equilibrium. Russia oscillated between cooperation and assertiveness. France, after initial constraints, gradually regained diplomatic room to maneuver.</p>
+  <p>The Congress also demonstrated a paradox that continues to appear in international politics: stability can be produced by compromise among competing powers, but that stability may rest on limiting political change within states. The post-1815 system therefore combined external restraint with internal conservatism, and it treated certain revolutionary movements as security problems rather than domestic choices. This mixture helped keep borders relatively stable while fueling a counter-current of liberal and national agitation.</p>
+
+  <h2>Why the Congress of Vienna Still Matters</h2>
+  <p>Vienna remains a reference point because it illustrates how a major war can end without producing a settlement that is purely punitive or purely idealistic. The negotiators sought a workable middle ground: restrain France without humiliating it permanently; satisfy Russia and Prussia without allowing them to dominate; and give smaller states enough protection to reduce incentives for constant realignment. The emphasis on buffers, compensations, and consultation reflects a hard lesson of 1792–1815: a defeated state left desperate or excluded can become a source of renewed instability, while victors who quarrel too openly can unravel their own security.</p>
+  <p>The Congress also shaped later debates about legitimacy, sovereignty, and intervention. Its leaders claimed the right—explicitly or implicitly—to manage Europe’s order collectively, sometimes crossing into interference when they believed the system itself was threatened. Modern international politics continues to wrestle with related questions: when stability justifies external involvement, how to reintegrate defeated powers, and whether durable peace is better built through legal principles, shared norms, or equilibrium among rival interests.</p>
+  <p>At the same time, the Vienna settlement’s limits are part of its legacy. The Congress did not resolve the aspirations that would drive later upheavals—constitutional demands, national unifications, and social change accelerated by industrialization. In this sense, 1815 was less an endpoint than an attempt to manage the consequences of a transformed Europe using traditional tools. The fact that those tools worked as long as they did—and then failed under new pressures—makes Vienna a useful case for understanding both the power and the fragility of diplomatic order-making.</p>
+
+  <h2>Summary</h2>
+  <p>The Congress of Vienna (1814–1815) was Europe’s effort to rebuild a stable international order after roughly two decades of revolutionary and Napoleonic war. Guided by principles of legitimacy, compensation, and balance of power, diplomats led by figures such as Klemens von Metternich (1773–1859) and Viscount Castlereagh (1769–1822) negotiated a settlement that reshaped borders, strengthened buffer states around France, and created frameworks such as the German Confederation. The talks faced serious internal disputes—especially over Poland and Saxony—and were disrupted by Napoleon’s brief return in 1815, yet they produced a compromise that avoided an immediate breakdown among the victors.</p>
+  <p>Beyond territorial changes, Vienna’s most durable contribution was the Concert of Europe: a practice of consultation among the great powers designed to manage crises and preserve a general equilibrium. The system helped prevent a continent-wide war for decades, even while it often prioritized dynastic stability and conservative governance over popular sovereignty. The Congress still matters as a model—and a warning—about how postwar settlements can seek durability through inclusion, restraint, and negotiated balance, while leaving unresolved political forces that later reshape the order it tried to secure. ⬇️ -->
+        </div>
+      </details>
+
+      <!-- ARTICLE 3 -->
+      <details>
+        <summary>3. Colombia</summary>
+        <div class="article-body">
+          <!-- ⬇️ <div class="facts">
+    <h2>Key Facts</h2>
+    <table class="facts-table">
+      <tbody>
+<tr><th>Official name</th><td>Republic of Colombia</td></tr>
+<tr><th>Area</th><td>About 1,142,000 km² (about 441,000 sq mi)</td></tr>
+<tr><th>Population</th><td>52.7 M (2024 est.)</td></tr>
+<tr><th>Capital</th><td>Bogotá</td></tr>
+<tr><th>Largest urban area</th><td>Bogotá metropolitan area</td></tr>
+<tr><th>Government</th><td>Unitary presidential constitutional republic</td></tr>
+<tr><th>Head of state</th><td>President</td></tr>
+<tr><th>Head of government</th><td>President</td></tr>
+<tr><th>Currency</th><td>Colombian peso (COP)</td></tr>
+<tr><th>Highest point</th><td>Pico Cristóbal Colón, about 5,775 m (about 18,947 ft)</td></tr>
+<tr><th>Major religions</th><td>Christianity (predominantly Roman Catholic), Protestant communities; other faiths and non-religious minorities</td></tr>
+<tr><th>Time zones</th><td>UTC−5</td></tr>
+<tr><th>Population density</th><td>Roughly 40–50 people per km² (about 100–130 per sq mi)</td></tr>
+<tr><th>GDP (nominal)</th><td>On the order of US$350–450 billion</td></tr>
+<tr><th>GDP per capita (nominal)</th><td>Roughly US$6,000–9,000</td></tr>
+<tr><th>GDP (PPP)</th><td>On the order of US$900 billion–US$1.1 trillion</td></tr>
+<tr><th>GDP per capita (PPP)</th><td>Roughly US$17,000–24,000</td></tr>
+</tbody>
+    </table>
+  </div>
+
+  <h2>Geography &amp; Location</h2>
+  <p>Colombia occupies the northwestern corner of South America and is the only country on the continent with coastlines on both the Caribbean Sea and the Pacific Ocean. It borders Panama to the northwest and Ecuador, Peru, Brazil, and Venezuela to the south and east, with extensive maritime zones in the Caribbean. Its territory spans about 1.14 million km² (about 441,000 sq mi), giving it a wide range of landscapes within a single national boundary.</p>
+  <p>The Andes Mountains enter Colombia from the south and split into three major branches (the Western, Central, and Eastern cordilleras), forming a highland backbone that shapes settlement and transport. Between and around these ranges lie major valleys such as the Magdalena River corridor, historically the principal route linking the interior to the Caribbean. To the east, the land opens into the Llanos (plains) that extend toward the Orinoco basin, while the south includes large portions of the Amazon rainforest. Offshore, Colombia also administers island territories, notably the San Andrés and Providencia archipelago in the Caribbean, located roughly 700 km (about 435 mi) from the mainland.</p>
+
+  <h2>Nature &amp; Environment</h2>
+  <p>Colombia is among the world’s most biodiverse countries, a result of its equatorial position, sharp elevation gradients, and the meeting of multiple biogeographic regions. Ecosystems range from mangroves and coral-associated coastal waters to cloud forests and páramo—high, cool grassland and shrub landscapes typically found above about 3,000 m (about 9,840 ft) in the Andes. The Sierra Nevada de Santa Marta, an isolated coastal mountain range, rises steeply from near sea level to snowcapped summits around 5,775 m (about 18,947 ft), creating tightly stacked habitats over short distances.</p>
+  <p>Large river systems organize much of the country’s ecology. The Magdalena and Cauca rivers drain the Andean interior northward, while the Guaviare, Caquetá, and Putumayo connect the southeast to the Amazon basin. Protected areas include national parks in both marine and terrestrial settings, aimed at safeguarding habitats and species as well as watersheds that supply cities and agriculture.</p>
+  <p>Environmental pressures vary by region. Deforestation is most visible along parts of the Amazon and Andean foothills where roads, agriculture, and illicit economies have expanded. In the highlands, páramo ecosystems are sensitive because they function as natural “water towers,” regulating flows to downstream valleys. Coastal areas face typical tropical challenges such as erosion and habitat loss, while major cities contend with air quality issues linked to traffic and topography.</p>
+
+  <h2>Climate</h2>
+  <p>Colombia’s climate is strongly shaped by elevation and by seasonal rainfall patterns rather than by large temperature swings between summer and winter. Near sea level on the Caribbean and Pacific coasts, typical daytime highs are about 30–33°C (about 86–91°F) and nighttime lows about 23–26°C (about 73–79°F). Humidity is often high, particularly on the Pacific coast, which includes some of the rainiest inhabited areas on Earth.</p>
+  <p>In the Andean highlands, temperatures are cooler and more variable over the course of a day. In Bogotá, at roughly 2,600 m (about 8,530 ft), typical daytime highs are about 18–20°C (about 64–68°F) and nighttime lows about 7–10°C (about 45–50°F). Higher elevations can experience near-freezing nights, and the highest peaks sustain snow and ice, though at limited spatial extent.</p>
+  <p>Rainfall ranges widely. Parts of the Pacific lowlands can exceed about 5,000–8,000 mm per year (about 200–315 in), while some interior valleys and Caribbean areas are far drier, often around 500–1,000 mm (about 20–40 in) annually. Many regions experience two wetter seasons and two relatively drier seasons as the Intertropical Convergence Zone shifts north and south across the equator, though local patterns vary with terrain and winds.</p>
+
+  <h2>Population &amp; Society</h2>
+  <p>Colombia is a predominantly urban country: roughly three-quarters of residents live in towns and cities, with major metropolitan areas including Bogotá, Medellín, Cali, Barranquilla, and Cartagena. Settlement patterns reflect geography. Dense populations cluster in Andean basins and valleys where climate is moderate and transport routes converge, while the Amazon and parts of the eastern plains remain much more sparsely populated.</p>
+  <p>The society is ethnically and culturally diverse, shaped by Indigenous roots, Spanish colonization, African diaspora communities, and later migrations from Europe and the Middle East. Spanish is the principal language, and dozens of Indigenous languages are also spoken, especially in the Amazon and some Andean and Caribbean communities. Colombia recognizes Indigenous territorial rights and cultural protections, though practical outcomes differ markedly by region.</p>
+  <p>Social indicators vary. Life expectancy is broadly in the low-to-mid 70s (roughly 73–77 years), reflecting improvements in health access over recent decades alongside persistent inequalities. The country has expanded education access, with large enrollment at primary and secondary levels, but gaps remain between urban centers and rural or conflict-affected areas. Internal migration has long been a feature of national life, and cross-border migration—particularly from Venezuela in the 2010s and early 2020s—has added to the demographic and policy landscape.</p>
+
+  <h2>Historical Overview</h2>
+  <p>Before European contact, the territory of present-day Colombia included a mosaic of societies adapted to highland, coastal, and forest environments, including the Muisca in the Eastern Cordillera and the Tairona in the Sierra Nevada de Santa Marta. Spanish colonization began in the early 16th century, and the region became part of a broader imperial system centered on mining, agriculture, and trade through Caribbean ports. Colonial institutions and Catholic missions reshaped settlement and landholding, while Indigenous and African-descended communities maintained distinct identities under changing conditions.</p>
+  <p>Independence movements in the early 19th century produced a new republican order after years of conflict. Colombia’s subsequent political history included periods of centralization and federalism, as well as recurring civil wars in the 19th century. In the 20th century, partisan violence and uneven rural development contributed to the emergence of guerrilla insurgencies and, later, powerful drug trafficking organizations. From the 1980s through the early 2000s, conflict among guerrillas, paramilitary groups, and the state caused profound human displacement and insecurity in many regions.</p>
+  <p>A major milestone was the 1991 Constitution, which expanded rights protections, recognized cultural diversity, and reformed political institutions. In the 2010s, peace negotiations led to a landmark accord with the country’s largest guerrilla group, accompanied by demobilization and transitional justice mechanisms. Although violence decreased in many areas, armed groups and criminal networks persisted in some regions, making security and rural governance continuing challenges alongside efforts at reconciliation and development.</p>
+
+  <h2>Government &amp; Politics</h2>
+  <p>Colombia is a unitary presidential constitutional republic. The president serves as both head of state and head of government and is elected by popular vote. The national legislature is bicameral, consisting of a Senate and a House of Representatives, and the judiciary includes high courts with specialized roles. The 1991 Constitution is the central legal framework, emphasizing fundamental rights, constitutional review, and mechanisms for citizen participation.</p>
+  <p>Administratively, the country is divided into departments and the Capital District of Bogotá, with elected governors and local councils. Decentralization has given subnational governments significant responsibilities in areas such as education, health services, and infrastructure, though fiscal and administrative capacity varies greatly across regions.</p>
+  <p>Politics is pluralistic, with multiple parties and shifting coalitions. Key issues commonly include public security, corruption control, economic inequality, rural land governance, and the implementation of peace-related commitments. Civil society organizations, Indigenous and Afro-Colombian representative bodies, and an active press and judiciary play visible roles in public debate, even as political polarization periodically intensifies.</p>
+
+  <h2>Economy</h2>
+  <p>Colombia has an upper-middle-income, diversified economy in Latin American terms, with services as the dominant sector. Services account for roughly 55–65% of GDP, industry and construction around 25–35%, and agriculture typically under 10%—though farming remains crucial for rural employment and export identity. Economic activity is concentrated in the Andean urban corridor and in major ports and logistics hubs on the Caribbean.</p>
+  <p>Energy and extractive industries have long been important sources of export earnings and government revenue. Oil and coal exports have been particularly significant, making national finances sensitive to global commodity prices. Manufacturing includes food processing, textiles, chemicals, and cement, while construction and infrastructure have expanded with urban growth. The informal economy remains substantial, shaping labor conditions and tax collection.</p>
+  <p>Agriculture ranges from smallholder farming to large plantations. Colombia is a leading global producer of coffee, and it also exports cut flowers, bananas, sugar, and palm oil products. Coffee cultivation is closely associated with mid-elevation zones, often around 1,200–2,000 m (about 3,900–6,600 ft), where temperatures and rainfall support high-quality arabica varieties.</p>
+  <p>In macroeconomic terms, nominal GDP is on the order of US$350–450 billion, with GDP per capita roughly US$6,000–9,000; in purchasing power terms, overall output approaches about US$900 billion–US$1.1 trillion. Inflation and exchange-rate swings have periodically affected household purchasing power, while poverty reduction has generally advanced over the long term but remains uneven. Policy debates often focus on productivity, education and skills, logistics costs in mountainous terrain, and balancing resource extraction with environmental and social priorities.</p>
+
+  <h2>International Role &amp; Contemporary Issues</h2>
+  <p>Colombia plays an important regional role due to its geographic position linking South America, Central America, and the Caribbean. It participates in major hemispheric institutions and has pursued trade and investment ties with North America, Europe, and Asia, alongside regional partnerships. Its ports on both oceans and its proximity to the Panama Canal corridor contribute to its strategic relevance for shipping and supply chains.</p>
+  <p>Relations with neighboring countries are shaped by migration, border security, and cross-border commerce. The arrival of large numbers of Venezuelan migrants has been one of the most consequential recent developments, requiring expanded public services and creating both labor-market opportunities and integration challenges. Another ongoing issue is the uneven reach of the state in remote areas, where illegal armed groups and criminal organizations may contest control, often connected to narcotics trafficking and illegal mining.</p>
+  <p>Colombia also faces the long-term task of implementing peace and rural development in areas most affected by conflict. This includes land restitution claims, infrastructure, and the substitution of illicit crops with legal livelihoods. At the same time, cities continue to address issues typical of fast-urbanizing societies: transport congestion, housing affordability, and disparities in access to quality education and healthcare.</p>
+
+  <h2>Summary</h2>
+  <p>Colombia is a large, geographically varied country in northwestern South America, distinguished by coastlines on both the Caribbean and the Pacific and by Andean mountain ranges that shape climate, settlement, and economic life. Its ecosystems range from Amazon rainforest and eastern plains to high-altitude páramo and coastal wetlands, supporting exceptional biodiversity across steep elevation gradients.</p>
+  <p>The population is largely urban and culturally diverse, with strong regional identities and a society influenced by Indigenous, European, and African heritages. Modern Colombia is a presidential republic under the 1991 Constitution, with active political competition and ongoing debates about security, inequality, and governance capacity beyond major cities.</p>
+  <p>Economically, Colombia combines a service-heavy urban economy with significant extractive exports and well-known agricultural products such as coffee and cut flowers. Contemporary national priorities include sustaining inclusive growth, improving infrastructure across difficult terrain, integrating migrants, and extending effective governance and development in areas historically affected by conflict. ⬇️ -->
+        </div>
+      </details>
+
+      <!-- ARTICLE 4 -->
+      <details>
+        <summary>4. Cloud Types: Cumulus, Stratocumulus and Atmospheric Science</summary>
+        <div class="article-body">
+          <!-- ⬇️ Why these clouds look so different</h2>
+  <p>A sky can shift from crisp, cotton-like mounds to a broad, gray quilt in less than an hour, even though both scenes are made of the same ingredients: tiny water droplets (and sometimes ice crystals) suspended in air. The difference is structure. Cumulus clouds tend to be vertically “built,” with distinct edges that reflect localized rising air. Stratocumulus clouds spread more laterally, forming lumpy layers that cover large areas when mixing and gentle lifting dominate rather than strong updrafts.</p>
+  <p>In atmospheric science, these familiar forms matter because they reveal how heat and moisture are moving through the lowest part of the atmosphere. Cloud shape is therefore a visible clue to stability, turbulence, and the depth of the boundary layer—the near-surface zone strongly influenced by the ground.</p>
+
+  <h2>Cumulus: convection in compact towers</h2>
+  <p>Cumulus clouds usually form when sunlight warms the surface and parcels of air rise until cooling produces condensation at the lifting condensation level (often around 500–2,000 m, or about 1,600–6,600 ft). Many fair-weather cumulus have tops in the range of roughly 1–3 km (about 0.6–1.9 mi), but in more humid or unstable conditions they can grow taller and transition toward showers and thunderstorms.</p>
+  <p>Their sharp, bright outlines come from active updrafts that continually replenish droplets. The darker bases reflect a thicker path of droplets that absorbs and scatters light, and the base height often rises or falls with near-surface humidity.</p>
+
+  <h2>Stratocumulus: a textured layer that regulates sunlight</h2>
+  <p>Stratocumulus clouds are typically low, with bases often around 300–1,500 m (about 1,000–4,900 ft). They form when moist air is mixed by turbulence or gently lifted over broad areas, creating a deck with rounded elements and frequent breaks. Compared with towering cumulus, stratocumulus is less about strong vertical motion and more about widespread, shallow convection capped by a stable layer above.</p>
+  <p>These clouds are influential in Earth’s energy balance because their extensive coverage can reflect substantial incoming sunlight. Their brightness and persistence depend on droplet concentration, layer thickness, and whether the cloud top is cooled by radiation, which can maintain the churning that keeps the deck intact.</p>
+
+  <h2>Summary</h2>
+  <p>Cumulus and stratocumulus clouds are produced by condensation in the lower atmosphere, but their contrasting shapes indicate different air motions. Cumulus clouds are compact and vertically developed, typically forming from localized convection with bases often around 500–2,000 m (1,600–6,600 ft). Stratocumulus clouds form broader, textured layers with bases commonly around 300–1,500 m (1,000–4,900 ft), reflecting widespread mixing and gentle lifting. Both types help atmospheric science interpret boundary-layer structure and the movement of heat and moisture. ⬇️ -->
+        </div>
+      </details>
+
+      <p style="margin-top:12px;">
+        To read the weekly blocks and the full library, <a href="#pricing">buy a plan</a>.
+      </p>
+    </div>
+  </details>
+
+  <!-- ===== HOW ARTICLES ARE CREATED ===== -->
+  <details class="expander">
+    <summary>How articles are created</summary>
+    <div class="expander-body">
+      <!-- ⬇️ Articles on KnowStride are created through a structured editorial process, guided by human judgment and supported by custom-built internal tools.
+
+Topics are selected with the aim of building broad, useful general knowledge over time — combining well-known subjects with less obvious but important ones. Selection is shaped by long-term relevance, balance across disciplines, and what contributes to a coherent understanding of history, geography, science, and ideas.
+
+When a topic naturally expands into a wider category — such as groups of thinkers, related concepts, or contextual background — internal tools assist by surfacing relevant material. This allows breadth without requiring exhaustive manual enumeration, while decisions about inclusion, emphasis, and framing remain editorial.
+
+Each weekly block is composed deliberately, balancing depth, variety, and pacing. Blocks are reviewed and adjusted until the mix feels calm, structured, and rewarding rather than overwhelming.
+
+All articles are reviewed and edited by a human editor, with clarifications, context, and additional perspectives added where relevant.
+
+The result is a process rooted in human curiosity and judgment, with purpose-built tools enabling consistency and scale — without replacing editorial intent. ⬇️ -->
+    </div>
+  </details>
+
+</div>
+
             </p>
           </div>
         </details>
@@ -397,51 +544,31 @@
     </section>
 
     <section class="pricing" id="pricing">
-      <h2>New Year offer</h2>
-      <p class="muted">
-        Secure checkout via Stripe.
-        <strong>Valid until January 31.</strong>
-      </p>
+      <h2>Pricing</h2>
+      <p class="muted">Secure checkout via Stripe.</p>
       <p class="muted"><strong>No binding period.</strong> Cancel anytime.</p>
 
       <div class="plans">
-        <button class="plan" data-plan="monthly">
+        <button class="plan" data-plan="monthly" aria-label="Monthly subscription: $1.99 per month">
           <div class="plan-title">Monthly</div>
-          <div class="plan-price">$2.99</div>
+          <div class="plan-price">$1.99</div>
+          <div class="muted small" style="margin-top:6px;">Subscription</div>
         </button>
 
-        <button class="plan offer" data-plan="yearly" aria-label="Yearly New Year offer: $14.99 (regular $19.99)">
+        <button class="plan best" data-plan="yearly" aria-label="Yearly subscription: $9.99 per year">
           <div class="plan-title">Yearly</div>
-          <div class="plan-price">
-            <div class="price-row">
-              <span class="price-now">$14.99</span>
-              <span class="price-was">$19.99</span>
-            </div>
-          </div>
+          <div class="plan-price">$9.99</div>
+          <div class="muted small" style="margin-top:6px;">Subscription</div>
         </button>
 
-        <button class="plan offer" data-plan="3y" aria-label="3 Years New Year offer: $24.99 (regular $29.99)">
+        <button class="plan" data-plan="3y" aria-label="3-year access: $18.99 one-time payment">
           <div class="plan-title">3 Years</div>
-          <div class="plan-price">
-            <div class="price-row">
-              <span class="price-now">$24.99</span>
-              <span class="price-was">$29.99</span>
-            </div>
-          </div>
-        </button>
-
-        <button class="plan" data-plan="6y">
-          <div class="plan-title">6 Years</div>
-          <div class="plan-price">$39.99</div>
-        </button>
-
-        <button class="plan best" data-plan="9y">
-          <div class="plan-title">9 Years</div>
-          <div class="plan-price">$49.99</div>
+          <div class="plan-price">$18.99</div>
+          <div class="muted small" style="margin-top:6px;">One-time payment</div>
         </button>
       </div>
 
-      <p class="muted small">
+      <p class="muted small" style="margin-top:12px;">
         Taxes & VAT: VAT for EU customers may apply depending on location and is handled automatically at checkout.
         Customers outside the EU are not charged EU VAT.
       </p>
