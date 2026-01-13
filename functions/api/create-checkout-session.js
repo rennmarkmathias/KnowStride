@@ -11,18 +11,19 @@ export async function onRequestPost(context) {
     const { userId } = auth;
 
     const stripeKey = env.STRIPE_SECRET_KEY;
-    if (!stripeKey) return new Response("Missing STRIPE_SECRET_KEY", { status: 500 });
+    if (!stripeKey) {
+      return new Response("Missing STRIPE_SECRET_KEY", { status: 500 });
+    }
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
     const { plan } = await request.json();
 
+    // Only 3 plans + new Stripe Price IDs
     const priceMap = {
-      monthly: env.PRICE_MONTHLY,
-      yearly: env.PRICE_YEARLY,
-      "3y": env.PRICE_3Y,
-      "6y": env.PRICE_6Y,
-      "9y": env.PRICE_9Y,
+      monthly: "price_1SojhyBGIoJDnx09wsl1Bc3W",
+      yearly: "price_1SojlSBGIoJDnx09SJEFYE0d",
+      "3y":   "price_1SojpGBGIoJDnx09PFoceWJv",
     };
 
     const price = priceMap[plan];
@@ -31,17 +32,18 @@ export async function onRequestPost(context) {
     const url = new URL(request.url);
     const origin = `${url.protocol}//${url.host}`;
 
-    // ✅ SUPERviktigt: Stripe måste få lägga in session_id i redirecten
+    // Stripe must be allowed to inject the session_id token
     const successUrl = `${origin}/app?success=1&session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/app?canceled=1`;
 
+    const isOneTime = plan === "3y";
+
     const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
+      mode: isOneTime ? "payment" : "subscription",
       line_items: [{ price, quantity: 1 }],
       success_url: successUrl,
       cancel_url: cancelUrl,
 
-      // Bra att ha för felsökning/spårning
       client_reference_id: userId,
 
       metadata: {
