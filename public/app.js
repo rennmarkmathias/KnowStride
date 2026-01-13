@@ -106,7 +106,7 @@ function renderPlans(container) {
       </button>
 
       <button class="plan best" data-plan="yearly" aria-label="Yearly subscription: $9.99 per year">
-        <div class="plan-title">Yearly</div>
+        <div class="plan-title">Yearly · 14-day trial</div>
         <div class="plan-price">$9.99</div>
         <div class="muted small" style="margin-top:6px;">Subscription</div>
       </button>
