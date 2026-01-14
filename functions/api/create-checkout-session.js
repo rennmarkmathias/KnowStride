@@ -51,8 +51,8 @@ export async function onRequestPost(context) {
         plan,
       },
 
-      // ✅ 14-day trial ONLY for yearly subscriptions
-      ...(plan === "yearly"
+      // ✅ 14-day trial for monthly + yearly subscriptions
+      ...(plan === "monthly" || plan === "yearly"
         ? { subscription_data: { trial_period_days: 14 } }
         : {}),
     });
