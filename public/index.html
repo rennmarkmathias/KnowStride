@@ -276,16 +276,18 @@ body{
   padding: 26px 18px 64px;
 }
 
-/* ===== Mobile reading mode: use screen width ===== */
+/* ===== Mobile reading mode: true edge-to-edge with 5% margins ===== */
 @media (max-width: 640px){
   .article-wrap{
-    padding: 12px 0; /* mindre ram runt artikeln */
+    padding: 0;              /* ta bort kortets inre luft */
   }
 
   .article-wrap article{
-    max-width: none;          /* ta bort desktop-begränsning */
-    width: 90vw;              /* ~5% marginal per sida */
-    margin: 0 auto;
+    max-width: none;         /* ingen desktop-begränsning */
+    width: 100%;
+    padding-left: 5vw;       /* exakt 5% från vänster */
+    padding-right: 5vw;      /* exakt 5% från höger */
+    margin: 0;
   }
 }
 
