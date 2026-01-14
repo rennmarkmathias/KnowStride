@@ -276,6 +276,19 @@ body{
   padding: 26px 18px 64px;
 }
 
+/* ===== Mobile reading mode: use screen width ===== */
+@media (max-width: 640px){
+  .article-wrap{
+    padding: 12px 0; /* mindre ram runt artikeln */
+  }
+
+  .article-wrap article{
+    max-width: none;          /* ta bort desktop-begränsning */
+    width: 90vw;              /* ~5% marginal per sida */
+    margin: 0 auto;
+  }
+}
+
 .header{
   display:flex;
   align-items:flex-end;
