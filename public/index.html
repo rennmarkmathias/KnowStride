@@ -277,17 +277,33 @@ body{
 }
 
 /* ===== Mobile reading mode: true edge-to-edge with 5% margins ===== */
+/* ===== Mobile reading mode: only when an article is open ===== */
 @media (max-width: 640px){
-  .article-wrap{
-    padding: 0;              /* ta bort kortets inre luft */
+
+  /* Only apply when a clicked article is visible */
+  .article-wrap.active{
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .article-wrap article{
-    max-width: none;         /* ingen desktop-begränsning */
+  /* Keep the “paper card” look, but let the text column use the screen */
+  .article-wrap.active article{
+    max-width: none;
     width: 100%;
-    padding-left: 5vw;       /* exakt 5% från vänster */
-    padding-right: 5vw;      /* exakt 5% från höger */
     margin: 0;
+
+    /* ~5% margins, but also respect notch safe areas */
+    padding-left: max(5vw, env(safe-area-inset-left));
+    padding-right: max(5vw, env(safe-area-inset-right));
+  }
+
+  /* Also remove the 760px cap from the top action row on mobile */
+  .article-wrap.active .article-actions{
+    max-width: none;
+    width: 100%;
+    margin: 0 0 10px;
+    padding-left: max(5vw, env(safe-area-inset-left));
+    padding-right: max(5vw, env(safe-area-inset-right));
   }
 }
 
@@ -583,7 +599,7 @@ a:hover{ color: var(--link-hover); }
   <h1>2. World Prehistory — Early Humans and Global Spread</h1>
 
   <h2>Opening: A Deep Past Hidden in Plain Sight</h2>
-  <p>Everyday human life—walking upright, sharing food, telling stories, shaping tools, crossing landscapes—rests on a prehistory that spans vastly more time than written history. For roughly 300,000 years, humans lived without cities, books, or formal states, yet they developed the behaviors that make later history possible: cooperation in groups, flexible problem-solving, and the ability to adapt to nearly every environment on Earth. Prehistory is not a single “stone age” backdrop; it is a long sequence of experiments in survival and social life, unfolding across multiple continents and climates, with many human species and populations sometimes coexisting...</p></p>
+  <p>Everyday human life—walking upright, sharing food, telling stories, shaping tools, crossing landscapes—rests on a prehistory that spans vastly more time than written history. For roughly 300,000 years, humans lived without cities, books, or formal states, yet they developed the behaviors that make later history possible: cooperation in groups, flexible problem-solving, and the ability to adapt to nearly every environment on Earth. Prehistory is not a single “stone age” backdrop; it is a long sequence of experiments in survival and social life, unfolding across multiple continents and climates, with many human species and populations sometimes coexisting...</p>
 
   <h2>Summary</h2>
   <p>World prehistory spans millions of years of toolmaking and evolution, culminating in the emergence of <em>Homo sapiens</em> about 300,000 years ago and a global dispersal largely after roughly 70,000 years ago...</p>
@@ -696,7 +712,7 @@ a:hover{ color: var(--link-hover); }
 
   <h2>A frontier polity built around arms and negotiation</h2>
   <p>In the middle of the 1600s, a new political order appeared on the steppe and forest-steppe borderlands of Eastern Europe: the Cossack Hetmanate. It emerged from a society shaped by river crossings, raids, seasonal campaigns, and the practical demands of defending scattered settlements. Leadership in this environment was never simply “civil” or “military.” The same figures who negotiated with neighboring powers also raised regiments, managed supply lines, and enforced discipline. The Hetmanate’s institutions combined elective traditions with strong wartime authority, producing a style of government that could be flexible in diplomacy yet hard-edged in the field.</p>
-  <p>At its height in the later 1600s, the Hetmanate controlled much of central Ukraine, particularly on the Left Bank of the Dnipro River. Its armed forces—organized in territorial regiments—were both an army and an administrative framework. That fusion left a lasting imprint on regional political culture: offices were defined by command responsibilities, and public legitimacy was closely tied to the capacity to mobilize men, horses, and provisions quickly...</p></p>
+  <p>At its height in the later 1600s, the Hetmanate controlled much of central Ukraine, particularly on the Left Bank of the Dnipro River. Its armed forces—organized in territorial regiments—were both an army and an administrative framework. That fusion left a lasting imprint on regional political culture: offices were defined by command responsibilities, and public legitimacy was closely tied to the capacity to mobilize men, horses, and provisions quickly...</p>
 
   <h2>Summary</h2>
   <p>The Cossack Hetmanate fused leadership and warfare into a single political language...</p>
@@ -711,7 +727,7 @@ a:hover{ color: var(--link-hover); }
   <h1>8. Car Brands — Toyota History Innovation Impact</h1>
 
   <h2>From Looms to Automobiles: An Unusual Origin</h2>
-  <p>Toyota’s rise is often described as steady and methodical, but it began with a leap across industries. The company’s roots lie in textile machinery, not cars: inventor and industrialist Sakichi Toyoda (1867–1930) built automatic looms that helped modernize Japan’s manufacturing. In the 1930s, his son Kiichiro Toyoda (1894–1952) pushed into automotive production, drawing on lessons from machinery design—precision, repeatability, and an emphasis on reducing waste. Toyota Motor Co. was established as a separate company in 1937, entering a global market already dominated by American and European firms...</p></p>
+  <p>Toyota’s rise is often described as steady and methodical, but it began with a leap across industries. The company’s roots lie in textile machinery, not cars: inventor and industrialist Sakichi Toyoda (1867–1930) built automatic looms that helped modernize Japan’s manufacturing. In the 1930s, his son Kiichiro Toyoda (1894–1952) pushed into automotive production, drawing on lessons from machinery design—precision, repeatability, and an emphasis on reducing waste. Toyota Motor Co. was established as a separate company in 1937, entering a global market already dominated by American and European firms...</p>
 
   <h2>Summary</h2>
   <p>Toyota developed from an unusual origin in textile machinery into a global automotive leader, shaped by early constraints that rewarded efficiency and disciplined engineering...</p>
@@ -738,7 +754,7 @@ a:hover{ color: var(--link-hover); }
   <p>Dubrovnik has a Mediterranean climate with mild, wetter winters and hot, drier summers, moderated by the sea but influenced by nearby mountains. In mid-summer (July–August), average daytime highs are typically around 28–30&nbsp;°C (82–86&nbsp;°F), with average nighttime lows near 21–23&nbsp;°C (70–73&nbsp;°F)...</p>
 
   <h2>Culture, Learning, and Notable Figures</h2>
-  <p>Dubrovnik’s cultural life has been shaped by its history as a small but outward-facing republic. Its elite invested in diplomacy, education, and letters, and the city’s archives and legal traditions remain important sources for understanding Adriatic and Balkan history. A distinctive local literature emerged early, often written in forms that connected the city to wider currents in Renaissance and Baroque Europe...</p></p>
+  <p>Dubrovnik’s cultural life has been shaped by its history as a small but outward-facing republic. Its elite invested in diplomacy, education, and letters, and the city’s archives and legal traditions remain important sources for understanding Adriatic and Balkan history. A distinctive local literature emerged early, often written in forms that connected the city to wider currents in Renaissance and Baroque Europe...</p>
 
   <h2>Summary</h2>
   <p>Dubrovnik is a historic Adriatic city defined by a compact walled core, a strategic coastal setting, and a legacy of maritime self-government once known as the Republic of Ragusa...</p>
