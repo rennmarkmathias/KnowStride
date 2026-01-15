@@ -177,6 +177,20 @@ function renderLibrary(container, items = []) {
   `;
 }
 
+async function openBillingPortal() {
+  const out = await apiFetchJson("/api/create-portal-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({}),
+  });
+
+  if (out?.url) {
+    window.location.href = out.url;
+  } else {
+    throw new Error("Missing billing portal URL from server.");
+  }
+}
+
 async function loadLibrary() {
   return await apiFetchJson("/api/library");
 }
@@ -247,6 +261,13 @@ async function boot() {
             ? "✅ Subscription active."
             : "✅ You are signed in, but you don’t have an active subscription yet."
         }</div>
+        ${
+          data.accessGranted
+            ? `<div style="margin-top:10px;">
+                 <button id="manageSubBtn" type="button">Manage subscription</button>
+               </div>`
+            : ""
+        }
       </div>
     `;
 
@@ -259,6 +280,25 @@ async function boot() {
     }
 
     appContent.innerHTML = header;
+
+    // Wire up Billing Portal
+    const manageBtn = document.getElementById("manageSubBtn");
+    if (manageBtn) {
+      manageBtn.addEventListener("click", async () => {
+        const original = manageBtn.textContent;
+        try {
+          manageBtn.disabled = true;
+          manageBtn.textContent = "Loading…";
+          await openBillingPortal();
+        } catch (e) {
+          alert(e?.message || String(e));
+        } finally {
+          manageBtn.disabled = false;
+          manageBtn.textContent = original;
+        }
+      });
+    }
+
     const wrap = document.createElement("div");
     appContent.appendChild(wrap);
     renderLibrary(wrap, data.items || []);
