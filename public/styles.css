@@ -37,9 +37,22 @@ body{
   gap:12px;
 }
 
+/* UPDATED: brand can now have a title + a small grey tagline */
 .brand{
-  font-weight:800;
-  letter-spacing:.2px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-name{
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.brand-tagline{
+  font-size: 0.75rem;
+  color: rgba(0,0,0,.55);
+  margin-top: 2px;
 }
 
 .topnav{
@@ -379,3 +392,6 @@ button:hover{
   margin: 1.25rem 0 .5rem;
   font-size: 1.05rem;
 }
+
+
+
