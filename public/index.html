@@ -3,403 +3,116 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="KnowStride delivers one reading block per week—12 substantial articles that build real general knowledge over time." />
-  <title>KnowStride — General knowledge, one week at a time</title>
+  <meta name="description" content="Museum-inspired black-and-white posters in a classic 19th-century engraving style." />
+  <title>KnowStride — Posters</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- Small, self-contained styling for pricing + teaser cards + legal sections
-       + (NEW) mobile-only example dropdown behaviour
-       + (NEW) two expandable rows for samples + how articles are created -->
-  <style>
-    /* Teasers */
-    .teasers {
-      margin-top: 2rem;
-    }
-    .teasers-grid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 12px;
-    }
-    @media (max-width: 900px){
-      .teasers-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 640px){
-      .teasers-grid{ grid-template-columns: 1fr; }
-    }
-    .teaser-card{
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 14px 14px 12px;
-      background: rgba(255,255,255,.55);
-    }
-    .teaser-card h3{
-      margin: 0 0 8px;
-      font-size: 1rem;
-      line-height: 1.25;
-    }
-    .teaser-card p{
-      margin: 0;
-      line-height: 1.45;
-    }
-    .teaser-card .tag{
-      display:inline-block;
-      margin-top: 10px;
-      font-size: .78rem;
-      opacity: .78;
-    }
-
-    /* Callout */
-    .callout{
-      margin-top: 12px;
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-    }
-
-    /* Terms/Privacy area (compact + collapsible) */
-    .legal{
-      margin-top: 2.2rem;
-      padding-top: .6rem;
-    }
-    .legal details{
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-      margin-top: 10px;
-    }
-    .legal summary{
-      cursor:pointer;
-      font-weight: 700;
-      list-style: none;
-    }
-    .legal summary::-webkit-details-marker{ display:none; }
-    .legal .legal-body{
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-    .legal .legal-body p{
-      margin: 0 0 10px;
-    }
-    .legal .legal-body ul{
-      margin: 0 0 10px 18px;
-      padding: 0;
-    }
-    .footer a{ text-decoration: underline; }
-
-    /* ===== Example headlines layout (desktop vs mobile) ===== */
-    .example-desktop { display: block; }
-    .example-mobile  { display: none; }
-
-    @media (max-width: 640px){
-      .example-desktop { display: none; }
-      .example-mobile  { display: block; }
-
-      .example-mobile details{
-        border: 1px solid rgba(0,0,0,.14);
-        border-radius: 12px;
-        padding: 12px 14px;
-        background: rgba(255,255,255,.55);
-        margin-top: 12px;
-      }
-      .example-mobile summary{
-        cursor:pointer;
-        font-weight: 700;
-        list-style: none;
-      }
-      .example-mobile summary::-webkit-details-marker{ display:none; }
-      .example-mobile .more-wrap{
-        margin-top: 12px;
-        display: grid;
-        gap: 12px;
-      }
-    }
-
-    /* ===== Two simple expandable rows ===== */
-    .expanders{
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
-    .expander{
-      border: 1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,.55);
-    }
-    .expander summary{
-      cursor: pointer;
-      font-weight: 800;
-      list-style: none;
-    }
-    .expander summary::-webkit-details-marker{ display:none; }
-    .expander .expander-body{
-      margin-top: 10px;
-      line-height: 1.55;
-    }
-    .expander .expander-body p{
-      margin: 0 0 10px;
-    }
-    .expander .expander-body ul{
-      margin: 0 0 10px 18px;
-      padding: 0;
-    }
-    .expander .expander-body li{
-      margin: 8px 0;
-    }
-    .expander .mutedline{
-      opacity: .78;
-      font-size: .92rem;
-      margin-top: 6px;
-    }
-  </style>
 </head>
 
 <body>
   <header class="topbar">
-    <div class="brand">
-  <div class="brand-name">KnowStride</div>
-  <div class="brand-tagline">A general knowledge series</div>
-</div>
+    <a class="brand" href="/" aria-label="Home">
+      <div class="brand-name">KnowStride</div>
+      <div class="brand-tagline">Historical posters</div>
+    </a>
+
     <nav class="topnav">
-      <a class="toplink secondary" href="#pricing">Try a plan · 14-day free trial</a>
-      <a class="toplink" href="/app.html">Create account / Log in</a>
+      <a class="toplink secondary" href="#grid">Shop</a>
+      <a class="toplink" href="/account.html" id="accountLink">Account</a>
     </nav>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <div class="hero-col">
-        <h1>General knowledge, one week at a time.</h1>
-        <strong>KnowStride is evolving.</strong><br>
-The site is under reconstruction!!! Check in again in a couple of days :)<br>
-</a>
-
-          KnowStride delivers <strong>one reading block per week</strong>.
-          Each block contains <strong>12 articles</strong> across world history, geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures — designed to build a stronger general knowledge over time.
+    <section class="hero hero-shop">
+      <div>
+        <h1>Museum-inspired prints for curious walls.</h1>
+        <p class="lead">
+          Black-and-white historical icon posters in a classic 19th‑century engraving style.
+          Printed on demand in two paper grades. Shipped professionally with tracking.
         </p>
-        <p class="muted">Calm, focused reading. No ads. No distractions.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#grid">Browse posters</a>
+          <a class="btn ghost" href="#how">How it works</a>
+        </div>
+        <div class="trust-row">
+          <span class="pill">300 DPI artwork</span>
+          <span class="pill">Matte finish</span>
+          <span class="pill">No frames</span>
+        </div>
       </div>
 
-      <div class="hero-logo" aria-label="KnowStride logo">
-        <img class="logo-img" src="/assets/logo.png" alt="KnowStride logo" loading="eager" />
-      </div>
-
-      <div class="hero-col">
-        <h2>Why it matters</h2>
-        <p>
-          A stronger general knowledge helps to understand news, history, and the world’s connections.
-          KnowStride is built for long-term learning — not clickbait.
-        </p>
-        <p class="muted">Works on all devices via the web.</p>
-
-<!-- ===== TAKE A LOOK INSIDE (quick link) ===== -->
-<details class="expander">
-  <summary>Take a look inside — free preview, no sign-in required</summary>
-
-  <div class="expander-body">
-    <p class="mutedline">Open a full sample block in a separate page.</p>
-
-    <p style="margin: 10px 0 0;">
-      <a href="/take-a-look-inside.html"><strong>Open the free preview →</strong></a>
-    </p>
-  </div>
-</details>
-
+      <div class="hero-aside">
+        <div class="aside-card">
+          <div class="aside-title">Paper options</div>
+          <div class="aside-lines">
+            <div class="aside-line"><span class="dot"></span><strong>Standard</strong> — clean poster stock</div>
+            <div class="aside-line"><span class="dot"></span><strong>Fine Art</strong> — enhanced matte</div>
+          </div>
+          <div class="aside-title" style="margin-top:12px;">Sizes</div>
+          <div class="aside-lines">
+            <div class="aside-line"><span class="dot"></span>12×18″ · 18×24″</div>
+            <div class="aside-line"><span class="dot"></span>A3 · A2</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Teasers / previews -->
-    <section class="teasers" aria-label="Teasers">
-      <h2>What you get</h2>
-      <p class="muted">
-        One weekly block, designed for steady progress—serious, calm, and surprisingly addictive over time.
-      </p>
-
-      <div class="callout">
-        <p style="margin:0; line-height:1.45;">
-          <strong>First two years:</strong> across the first two years, each weekly block continues the core series in world history and world geography — alongside coverage of all countries and a wide mix of other subjects, including standalone articles on history and geography.
-        </p>
-      </div>
-
-      <!-- 3 informative teasers -->
-      <div class="teasers-grid" style="margin-top:14px;">
-        <div class="teaser-card">
-          <h3>Build solid general knowledge over time</h3>
-          <p>
-            Each weekly block corresponds to about <strong>50 book pages</strong> (≈15,000 words) — roughly one to one-and-a-half hours of focused reading.
-            The pace is deliberate, allowing knowledge to accumulate naturally over time.
-          </p>
-          <span class="tag">≈ 1–1.5 hours / week</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Short on time? Read the summaries</h3>
-          <p>
-            Every article includes a clear summary. Reading only the summaries takes about <strong>15 minutes</strong>, helping you maintain 
-                                continuity even during busy weeks.
-          </p>
-          <span class="tag">Summaries-only: ≈ 15 minutes</span>
-        </div>
-
-        <div class="teaser-card">
-          <h3>Designed to open new horizons</h3>
-          <p>
-            KnowStride is built to expand perspective, connect ideas across subjects, and inspire further reading —
-            without noise, hype, or endless scrolling.
-          </p>
-          <span class="tag">Balanced by design</span>
+    <section class="section" id="grid">
+      <div class="section-head">
+        <h2>Posters</h2>
+        <div class="section-controls">
+          <select class="select" id="filterCategory" aria-label="Filter category">
+            <option value="">All categories</option>
+          </select>
+          <select class="select" id="sort" aria-label="Sort posters">
+            <option value="new">Newest</option>
+            <option value="title">Title</option>
+          </select>
         </div>
       </div>
 
-<!-- ===== TAKE A LOOK INSIDE (separate page) ===== -->
-<details class="expander">
-  <summary>Take a look inside — free preview, no sign-in required</summary>
-
-  <div class="expander-body">
-    <p class="mutedline">Open a full sample block in a separate page.</p>
-
-    <p style="margin: 10px 0 0;">
-      <a href="/take-a-look-inside.html"><strong>Open the free preview →</strong></a>
-    </p>
-  </div>
-</details>
-      
-  <!-- ===== HOW ARTICLES ARE CREATED ===== -->
-  <details class="expander">
-    <summary>How Articles Are Selected and Written</summary>
-    <div class="expander-body">
-  <p><strong>Articles on KnowStride are shaped through an editorial process guided by human judgment.</strong></p>
-
-<p>
-  Topics are primarily selected manually to build broad, useful general knowledge over time.
-  The selection balances well-known subjects with less obvious but important ones across world history,
-  geography, countries, science, culture, technology, key ideas, and significant historical and contemporary figures.
-</p>
-
-<p>
-  To work with very large subject ranges in a consistent way, internal tools are used to assess relevance,
-  balance, and appropriate length, and to organize material into coherent weekly reading blocks.
-  This makes it possible to maintain continuity without relying on ad-hoc or purely manual selection alone.
-</p>
-
-<p>
-  Articles are written specifically for KnowStride using structured instructions and consistent formats.
-  Where relevant, additional context, perspectives, or references are added to highlight connections
-  and details that enrich understanding. Final selection, ordering, and refinement remain editorial.
-</p>
-
-
-</div>
-
-  </details>
-    <section class="how">
-      <h2>How it works</h2>
-      <ol>
-        <li>Create an account (email + password) or login with Google.</li>
-        <li>Choose a plan. You receive <strong>Block 1 immediately</strong>.</li>
-        <li>Your next block unlocks <strong>exactly one week after your signup time</strong> (individual schedule).</li>
-        <li>Blocks and articles are numbered for easy orientation.</li>
-      </ol>
-
-      
-        </section>
-
-<section class="pricing" id="pricing">
-      <h2>Pricing</h2>
-      <p class="muted">Secure checkout via Stripe.</p>
-      <p class="muted"><strong>No binding period.</p>
-
-      <div class="plans">
-        <button class="plan" data-plan="monthly" aria-label="Monthly subscription: $1.99 per month">
-          <div class="plan-title">Monthly · 14-day trial</div>
-          <div class="plan-price">$1.99</div>
-          <div class="muted small" style="margin-top:6px;">Subscription</div>
-        </button>
-
-        <button class="plan best" data-plan="yearly" aria-label="Yearly subscription: $9.99 per year">
-          <div class="plan-title">Yearly · 14-day trial</div>
-          <div class="plan-price">$9.99</div>
-          <div class="muted small" style="margin-top:6px;">Subscription</div>
-        </button>
-
-        <button class="plan" data-plan="3y" aria-label="3-year access: $18.99 one-time payment">
-          <div class="plan-title">3 Years</div>
-          <div class="plan-price">$18.99</div>
-          <div class="muted small" style="margin-top:6px;">One-time payment</div>
-        </button>
-      </div>
-
-      <p class="muted small" style="margin-top:12px;">
-        Taxes & VAT: VAT for EU customers may apply depending on location and is handled automatically at checkout.
-        Customers outside the EU are not charged EU VAT.
-      </p>
+      <div class="poster-grid" id="posterGrid" aria-live="polite"></div>
     </section>
 
-    <section class="trust">
-      <h2>Trust & positioning</h2>
-      <ul>
-        <li>Completely ad-free</li>
-        <li>Neutral international English</li>
-        <li>Designed for long-term learning</li>
-        
-    
-      </ul>
-    </section>
-
-    <section class="legal" id="legal" aria-label="Terms and Privacy">
-      <h2>Terms & Privacy</h2>
-      <p class="muted">Short and readable. Click to expand.</p>
-
-      <details id="terms">
-        <summary>Terms</summary>
-        <div class="legal-body">
-          <p><strong>No binding period.</strong> You can cancel anytime. Billing stops immediately, and unused time is refunded.</p>
-          <ul>
-            <li>Subscriptions provide personal, non-transferable access to KnowStride content while active.</li>
-            <li>Payments are processed securely via Stripe. We do not store full payment card details.</li>
-            <li>All content is for personal use. Sharing excerpts for private, non-commercial purposes
-                is fine; systematic copying, redistribution, or resale is not permitted.</li>
-          </ul>
-
-          <p>Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
-      </details>
-
-      <details id="privacy">
-        <summary>Privacy</summary>
-        <div class="legal-body">
-          <p>We collect only what’s needed to run the service.</p>
-          <ul>
-            <li><strong>Account data:</strong> email and a securely stored password hash.</li>
-            <li><strong>Payments:</strong> handled by Stripe; we receive confirmation of payment status.</li>
-            <li><strong>Service use:</strong> basic technical logs may be kept for security and reliability.</li>
-          </ul>
-          <p>We do not sell personal data. For requests or questions, contact <a href="mailto:service@knowstride.com">service@knowstride.com</a>.</p>
-        </div>
-      </details>
+    <section class="section" id="how">
+      <div class="how">
+        <h2>How it works</h2>
+        <ol class="how-steps">
+          <li><strong>Choose</strong> a poster and pick size + paper.</li>
+          <li><strong>Checkout</strong> securely via Stripe.</li>
+          <li><strong>Printed & shipped</strong> professionally with tracking.</li>
+        </ol>
+        <p class="muted small">You can check out as a guest or log in to keep order history in one place.</p>
+      </div>
     </section>
 
     <footer class="footer">
-      <div>All content © KnowStride</div>
-      <div class="muted">
-  <p>
-    Customer support:
-    <a href="mailto:service@knowstride.com">service@knowstride.com</a>
-    (response within 24 business hours)
-    ·
-    <a href="https://www.facebook.com/profile.php?id=61586159253569" target="_blank" rel="noopener noreferrer">Facebook</a>
-  </p>
-
-  <p>
-    Secure checkout via Stripe.
-     </p>
-</div>
-   </footer>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">Contact</div>
+          <div class="muted small">Questions, damaged prints, or shipping issues — email us.</div>
+          <div class="footer-links">
+            <a href="mailto:support@knowstride.com">support@knowstride.com</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Info</div>
+          <div class="footer-links">
+            <a href="#how">How it works</a>
+            <a href="/account.html">Account</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">Legal</div>
+          <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom muted small">© <span id="year"></span> KnowStride.</div>
+    </footer>
   </main>
 
-  <script src="/landing.js"></script>
+  <script src="/shop.js" defer></script>
 </body>
 </html>
