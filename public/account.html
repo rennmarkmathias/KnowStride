@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Account — KnowStride</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Shop</a>
+    <a class="brand" href="/">
+      <div class="brand-name">KnowStride</div>
+      <div class="brand-tagline">Historical posters</div>
+    </a>
+    <nav class="topnav">
+      <a class="toplink" href="/sign-in.html" id="loginLink">Log in</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Account</h1>
+      <p class="muted">Sign in to see your order history. Guest checkouts are always available.</p>
+
+      <div id="userArea" style="display:none;">
+        <div class="callout" style="margin-top:14px;">
+          <div class="muted small">Signed in as</div>
+          <div id="userId" style="font-weight:800;"></div>
+          <div style="margin-top:10px;" id="userButton"></div>
+        </div>
+
+        <h2 style="margin-top:22px;">Orders</h2>
+        <div class="muted">Order history UI will appear here once Stripe + Prodigi are connected.</div>
+      </div>
+
+      <div id="guestArea" style="display:none;">
+        <div class="hero-actions" style="margin-top:14px;">
+          <a class="btn" href="/sign-in.html">Log in</a>
+          <a class="btn ghost" href="/sign-up.html">Create account</a>
+        </div>
+      </div>
+
+      <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
+    </section>
+
+    <footer class="footer footer-compact">
+      <div class="footer-bottom muted small">© <span id="year"></span> KnowStride.</div>
+    </footer>
+  </main>
+
+  <!-- ClerkJS (pin version for stability) -->
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
+  </script>
+
+  <script>
+    window.addEventListener("load", async () => {
+      const y = document.getElementById("year");
+      if (y) y.textContent = String(new Date().getFullYear());
+
+      try {
+        await Clerk.load();
+
+        const user = Clerk.user;
+        const userArea = document.getElementById("userArea");
+        const guestArea = document.getElementById("guestArea");
+        const loginLink = document.getElementById("loginLink");
+
+        if (user) {
+          if (loginLink) loginLink.style.display = "none";
+          userArea.style.display = "block";
+          document.getElementById("userId").textContent = user.id;
+          Clerk.mountUserButton(document.getElementById("userButton"));
+        } else {
+          guestArea.style.display = "block";
+        }
+      } catch (e) {
+        document.getElementById("err").textContent = e?.message || String(e);
+      }
+    });
+  </script>
+</body>
+</html>
