@@ -1,0 +1,74 @@
+{
+  "posters": [
+    {
+      "id": "world-history-icons",
+      "slug": "world-history-icons",
+      "title": "World History Icons",
+      "category": "World History",
+      "tag": "25 icons",
+      "year": 2026,
+      "previewUrl": "/assets/poster-placeholder.svg",
+      "printUrl": "",
+      "prices": {
+        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
+        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "europe-history-icons",
+      "slug": "europe-history-icons",
+      "title": "Europe — Empires & Ideas",
+      "category": "Europe",
+      "tag": "19th‑century engraving style",
+      "year": 2026,
+      "previewUrl": "/assets/poster-placeholder.svg",
+      "printUrl": "",
+      "prices": {
+        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
+        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "vintage-cars-1960s",
+      "slug": "vintage-cars-1960s",
+      "title": "Vintage Cars — 1960s",
+      "category": "Vintage Cars",
+      "tag": "40s–70s series",
+      "year": 2026,
+      "previewUrl": "/assets/poster-placeholder.svg",
+      "printUrl": "",
+      "prices": {
+        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
+        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "new-york-skyline",
+      "slug": "new-york-skyline",
+      "title": "New York Skyline",
+      "category": "City Skylines",
+      "tag": "classic monochrome",
+      "year": 2026,
+      "previewUrl": "/assets/poster-placeholder.svg",
+      "printUrl": "",
+      "prices": {
+        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
+        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "north-america-history-icons",
+      "slug": "north-america-history-icons",
+      "title": "North America — History Icons",
+      "category": "North America",
+      "tag": "25 icons",
+      "year": 2026,
+      "previewUrl": "/assets/poster-placeholder.svg",
+      "printUrl": "",
+      "prices": {
+        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
+        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    }
+  ]
+}
