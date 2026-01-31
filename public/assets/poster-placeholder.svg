@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1125" viewBox="0 0 900 1125">
+  <rect width="900" height="1125" fill="#f6f1ea"/>
+  <rect x="48" y="48" width="804" height="1029" fill="#fffdf8" stroke="#e3d8c8" stroke-width="4"/>
+
+  <text x="450" y="130" text-anchor="middle" font-family="ui-serif, Georgia, 'Times New Roman', serif" font-size="46" fill="#1a1a1a" letter-spacing="1">
+    POSTER PREVIEW
+  </text>
+  <text x="450" y="175" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="20" fill="#5f564c">
+    Replace this placeholder with your real artwork
+  </text>
+
+  <!-- Simple icon grid -->
+  <g transform="translate(120, 260)" fill="#1a1a1a" opacity="0.9">
+    <!-- 5 columns x 5 rows -->
+    <g>
+      <circle cx="0" cy="0" r="18"/>
+      <circle cx="150" cy="0" r="18"/>
+      <circle cx="300" cy="0" r="18"/>
+      <circle cx="450" cy="0" r="18"/>
+      <circle cx="600" cy="0" r="18"/>
+
+      <circle cx="0" cy="140" r="18"/>
+      <circle cx="150" cy="140" r="18"/>
+      <circle cx="300" cy="140" r="18"/>
+      <circle cx="450" cy="140" r="18"/>
+      <circle cx="600" cy="140" r="18"/>
+
+      <circle cx="0" cy="280" r="18"/>
+      <circle cx="150" cy="280" r="18"/>
+      <circle cx="300" cy="280" r="18"/>
+      <circle cx="450" cy="280" r="18"/>
+      <circle cx="600" cy="280" r="18"/>
+
+      <circle cx="0" cy="420" r="18"/>
+      <circle cx="150" cy="420" r="18"/>
+      <circle cx="300" cy="420" r="18"/>
+      <circle cx="450" cy="420" r="18"/>
+      <circle cx="600" cy="420" r="18"/>
+
+      <circle cx="0" cy="560" r="18"/>
+      <circle cx="150" cy="560" r="18"/>
+      <circle cx="300" cy="560" r="18"/>
+      <circle cx="450" cy="560" r="18"/>
+      <circle cx="600" cy="560" r="18"/>
+    </g>
+  </g>
+
+  <rect x="140" y="920" width="620" height="6" fill="#e3d8c8"/>
+  <text x="450" y="975" text-anchor="middle" font-family="ui-serif, Georgia, 'Times New Roman', serif" font-size="28" fill="#1a1a1a">
+    Item list rendered separately below
+  </text>
+
+  <text x="450" y="1030" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="16" fill="#5f564c">
+    This is only a preview placeholder for the shop layout
+  </text>
+</svg>
