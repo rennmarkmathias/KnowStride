@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KnowStride — Sign up</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/sign-in.html">← Back</a>
+    <div class="brand">KnowStride</div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1>Sign up</h1>
+      <p class="muted">Create an account with email or Google.</p>
+      <div id="sign-up" style="margin-top:14px;"></div>
+      <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
+    </section>
+  </main>
+
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
+  </script>
+
+  <script>
+    window.addEventListener("load", async () => {
+      try {
+        await Clerk.load();
+        Clerk.mountSignUp(document.getElementById("sign-up"), {
+          signInUrl: "/sign-in.html",
+          afterSignUpUrl: '/account.html',
+        });
+      } catch (e) {
+        document.getElementById("err").textContent = e?.message || String(e);
+      }
+    });
+  </script>
+</body>
+</html>
+
