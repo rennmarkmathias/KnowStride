@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Poster — KnowStride</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Back</a>
+    <a class="brand" href="/">
+      <div class="brand-name">KnowStride</div>
+      <div class="brand-tagline">Historical posters</div>
+    </a>
+    <nav class="topnav">
+      <a class="toplink" href="/account.html">Account</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="poster-page" id="posterPage" aria-live="polite">
+      <div class="card">
+        <div class="muted">Loading…</div>
+      </div>
+    </section>
+
+    <footer class="footer footer-compact">
+      <div class="footer-bottom muted small">© <span id="year"></span> KnowStride.</div>
+    </footer>
+  </main>
+
+  <script src="/poster.js" defer></script>
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
+  </script>
+</body>
+</html>
