@@ -13,6 +13,27 @@ CREATE TABLE IF NOT EXISTS access (
   access_until INTEGER NOT NULL
 );
 
+-- Poster orders (Stripe -> webhook -> Prodigi)
+CREATE TABLE IF NOT EXISTS orders (
+  id TEXT PRIMARY KEY,
+  created_at TEXT DEFAULT (datetime('now')),
+  email TEXT,
+  clerk_user_id TEXT,
+  poster_id TEXT NOT NULL,
+  poster_title TEXT,
+  size TEXT NOT NULL,
+  paper TEXT NOT NULL,
+  mode TEXT DEFAULT 'STRICT',
+  currency TEXT DEFAULT 'usd',
+  amount_total REAL,
+  stripe_session_id TEXT,
+  prodigi_order_id TEXT,
+  status TEXT DEFAULT 'paid'
+);
+
+CREATE INDEX IF NOT EXISTS idx_orders_clerk_user_id ON orders(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_orders_stripe_session_id ON orders(stripe_session_id);
+
 -- Stripe events/purchases for bookkeeping
 CREATE TABLE IF NOT EXISTS purchases (
   id TEXT PRIMARY KEY,
