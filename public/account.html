@@ -32,7 +32,7 @@
         </div>
 
         <h2 style="margin-top:22px;">Orders</h2>
-        <div class="muted">Order history UI will appear here once Stripe + Prodigi are connected.</div>
+        <div id="ordersArea" class="muted">Loading orders…</div>
       </div>
 
       <div id="guestArea" style="display:none;">
@@ -76,6 +76,50 @@
           userArea.style.display = "block";
           document.getElementById("userId").textContent = user.id;
           Clerk.mountUserButton(document.getElementById("userButton"));
+
+          // Fetch orders for this Clerk user
+          const token = await Clerk.session.getToken();
+          const res = await fetch("/api/orders", {
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+          });
+          const data = await res.json().catch(() => ({}));
+
+          const ordersArea = document.getElementById("ordersArea");
+          if (!res.ok) {
+            ordersArea.textContent = data?.error || "Could not load orders.";
+            return;
+          }
+
+          const orders = Array.isArray(data?.orders) ? data.orders : [];
+          if (!orders.length) {
+            ordersArea.textContent = "No orders yet.";
+            return;
+          }
+
+          ordersArea.classList.remove("muted");
+          ordersArea.innerHTML = orders.map(o => {
+            const dt = new Date(o.created_at);
+            const when = isNaN(dt.getTime()) ? "" : dt.toLocaleString();
+            const amount = (o.amount_total != null) ? `$${Number(o.amount_total).toFixed(2)}` : "";
+            const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
+            const labelSize = (o.size || "").toUpperCase();
+            const status = o.status || "";
+            return `
+              <div class="card" style="margin-top:12px;">
+                <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                  <div>
+                    <div style="font-weight:800;">${(o.poster_title || o.poster_id || "Poster")}</div>
+                    <div class="muted small">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-weight:800;">${amount}</div>
+                    <div class="muted small">${when}</div>
+                  </div>
+                </div>
+                <div class="muted small" style="margin-top:8px;">Status: ${status}${o.prodigi_order_id ? ` · Prodigi: ${o.prodigi_order_id}` : ""}</div>
+              </div>
+            `;
+          }).join("");
         } else {
           guestArea.style.display = "block";
         }
