@@ -135,7 +135,7 @@ function render(poster) {
         </div>
 
         <div class="muted small" style="margin-top:10px;">
-          Printed & shipped by Prodigi · Tracking included · No frames
+          Printed & shipped by our print partner · Tracking included · No frames
         </div>
       </div>
     </section>
