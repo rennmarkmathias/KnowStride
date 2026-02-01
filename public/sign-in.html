@@ -36,7 +36,7 @@
         await Clerk.load();
         Clerk.mountSignIn(document.getElementById("sign-in"), {
           signUpUrl: "/sign-up.html",
-          afterSignInUrl: "/app",
+          afterSignInUrl: '/account.html',
         });
       } catch (e) {
         document.getElementById("err").textContent = e?.message || String(e);
