@@ -95,6 +95,19 @@ export async function onRequestPost(context) {
           "NZ",
         ],
       },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: { amount: 0, currency: "usd" },
+            display_name: "Shipping included",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 3 },
+              maximum: { unit: "business_day", value: 10 },
+            },
+          },
+        },
+      ],
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: {
