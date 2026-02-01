@@ -1,2 +1,6 @@
 # API routes
 /api/* /api/:splat 200
+
+# Legacy app route -> account
+/app /account.html 302
+/app.html /account.html 302
