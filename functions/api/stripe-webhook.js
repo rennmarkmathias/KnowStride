@@ -3,25 +3,29 @@
 import Stripe from "stripe";
 import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
 
-/**
- * Normalize paper coming from UI/metadata to Prodigi-friendly tokens.
- * UI: "standard" | "fineart"
- * Prodigi mapping: "blp" | "fap"
- */
 function normalizePaper(paperRaw) {
   if (!paperRaw) return null;
-
   const p = String(paperRaw).trim().toLowerCase();
+  // UI kan skicka standard/fine_art, backend vill ha blp/fap
+  if (p === "blp" || p === "standard") return "blp";
+  if (p === "fap" || p === "fine_art" || p === "fineart" || p === "fine art") return "fap";
+  return p;
+}
 
-  // Accept already-normalized tokens
-  if (p === "blp" || p === "fap") return p;
+/**
+ * Normalisera storlekar så de matchar env-namnen och SKU-lookup.
+ * Ex: "12X18" -> "12x18", "A2A" -> "a2"
+ */
+function normalizeSize(sizeRaw) {
+  if (!sizeRaw) return null;
+  const s = String(sizeRaw).trim().toLowerCase().replace(/\s+/g, "");
+  if (s === "a2a") return "a2"; // legacy-typo
+  return s;
+}
 
-  // Accept UI tokens
-  if (p === "standard") return "blp";
-  if (p === "fineart" || p === "fine_art" || p === "fine-art") return "fap";
-
-  // Some people accidentally send "matte"/"gloss" etc — fail loudly:
-  return null;
+function cleanStr(v) {
+  const s = v == null ? "" : String(v).trim();
+  return s.length ? s : undefined;
 }
 
 export async function onRequestPost(context) {
@@ -34,7 +38,6 @@ export async function onRequestPost(context) {
     return new Response("Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET", { status: 500 });
   }
 
-  // Cloudflare/Workers: use fetch-http-client
   const stripe = new Stripe(stripeSecret, {
     apiVersion: "2024-06-20",
     httpClient: Stripe.createFetchHttpClient(),
@@ -45,7 +48,7 @@ export async function onRequestPost(context) {
 
   let event;
   try {
-    // ✅ Cloudflare requires async verification
+    // ✅ Cloudflare kräver async verifiering
     event = await stripe.webhooks.constructEventAsync(body, sig, webhookSecret);
   } catch (err) {
     return new Response(`Webhook signature verification failed: ${err?.message || String(err)}`, {
@@ -53,7 +56,7 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Only handle posters / completed checkouts
+  // Endast posters
   if (event.type !== "checkout.session.completed") {
     return new Response("ok", { status: 200 });
   }
@@ -63,34 +66,30 @@ export async function onRequestPost(context) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
+      expand: [
+        "line_items",
+        "payment_intent",
+        "payment_intent.latest_charge",
+        "customer_details",
+      ],
     });
 
-    // Metadata from create-poster-checkout-session.js
+    // Metadata från create-poster-checkout-session.js
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const size = session.metadata?.size || null; // "12x18" / "18x24" / "a2" / "a3" etc.
-    const paperRaw = session.metadata?.paper || null; // might be "standard"/"fineart" OR "blp"/"fap"
+    const size = normalizeSize(session.metadata?.size || null); // "12x18" / "18x24" / "a2" / "a3"
+    const paper = normalizePaper(session.metadata?.paper || null); // "blp" / "fap"
     const mode = session.metadata?.mode || null; // "STRICT" / "ART"
     const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
 
-    // Normalize paper for Prodigi SKU lookup
-    const paper = normalizePaper(paperRaw);
-
-    if (!posterId || !size || !paperRaw || !mode || !printUrl) {
+    if (!posterId || !size || !paper || !mode || !printUrl) {
       throw new Error(
-        `Missing required metadata. posterId=${posterId} size=${size} paper=${paperRaw} mode=${mode} printUrl=${printUrl}`
-      );
-    }
-
-    if (!paper) {
-      throw new Error(
-        `Invalid paper metadata value: "${paperRaw}". Expected "standard"|"fineart" or "blp"|"fap".`
+        `Missing required metadata. posterId=${posterId} size=${size} paper=${paper} mode=${mode} printUrl=${printUrl}`
       );
     }
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // Shipping (robust): prefer collected_information.shipping_details if present
+    // Shipping (robust): primärt collected_information.shipping_details
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -98,34 +97,42 @@ export async function onRequestPost(context) {
         ? { name: session.customer_details?.name || "Customer", address: session.customer_details.address }
         : null) ||
       (session.payment_intent?.latest_charge?.shipping
-        ? {
-            name: session.payment_intent.latest_charge.shipping.name,
-            address: session.payment_intent.latest_charge.shipping.address,
-          }
+        ? { name: session.payment_intent.latest_charge.shipping.name, address: session.payment_intent.latest_charge.shipping.address }
         : null);
 
     if (!shippingDetails?.address) {
-      // Stripe will retry webhook on 500
       throw new Error("Missing shipping address on Stripe session");
     }
 
     const addr = shippingDetails.address;
 
-    const recipient = {
-      name: shippingDetails.name || session.customer_details?.name || "Customer",
-      email: session.customer_details?.email || undefined,
-      address: {
-        line1: addr.line1 || "",
-        line2: addr.line2 || "",
-        townOrCity: addr.city || "",
-        stateOrCounty: addr.state || "",
-        postalOrZipCode: addr.postal_code || "",
-        countryCode: addr.country || "",
-      },
+    // Bygg address men SKICKA INTE tomma strängar (Prodigi validerar hårt)
+    const address = {
+      line1: cleanStr(addr.line1),
+      townOrCity: cleanStr(addr.city),
+      postalOrZipCode: cleanStr(addr.postal_code),
+      countryCode: cleanStr(addr.country),
     };
 
-    // SKU from env-vars (Cloudflare)
-    // IMPORTANT: paper must be "blp" or "fap" here.
+    const line2 = cleanStr(addr.line2);
+    if (line2) address.line2 = line2;
+
+    const state = cleanStr(addr.state);
+    if (state) address.stateOrCounty = state;
+
+    // grundkrav
+    const missing = ["line1", "townOrCity", "postalOrZipCode", "countryCode"].filter((k) => !address[k]);
+    if (missing.length) {
+      throw new Error(`Shipping address missing required fields: ${missing.join(", ")}`);
+    }
+
+    const recipient = {
+      name: cleanStr(shippingDetails.name) || cleanStr(session.customer_details?.name) || "Customer",
+      email: cleanStr(session.customer_details?.email),
+      address,
+    };
+
+    // SKU från env-vars
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
     const prodigiOrderPayload = {
@@ -136,15 +143,19 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          assets: [{ url: printUrl }],
+
+          // ✅ REQUIRED by Prodigi (Crop/ShrinkToFit etc)
+          sizing: "Crop", // default och vanligast :contentReference[oaicite:1]{index=1}
+
+          // ✅ REQUIRED: assets[*].printArea
+          assets: [{ printArea: "default", url: printUrl }],
         },
       ],
     };
 
-    // Create order in Prodigi
     const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
 
-    // Save in D1 if DB exists
+    // Spara i D1 om DB finns
     if (env.DB) {
       const userId = session.metadata?.user_id || null;
       const total = session.amount_total || 0;
@@ -162,7 +173,6 @@ export async function onRequestPost(context) {
           session.id,
           prodigiOrder?.id || prodigiOrder?.orderId || null,
           posterId,
-          // NOTE: store normalized paper (blp/fap) so it matches your env mapping & Prodigi
           paper,
           size,
           mode,
@@ -173,9 +183,6 @@ export async function onRequestPost(context) {
           Date.now()
         )
         .run();
-
-      // If you *want* to store UI paper too, add a column like paper_ui and save paperRaw.
-      // (Requires schema change.)
     }
 
     return new Response("ok", { status: 200 });
