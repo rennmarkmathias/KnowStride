@@ -1,190 +1,168 @@
 // functions/api/stripe-webhook.js
+
 import Stripe from "stripe";
-import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
-import { findPosterById } from "./_posters.js";
+import { findPosterById } from "./_posters";
+import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi";
 
-export const onRequestPost = async ({ request, env }) => {
+export async function onRequestPost({ request, env }) {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" });
+
+  const sig = request.headers.get("stripe-signature");
+  if (!sig) return new Response("Missing stripe-signature", { status: 400 });
+
+  const rawBody = await request.arrayBuffer();
+  const rawBytes = new Uint8Array(rawBody);
+
+  let event;
   try {
-    const sig = request.headers.get("stripe-signature");
-    if (!sig) return new Response("Missing stripe-signature", { status: 400 });
-
-    const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-      return new Response("Missing STRIPE_WEBHOOK_SECRET", { status: 500 });
-    }
-
-    const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2025-01-27.acacia",
-    });
-
-    const body = await request.text();
-
-    let event;
-    try {
-      event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    } catch (err) {
-      return new Response(`Webhook signature verification failed`, {
-        status: 400,
-      });
-    }
-
-    if (event.type !== "checkout.session.completed") {
-      return new Response("ignored", { status: 200 });
-    }
-
-    const session = event.data.object;
-
-    // Hämta full session (för metadata, totals, shipping_details, osv)
-    const full = await stripe.checkout.sessions.retrieve(session.id);
-
-    if (full.payment_status !== "paid") {
-      return new Response("not paid", { status: 200 });
-    }
-
-    const md = full.metadata || {};
-    const posterId = md.poster_id;
-    const size = md.size;
-    const paper = md.paper;
-    const mode = md.mode || "strict";
-
-    if (!posterId || !size || !paper) {
-      return new Response("Missing metadata (poster_id/size/paper)", {
-        status: 400,
-      });
-    }
-
-    // Idempotency: om order redan skapad för session -> gör inget
-    const existing = await env.DB.prepare(
-      `SELECT id FROM orders WHERE stripe_session_id = ? LIMIT 1`
-    )
-      .bind(full.id)
-      .first();
-
-    if (existing?.id) return new Response("ok", { status: 200 });
-
-    // Poster title (cachea vid köp)
-    const poster = await findPosterById(
-      new Request(full.success_url || "https://example.com"),
-      env,
-      posterId
+    event = await stripe.webhooks.constructEventAsync(
+      rawBytes,
+      sig,
+      env.STRIPE_WEBHOOK_SECRET
     );
-
-    const posterTitle = md.poster_title || poster?.title || posterId;
-
-    const orderId = crypto.randomUUID();
-    const email = full.customer_details?.email || null;
-    const clerkUserId = md.clerk_user_id || null;
-    const amountTotal =
-      full.amount_total != null ? Number(full.amount_total) / 100 : null;
-    const currency = (full.currency || "usd").toLowerCase();
-
-    await env.DB.prepare(
-      `INSERT INTO orders (
-        id, email, clerk_user_id, poster_id, poster_title,
-        size, paper, mode, currency, amount_total,
-        stripe_session_id, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-      .bind(
-        orderId,
-        email,
-        clerkUserId,
-        posterId,
-        posterTitle,
-        size,
-        paper,
-        mode,
-        currency,
-        amountTotal,
-        full.id,
-        "paid"
-      )
-      .run();
-
-    // Prodigi SKU
-    const sku = prodigiSkuFor(env, paper, size);
-    if (!sku) {
-      await env.DB.prepare(`UPDATE orders SET status=? WHERE id=?`)
-        .bind("paid_missing_prodigi_sku", orderId)
-        .run();
-      return new Response(
-        `Missing Prodigi SKU mapping for paper=${paper}, size=${size}`,
-        { status: 500 }
-      );
-    }
-
-    // ✅ Stripe Checkout Session: shipping_details är rätt fält
-    // shipping_details: { name, address: { line1, city, postal_code, country, ... } }
-    const ship = full.shipping_details || full.shipping || null;
-    const shipAddr = ship?.address || null;
-
-    // Fallbacks (ibland finns billing address här)
-    const billingAddr = full.customer_details?.address || null;
-
-    const addr = shipAddr || billingAddr || null;
-
-    // Guard: måste ha minsta för frakt
-    if (
-      !addr?.line1 ||
-      !addr?.city ||
-      !addr?.postal_code ||
-      !addr?.country
-    ) {
-      await env.DB.prepare(`UPDATE orders SET status=? WHERE id=?`)
-        .bind("paid_missing_shipping", orderId)
-        .run();
-
-      return new Response("Missing shipping address on Stripe session", {
-        status: 500,
-      });
-    }
-
-    const recipientName =
-      ship?.name || full.customer_details?.name || "Customer";
-
-    // Skapa Prodigi-order
-    const payload = {
-      merchantReference: orderId,
-      shippingMethod: env.PRODIGI_SHIPPING_METHOD || "Budget",
-      recipient: {
-        name: recipientName,
-        email: email || undefined,
-        address: {
-          line1: addr.line1 || "",
-          line2: addr.line2 || "",
-          postalOrZipCode: addr.postal_code || "",
-          townOrCity: addr.city || "",
-          stateOrCounty: addr.state || "",
-          countryCode: addr.country || "",
-        },
-      },
-      items: [
-        {
-          sku,
-          copies: 1,
-          attributes: {},
-          assets: [
-            {
-              url: md.print_url, // din create-checkout-session lägger in denna
-            },
-          ],
-        },
-      ],
-    };
-
-    const prodigiRes = await prodigiCreateOrder(env, payload);
-
-    await env.DB.prepare(
-      `UPDATE orders SET prodigi_order_id=?, status=? WHERE id=?`
-    )
-      .bind(prodigiRes?.id || null, "sent_to_print", orderId)
-      .run();
-
-    return new Response("ok", { status: 200 });
   } catch (err) {
-    // Svara 500 så Stripe visar felet och kan resend
-    return new Response(`Webhook handler error: ${err?.message || err}`, {
-      status: 500,
-    });
+    return new Response(`Webhook signature error: ${err?.message || err}`, { status: 400 });
   }
-};
+
+  try {
+    if (event.type === "checkout.session.completed") {
+      await handleCheckoutSessionCompleted(stripe, event.data.object, env);
+    }
+  } catch (err) {
+    return new Response(`Webhook handler error: ${err?.message || err}`, { status: 500 });
+  }
+
+  return new Response("ok", { status: 200 });
+}
+
+function pickShippingFromSession(session) {
+  // Stripe kan lägga adress i olika fält beroende på checkout-flöde.
+  const sd = session.shipping_details || null;
+  const cd = session.customer_details || null;
+
+  const name = sd?.name || cd?.name || null;
+  const address = sd?.address || cd?.address || null;
+
+  if (!address || !address.country) return null;
+
+  return {
+    name: name || "Customer",
+    address,
+  };
+}
+
+async function handleCheckoutSessionCompleted(stripe, session, env) {
+  // För säkerhets skull: hämta uppdaterad session (utan expand som kan bråka)
+  const s = await stripe.checkout.sessions.retrieve(session.id);
+
+  const posterId = s?.metadata?.posterId;
+  const size = s?.metadata?.size;
+  const paper = s?.metadata?.paper;
+  const mode = s?.metadata?.mode || "strict";
+  const clerkUserId = s?.metadata?.clerkUserId || null;
+
+  if (!posterId || !size || !paper) {
+    throw new Error("Missing metadata on Stripe session (posterId/size/paper)");
+  }
+
+  const poster = findPosterById(posterId);
+  if (!poster) throw new Error(`Poster not found: ${posterId}`);
+
+  // Email
+  const email = s.customer_details?.email || s.customer_email || null;
+
+  // Shipping
+  const shipping = pickShippingFromSession(s);
+
+  // Spara order i D1 först (så du alltid ser den i historiken)
+  const amountTotal = Number(s.amount_total || 0);
+  const currency = (s.currency || "usd").toUpperCase();
+
+  // Minimal DB insert (kräver att orders-tabellen finns)
+  // Om den inte finns: detta kastar fel => du ser 500 i Stripe.
+  const createdAt = new Date().toISOString();
+  const orderId = crypto.randomUUID();
+
+  let status = "paid";
+  if (!shipping) status = "paid_missing_shipping";
+
+  await env.DB.prepare(`
+    INSERT INTO orders (
+      id, created_at, email, clerk_user_id,
+      poster_id, title, size, paper, mode,
+      currency, amount_total, stripe_session_id,
+      status
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).bind(
+    orderId, createdAt, email, clerkUserId,
+    posterId, poster.title, size, paper, mode,
+    currency, amountTotal, s.id,
+    status
+  ).run();
+
+  // Om shipping saknas: skippa Prodigi nu (men ordern syns i historiken)
+  if (!shipping) return;
+
+  // Bygg printfil-URL enligt din filnamnslogik
+  // Exempel: /prints/world_history_25_icons_12x18_in_STRICT.png
+  const sizePart =
+    size.toLowerCase() === "12x18" ? "12x18_in" :
+    size.toLowerCase() === "18x24" ? "18x24_in" :
+    size.toLowerCase() === "a2" ? "A2_420x594mm" :
+    size.toLowerCase() === "a3" ? "A3_297x420mm" :
+    size;
+
+  const modePart = (mode || "strict").toUpperCase(); // STRICT / ART
+
+  const assetPath = `${poster.printDir || "/prints"}/${poster.fileBase}_${sizePart}_${modePart}.png`;
+  const assetUrl = new URL(assetPath, "https://knowstride.com").toString();
+
+  // SKU
+  const sku = prodigiSkuFor(env, { paper, size });
+
+  // Prodigi payload (enkel “order”)
+  const prodigiPayload = {
+    merchantReference: orderId,
+    shippingMethod: "Standard",
+    recipient: {
+      name: shipping.name,
+      address: {
+        line1: shipping.address.line1 || "",
+        line2: shipping.address.line2 || "",
+        postalOrZipCode: shipping.address.postal_code || "",
+        townOrCity: shipping.address.city || "",
+        stateOrCounty: shipping.address.state || "",
+        countryCode: shipping.address.country || "",
+      },
+      email: email || undefined,
+    },
+    items: [
+      {
+        sku,
+        copies: 1,
+        sizing: "fill",
+        assets: [
+          { url: assetUrl }
+        ],
+      },
+    ],
+  };
+
+  const prodigiRes = await prodigiCreateOrder(env, prodigiPayload);
+
+  const prodigiOrderId =
+    prodigiRes?.id ||
+    prodigiRes?.orderId ||
+    prodigiRes?.data?.id ||
+    null;
+
+  await env.DB.prepare(`
+    UPDATE orders
+    SET prodigi_order_id = ?, status = ?
+    WHERE id = ?
+  `).bind(
+    prodigiOrderId,
+    "submitted_to_prodigi",
+    orderId
+  ).run();
+}
