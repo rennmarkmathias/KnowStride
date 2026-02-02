@@ -1,35 +1,30 @@
 // functions/api/_prodigi.js
 
 export function prodigiSkuFor(env, { paper, size }) {
-  // paper: "blp" (Budget/Standard) eller "fap" (Fine Art)
-  // size: "12x18" | "18x24" | "a2" | "a3"
-  const p = String(paper || "").toLowerCase();
-  const s = String(size || "").toLowerCase();
+  const rawP = String(paper || "").trim().toLowerCase();
+  const rawS = String(size || "").trim().toLowerCase().replace(/\s+/g, "");
 
-  const key =
-    p === "blp"
-      ? s === "12x18" ? "PRODIGI_SKU_BLP_12X18"
-      : s === "18x24" ? "PRODIGI_SKU_BLP_18X24"
-      : null
-    : p === "fap"
-      ? s === "12x18" ? "PRODIGI_SKU_FAP_12X18"
-      : s === "18x24" ? "PRODIGI_SKU_FAP_18X24"
-      : s === "a2" ? "PRODIGI_SKU_FAP_A2"
-      : s === "a3" ? "PRODIGI_SKU_FAP_A3"
-      : null
-    : null;
+  const p =
+    rawP === "standard" || rawP === "blp" ? "blp" :
+    rawP === "fine_art" || rawP === "fineart" || rawP === "fine art" || rawP === "fap" ? "fap" :
+    rawP;
 
-  if (!key || !env[key]) {
-    throw new Error(`Missing Prodigi SKU env var for paper=${paper} size=${size} (expected ${key})`);
+  const s = rawS === "a2a" ? "a2" : rawS;
+
+  const key = `PRODIGI_SKU_${p.toUpperCase()}_${s.toUpperCase().replace(/[^A-Z0-9]/g, "")}`;
+  const sku = env[key];
+
+  if (!sku) {
+    throw new Error(`Missing Prodigi SKU env var for paper=${p} size=${s}. Expected env var: ${key}`);
   }
-  return env[key];
+  return sku;
 }
 
 export async function prodigiCreateOrder(env, payload) {
   const apiKey = env.PRODIGI_API_KEY;
-  if (!apiKey) throw new Error("Missing PRODIGI_API_KEY");
+  if (!apiKey) throw new Error("Missing PRODIGI_API_KEY env var");
 
-  const res = await fetch("https://api.prodigi.com/v4.0/Orders", {
+  const res = await fetch("https://api.prodigi.com/v4.0/orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,15 +34,11 @@ export async function prodigiCreateOrder(env, payload) {
   });
 
   const text = await res.text();
+  let json;
+  try { json = JSON.parse(text); } catch { json = { raw: text }; }
 
   if (!res.ok) {
-    // Viktigt: bubbla upp Prodigi-svaret så vi ser exakt varför det failar i Stripe webhook deliveries
-    throw new Error(`Prodigi create order failed (${res.status}): ${text}`);
+    throw new Error(`Prodigi create order failed (${res.status}): ${JSON.stringify(json)}`);
   }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { raw: text };
-  }
+  return json;
 }
