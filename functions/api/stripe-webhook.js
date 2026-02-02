@@ -1,177 +1,149 @@
+// functions/api/stripe-webhook.js
+
 import Stripe from "stripe";
-import { prodigiCreateOrder } from "./_prodigi";
-import { json } from "./_posters";
+import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
 
-/**
- * Cloudflare Pages Function: /api/stripe-webhook
- * Requires env:
- * - STRIPE_SECRET_KEY
- * - STRIPE_WEBHOOK_SECRET
- * - PRODIGI_API_KEY
- * - DB (D1 binding)
- */
 export async function onRequestPost(context) {
-  const { request, env } = context;
+  const { env, request } = context;
 
-  if (!env.STRIPE_SECRET_KEY) return json({ error: "Missing STRIPE_SECRET_KEY" }, 500);
-  if (!env.STRIPE_WEBHOOK_SECRET) return json({ error: "Missing STRIPE_WEBHOOK_SECRET" }, 500);
-  if (!env.DB) return json({ error: "Missing DB binding" }, 500);
+  const stripeSecret = env.STRIPE_SECRET_KEY;
+  const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
+  if (!stripeSecret || !webhookSecret) {
+    return new Response("Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET", { status: 500 });
+  }
 
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" });
+  const stripe = new Stripe(stripeSecret, { apiVersion: "2024-06-20" });
 
   const sig = request.headers.get("stripe-signature");
-  if (!sig) return json({ error: "Missing stripe-signature header" }, 400);
-
-  const rawBody = await request.text();
-
   let event;
+
+  const body = await request.text();
+
   try {
-    event = stripe.webhooks.constructEvent(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
-    return json({ error: `Webhook signature verification failed: ${err?.message || err}` }, 400);
+    return new Response(`Webhook signature verification failed: ${err.message}`, { status: 400 });
   }
 
-  // We only care about poster checkouts
+  // Vi hanterar bara posters-checkout
   if (event.type !== "checkout.session.completed") {
-    return json({ ok: true, ignored: event.type });
+    return new Response("ok", { status: 200 });
   }
 
-  const sessionFromEvent = event.data?.object;
-  const sessionId = sessionFromEvent?.id;
-  if (!sessionId) return json({ error: "Missing session id" }, 400);
+  const sessionFromEvent = event.data.object;
+  const sessionId = sessionFromEvent.id;
 
-  // Re-fetch to ensure we have full details.
-  // IMPORTANT: Do NOT expand shipping_details (Stripe may reject it).
-  let session;
   try {
-    session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items"],
+    // Hämta full session med line_items + payment_intent (för robust shipping fallback om Stripe beter sig)
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
-  } catch (err) {
-    return json({ error: `Failed to retrieve session: ${err?.message || err}` }, 500);
-  }
 
-  const md = session?.metadata || {};
-  if (md.kind !== "poster") {
-    return json({ ok: true, ignored: "not a poster session" });
-  }
+    // Metadata vi satte i create-poster-checkout-session.js
+    const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
+    const size = session.metadata?.size || null;      // ex "12x18"
+    const paper = session.metadata?.paper || null;    // ex "blp" eller "fap"
+    const mode = session.metadata?.mode || null;      // ex "strict" / "art"
+    const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
 
-  const posterId = md.poster_id || "";
-  const posterTitle = md.poster_title || "";
-  const size = md.size || "";
-  const paper = md.paper || "";
-  const mode = md.mode || "";
-  const printUrl = md.print_url || "";
-  const clerkUserId = md.clerk_user_id || null;
+    if (!posterId || !size || !paper || !mode || !printUrl) {
+      throw new Error(
+        `Missing required metadata. posterId=${posterId} size=${size} paper=${paper} mode=${mode} printUrl=${printUrl}`
+      );
+    }
 
-  // Shipping info can be in different places depending on Stripe settings / flow.
-  const ship = session.shipping_details || null;
-  const cust = session.customer_details || null;
+    const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-  const shippingName = ship?.name || cust?.name || "";
-  const shippingAddress =
-    ship?.address ||
-    cust?.address ||
-    null;
+    // --- Shipping details (robust) ---
+    // Primärt: session.shipping_details (brukar finnas för fysiska produkter)
+    // Fallback: session.customer_details.address
+    // Extra fallback: charge.shipping / billing_details (sista utvägen)
+    const shippingDetails =
+      session.shipping_details ||
+      (session.customer_details?.address
+        ? { name: session.customer_details?.name || "Customer", address: session.customer_details.address }
+        : null) ||
+      (session.payment_intent?.latest_charge?.shipping
+        ? { name: session.payment_intent.latest_charge.shipping.name, address: session.payment_intent.latest_charge.shipping.address }
+        : null);
 
-  const email = cust?.email || session.customer_email || "";
+    if (!shippingDetails || !shippingDetails.address) {
+      // Detta gör att Stripe retryar. Viktigt om Stripe ibland skickar completed innan shipping-data sitter (ovanligt men kan hända).
+      throw new Error("Missing shipping address on Stripe session");
+    }
 
-  // Amount (USD cents)
-  const amountTotal = Number(session.amount_total || 0);
-  const currency = String(session.currency || "usd").toUpperCase();
+    const addr = shippingDetails.address;
 
-  // Save order to D1 (always)
-  const createdAtIso = new Date().toISOString();
-
-  // Minimal “status” logic
-  let status = "paid";
-  if (!shippingAddress) status = "paid_missing_shipping";
-
-  // Create local order row (id = Stripe session id)
-  try {
-    await env.DB.prepare(
-      `INSERT OR REPLACE INTO orders
-       (id, created_at, status, poster_id, poster_title, size, paper, mode, amount_total, currency, email, clerk_user_id, shipping_name, shipping_json, print_url)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).bind(
-      sessionId,
-      createdAtIso,
-      status,
-      posterId,
-      posterTitle,
-      size,
-      paper,
-      mode,
-      amountTotal,
-      currency,
-      email,
-      clerkUserId,
-      shippingName,
-      shippingAddress ? JSON.stringify(shippingAddress) : null,
-      printUrl
-    ).run();
-  } catch (err) {
-    return json({ error: `DB error saving order: ${err?.message || err}` }, 500);
-  }
-
-  // If we still don't have shipping, we cannot send to Prodigi
-  if (!shippingAddress) {
-    return json({ ok: true, stored: true, prodigi: false, reason: "missing_shipping" });
-  }
-
-  // Create Prodigi order
-  try {
-    const prodigiResult = await prodigiCreateOrder(env, {
-      merchantReference: sessionId,
-      recipient: {
-        name: shippingName || "Customer",
-        email: email || undefined,
-        address: {
-          line1: shippingAddress.line1 || "",
-          line2: shippingAddress.line2 || "",
-          townOrCity: shippingAddress.city || "",
-          stateOrCounty: shippingAddress.state || "",
-          postalOrZipCode: shippingAddress.postal_code || "",
-          countryCode: shippingAddress.country || "",
-        },
+    // Stripe använder ofta: line1/line2/city/postal_code/state/country
+    const recipient = {
+      name: shippingDetails.name || session.customer_details?.name || "Customer",
+      email: session.customer_details?.email || undefined,
+      address: {
+        line1: addr.line1 || "",
+        line2: addr.line2 || "",
+        townOrCity: addr.city || "",
+        stateOrCounty: addr.state || "",
+        postalOrZipCode: addr.postal_code || "",
+        countryCode: addr.country || "",
       },
+    };
+
+    // --- SKU mapping (från env vars du lade in i Cloudflare) ---
+    // paper: "blp" = Budget/Standard, "fap" = Fine Art (Enhanced Matte)
+    const prodigiSku = prodigiSkuFor(env, { paper, size });
+
+    // --- Build Prodigi order payload ---
+    // Viktigt: Prodigi vill ha items med sku + assets + copies
+    const prodigiOrderPayload = {
+      merchantReference: `ks_${session.id}`,
+      shippingMethod: "Standard",
+      recipient,
       items: [
         {
-          // Your Prodigi SKU selection happens inside _prodigi.js via env vars + metadata
-          // (paper/size etc)
-          posterId,
-          posterTitle,
-          size,
-          paper,
-          mode,
-          printUrl,
+          sku: prodigiSku,
+          copies: qty,
+          assets: [{ url: printUrl }],
         },
       ],
-    });
+    };
 
-    // Store Prodigi order id/status on the local order
-    await env.DB.prepare(
-      `UPDATE orders SET prodigi_order_id = ?, status = ? WHERE id = ?`
-    ).bind(
-      prodigiResult?.id || null,
-      "sent_to_prodigi",
-      sessionId
-    ).run();
+    // Skapa order i Prodigi
+    const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
 
-    return json({ ok: true, stored: true, prodigi: true, prodigi_order_id: prodigiResult?.id || null });
-  } catch (err) {
-    // Keep order saved, but mark error
-    try {
+    // Spara i D1 orders-tabell (om du har D1 bindad som DB)
+    // Om du inte har DB binding i Cloudflare Pages, kommentera bort detta block.
+    if (env.DB) {
+      const userId = session.metadata?.user_id || null; // finns om köp initieras när man är inloggad
+      const total = session.amount_total || 0;
+      const currency = session.currency || "usd";
+
       await env.DB.prepare(
-        `UPDATE orders SET status = ?, prodigi_error = ? WHERE id = ?`
-      ).bind(
-        "prodigi_failed",
-        String(err?.message || err),
-        sessionId
-      ).run();
-    } catch {
-      // ignore secondary error
+        `INSERT INTO orders
+          (id, user_id, stripe_session_id, prodigi_order_id, poster_id, paper, size, mode, quantity, amount_total, currency, status, created_at)
+         VALUES
+          (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+        .bind(
+          crypto.randomUUID(),
+          userId,
+          session.id,
+          prodigiOrder?.id || prodigiOrder?.orderId || null,
+          posterId,
+          paper,
+          size,
+          mode,
+          qty,
+          total,
+          currency,
+          "prodigi_created",
+          Date.now()
+        )
+        .run();
     }
-    return json({ error: `Prodigi create failed: ${err?.message || err}` }, 500);
+
+    return new Response("ok", { status: 200 });
+  } catch (err) {
+    // Stripe kommer retrya om vi returnerar 500
+    return new Response(`Webhook handler error: ${err.message}`, { status: 500 });
   }
 }
