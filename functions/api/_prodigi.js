@@ -1,34 +1,55 @@
-const DEFAULT_LIVE_BASE = "https://api.prodigi.com/v4.0";
-const DEFAULT_SANDBOX_BASE = "https://api.sandbox.prodigi.com/v4.0";
+// functions/api/_prodigi.js
 
-function getBaseUrl(env) {
-  if (env.PRODIGI_BASE_URL) return String(env.PRODIGI_BASE_URL).replace(/\/$/, "");
-  const e = String(env.PRODIGI_ENV || "live").toLowerCase();
-  return e === "sandbox" ? DEFAULT_SANDBOX_BASE : DEFAULT_LIVE_BASE;
-}
+const PRODIGI_API_BASE = "https://api.prodigi.com/v4.0";
 
-export function prodigiSkuFor(env, paper, size) {
-  const p = String(paper || "").toLowerCase();
-  const s = String(size || "").toLowerCase();
+/**
+ * Mappar (paper, size) -> SKU via env vars du redan lagt in:
+ *  - Budget/Standard:
+ *    PRODIGI_SKU_BLP_12X18, PRODIGI_SKU_BLP_18X24
+ *  - Fine art / Enhanced matte:
+ *    PRODIGI_SKU_FAP_12X18, PRODIGI_SKU_FAP_18X24, PRODIGI_SKU_FAP_A2, PRODIGI_SKU_FAP_A3
+ */
+export function prodigiSkuFor(env, { paper, size }) {
+  const p = (paper || "").toLowerCase();
+  const s = (size || "").toLowerCase();
 
-  const key = (p === "fineart" ? "FAP" : "BLP");
-  const sizeKey = s.replace(/[^a-z0-9]/gi, "").toUpperCase(); // a3 -> A3, 12x18 -> 12X18
-  const envVar = `PRODIGI_SKU_${key}_${sizeKey}`;
-  const sku = env[envVar];
-  if (sku) return String(sku);
+  // Normalisera size-nycklar
+  const sizeKey =
+    s === "12x18" || s === "12x18_in" || s === "12x18 in" ? "12X18" :
+    s === "18x24" || s === "18x24_in" || s === "18x24 in" ? "18X24" :
+    s === "a2" ? "A2" :
+    s === "a3" ? "A3" :
+    null;
 
-  // Safe defaults only where we can be confident.
-  if (key === "BLP" && sizeKey === "18X24") return "GLOBAL-BLP-18X24";
-  return null;
-}
+  if (!sizeKey) throw new Error(`Unknown size for Prodigi SKU: "${size}"`);
 
-export async function createProdigiOrder(env, payload) {
-  if (!env.PRODIGI_API_KEY) {
-    throw new Error("Missing PRODIGI_API_KEY env var");
+  // Standard/Budget (BLP) – bara 12x18 och 18x24 enligt dina SKUs
+  if (p === "standard" || p === "budget" || p === "blp") {
+    if (sizeKey === "12X18") return env.PRODIGI_SKU_BLP_12X18;
+    if (sizeKey === "18X24") return env.PRODIGI_SKU_BLP_18X24;
+    throw new Error(`No Budget/Standard SKU for size "${sizeKey}"`);
   }
 
-  const base = getBaseUrl(env);
-  const res = await fetch(`${base}/Orders`, {
+  // Fineart/Enhanced Matte (FAP)
+  if (p === "fineart" || p === "fine_art" || p === "fap") {
+    if (sizeKey === "12X18") return env.PRODIGI_SKU_FAP_12X18;
+    if (sizeKey === "18X24") return env.PRODIGI_SKU_FAP_18X24;
+    if (sizeKey === "A2") return env.PRODIGI_SKU_FAP_A2;
+    if (sizeKey === "A3") return env.PRODIGI_SKU_FAP_A3;
+    throw new Error(`No Fine Art SKU for size "${sizeKey}"`);
+  }
+
+  throw new Error(`Unknown paper "${paper}"`);
+}
+
+/**
+ * Skapar Prodigi-order via API.
+ * OBS: Prodigi kräver att du har payment details i Prodigi-kontot (vilket du nu har lagt in).
+ */
+export async function prodigiCreateOrder(env, payload) {
+  if (!env.PRODIGI_API_KEY) throw new Error("Missing PRODIGI_API_KEY env var");
+
+  const res = await fetch(`${PRODIGI_API_BASE}/orders`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,12 +58,13 @@ export async function createProdigiOrder(env, payload) {
     body: JSON.stringify(payload),
   });
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || data?.outcome === "Failure") {
-    const msg = data?.error?.message || data?.message || `Prodigi order failed (${res.status})`;
-    const detail = data?.error?.details || data?.details;
-    const suffix = detail ? `: ${JSON.stringify(detail).slice(0, 500)}` : "";
-    throw new Error(`${msg}${suffix}`);
+  const text = await res.text();
+  let json;
+  try { json = JSON.parse(text); } catch { json = { raw: text }; }
+
+  if (!res.ok) {
+    throw new Error(`Prodigi API error ${res.status}: ${JSON.stringify(json)}`);
   }
-  return data;
+
+  return json;
 }
