@@ -3,31 +3,6 @@
 import Stripe from "stripe";
 import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
 
-function normalizePaper(paperRaw) {
-  if (!paperRaw) return null;
-  const p = String(paperRaw).trim().toLowerCase();
-  // UI kan skicka standard/fine_art, backend vill ha blp/fap
-  if (p === "blp" || p === "standard") return "blp";
-  if (p === "fap" || p === "fine_art" || p === "fineart" || p === "fine art") return "fap";
-  return p;
-}
-
-/**
- * Normalisera storlekar så de matchar env-namnen och SKU-lookup.
- * Ex: "12X18" -> "12x18", "A2A" -> "a2"
- */
-function normalizeSize(sizeRaw) {
-  if (!sizeRaw) return null;
-  const s = String(sizeRaw).trim().toLowerCase().replace(/\s+/g, "");
-  if (s === "a2a") return "a2"; // legacy-typo
-  return s;
-}
-
-function cleanStr(v) {
-  const s = v == null ? "" : String(v).trim();
-  return s.length ? s : undefined;
-}
-
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -48,7 +23,6 @@ export async function onRequestPost(context) {
 
   let event;
   try {
-    // ✅ Cloudflare kräver async verifiering
     event = await stripe.webhooks.constructEventAsync(body, sig, webhookSecret);
   } catch (err) {
     return new Response(`Webhook signature verification failed: ${err?.message || String(err)}`, {
@@ -56,7 +30,7 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Endast posters
+  // Vi hanterar bara posters
   if (event.type !== "checkout.session.completed") {
     return new Response("ok", { status: 200 });
   }
@@ -66,19 +40,14 @@ export async function onRequestPost(context) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: [
-        "line_items",
-        "payment_intent",
-        "payment_intent.latest_charge",
-        "customer_details",
-      ],
+      expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
     // Metadata från create-poster-checkout-session.js
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const size = normalizeSize(session.metadata?.size || null); // "12x18" / "18x24" / "a2" / "a3"
-    const paper = normalizePaper(session.metadata?.paper || null); // "blp" / "fap"
-    const mode = session.metadata?.mode || null; // "STRICT" / "ART"
+    const size = session.metadata?.size || null;       // "12x18"
+    const paper = session.metadata?.paper || null;     // "standard" / "fine_art"
+    const mode = session.metadata?.mode || null;       // "STRICT" / "ART"
     const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
 
     if (!posterId || !size || !paper || !mode || !printUrl) {
@@ -89,7 +58,7 @@ export async function onRequestPost(context) {
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // Shipping (robust): primärt collected_information.shipping_details
+    // Shipping (robust)
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -97,7 +66,10 @@ export async function onRequestPost(context) {
         ? { name: session.customer_details?.name || "Customer", address: session.customer_details.address }
         : null) ||
       (session.payment_intent?.latest_charge?.shipping
-        ? { name: session.payment_intent.latest_charge.shipping.name, address: session.payment_intent.latest_charge.shipping.address }
+        ? {
+            name: session.payment_intent.latest_charge.shipping.name,
+            address: session.payment_intent.latest_charge.shipping.address,
+          }
         : null);
 
     if (!shippingDetails?.address) {
@@ -106,34 +78,25 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
-    // Bygg address men SKICKA INTE tomma strängar (Prodigi validerar hårt)
-    const address = {
-      line1: cleanStr(addr.line1),
-      townOrCity: cleanStr(addr.city),
-      postalOrZipCode: cleanStr(addr.postal_code),
-      countryCode: cleanStr(addr.country),
-    };
-
-    const line2 = cleanStr(addr.line2);
-    if (line2) address.line2 = line2;
-
-    const state = cleanStr(addr.state);
-    if (state) address.stateOrCounty = state;
-
-    // grundkrav
-    const missing = ["line1", "townOrCity", "postalOrZipCode", "countryCode"].filter((k) => !address[k]);
-    if (missing.length) {
-      throw new Error(`Shipping address missing required fields: ${missing.join(", ")}`);
-    }
-
     const recipient = {
-      name: cleanStr(shippingDetails.name) || cleanStr(session.customer_details?.name) || "Customer",
-      email: cleanStr(session.customer_details?.email),
-      address,
+      name: shippingDetails.name || session.customer_details?.name || "Customer",
+      email: session.customer_details?.email || undefined,
+      address: {
+        line1: addr.line1 || "",
+        line2: addr.line2 ? addr.line2 : undefined,                 // viktigt: inte tom sträng
+        townOrCity: addr.city || "",
+        stateOrCounty: addr.state ? addr.state : undefined,          // viktigt: inte tom sträng
+        postalOrZipCode: addr.postal_code || "",
+        countryCode: addr.country || "",
+      },
     };
 
-    // SKU från env-vars
+    // SKU från env-vars (Cloudflare)
     const prodigiSku = prodigiSkuFor(env, { paper, size });
+
+    // Prodigi sizing: måste vara en tillåten sträng
+    // STRICT = ingen crop, ART = fyll/crop
+    const sizing = mode === "ART" ? "fillPrintArea" : "fitPrintArea";
 
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
@@ -143,11 +106,7 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-
-          // ✅ REQUIRED by Prodigi (Crop/ShrinkToFit etc)
-          sizing: "Crop", // default och vanligast :contentReference[oaicite:1]{index=1}
-
-          // ✅ REQUIRED: assets[*].printArea
+          sizing,
           assets: [{ printArea: "default", url: printUrl }],
         },
       ],
