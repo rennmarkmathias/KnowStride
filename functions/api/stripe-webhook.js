@@ -30,7 +30,6 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Vi hanterar bara posters
   if (event.type !== "checkout.session.completed") {
     return new Response("ok", { status: 200 });
   }
@@ -39,16 +38,31 @@ export async function onRequestPost(context) {
   const sessionId = sessionFromEvent.id;
 
   try {
+    // (Valfritt men bra) Idempotency: om vi redan har sessionen i D1, gör inget mer
+    if (env.DB) {
+      try {
+        const existing = await env.DB
+          .prepare("SELECT id FROM orders WHERE stripe_session_id = ? LIMIT 1")
+          .bind(sessionId)
+          .first();
+        if (existing) return new Response("ok", { status: 200 });
+      } catch (e) {
+        // fortsätt ändå
+        console.error("D1 idempotency check failed:", e);
+      }
+    }
+
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
-    // Metadata från create-poster-checkout-session.js
-    const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const size = session.metadata?.size || null;       // "12x18"
-    const paper = session.metadata?.paper || null;     // "standard" / "fine_art"
-    const mode = session.metadata?.mode || null;       // "STRICT" / "ART"
-    const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
+    const posterId = session.metadata?.poster_id || null;
+    const posterTitle = session.metadata?.poster_title || null;
+    const size = session.metadata?.size || null;
+    const paper = session.metadata?.paper || null;
+    const mode = session.metadata?.mode || null;
+    const printUrl = session.metadata?.print_url || null;
+    const clerkUserId = session.metadata?.clerk_user_id || null;
 
     if (!posterId || !size || !paper || !mode || !printUrl) {
       throw new Error(
@@ -58,7 +72,6 @@ export async function onRequestPost(context) {
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // Shipping (robust)
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -83,20 +96,15 @@ export async function onRequestPost(context) {
       email: session.customer_details?.email || undefined,
       address: {
         line1: addr.line1 || "",
-        line2: addr.line2 ? addr.line2 : undefined,                 // viktigt: inte tom sträng
+        line2: addr.line2 || "",
         townOrCity: addr.city || "",
-        stateOrCounty: addr.state ? addr.state : undefined,          // viktigt: inte tom sträng
+        stateOrCounty: addr.state || "",
         postalOrZipCode: addr.postal_code || "",
         countryCode: addr.country || "",
       },
     };
 
-    // SKU från env-vars (Cloudflare)
     const prodigiSku = prodigiSkuFor(env, { paper, size });
-
-    // Prodigi sizing: måste vara en tillåten sträng
-    // STRICT = ingen crop, ART = fyll/crop
-    const sizing = mode === "ART" ? "fillPrintArea" : "fitPrintArea";
 
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
@@ -106,42 +114,51 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          sizing,
-          assets: [{ printArea: "default", url: printUrl }],
+          assets: [{ url: printUrl }],
         },
       ],
     };
 
     const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
 
-    // Spara i D1 om DB finns
+    // ✅ D1 är “nice-to-have”: om den failar ska vi INTE returnera 500 och trigga Stripe retries
     if (env.DB) {
-      const userId = session.metadata?.user_id || null;
-      const total = session.amount_total || 0;
-      const currency = session.currency || "usd";
+      try {
+        const total = session.amount_total || 0;
+        const currency = session.currency || "usd";
+        const paymentIntentId =
+          typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id || null;
 
-      await env.DB.prepare(
-        `INSERT INTO orders
-          (id, user_id, stripe_session_id, prodigi_order_id, poster_id, paper, size, mode, quantity, amount_total, currency, status, created_at)
-         VALUES
-          (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-      )
-        .bind(
-          crypto.randomUUID(),
-          userId,
-          session.id,
-          prodigiOrder?.id || prodigiOrder?.orderId || null,
-          posterId,
-          paper,
-          size,
-          mode,
-          qty,
-          total,
-          currency,
-          "prodigi_created",
-          Date.now()
+        await env.DB.prepare(
+          `INSERT INTO orders
+            (id, clerk_user_id, email, poster_id, poster_title, size, paper, mode, quantity,
+             amount_total, currency, stripe_session_id, stripe_payment_intent_id,
+             prodigi_order_id, status, created_at)
+           VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         )
-        .run();
+          .bind(
+            crypto.randomUUID(),
+            clerkUserId,
+            session.customer_details?.email || null,
+            posterId,
+            posterTitle,
+            size,
+            paper,
+            mode,
+            qty,
+            total,
+            currency,
+            session.id,
+            paymentIntentId,
+            prodigiOrder?.id || prodigiOrder?.orderId || null,
+            "prodigi_created",
+            new Date().toISOString()
+          )
+          .run();
+      } catch (e) {
+        console.error("D1 insert failed (non-fatal):", e);
+      }
     }
 
     return new Response("ok", { status: 200 });
