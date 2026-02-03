@@ -2,6 +2,46 @@
 
 import Stripe from "stripe";
 import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
+import { sendOrderReceivedEmail } from "./_mail.js";
+
+// Stripe amounts are in the smallest currency unit (e.g. cents). Convert to a
+// major unit number for display/storage.
+function amountToMajor(amountMinor, currency) {
+  const c = String(currency || "").toLowerCase();
+
+  // Common 0-decimal currencies (Stripe treats these as whole units).
+  const zeroDecimal = new Set([
+    "bif",
+    "clp",
+    "djf",
+    "gnf",
+    "jpy",
+    "kmf",
+    "krw",
+    "mga",
+    "pyg",
+    "rwf",
+    "ugx",
+    "vnd",
+    "vuv",
+    "xaf",
+    "xof",
+    "xpf",
+  ]);
+
+  // A few 3-decimal currencies.
+  const threeDecimal = new Set(["bhd", "jod", "kwd", "omr", "tnd"]);
+
+  const n = Number(amountMinor || 0);
+  if (zeroDecimal.has(c)) return n;
+  if (threeDecimal.has(c)) return n / 1000;
+  return n / 100;
+}
+
+function cleanAddressField(v) {
+  const s = (v ?? "").toString().trim();
+  return s.length ? s : null;
+}
 
 export async function onRequestPost(context) {
   const { env, request } = context;
@@ -45,6 +85,13 @@ export async function onRequestPost(context) {
       expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
+    console.log("stripe-webhook", {
+      sessionId: session.id,
+      amount_total: session.amount_total,
+      currency: session.currency,
+      customer_email: session.customer_details?.email,
+    });
+
     // Metadata från create-poster-checkout-session.js
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
     const size = session.metadata?.size || null;       // "12x18"
@@ -78,14 +125,16 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
+    // Prodigi validates that some optional fields are either omitted or non-empty.
+    // So we only include line2/state when they exist.
     const recipient = {
       name: shippingDetails.name || session.customer_details?.name || "Customer",
       email: session.customer_details?.email || undefined,
       address: {
         line1: addr.line1 || "",
-        line2: addr.line2 || "",
+        ...(addr.line2 ? { line2: addr.line2 } : {}),
         townOrCity: addr.city || "",
-        stateOrCounty: addr.state || "",
+        ...(addr.state ? { stateOrCounty: addr.state } : {}),
         postalOrZipCode: addr.postal_code || "",
         countryCode: addr.country || "",
       },
@@ -94,40 +143,26 @@ export async function onRequestPost(context) {
     // SKU från env-vars (Cloudflare)
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // ✅ Idempotens: om DB finns och ordern redan finns, returnera ok (Resend ska inte skapa ny)
+    // --- DB upsert + idempotency ---
+    // We want:
+    //  1) Only ONE Prodigi order per Stripe session (even if Stripe retries or you click "Resend").
+    //  2) Always update the SAME DB row with prodigi_order_id/status.
+    let existing = null;
     if (env.DB) {
-      const existing = await env.DB.prepare(
+      existing = await env.DB.prepare(
         `SELECT id, prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
       )
         .bind(session.id)
         .first();
-
-      if (existing?.id) {
-        return new Response("ok", { status: 200 });
-      }
     }
 
-    // ✅ Prodigi kräver "sizing" och här ska den vara ett giltigt värde
-    // För posters funkar "fillPrintArea" (inte Crop/ShrinkToFit).
-    const prodigiOrderPayload = {
-      merchantReference: `ks_${session.id}`,
-      shippingMethod: "Standard",
-      recipient,
-      items: [
-        {
-          sku: prodigiSku,
-          copies: qty,
-          sizing: "fillPrintArea",
-          assets: [{ url: printUrl }],
-        },
-      ],
-    };
+    // If we already created a Prodigi order for this Stripe session, we're done.
+    if (existing?.prodigi_order_id) {
+      return new Response("ok", { status: 200 });
+    }
 
-    // Skapa order i Prodigi
-    const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
-
-    // Spara i D1 om DB finns
-    if (env.DB) {
+    // Ensure we have a DB row as early as possible.
+    if (env.DB && !existing?.id) {
       const clerkUserId =
         session.metadata?.clerk_user_id ||
         session.metadata?.clerkUserId ||
@@ -135,17 +170,16 @@ export async function onRequestPost(context) {
 
       const email = session.customer_details?.email || null;
 
-      // Stripe amount_total är i minor units (t.ex. cents) → spara i major units
       const currency = (session.currency || "usd").toLowerCase();
       const totalMinor = Number(session.amount_total || 0);
-      const totalMajor = Number.isFinite(totalMinor) ? totalMinor / 100 : 0;
+      const totalMajor = amountToMajor(totalMinor, currency);
 
       await env.DB.prepare(
         `INSERT INTO orders
           (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency, amount_total,
-           stripe_session_id, stripe_payment_intent_id, prodigi_order_id, status)
+           stripe_session_id, stripe_payment_intent_id, status)
          VALUES
-          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
         .bind(
           crypto.randomUUID(),
@@ -160,11 +194,71 @@ export async function onRequestPost(context) {
           totalMajor,
           session.id,
           session.payment_intent || null,
-          prodigiOrder?.response?.id || prodigiOrder?.response?.orderId || null,
           "stripe_received"
         )
         .run();
+
+      existing = await env.DB.prepare(
+        `SELECT id, prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
+      )
+        .bind(session.id)
+        .first();
     }
+
+    // --- Create Prodigi order ---
+    // Prodigi expects sizing to be one of the allowed values. "ShrinkToFit" is the safest default.
+    const prodigiOrderPayload = {
+      merchantReference: `ks_${session.id}`,
+      shippingMethod: "Standard",
+      recipient,
+      items: [
+        {
+          sku: prodigiSku,
+          copies: qty,
+          sizing: "ShrinkToFit",
+          assets: [{ url: printUrl, printArea: "default" }],
+        },
+      ],
+    };
+
+    const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
+    const prodigiOrderId =
+      prodigiOrder?.id ||
+      prodigiOrder?.orderId ||
+      prodigiOrder?.response?.id ||
+      prodigiOrder?.response?.orderId ||
+      null;
+    const prodigiStatus =
+      prodigiOrder?.status ||
+      prodigiOrder?.response?.status ||
+      null;
+
+    // Update the SAME DB row with Prodigi info.
+    if (env.DB && existing?.id) {
+      await env.DB.prepare(
+        `UPDATE orders
+            SET prodigi_order_id = ?,
+                prodigi_status = COALESCE(?, prodigi_status),
+                status = 'prodigi_created'
+          WHERE id = ?`
+      )
+        .bind(prodigiOrderId, prodigiStatus, existing.id)
+        .run();
+    }
+
+    // Optional: email confirmation to the customer.
+    // Sends only if email provider env vars are configured.
+    await sendOrderReceivedEmail(env, {
+      to: session.customer_details?.email || null,
+      name: recipient.name,
+      posterTitle,
+      size,
+      paper,
+      mode,
+      amountTotalMajor: totalMajor,
+      currency,
+      prodigiOrderId,
+    });
 
     return new Response("ok", { status: 200 });
   } catch (err) {
