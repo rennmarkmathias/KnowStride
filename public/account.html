@@ -27,8 +27,17 @@
       <div id="userArea" style="display:none;">
         <div class="callout" style="margin-top:14px;">
           <div class="muted small">Signed in as</div>
-          <div id="userId" style="font-weight:800;"></div>
-          <div style="margin-top:10px;" id="userButton"></div>
+
+          <!-- Show email instead of userId -->
+          <div id="userEmail" style="font-weight:800;"></div>
+
+          <!-- Logout button (standard UX) -->
+          <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button class="btn" id="logoutBtn" type="button">Log out</button>
+
+            <!-- Optional: keep Clerk user button if you like -->
+            <div id="userButton"></div>
+          </div>
         </div>
 
         <h2 style="margin-top:22px;">Orders</h2>
@@ -74,12 +83,34 @@
         if (user) {
           if (loginLink) loginLink.style.display = "none";
           userArea.style.display = "block";
-          document.getElementById("userId").textContent = user.id;
-          Clerk.mountUserButton(document.getElementById("userButton"));
+
+          // ✅ Display email instead of user.id
+          const email =
+            user?.primaryEmailAddress?.emailAddress ||
+            user?.emailAddresses?.[0]?.emailAddress ||
+            "";
+          document.getElementById("userEmail").textContent = email ? email : "Signed in";
+
+          // ✅ Logout button
+          const logoutBtn = document.getElementById("logoutBtn");
+          logoutBtn.onclick = async () => {
+            try {
+              await Clerk.signOut();
+            } finally {
+              window.location.href = "/"; // or "/account" if you prefer
+            }
+          };
+
+          // Optional: keep Clerk user button mounted
+          const userButtonEl = document.getElementById("userButton");
+          if (userButtonEl) {
+            Clerk.mountUserButton(userButtonEl);
+          }
 
           // Fetch orders for this Clerk user
           const token = await Clerk.session.getToken();
-          const primaryEmail = user?.primaryEmailAddress?.emailAddress || "";
+          const primaryEmail = email || "";
+
           const res = await fetch("/api/orders", {
             headers: token
               ? {
@@ -88,9 +119,10 @@
                 }
               : {},
           });
-          const data = await res.json().catch(() => ({}));
 
+          const data = await res.json().catch(() => ({}));
           const ordersArea = document.getElementById("ordersArea");
+
           if (!res.ok) {
             ordersArea.textContent = data?.error || "Could not load orders.";
             return;
