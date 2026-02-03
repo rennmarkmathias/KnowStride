@@ -111,12 +111,61 @@ export async function onRequestPost(context) {
           sku: prodigiSku,
           copies: qty,
           assets: [{ url: printUrl, printArea: "default" }],
-          sizing: "fillPrintArea", // ✅ Prodigi accepterar "Fill" (inte "Crop")
+          // Låt Prodigi använda sin default sizing. Vi har sett att explicita värden
+          // kan trigga valideringsfel beroende på produkt.
         },
       ],
     };
 
-    // ✅ Skapa order i Prodigi – men duplicate ska inte ge 500
+    // --- Idempotency (viktigt) ---
+    // Stripe kan skicka samma webhook igen (retries / "Resend" i dashboard).
+    // Om vi skapar Prodigi-order varje gång får du dubletter.
+    // Lösning: om vi redan har en prodigi_order_id sparad för stripe_session_id,
+    // skapa inte en ny Prodigi-order.
+    if (env.DB) {
+      const existing = await env.DB
+        .prepare(`SELECT prodigi_order_id, status FROM orders WHERE stripe_session_id = ? LIMIT 1`)
+        .bind(session.id)
+        .first();
+
+      if (existing?.prodigi_order_id) {
+        return new Response("ok", { status: 200 });
+      }
+
+      // "Reservera" session-id i DB innan vi anropar Prodigi.
+      // Detta kräver UNIQUE index på orders(stripe_session_id).
+      // Om raden redan finns (retry) så gör INSERT OR IGNORE inget.
+      const clerkUserId = session.metadata?.clerk_user_id || null;
+      const email = session.customer_details?.email || session.customer_email || null;
+      const totalMajor = (session.amount_total || 0) / 100;
+      const currency = session.currency || "usd";
+
+      await env.DB.prepare(
+        `INSERT OR IGNORE INTO orders
+          (id, clerk_user_id, email, poster_id, poster_title, size, paper, mode,
+           amount_total, currency, stripe_session_id, status, created_at)
+         VALUES
+          (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+        .bind(
+          crypto.randomUUID(),
+          clerkUserId,
+          email,
+          posterId,
+          posterTitle,
+          size,
+          paper,
+          mode,
+          totalMajor,
+          currency,
+          session.id,
+          "stripe_received",
+          nowMs()
+        )
+        .run();
+    }
+
+    // ✅ Skapa order i Prodigi (nu är vi skyddade mot dubletter via DB)
     const prodigiResult = await prodigiCreateOrder(env, prodigiOrderPayload);
 
     // prodigiResult.response kan vara:
@@ -130,53 +179,17 @@ export async function onRequestPost(context) {
     // Status vi sparar internt
     const internalStatus = prodigiResult.duplicate ? "prodigi_already_created" : "prodigi_created";
 
-    // ✅ Spara i D1 om DB finns – använd UPSERT så Resend inte sabbar
+    // ✅ Uppdatera orderraden i D1 (om DB finns)
     if (env.DB) {
-      const userId = session.metadata?.user_id || null;
-      const total = session.amount_total || 0; // Stripe amount_total är i MINSTA enheten (cent)
-      const currency = session.currency || "usd";
-      const email = session.customer_details?.email || null;
-
-      // OBS: ON CONFLICT kräver att stripe_session_id har UNIQUE index (ni har idx_orders_stripe_session_id)
-      await env.DB.prepare(
-        `
-        INSERT INTO orders
-          (id, user_id, email, clerk_user_id, poster_id, poster_title, size, paper, mode,
-           amount_total, currency, stripe_session_id, prodigi_order_id, status, created_at)
-        VALUES
-          (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(stripe_session_id) DO UPDATE SET
-          user_id=excluded.user_id,
-          email=excluded.email,
-          clerk_user_id=excluded.clerk_user_id,
-          poster_id=excluded.poster_id,
-          poster_title=excluded.poster_title,
-          size=excluded.size,
-          paper=excluded.paper,
-          mode=excluded.mode,
-          amount_total=excluded.amount_total,
-          currency=excluded.currency,
-          prodigi_order_id=COALESCE(excluded.prodigi_order_id, orders.prodigi_order_id),
-          status=excluded.status
-        `
-      )
-        .bind(
-          crypto.randomUUID(),
-          userId,
-          email,
-          userId,          // om ni använder clerk_user_id = user_id (som innan)
-          posterId,
-          posterTitle,
-          size,
-          paper,
-          mode,
-          total,
-          currency,
-          session.id,
-          prodigiOrderId,
-          internalStatus,
-          nowMs()
+      await env.DB
+        .prepare(
+          `UPDATE orders
+             SET prodigi_order_id = COALESCE(?, prodigi_order_id),
+                 status = ?,
+                 poster_title = COALESCE(poster_title, ?)
+           WHERE stripe_session_id = ?`
         )
+        .bind(prodigiOrderId, internalStatus, posterTitle, session.id)
         .run();
     }
 
