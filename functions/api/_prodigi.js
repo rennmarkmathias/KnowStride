@@ -20,6 +20,19 @@ export function prodigiSkuFor(env, { paper, size }) {
   return sku;
 }
 
+function looksLikeDuplicateProdigiError(status, json) {
+  if (status === 409) return true;
+
+  const txt = JSON.stringify(json || {}).toLowerCase();
+  // Vi matchar brett eftersom Prodigi kan formulera detta lite olika
+  return (
+    txt.includes("already exists") ||
+    txt.includes("duplicate") ||
+    txt.includes("already been") ||
+    txt.includes("merchantreference") && txt.includes("exists")
+  );
+}
+
 export async function prodigiCreateOrder(env, payload) {
   const apiKey = env.PRODIGI_API_KEY;
   if (!apiKey) throw new Error("Missing PRODIGI_API_KEY env var");
@@ -38,7 +51,12 @@ export async function prodigiCreateOrder(env, payload) {
   try { json = JSON.parse(text); } catch { json = { raw: text }; }
 
   if (!res.ok) {
+    // ✅ Om ordern redan finns (pga Resend / tidigare 500) – behandla som OK.
+    if (looksLikeDuplicateProdigiError(res.status, json)) {
+      return { ok: true, duplicate: true, response: json };
+    }
     throw new Error(`Prodigi create order failed (${res.status}): ${JSON.stringify(json)}`);
   }
-  return json;
+
+  return { ok: true, duplicate: false, response: json };
 }
