@@ -28,7 +28,13 @@ CREATE TABLE IF NOT EXISTS orders (
   amount_total REAL,
   stripe_session_id TEXT,
   prodigi_order_id TEXT,
-  status TEXT DEFAULT 'paid'
+  status TEXT DEFAULT 'paid',
+  -- Optional fulfillment fields (updated later by Prodigi webhooks)
+  prodigi_status TEXT,
+  tracking_number TEXT,
+  tracking_url TEXT,
+  shipped_at TEXT,
+  updated_at TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_orders_clerk_user_id ON orders(clerk_user_id);
