@@ -40,6 +40,10 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE INDEX IF NOT EXISTS idx_orders_clerk_user_id ON orders(clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_stripe_session_id ON orders(stripe_session_id);
 
+-- Idempotency: en Stripe checkout session ska bara ge en order.
+-- Detta gör att webhook-retries / "Resend" inte kan skapa duplicates i DB.
+CREATE UNIQUE INDEX IF NOT EXISTS ux_orders_stripe_session_id ON orders(stripe_session_id);
+
 -- Stripe events/purchases for bookkeeping
 CREATE TABLE IF NOT EXISTS purchases (
   id TEXT PRIMARY KEY,
