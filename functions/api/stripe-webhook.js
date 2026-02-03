@@ -111,8 +111,9 @@ export async function onRequestPost(context) {
           sku: prodigiSku,
           copies: qty,
           assets: [{ url: printUrl, printArea: "default" }],
-          // Låt Prodigi använda sin default sizing. Vi har sett att explicita värden
-          // kan trigga valideringsfel beroende på produkt.
+          // Vissa Prodigi-SKU:er (t.ex. ART-*) kräver att "sizing" skickas.
+          // "ShrinkToFit" är den säkra defaulten (undviker oväntad crop).
+          sizing: env.PRODIGI_SIZING || "ShrinkToFit",
         },
       ],
     };
