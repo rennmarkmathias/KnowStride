@@ -79,8 +79,14 @@
 
           // Fetch orders for this Clerk user
           const token = await Clerk.session.getToken();
+          const primaryEmail = user?.primaryEmailAddress?.emailAddress || "";
           const res = await fetch("/api/orders", {
-            headers: token ? { Authorization: `Bearer ${token}` } : {}
+            headers: token
+              ? {
+                  Authorization: `Bearer ${token}`,
+                  "X-User-Email": primaryEmail,
+                }
+              : {},
           });
           const data = await res.json().catch(() => ({}));
 
@@ -116,7 +122,13 @@
                     <div class="muted small">${when}</div>
                   </div>
                 </div>
-                <div class="muted small" style="margin-top:8px;">Status: ${status}${o.prodigi_order_id ? ` · Print ref: ${o.prodigi_order_id}` : ""}</div>
+                <div class="muted small" style="margin-top:8px;">
+                  Status: ${status}
+                  ${o.prodigi_status ? ` · Prodigi: ${o.prodigi_status}` : ""}
+                  ${o.tracking_url ? ` · <a href="${o.tracking_url}" target="_blank" rel="noopener">Track package</a>` : ""}
+                  ${!o.tracking_url && o.tracking_number ? ` · Tracking: ${o.tracking_number}` : ""}
+                  ${o.prodigi_order_id ? ` · Print ref: ${o.prodigi_order_id}` : ""}
+                </div>
               </div>
             `;
           }).join("");
