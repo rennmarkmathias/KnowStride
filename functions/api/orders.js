@@ -8,7 +8,7 @@ async function getClerkEmails(env, userId) {
   const secret = env.CLERK_SECRET_KEY;
   if (!secret) throw new Error("Missing CLERK_SECRET_KEY");
 
-  const res = await fetch(`https://api.clerk.com/v1/users/${userId}`, {
+  const res = await fetch(`https://api.clerk.com/v1/users/${encodeURIComponent(userId)}`, {
     headers: {
       Authorization: `Bearer ${secret}`,
       "Content-Type": "application/json",
@@ -37,7 +37,20 @@ async function getClerkEmails(env, userId) {
 }
 
 export async function onRequestGet({ request, env }) {
-  const userId = await requireClerkAuth(request, env);
+  const auth = await requireClerkAuth(request, env);
+
+  // requireClerkAuth kan råka returnera ett objekt — vi behöver en ren sträng-id
+  const userId =
+    typeof auth === "string"
+      ? auth
+      : (auth?.userId || auth?.id || auth?.user?.id || null);
+
+  if (!userId) {
+    return new Response(JSON.stringify({ ok: false, error: "Not authenticated" }), {
+      status: 401,
+      headers: { "content-type": "application/json" },
+    });
+  }
 
   if (!env.DB) {
     return new Response(JSON.stringify({ ok: false, error: "DB binding missing" }), {
