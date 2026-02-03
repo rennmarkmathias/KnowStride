@@ -80,6 +80,43 @@
         const guestArea = document.getElementById("guestArea");
         const loginLink = document.getElementById("loginLink");
 
+        // Helper: map internal statuses to friendly labels
+        function friendlyStatus(raw) {
+          const s = String(raw || "").toLowerCase();
+          const map = {
+            paid: "Order received",
+            prodigi_created: "Order received",
+            submitted: "In production",
+            in_production: "In production",
+            shipped: "Shipped",
+            delivered: "Delivered",
+            cancelled: "Cancelled",
+            canceled: "Cancelled",
+            refunded: "Refunded",
+          };
+          return map[s] || (s ? s.replace(/_/g, " ") : "Order received");
+        }
+
+        // Helper: format currency correctly (Stripe/D1 often stores cents)
+        function formatMoney(amountTotal, currency) {
+          if (amountTotal == null) return "";
+          const ccy = String(currency || "usd").toUpperCase();
+          const n = Number(amountTotal);
+          if (Number.isNaN(n)) return "";
+
+          // Most Stripe amounts are in the smallest currency unit (USD cents).
+          // So 100 => $1.00, not $100.00.
+          const isZeroDecimal = ["JPY", "KRW"].includes(ccy);
+          const value = isZeroDecimal ? n : n / 100;
+
+          try {
+            return new Intl.NumberFormat(undefined, { style: "currency", currency: ccy }).format(value);
+          } catch {
+            // Fallback if Intl doesn't like the currency for some reason
+            return (ccy === "USD" ? "$" : (ccy + " ")) + value.toFixed(2);
+          }
+        }
+
         if (user) {
           if (loginLink) loginLink.style.display = "none";
           userArea.style.display = "block";
@@ -135,35 +172,48 @@
           }
 
           ordersArea.classList.remove("muted");
-          ordersArea.innerHTML = orders.map(o => {
-            const dt = new Date(o.created_at);
-            const when = isNaN(dt.getTime()) ? "" : dt.toLocaleString();
-            const amount = (o.amount_total != null) ? `$${Number(o.amount_total).toFixed(2)}` : "";
-            const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
-            const labelSize = (o.size || "").toUpperCase();
-            const status = o.status || "";
-            return `
-              <div class="card" style="margin-top:12px;">
-                <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                  <div>
-                    <div style="font-weight:800;">${(o.poster_title || o.poster_id || "Poster")}</div>
-                    <div class="muted small">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
+          ordersArea.innerHTML = orders
+            .map((o) => {
+              const dt = new Date(o.created_at);
+              const when = isNaN(dt.getTime()) ? "" : dt.toLocaleString();
+
+              const amount = formatMoney(o.amount_total, o.currency);
+              const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
+              const labelSize = (o.size || "").toUpperCase();
+
+              const statusLabel = friendlyStatus(o.status);
+
+              // Optional extra info (only show if present)
+              const details = [];
+              if (o.prodigi_status) details.push(`Production: ${o.prodigi_status}`);
+              if (o.tracking_url) {
+                details.push(`<a href="${o.tracking_url}" target="_blank" rel="noopener">Track package</a>`);
+              } else if (o.tracking_number) {
+                details.push(`Tracking: ${o.tracking_number}`);
+              }
+              if (o.prodigi_order_id) details.push(`Print ref: ${o.prodigi_order_id}`);
+
+              const detailsHtml = details.length ? ` · ${details.join(" · ")}` : "";
+
+              return `
+                <div class="card" style="margin-top:12px;">
+                  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                    <div>
+                      <div style="font-weight:800;">${(o.poster_title || o.poster_id || "Poster")}</div>
+                      <div class="muted small">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
+                    </div>
+                    <div style="text-align:right;">
+                      <div style="font-weight:800;">${amount}</div>
+                      <div class="muted small">${when}</div>
+                    </div>
                   </div>
-                  <div style="text-align:right;">
-                    <div style="font-weight:800;">${amount}</div>
-                    <div class="muted small">${when}</div>
+                  <div class="muted small" style="margin-top:8px;">
+                    Status: ${statusLabel}${detailsHtml}
                   </div>
                 </div>
-                <div class="muted small" style="margin-top:8px;">
-                  Status: ${status}
-                  ${o.prodigi_status ? ` · Prodigi: ${o.prodigi_status}` : ""}
-                  ${o.tracking_url ? ` · <a href="${o.tracking_url}" target="_blank" rel="noopener">Track package</a>` : ""}
-                  ${!o.tracking_url && o.tracking_number ? ` · Tracking: ${o.tracking_number}` : ""}
-                  ${o.prodigi_order_id ? ` · Print ref: ${o.prodigi_order_id}` : ""}
-                </div>
-              </div>
-            `;
-          }).join("");
+              `;
+            })
+            .join("");
         } else {
           guestArea.style.display = "block";
         }
