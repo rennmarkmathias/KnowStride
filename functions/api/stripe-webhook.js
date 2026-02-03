@@ -3,6 +3,10 @@
 import Stripe from "stripe";
 import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
 
+function nowMs() {
+  return Date.now();
+}
+
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -30,7 +34,6 @@ export async function onRequestPost(context) {
     });
   }
 
-  // Vi hanterar bara completed-checkouts
   if (event.type !== "checkout.session.completed") {
     return new Response("ok", { status: 200 });
   }
@@ -39,25 +42,16 @@ export async function onRequestPost(context) {
   const sessionId = sessionFromEvent.id;
 
   try {
-    // Hämta "riktiga" sessionen + line_items + shipping etc
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
-    // --- Metadata (från create-poster-checkout-session.js) ---
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const posterTitle = session.metadata?.poster_title || session.metadata?.posterTitle || null;
-
-    // size: "12x18", "18x24", "A2", "A3" etc
-    const size = session.metadata?.size || null;
-
-    // paper: t.ex "standard" / "fineart" (eller "blp"/"fap" om du kör så)
-    const paper = session.metadata?.paper || null;
-
-    // mode: "STRICT" / "ART" etc
-    const mode = session.metadata?.mode || null;
-
+    const size = session.metadata?.size || null;        // "12x18" / "a2a"
+    const paper = session.metadata?.paper || null;      // "standard" / "fineart" / "blp" / "fap"
+    const mode = session.metadata?.mode || null;        // "STRICT" / "ART"
     const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
+    const posterTitle = session.metadata?.poster_title || session.metadata?.posterTitle || null;
 
     if (!posterId || !size || !paper || !mode || !printUrl) {
       throw new Error(
@@ -67,7 +61,6 @@ export async function onRequestPost(context) {
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // --- Shipping: robust ---
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -84,149 +77,103 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
-    // Prodigi är kinkig med whitespace/empty: skicka inte tomma fält
-    const clean = (v) => {
-      const s = String(v ?? "").trim();
-      return s.length ? s : null;
-    };
-
     const recipient = {
-      name: clean(shippingDetails.name) || clean(session.customer_details?.name) || "Customer",
-      email: clean(session.customer_details?.email) || undefined,
+      name: shippingDetails.name || session.customer_details?.name || "Customer",
+      email: session.customer_details?.email || undefined,
       address: {
-        line1: clean(addr.line1) || "",
-        line2: clean(addr.line2) || undefined,
-        townOrCity: clean(addr.city) || "",
-        stateOrCounty: clean(addr.state) || undefined,
-        postalOrZipCode: clean(addr.postal_code) || "",
-        countryCode: clean(addr.country) || "",
+        line1: (addr.line1 || "").trim(),
+        line2: (addr.line2 || "").trim(),
+        townOrCity: (addr.city || "").trim(),
+        stateOrCounty: (addr.state || "").trim(),
+        postalOrZipCode: (addr.postal_code || "").trim(),
+        countryCode: (addr.country || "").trim(),
       },
     };
 
-    // --- Idempotens (Steg 2) ---
-    // 1) Om vi har DB: kolla om order redan finns för denna session
-    // 2) Försök reservera raden (processing) före Prodigi-create
-    //    Detta blir "race-safe" om du kör UNIQUE index på stripe_session_id.
-    const clerkUserId =
-      clean(session.metadata?.clerk_user_id) ||
-      clean(session.metadata?.user_id) ||
-      null;
-
-    const emailForGuest = clean(session.customer_details?.email) || null;
-
-    const amountTotal = session.amount_total ?? null;   // i minsta enhet (USD cents)
-    const currency = session.currency || "usd";
-    const paymentIntentId = session.payment_intent?.id || session.payment_intent || null;
-
-    if (env.DB) {
-      // A) Snabb-check: finns redan en rad?
-      const existing = await env.DB
-        .prepare(`SELECT id, prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`)
-        .bind(session.id)
-        .first();
-
-      if (existing?.prodigi_order_id) {
-        // Redan behandlad => idempotent 200
-        return new Response("ok", { status: 200 });
-      }
-
-      // B) Reservera sessionen (om unique index finns blir detta race-safe)
-      // Om någon annan redan reserverat/skapade så får vi conflict/do nothing,
-      // och då kan vi bara returnera 200.
-      try {
-        await env.DB
-          .prepare(`
-            INSERT INTO orders (
-              id, created_at, email, clerk_user_id,
-              poster_id, poster_title, size, paper, mode,
-              currency, amount_total, stripe_session_id, stripe_payment_intent_id,
-              status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(stripe_session_id) DO NOTHING
-          `)
-          .bind(
-            crypto.randomUUID(),
-            Date.now(),
-            emailForGuest,
-            clerkUserId,
-            posterId,
-            posterTitle,
-            size,
-            paper,
-            mode,
-            currency,
-            amountTotal,
-            session.id,
-            paymentIntentId,
-            "processing"
-          )
-          .run();
-
-        // Efter insert: om någon annan hann före, då finns raden nu.
-        const rowNow = await env.DB
-          .prepare(`SELECT id, prodigi_order_id, status FROM orders WHERE stripe_session_id = ? LIMIT 1`)
-          .bind(session.id)
-          .first();
-
-        if (rowNow?.prodigi_order_id) {
-          return new Response("ok", { status: 200 });
-        }
-
-        // Om status inte är processing kan den vara cancelled/refunded etc.
-        // Men normalt: fortsätt till Prodigi-create.
-      } catch (e) {
-        // Om DB bråkar här: vi kan inte garantera idempotens.
-        // Men det är bättre att faila hårt än att skapa dubletter.
-        throw new Error(`DB reservation failed: ${e?.message || String(e)}`);
-      }
-    }
-
-    // --- SKU från env-vars ---
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // --- Skapa Prodigi order ---
+    // Idempotency “nyckel” hos oss
+    const merchantReference = `ks_${session.id}`;
+
     const prodigiOrderPayload = {
-      merchantReference: `ks_${session.id}`,
+      merchantReference,
       shippingMethod: "Standard",
       recipient,
       items: [
         {
           sku: prodigiSku,
           copies: qty,
-          assets: [
-            // Prodigi kräver assets + printArea (default funkar för posters)
-            { url: printUrl, printArea: "default" },
-          ],
-          // sizing ska INTE skickas om din Prodigi-product inte stödjer det.
-          // (Vi skickar ingen "Crop" här.)
+          assets: [{ url: printUrl, printArea: "default" }],
+          sizing: "Fill", // ✅ Prodigi accepterar "Fill" (inte "Crop")
         },
       ],
     };
 
-    const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
-    const prodigiOrderId = prodigiOrder?.id || prodigiOrder?.orderId || null;
+    // ✅ Skapa order i Prodigi – men duplicate ska inte ge 500
+    const prodigiResult = await prodigiCreateOrder(env, prodigiOrderPayload);
 
-    // --- Uppdatera DB (efter lyckad Prodigi-create) ---
+    // prodigiResult.response kan vara:
+    // - skapad order (har ofta id/orderId)
+    // - duplicate (saknar kanske id)
+    const prodigiOrderId =
+      prodigiResult?.response?.id ||
+      prodigiResult?.response?.orderId ||
+      null;
+
+    // Status vi sparar internt
+    const internalStatus = prodigiResult.duplicate ? "prodigi_already_created" : "prodigi_created";
+
+    // ✅ Spara i D1 om DB finns – använd UPSERT så Resend inte sabbar
     if (env.DB) {
-      try {
-        await env.DB
-          .prepare(`
-            UPDATE orders
-            SET
-              prodigi_order_id = ?,
-              status = ?,
-              updated_at = ?
-            WHERE stripe_session_id = ?
-          `)
-          .bind(prodigiOrderId, "prodigi_created", Date.now(), session.id)
-          .run();
-      } catch (e) {
-        // Viktigt: returnera ändå 200 så Stripe inte retry:ar och skapar dubletter.
-        // Du kan alltid se ordern i Prodigi ändå.
-        return new Response(`ok (db update failed: ${e?.message || String(e)})`, { status: 200 });
-      }
+      const userId = session.metadata?.user_id || null;
+      const total = session.amount_total || 0; // Stripe amount_total är i MINSTA enheten (cent)
+      const currency = session.currency || "usd";
+      const email = session.customer_details?.email || null;
+
+      // OBS: ON CONFLICT kräver att stripe_session_id har UNIQUE index (ni har idx_orders_stripe_session_id)
+      await env.DB.prepare(
+        `
+        INSERT INTO orders
+          (id, user_id, email, clerk_user_id, poster_id, poster_title, size, paper, mode,
+           amount_total, currency, stripe_session_id, prodigi_order_id, status, created_at)
+        VALUES
+          (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(stripe_session_id) DO UPDATE SET
+          user_id=excluded.user_id,
+          email=excluded.email,
+          clerk_user_id=excluded.clerk_user_id,
+          poster_id=excluded.poster_id,
+          poster_title=excluded.poster_title,
+          size=excluded.size,
+          paper=excluded.paper,
+          mode=excluded.mode,
+          amount_total=excluded.amount_total,
+          currency=excluded.currency,
+          prodigi_order_id=COALESCE(excluded.prodigi_order_id, orders.prodigi_order_id),
+          status=excluded.status
+        `
+      )
+        .bind(
+          crypto.randomUUID(),
+          userId,
+          email,
+          userId,          // om ni använder clerk_user_id = user_id (som innan)
+          posterId,
+          posterTitle,
+          size,
+          paper,
+          mode,
+          total,
+          currency,
+          session.id,
+          prodigiOrderId,
+          internalStatus,
+          nowMs()
+        )
+        .run();
     }
 
+    // ✅ Viktigt: alltid 200 här så Stripe slutar retry:a på “duplicate”
     return new Response("ok", { status: 200 });
   } catch (err) {
     return new Response(`Webhook handler error: ${err?.message || String(err)}`, { status: 500 });
