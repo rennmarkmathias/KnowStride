@@ -77,17 +77,24 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
+    const address = {
+      line1: (addr.line1 || "").trim(),
+      townOrCity: (addr.city || "").trim(),
+      postalOrZipCode: (addr.postal_code || "").trim(),
+      countryCode: (addr.country || "").trim(),
+    };
+
+    // Prodigi vill inte ha tomma strängar för valfria fält (line2/stateOrCounty).
+    const line2 = (addr.line2 || "").trim();
+    if (line2) address.line2 = line2;
+
+    const state = (addr.state || "").trim();
+    if (state) address.stateOrCounty = state;
+
     const recipient = {
-      name: shippingDetails.name || session.customer_details?.name || "Customer",
+      name: (shippingDetails.name || session.customer_details?.name || "Customer").trim(),
       email: session.customer_details?.email || undefined,
-      address: {
-        line1: (addr.line1 || "").trim(),
-        line2: (addr.line2 || "").trim(),
-        townOrCity: (addr.city || "").trim(),
-        stateOrCounty: (addr.state || "").trim(),
-        postalOrZipCode: (addr.postal_code || "").trim(),
-        countryCode: (addr.country || "").trim(),
-      },
+      address,
     };
 
     const prodigiSku = prodigiSkuFor(env, { paper, size });
@@ -104,7 +111,7 @@ export async function onRequestPost(context) {
           sku: prodigiSku,
           copies: qty,
           assets: [{ url: printUrl, printArea: "default" }],
-          sizing: "Fill", // ✅ Prodigi accepterar "Fill" (inte "Crop")
+          sizing: "fillPrintArea", // ✅ Prodigi accepterar "Fill" (inte "Crop")
         },
       ],
     };
