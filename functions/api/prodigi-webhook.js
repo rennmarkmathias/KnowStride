@@ -1,4 +1,6 @@
 // functions/api/prodigi-webhook.js
+
+import { sendOrderShippedEmail } from "./_mail.js";
 //
 // Optional: receive order status updates from Prodigi and update D1 so customers can
 // see tracking/status in their account.
@@ -86,6 +88,20 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: true, note: "DB not configured" }, 200);
   }
 
+  // Fetch existing order row (for email + to detect "first time" tracking update)
+  let existing = null;
+  if (prodigiOrderId) {
+    const r = await env.DB.prepare(
+      `SELECT id, email, poster_title, tracking_number, tracking_url
+       FROM orders
+       WHERE prodigi_order_id = ?
+       LIMIT 1`
+    )
+      .bind(prodigiOrderId)
+      .first();
+    existing = r || null;
+  }
+
   // Try update by Prodigi order id first, then fallback to merchantReference ks_<stripeSessionId>
   let updated = 0;
   if (prodigiOrderId) {
@@ -117,6 +133,37 @@ export async function onRequestPost(context) {
       .bind(status, trackingNumber, trackingUrl, shippedAt, stripeSessionId)
       .run();
     updated = r?.meta?.changes || 0;
+
+    // If we had to fallback to stripe_session_id, we can also fetch the row now
+    if (!existing) {
+      const row = await env.DB.prepare(
+        `SELECT id, email, poster_title, tracking_number, tracking_url
+         FROM orders
+         WHERE stripe_session_id = ?
+         LIMIT 1`
+      )
+        .bind(stripeSessionId)
+        .first();
+      existing = row || null;
+    }
+  }
+
+  // Optional: shipping notification email if tracking just appeared
+  // (No-op unless RESEND_API_KEY + MAIL_FROM are configured.)
+  if (
+    updated &&
+    existing?.email &&
+    (trackingUrl || trackingNumber) &&
+    !existing.tracking_url &&
+    !existing.tracking_number
+  ) {
+    await sendOrderShippedEmail(env, {
+      to: existing.email,
+      posterTitle: existing.poster_title || "Your poster",
+      trackingUrl: trackingUrl || undefined,
+      trackingNumber: trackingNumber || undefined,
+      prodigiOrderId: prodigiOrderId || undefined,
+    });
   }
 
   return jsonResponse({ ok: true, updated }, 200);
