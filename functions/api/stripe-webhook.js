@@ -21,28 +21,20 @@ function asText(v) {
  *
  * Vi mappar vanliga termer till dessa, och defaultar till "fill".
  */
-function normalizeSizing(input) {
-  // Prodigi's enum is case-sensitive.
-  // In practice the accepted values are:
-  //   - "Crop"        (fill the print area)
-  //   - "ShrinkToFit" (fit inside the print area)
-  // Stripe/our UI may send: crop/fill/fit/shrink-to-fit/etc.
-  const raw = (asText(input) || "").trim().toLowerCase();
+function normalizeSizing(mode, provided = "") {
+  // Prodigi accepts e.g. "fillPrintArea" or "fitPrintArea"
+  const m = String(mode || "").toUpperCase();
+  const p = String(provided || "").toLowerCase();
 
-  if (!raw) return ""; // let caller decide default per mode
+  // STRICT = fyll tryckytan (crop)
+  if (m === "STRICT") return "fillPrintArea";
 
-  if (raw === "crop" || raw === "fill" || raw === "cropped") return "Crop";
+  // Om du någon gång skickar in något via metadata:
+  if (p.includes("fill") || p.includes("crop")) return "fillPrintArea";
 
-  if (
-    raw === "fit" ||
-    raw === "shrinktofit" ||
-    raw === "shrink_to_fit" ||
-    raw === "shrink-to-fit" ||
-    raw === "shrink" ||
-    raw === "contain"
-  ) {
-    return "ShrinkToFit";
-  }
+  // Default = passa in i tryckytan (fit)
+  return "fitPrintArea";
+}
 
   // If someone already sends the correct casing
   if (input === "Crop" || input === "ShrinkToFit") return input;
