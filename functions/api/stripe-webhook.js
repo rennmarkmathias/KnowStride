@@ -1,19 +1,38 @@
 // functions/api/stripe-webhook.js
-
 import Stripe from "stripe";
 import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
 
-// hjälp: D1 gillar inte objects
 function asText(v) {
-  if (v === undefined) return null;
-  if (v === null) return null;
-  const t = typeof v;
-  if (t === "string" || t === "number" || t === "boolean") return String(v);
+  if (v == null) return null;
+  if (typeof v === "string") return v;
+  if (typeof v === "number" || typeof v === "boolean") return String(v);
   try {
     return JSON.stringify(v);
   } catch {
     return String(v);
   }
+}
+
+/**
+ * Build Prodigi sizing value.
+ * Prodigi is picky about allowed values; we normalize inputs.
+ * If Prodigi still complains, we only need to tweak the returned strings here.
+ */
+function normalizeSizing(input) {
+  const raw = (asText(input) || "").trim();
+  const k = raw.toLowerCase();
+
+  // Common names people use:
+  // - crop
+  // - shrinktofit / shrink_to_fit / fit
+  if (!k) return "crop";
+
+  if (k === "crop") return "crop";
+  if (k === "fit" || k === "shrinktofit" || k === "shrink_to_fit") return "shrinkToFit";
+  if (k === "shrinktofit" || k === "shrink-to-fit") return "shrinkToFit";
+
+  // Fallback: try a safe default
+  return "crop";
 }
 
 export async function onRequestPost(context) {
@@ -55,12 +74,20 @@ export async function onRequestPost(context) {
       expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
+    // Metadata från create-poster-checkout-session.js
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const posterTitle = session.metadata?.poster_title || null;
+    const posterTitle = session.metadata?.poster_title || session.metadata?.posterTitle || null;
     const size = session.metadata?.size || null;       // "12x18"
-    const paper = session.metadata?.paper || null;     // "standard" / "fineart"
+    const paper = session.metadata?.paper || null;     // "standard" / "fineart" etc
     const mode = session.metadata?.mode || null;       // "STRICT" / "ART"
     const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
+
+    // Clerk
+    const clerkUserId =
+      session.metadata?.clerk_user_id ||
+      session.metadata?.clerkUserId ||
+      session.metadata?.user_id ||
+      null;
 
     if (!posterId || !size || !paper || !mode || !printUrl) {
       throw new Error(
@@ -70,7 +97,7 @@ export async function onRequestPost(context) {
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // shipping robust
+    // Shipping: prefer collected_information.shipping_details
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -90,46 +117,95 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
-    const recipient = {
-      name: shippingDetails.name || session.customer_details?.name || "Customer",
-      email: session.customer_details?.email || undefined,
-      address: {
-        line1: addr.line1 || "",
-        line2: addr.line2 || "",
-        townOrCity: addr.city || "",
-        stateOrCounty: addr.state || "",
-        postalOrZipCode: addr.postal_code || "",
-        countryCode: addr.country || "",
-      },
+    // Build recipient.address WITHOUT empty-string optional fields
+    const recipientAddress = {
+      line1: asText(addr.line1) || "",
+      townOrCity: asText(addr.city) || "",
+      postalOrZipCode: asText(addr.postal_code) || "",
+      countryCode: asText(addr.country) || "",
     };
 
-    const prodigiSku = prodigiSkuFor(env, { paper, size });
+    // Optional fields only if present
+    if (addr.line2) recipientAddress.line2 = asText(addr.line2);
+    if (addr.state) recipientAddress.stateOrCounty = asText(addr.state);
 
-    // =========================
-    // DB: idempotens + “enhet”
-    // =========================
-    const hasDB = Boolean(env.DB);
-    let existing = null;
+    const recipient = {
+      name: asText(shippingDetails.name) || asText(session.customer_details?.name) || "Customer",
+      email: asText(session.customer_details?.email) || undefined,
+      address: recipientAddress,
+    };
 
-    if (hasDB) {
-      const row = await env.DB.prepare(
-        `SELECT id, prodigi_order_id, status
-         FROM orders
-         WHERE stripe_session_id = ?
-         LIMIT 1`
-      ).bind(session.id).first();
+    // DB idempotency + store “stripe_received” first so we can retry safely
+    if (env.DB) {
+      const amountTotalDollars = Number(session.amount_total || 0) / 100;
+      const currency = asText(session.currency) || "usd";
+      const email = asText(session.customer_details?.email) || null;
 
-      existing = row || null;
+      // If already exists and already has prodigi_order_id -> skip everything
+      const existing = await env.DB.prepare(
+        `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
+      )
+        .bind(session.id)
+        .first();
 
-      // ✅ Viktigt: om vi redan har skapat Prodigi-order för denna session: skapa inte igen vid Resend.
-      if (existing?.prodigi_order_id || existing?.status === "prodigi_created") {
+      if (existing?.prodigi_order_id) {
+        return new Response("ok", { status: 200 });
+      }
+
+      // Upsert by unique stripe_session_id (ux_orders_stripe_session_id)
+      await env.DB.prepare(
+        `INSERT INTO orders
+          (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency, amount_total, stripe_session_id, status, updated_at)
+         VALUES
+          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+         ON CONFLICT(stripe_session_id) DO UPDATE SET
+          email = COALESCE(excluded.email, orders.email),
+          clerk_user_id = COALESCE(excluded.clerk_user_id, orders.clerk_user_id),
+          poster_title = COALESCE(excluded.poster_title, orders.poster_title),
+          currency = COALESCE(excluded.currency, orders.currency),
+          amount_total = COALESCE(excluded.amount_total, orders.amount_total),
+          status = CASE
+            WHEN orders.prodigi_order_id IS NOT NULL THEN orders.status
+            ELSE excluded.status
+          END,
+          updated_at = datetime('now')
+        `
+      )
+        .bind(
+          crypto.randomUUID(),
+          email,
+          asText(clerkUserId),
+          asText(posterId),
+          asText(posterTitle),
+          asText(size),
+          asText(paper),
+          asText(mode),
+          currency,
+          amountTotalDollars,
+          asText(session.id),
+          "stripe_received"
+        )
+        .run();
+    }
+
+    // If DB exists: check again before creating Prodigi order (race-safe)
+    if (env.DB) {
+      const existing = await env.DB.prepare(
+        `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
+      )
+        .bind(session.id)
+        .first();
+      if (existing?.prodigi_order_id) {
         return new Response("ok", { status: 200 });
       }
     }
 
-    // =========================
-    // Skapa order i Prodigi
-    // =========================
+    // SKU from env vars
+    const prodigiSku = prodigiSkuFor(env, { paper, size });
+
+    // Fix: assets must include printArea, and sizing must be allowed value
+    const sizing = normalizeSizing(session.metadata?.sizing);
+
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
       shippingMethod: "Standard",
@@ -138,79 +214,32 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          assets: [{ url: printUrl }],
-          sizing: "Crop", // standardval som Prodigi accepterar
+          sizing, // IMPORTANT
+          assets: [{ url: printUrl, printArea: "default" }], // IMPORTANT
         },
       ],
     };
 
-    const prodigiOrder = await prodigiCreateOrder(env, prodigiOrderPayload);
+    const prodigiResult = await prodigiCreateOrder(env, prodigiOrderPayload);
+    if (!prodigiResult?.ok) {
+      throw new Error(`Prodigi create order failed: ${asText(prodigiResult?.error) || "unknown"}`);
+    }
 
-    const prodigiOrderId =
-      prodigiOrder?.response?.id ||
-      prodigiOrder?.response?.orderId ||
-      null;
+    const prodigi = prodigiResult.response || {};
+    const prodigiOrderId = asText(prodigi.id || prodigi.orderId || prodigi.order?.id) || null;
 
-    // =========================
-    // Spara/uppdatera D1
-    // =========================
-    if (hasDB) {
-      const clerkUserId = session.metadata?.clerk_user_id || null;
-      const email = session.customer_details?.email || null;
-
-      // ✅ Spara i “minor units” (cents), för att matcha account.html (som delar /100)
-      const amountTotalMinor = Number(session.amount_total ?? 0);
-      const currency = session.currency || "usd";
-
-      if (!existing) {
-        await env.DB.prepare(
-          `INSERT INTO orders
-            (id, created_at, email, clerk_user_id,
-             poster_id, poster_title, size, paper, mode,
-             currency, amount_total,
-             stripe_session_id, stripe_payment_intent_id,
-             prodigi_order_id, prodigi_status, status)
-           VALUES
-            (?, ?, ?, ?,
-             ?, ?, ?, ?, ?,
-             ?, ?,
-             ?, ?,
-             ?, ?, ?)`
-        )
-          .bind(
-            crypto.randomUUID(),
-            Date.now(),
-            asText(email),
-            asText(clerkUserId),
-
-            asText(posterId),
-            asText(posterTitle),
-            asText(size),
-            asText(paper),
-            asText(mode),
-
-            asText(currency),
-            amountTotalMinor,
-
-            asText(session.id),
-            asText(session.payment_intent),
-
-            asText(prodigiOrderId),
-            null,
-            "prodigi_created"
-          )
-          .run();
-      } else {
-        await env.DB.prepare(
-          `UPDATE orders
-           SET
-             prodigi_order_id = ?,
-             status = 'prodigi_created'
-           WHERE stripe_session_id = ?`
-        )
-          .bind(asText(prodigiOrderId), asText(session.id))
-          .run();
-      }
+    // Update DB row with Prodigi info
+    if (env.DB) {
+      await env.DB.prepare(
+        `UPDATE orders
+         SET prodigi_order_id = COALESCE(prodigi_order_id, ?),
+             status = 'prodigi_created',
+             prodigi_status = COALESCE(prodigi_status, 'created'),
+             updated_at = datetime('now')
+         WHERE stripe_session_id = ?`
+      )
+        .bind(prodigiOrderId, asText(session.id))
+        .run();
     }
 
     return new Response("ok", { status: 200 });
