@@ -14,25 +14,20 @@ function asText(v) {
 }
 
 /**
- * ✅ Prodigi sizing enums:
- * - "fillPrintArea" = fyll ytan (kan beskära)  ≈ "crop"
- * - "fitPrintArea"  = passa in (kan ge vita kanter) ≈ "shrink/fit"
- *
- * Vi mappar:
- * - STRICT => fillPrintArea
- * - annars => fitPrintArea
- * Om du någon gång skickar metadata.sizing med t.ex. "crop"/"fill"/"fit", mappar vi det också.
+ * ✅ Prodigi sizing: använd tillåtna värden.
+ * Prodigi accepterar i praktiken: "fillPrintArea" och "fitPrintArea"
+ * - fillPrintArea = fyller (kan beskära)
+ * - fitPrintArea  = passar inom (kan få vit kant)
  */
 function normalizeSizing(mode, provided = "") {
   const m = String(mode || "").toUpperCase();
-  const p = String(provided || "").toLowerCase().trim();
+  const p = String(provided || "").toLowerCase();
 
-  // Om metadata råkar ange något:
+  if (m === "STRICT") return "fillPrintArea";
   if (p.includes("fill") || p.includes("crop")) return "fillPrintArea";
   if (p.includes("fit") || p.includes("shrink")) return "fitPrintArea";
 
-  // Default från ditt "mode"
-  if (m === "STRICT") return "fillPrintArea";
+  // Default
   return "fitPrintArea";
 }
 
@@ -115,7 +110,7 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
-    // ✅ Build recipient.address WITHOUT empty-string optionals
+    // ✅ Recipient.address: skicka inte tomma optionals
     const recipientAddress = {
       line1: asText(addr.line1) || "",
       townOrCity: asText(addr.city) || "",
@@ -131,9 +126,10 @@ export async function onRequestPost(context) {
       address: recipientAddress,
     };
 
-    // ✅ DB idempotency + store stripe_received first
+    // ✅ DB idempotency + spara stripe_received först
     if (env.DB) {
-      const amountTotalDollars = Number(session.amount_total || 0) / 100;
+      // VIKTIGT: spara i cents (Stripe använder minsta valutaenhet)
+      const amountTotalCents = Number(session.amount_total || 0);
       const currency = asText(session.currency) || "usd";
       const email = asText(session.customer_details?.email) || null;
 
@@ -147,12 +143,23 @@ export async function onRequestPost(context) {
         return new Response("ok", { status: 200 });
       }
 
-      // created_at: millisekunder (så new Date() alltid funkar)
       await env.DB.prepare(
         `INSERT INTO orders
           (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency, amount_total, stripe_session_id, status, updated_at)
          VALUES
-          (?, (unixepoch()*1000), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
+          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+         ON CONFLICT(stripe_session_id) DO UPDATE SET
+          email = COALESCE(excluded.email, orders.email),
+          clerk_user_id = COALESCE(excluded.clerk_user_id, orders.clerk_user_id),
+          poster_title = COALESCE(excluded.poster_title, orders.poster_title),
+          currency = COALESCE(excluded.currency, orders.currency),
+          amount_total = COALESCE(excluded.amount_total, orders.amount_total),
+          status = CASE
+            WHEN orders.prodigi_order_id IS NOT NULL THEN orders.status
+            ELSE excluded.status
+          END,
+          updated_at = datetime('now')
+        `
       )
         .bind(
           crypto.randomUUID(),
@@ -164,7 +171,7 @@ export async function onRequestPost(context) {
           asText(paper),
           asText(mode),
           currency,
-          amountTotalDollars,
+          amountTotalCents,          // ✅ cents i DB
           asText(session.id),
           "stripe_received"
         )
@@ -185,8 +192,8 @@ export async function onRequestPost(context) {
 
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // ✅ Correct Prodigi sizing enum
-    const sizing = normalizeSizing(mode, session.metadata?.sizing || "");
+    // ✅ Prodigi sizing (tillåten enum)
+    const sizing = normalizeSizing(mode, session.metadata?.sizing);
 
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
@@ -196,7 +203,7 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          sizing, // "fillPrintArea" | "fitPrintArea"
+          sizing,
           assets: [{ url: printUrl, printArea: "default" }],
         },
       ],
