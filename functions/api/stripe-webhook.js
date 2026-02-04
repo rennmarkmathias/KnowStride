@@ -14,33 +14,26 @@ function asText(v) {
 }
 
 /**
- * ✅ Prodigi sizing: use allowed values.
- * Prodigi accepts (in practice) "fill" and "fit".
- * - "fill" = fyller hela ytan (kan beskära)
- * - "fit"  = passar inom ytan (kan få vit kant)
+ * ✅ Prodigi sizing enums:
+ * - "fillPrintArea" = fyll ytan (kan beskära)  ≈ "crop"
+ * - "fitPrintArea"  = passa in (kan ge vita kanter) ≈ "shrink/fit"
  *
- * Vi mappar vanliga termer till dessa, och defaultar till "fill".
+ * Vi mappar:
+ * - STRICT => fillPrintArea
+ * - annars => fitPrintArea
+ * Om du någon gång skickar metadata.sizing med t.ex. "crop"/"fill"/"fit", mappar vi det också.
  */
 function normalizeSizing(mode, provided = "") {
-  // Prodigi accepts e.g. "fillPrintArea" or "fitPrintArea"
   const m = String(mode || "").toUpperCase();
-  const p = String(provided || "").toLowerCase();
+  const p = String(provided || "").toLowerCase().trim();
 
-  // STRICT = fyll tryckytan (crop)
-  if (m === "STRICT") return "fillPrintArea";
-
-  // Om du någon gång skickar in något via metadata:
+  // Om metadata råkar ange något:
   if (p.includes("fill") || p.includes("crop")) return "fillPrintArea";
+  if (p.includes("fit") || p.includes("shrink")) return "fitPrintArea";
 
-  // Default = passa in i tryckytan (fit)
+  // Default från ditt "mode"
+  if (m === "STRICT") return "fillPrintArea";
   return "fitPrintArea";
-}
-
-  // If someone already sends the correct casing
-  if (input === "Crop" || input === "ShrinkToFit") return input;
-
-  // Unknown -> let caller choose default
-  return "";
 }
 
 export async function onRequestPost(context) {
@@ -154,23 +147,12 @@ export async function onRequestPost(context) {
         return new Response("ok", { status: 200 });
       }
 
+      // created_at: millisekunder (så new Date() alltid funkar)
       await env.DB.prepare(
         `INSERT INTO orders
           (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency, amount_total, stripe_session_id, status, updated_at)
          VALUES
-          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
-         ON CONFLICT(stripe_session_id) DO UPDATE SET
-          email = COALESCE(excluded.email, orders.email),
-          clerk_user_id = COALESCE(excluded.clerk_user_id, orders.clerk_user_id),
-          poster_title = COALESCE(excluded.poster_title, orders.poster_title),
-          currency = COALESCE(excluded.currency, orders.currency),
-          amount_total = COALESCE(excluded.amount_total, orders.amount_total),
-          status = CASE
-            WHEN orders.prodigi_order_id IS NOT NULL THEN orders.status
-            ELSE excluded.status
-          END,
-          updated_at = datetime('now')
-        `
+          (?, (unixepoch()*1000), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
       )
         .bind(
           crypto.randomUUID(),
@@ -203,12 +185,8 @@ export async function onRequestPost(context) {
 
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // ✅ IMPORTANT: use allowed sizing enum for Prodigi.
-    // If no explicit sizing metadata is set, pick a sensible default:
-    //  - STRICT => Crop (fills print area)
-    //  - ART    => ShrinkToFit (preserve whole image)
-    const sizing =
-      normalizeSizing(session.metadata?.sizing) || (mode === "ART" ? "ShrinkToFit" : "Crop");
+    // ✅ Correct Prodigi sizing enum
+    const sizing = normalizeSizing(mode, session.metadata?.sizing || "");
 
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
@@ -218,7 +196,7 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          sizing,
+          sizing, // "fillPrintArea" | "fitPrintArea"
           assets: [{ url: printUrl, printArea: "default" }],
         },
       ],
