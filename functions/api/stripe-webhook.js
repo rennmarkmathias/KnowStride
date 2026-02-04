@@ -14,25 +14,32 @@ function asText(v) {
 }
 
 /**
- * Build Prodigi sizing value.
- * Prodigi is picky about allowed values; we normalize inputs.
- * If Prodigi still complains, we only need to tweak the returned strings here.
+ * ✅ Prodigi sizing: use allowed values.
+ * Prodigi accepts (in practice) "fill" and "fit".
+ * - "fill" = fyller hela ytan (kan beskära)
+ * - "fit"  = passar inom ytan (kan få vit kant)
+ *
+ * Vi mappar vanliga termer till dessa, och defaultar till "fill".
  */
 function normalizeSizing(input) {
-  const raw = (asText(input) || "").trim();
-  const k = raw.toLowerCase();
+  const raw = (asText(input) || "").trim().toLowerCase();
 
-  // Common names people use:
-  // - crop
-  // - shrinktofit / shrink_to_fit / fit
-  if (!k) return "crop";
+  // Default: safest for posters (fills the print area)
+  if (!raw) return "fill";
 
-  if (k === "crop") return "crop";
-  if (k === "fit" || k === "shrinktofit" || k === "shrink_to_fit") return "shrinkToFit";
-  if (k === "shrinktofit" || k === "shrink-to-fit") return "shrinkToFit";
+  // People often say "crop" but Prodigi expects "fill"
+  if (raw === "crop" || raw === "cropped") return "fill";
 
-  // Fallback: try a safe default
-  return "crop";
+  // People often say "fit" / "shrink to fit"
+  if (raw === "fit" || raw === "shrinktofit" || raw === "shrink_to_fit" || raw === "shrink-to-fit") {
+    return "fit";
+  }
+
+  // If someone already sends fill/fit
+  if (raw === "fill" || raw === "fit") return raw;
+
+  // Fallback
+  return "fill";
 }
 
 export async function onRequestPost(context) {
@@ -74,15 +81,13 @@ export async function onRequestPost(context) {
       expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
     });
 
-    // Metadata från create-poster-checkout-session.js
     const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
     const posterTitle = session.metadata?.poster_title || session.metadata?.posterTitle || null;
-    const size = session.metadata?.size || null;       // "12x18"
-    const paper = session.metadata?.paper || null;     // "standard" / "fineart" etc
-    const mode = session.metadata?.mode || null;       // "STRICT" / "ART"
+    const size = session.metadata?.size || null; // "12x18"
+    const paper = session.metadata?.paper || null; // "standard" / "fineart"
+    const mode = session.metadata?.mode || null; // "STRICT" / "ART"
     const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
 
-    // Clerk
     const clerkUserId =
       session.metadata?.clerk_user_id ||
       session.metadata?.clerkUserId ||
@@ -97,7 +102,6 @@ export async function onRequestPost(context) {
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
 
-    // Shipping: prefer collected_information.shipping_details
     const shippingDetails =
       session.collected_information?.shipping_details ||
       session.shipping_details ||
@@ -117,15 +121,13 @@ export async function onRequestPost(context) {
 
     const addr = shippingDetails.address;
 
-    // Build recipient.address WITHOUT empty-string optional fields
+    // ✅ Build recipient.address WITHOUT empty-string optionals
     const recipientAddress = {
       line1: asText(addr.line1) || "",
       townOrCity: asText(addr.city) || "",
       postalOrZipCode: asText(addr.postal_code) || "",
       countryCode: asText(addr.country) || "",
     };
-
-    // Optional fields only if present
     if (addr.line2) recipientAddress.line2 = asText(addr.line2);
     if (addr.state) recipientAddress.stateOrCounty = asText(addr.state);
 
@@ -135,13 +137,12 @@ export async function onRequestPost(context) {
       address: recipientAddress,
     };
 
-    // DB idempotency + store “stripe_received” first so we can retry safely
+    // ✅ DB idempotency + store stripe_received first
     if (env.DB) {
       const amountTotalDollars = Number(session.amount_total || 0) / 100;
       const currency = asText(session.currency) || "usd";
       const email = asText(session.customer_details?.email) || null;
 
-      // If already exists and already has prodigi_order_id -> skip everything
       const existing = await env.DB.prepare(
         `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
       )
@@ -152,7 +153,6 @@ export async function onRequestPost(context) {
         return new Response("ok", { status: 200 });
       }
 
-      // Upsert by unique stripe_session_id (ux_orders_stripe_session_id)
       await env.DB.prepare(
         `INSERT INTO orders
           (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency, amount_total, stripe_session_id, status, updated_at)
@@ -188,7 +188,7 @@ export async function onRequestPost(context) {
         .run();
     }
 
-    // If DB exists: check again before creating Prodigi order (race-safe)
+    // Race-safe: check again
     if (env.DB) {
       const existing = await env.DB.prepare(
         `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
@@ -200,10 +200,9 @@ export async function onRequestPost(context) {
       }
     }
 
-    // SKU from env vars
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // Fix: assets must include printArea, and sizing must be allowed value
+    // ✅ IMPORTANT: use allowed sizing
     const sizing = normalizeSizing(session.metadata?.sizing);
 
     const prodigiOrderPayload = {
@@ -214,8 +213,8 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          sizing, // IMPORTANT
-          assets: [{ url: printUrl, printArea: "default" }], // IMPORTANT
+          sizing, // "fill" or "fit"
+          assets: [{ url: printUrl, printArea: "default" }],
         },
       ],
     };
@@ -228,7 +227,6 @@ export async function onRequestPost(context) {
     const prodigi = prodigiResult.response || {};
     const prodigiOrderId = asText(prodigi.id || prodigi.orderId || prodigi.order?.id) || null;
 
-    // Update DB row with Prodigi info
     if (env.DB) {
       await env.DB.prepare(
         `UPDATE orders
