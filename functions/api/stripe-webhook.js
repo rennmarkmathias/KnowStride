@@ -22,24 +22,33 @@ function asText(v) {
  * Vi mappar vanliga termer till dessa, och defaultar till "fill".
  */
 function normalizeSizing(input) {
+  // Prodigi's enum is case-sensitive.
+  // In practice the accepted values are:
+  //   - "Crop"        (fill the print area)
+  //   - "ShrinkToFit" (fit inside the print area)
+  // Stripe/our UI may send: crop/fill/fit/shrink-to-fit/etc.
   const raw = (asText(input) || "").trim().toLowerCase();
 
-  // Default: safest for posters (fills the print area)
-  if (!raw) return "fill";
+  if (!raw) return ""; // let caller decide default per mode
 
-  // People often say "crop" but Prodigi expects "fill"
-  if (raw === "crop" || raw === "cropped") return "fill";
+  if (raw === "crop" || raw === "fill" || raw === "cropped") return "Crop";
 
-  // People often say "fit" / "shrink to fit"
-  if (raw === "fit" || raw === "shrinktofit" || raw === "shrink_to_fit" || raw === "shrink-to-fit") {
-    return "fit";
+  if (
+    raw === "fit" ||
+    raw === "shrinktofit" ||
+    raw === "shrink_to_fit" ||
+    raw === "shrink-to-fit" ||
+    raw === "shrink" ||
+    raw === "contain"
+  ) {
+    return "ShrinkToFit";
   }
 
-  // If someone already sends fill/fit
-  if (raw === "fill" || raw === "fit") return raw;
+  // If someone already sends the correct casing
+  if (input === "Crop" || input === "ShrinkToFit") return input;
 
-  // Fallback
-  return "fill";
+  // Unknown -> let caller choose default
+  return "";
 }
 
 export async function onRequestPost(context) {
@@ -202,8 +211,12 @@ export async function onRequestPost(context) {
 
     const prodigiSku = prodigiSkuFor(env, { paper, size });
 
-    // ✅ IMPORTANT: use allowed sizing
-    const sizing = normalizeSizing(session.metadata?.sizing);
+    // ✅ IMPORTANT: use allowed sizing enum for Prodigi.
+    // If no explicit sizing metadata is set, pick a sensible default:
+    //  - STRICT => Crop (fills print area)
+    //  - ART    => ShrinkToFit (preserve whole image)
+    const sizing =
+      normalizeSizing(session.metadata?.sizing) || (mode === "ART" ? "ShrinkToFit" : "Crop");
 
     const prodigiOrderPayload = {
       merchantReference: `ks_${session.id}`,
@@ -213,7 +226,7 @@ export async function onRequestPost(context) {
         {
           sku: prodigiSku,
           copies: qty,
-          sizing, // "fill" or "fit"
+          sizing,
           assets: [{ url: printUrl, printArea: "default" }],
         },
       ],
