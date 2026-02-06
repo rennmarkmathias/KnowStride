@@ -5,6 +5,72 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Account — KnowStride</title>
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Small UI polish just for this page -->
+  <style>
+    .order-row { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .order-title { font-weight:800; }
+    .order-meta { color:#666; font-size:13px; }
+    .order-right { text-align:right; }
+    .order-amount { font-weight:800; }
+    .order-when { color:#666; font-size:13px; }
+
+    .status-line { margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px; font-weight:700;
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(0,0,0,.03);
+      white-space:nowrap;
+    }
+    .dot { width:8px; height:8px; border-radius:999px; background:#999; }
+
+    .badge.received { background: rgba(0,0,0,.03); }
+    .badge.production { background: rgba(255, 193, 7, .12); border-color: rgba(255, 193, 7, .35); }
+    .badge.shipped { background: rgba(33, 150, 243, .12); border-color: rgba(33, 150, 243, .35); }
+    .badge.delivered { background: rgba(76, 175, 80, .12); border-color: rgba(76, 175, 80, .35); }
+    .badge.cancelled { background: rgba(244, 67, 54, .10); border-color: rgba(244, 67, 54, .30); }
+    .badge.refunded { background: rgba(156, 39, 176, .10); border-color: rgba(156, 39, 176, .28); }
+
+    .badge.received .dot { background:#666; }
+    .badge.production .dot { background:#f5a623; }
+    .badge.shipped .dot { background:#1976d2; }
+    .badge.delivered .dot { background:#2e7d32; }
+    .badge.cancelled .dot { background:#c62828; }
+    .badge.refunded .dot { background:#7b1fa2; }
+
+    .track-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:10px;
+      border:1px solid rgba(0,0,0,.10);
+      background:#fff;
+      font-weight:700; font-size:13px;
+      text-decoration:none;
+    }
+    .track-btn:hover { background: rgba(0,0,0,.03); }
+    .track-muted { color:#666; font-size:13px; }
+
+    details.more { margin-top:4px; }
+    details.more > summary {
+      cursor:pointer;
+      color:#666;
+      font-size:13px;
+      user-select:none;
+      list-style:none;
+    }
+    details.more > summary::-webkit-details-marker { display:none; }
+    .more-box {
+      margin-top:8px;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(0,0,0,.02);
+      color:#444;
+      font-size:13px;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
 </head>
 
 <body>
@@ -27,15 +93,10 @@
       <div id="userArea" style="display:none;">
         <div class="callout" style="margin-top:14px;">
           <div class="muted small">Signed in as</div>
-
-          <!-- Show email instead of userId -->
           <div id="userEmail" style="font-weight:800;"></div>
 
-          <!-- Logout button (standard UX) -->
           <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <button class="btn" id="logoutBtn" type="button">Log out</button>
-
-            <!-- Optional: keep Clerk user button if you like -->
             <div id="userButton"></div>
           </div>
         </div>
@@ -59,7 +120,6 @@
     </footer>
   </main>
 
-  <!-- ClerkJS (pin version for stability) -->
   <script
     defer
     crossorigin="anonymous"
@@ -72,6 +132,81 @@
       const y = document.getElementById("year");
       if (y) y.textContent = String(new Date().getFullYear());
 
+      function norm(s) { return String(s || "").trim().toLowerCase(); }
+
+      function friendlyStatus(order) {
+        const s = norm(order?.status);
+        if (!s) return "Order received";
+
+        // internal / technical -> Order received
+        if (s === "paid") return "Order received";
+        if (s === "stripe_received") return "Order received";
+        if (s === "prodigi_created") return "Order received";
+
+        // customer statuses
+        if (s === "in_production" || s === "production" || s === "submitted") return "In production";
+        if (s === "shipped" || s === "dispatched") return "Shipped";
+        if (s === "delivered") return "Delivered";
+        if (s === "cancelled" || s === "canceled") return "Cancelled";
+        if (s === "refunded") return "Refunded";
+
+        return s.replace(/_/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+      }
+
+      function statusBadgeClass(label) {
+        const v = norm(label);
+        if (v.includes("production")) return "production";
+        if (v.includes("shipped")) return "shipped";
+        if (v.includes("delivered")) return "delivered";
+        if (v.includes("cancel")) return "cancelled";
+        if (v.includes("refund")) return "refunded";
+        return "received";
+      }
+
+      function friendlyProductionStatus(prodigiStatus) {
+        const p = norm(prodigiStatus);
+        if (!p) return null;
+
+        if (p === "created") return "created";
+        if (p === "in_production" || p === "in production" || p === "printing") return "in production";
+        if (p === "shipped" || p === "dispatched") return "shipped";
+        if (p === "delivered") return "delivered";
+        if (p === "cancelled" || p === "canceled") return "cancelled";
+
+        return null;
+      }
+
+      function formatMoneySmart(amountTotal, currency) {
+        if (amountTotal == null) return "";
+        const ccy = String(currency || "usd").toUpperCase();
+        const n = Number(amountTotal);
+        if (Number.isNaN(n)) return "";
+
+        // Heuristic: >= 10 is probably cents; < 10 is probably dollars
+        const isProbablyCents = n >= 10;
+        const isZeroDecimal = ["JPY", "KRW"].includes(ccy);
+        const value = isZeroDecimal ? n : (isProbablyCents ? (n / 100) : n);
+
+        try {
+          return new Intl.NumberFormat(undefined, { style: "currency", currency: ccy }).format(value);
+        } catch {
+          return `${value.toFixed(2)} ${ccy}`;
+        }
+      }
+
+      function formatWhen(created_at) {
+        if (!created_at) return "";
+        let dt;
+        const num = Number(created_at);
+        if (!Number.isNaN(num) && String(created_at).trim() !== "") {
+          dt = new Date(num < 1e12 ? num * 1000 : num);
+        } else {
+          dt = new Date(created_at);
+        }
+        if (isNaN(dt.getTime())) return "";
+        return dt.toLocaleString();
+      }
+
       try {
         await Clerk.load();
 
@@ -80,81 +215,28 @@
         const guestArea = document.getElementById("guestArea");
         const loginLink = document.getElementById("loginLink");
 
-        // Helper: map internal statuses to friendly labels
-        function friendlyStatus(raw) {
-          const s = String(raw || "").toLowerCase();
-          const map = {
-            paid: "Order received",
-            prodigi_created: "Order received",
-            submitted: "In production",
-            in_production: "In production",
-            shipped: "Shipped",
-            delivered: "Delivered",
-            cancelled: "Cancelled",
-            canceled: "Cancelled",
-            refunded: "Refunded",
-          };
-          return map[s] || (s ? s.replace(/_/g, " ") : "Order received");
-        }
-
-        // Helper: format currency correctly (Stripe/D1 often stores cents)
-        function formatMoney(amountTotal, currency) {
-          if (amountTotal == null) return "";
-          const ccy = String(currency || "usd").toUpperCase();
-          const n = Number(amountTotal);
-          if (Number.isNaN(n)) return "";
-
-          // Most Stripe amounts are in the smallest currency unit (USD cents).
-          // So 100 => $1.00, not $100.00.
-          const isZeroDecimal = ["JPY", "KRW"].includes(ccy);
-          const value = isZeroDecimal ? n : n / 100;
-
-          try {
-            return new Intl.NumberFormat(undefined, { style: "currency", currency: ccy }).format(value);
-          } catch {
-            // Fallback if Intl doesn't like the currency for some reason
-            return (ccy === "USD" ? "$" : (ccy + " ")) + value.toFixed(2);
-          }
-        }
-
         if (user) {
           if (loginLink) loginLink.style.display = "none";
           userArea.style.display = "block";
 
-          // ✅ Display email instead of user.id
           const email =
             user?.primaryEmailAddress?.emailAddress ||
             user?.emailAddresses?.[0]?.emailAddress ||
             "";
           document.getElementById("userEmail").textContent = email ? email : "Signed in";
 
-          // ✅ Logout button
           const logoutBtn = document.getElementById("logoutBtn");
           logoutBtn.onclick = async () => {
-            try {
-              await Clerk.signOut();
-            } finally {
-              window.location.href = "/"; // or "/account" if you prefer
-            }
+            try { await Clerk.signOut(); }
+            finally { window.location.href = "/"; }
           };
 
-          // Optional: keep Clerk user button mounted
           const userButtonEl = document.getElementById("userButton");
-          if (userButtonEl) {
-            Clerk.mountUserButton(userButtonEl);
-          }
+          if (userButtonEl) Clerk.mountUserButton(userButtonEl);
 
-          // Fetch orders for this Clerk user
           const token = await Clerk.session.getToken();
-          const primaryEmail = email || "";
-
           const res = await fetch("/api/orders", {
-            headers: token
-              ? {
-                  Authorization: `Bearer ${token}`,
-                  "X-User-Email": primaryEmail,
-                }
-              : {},
+            headers: token ? { Authorization: `Bearer ${token}`, "X-User-Email": email || "" } : {},
           });
 
           const data = await res.json().catch(() => ({}));
@@ -172,48 +254,61 @@
           }
 
           ordersArea.classList.remove("muted");
-          ordersArea.innerHTML = orders
-            .map((o) => {
-              const dt = new Date(o.created_at);
-              const when = isNaN(dt.getTime()) ? "" : dt.toLocaleString();
 
-              const amount = formatMoney(o.amount_total, o.currency);
-              const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
-              const labelSize = (o.size || "").toUpperCase();
+          ordersArea.innerHTML = orders.map(o => {
+            const when = formatWhen(o.created_at);
+            const amount = formatMoneySmart(o.amount_total, o.currency);
+            const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
+            const labelSize = (o.size || "").toUpperCase();
 
-              const statusLabel = friendlyStatus(o.status);
+            const statusLabel = friendlyStatus(o);
+            const badgeKind = statusBadgeClass(statusLabel);
 
-              // Optional extra info (only show if present)
-              const details = [];
-              if (o.prodigi_status) details.push(`Production: ${o.prodigi_status}`);
-              if (o.tracking_url) {
-                details.push(`<a href="${o.tracking_url}" target="_blank" rel="noopener">Track package</a>`);
-              } else if (o.tracking_number) {
-                details.push(`Tracking: ${o.tracking_number}`);
-              }
-              if (o.prodigi_order_id) details.push(`Print ref: ${o.prodigi_order_id}`);
+            const prod = friendlyProductionStatus(o.prodigi_status);
 
-              const detailsHtml = details.length ? ` · ${details.join(" · ")}` : "";
+            const trackingBtn = o.tracking_url
+              ? `<a class="track-btn" href="${o.tracking_url}" target="_blank" rel="noopener">📦 Track package</a>`
+              : (o.tracking_number
+                  ? `<div class="track-muted">Tracking: <span class="mono">${o.tracking_number}</span></div>`
+                  : "");
 
-              return `
-                <div class="card" style="margin-top:12px;">
-                  <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                    <div>
-                      <div style="font-weight:800;">${(o.poster_title || o.poster_id || "Poster")}</div>
-                      <div class="muted small">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
-                    </div>
-                    <div style="text-align:right;">
-                      <div style="font-weight:800;">${amount}</div>
-                      <div class="muted small">${when}</div>
-                    </div>
+            // More details (support info)
+            const hasMore = Boolean(prod || o.prodigi_order_id);
+            const moreHtml = hasMore ? `
+              <details class="more">
+                <summary>More details</summary>
+                <div class="more-box">
+                  ${prod ? `<div><strong>Production</strong>: ${prod}</div>` : ""}
+                  ${o.prodigi_order_id ? `<div style="margin-top:6px;"><strong>Print ref</strong>: <span class="mono">${o.prodigi_order_id}</span></div>` : ""}
+                </div>
+              </details>
+            ` : "";
+
+            return `
+              <div class="card" style="margin-top:12px;">
+                <div class="order-row">
+                  <div>
+                    <div class="order-title">${(o.poster_title || o.poster_id || "Poster")}</div>
+                    <div class="order-meta">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
                   </div>
-                  <div class="muted small" style="margin-top:8px;">
-                    Status: ${statusLabel}${detailsHtml}
+                  <div class="order-right">
+                    <div class="order-amount">${amount}</div>
+                    <div class="order-when">${when}</div>
                   </div>
                 </div>
-              `;
-            })
-            .join("");
+
+                <div class="status-line">
+                  <span class="badge ${badgeKind}">
+                    <span class="dot"></span>
+                    ${statusLabel}
+                  </span>
+                  ${trackingBtn}
+                </div>
+
+                ${moreHtml}
+              </div>
+            `;
+          }).join("");
         } else {
           guestArea.style.display = "block";
         }
