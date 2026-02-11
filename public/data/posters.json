@@ -7,7 +7,7 @@
       "category": "World History",
       "tag": "25 icons",
       "year": 2026,
-      "previewUrl": "/prints/world_history_25_icons_12x18_in_STRICT.png",
+      "previewUrl": "/previews/world_history_25_icons_preview.jpg",
       "fileBase": "world_history_25_icons",
       "printDir": "/prints",
       "prices": {
@@ -15,7 +15,6 @@
         "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
-
     {
       "id": "european-history-icons",
       "slug": "european-history",
@@ -23,7 +22,7 @@
       "category": "European History",
       "tag": "classical Europe",
       "year": 2026,
-      "previewUrl": "/assets/poster-placeholder.svg",
+      "previewUrl": "/previews/europe_history_25_icons_preview.jpg",
       "fileBase": "europe_history_25_icons",
       "printDir": "/prints",
       "prices": {
@@ -31,7 +30,6 @@
         "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
-
     {
       "id": "north-american-history-icons",
       "slug": "north-american-history",
@@ -39,7 +37,7 @@
       "category": "North American History",
       "tag": "25 icons",
       "year": 2026,
-      "previewUrl": "/assets/poster-placeholder.svg",
+      "previewUrl": "/previews/north_america_history_25_icons_preview.jpg",
       "fileBase": "north_america_history_25_icons",
       "printDir": "/prints",
       "prices": {
@@ -47,7 +45,6 @@
         "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
-
     {
       "id": "historical-warships",
       "slug": "historical-warships",
@@ -55,7 +52,7 @@
       "category": "Military History",
       "tag": "naval history",
       "year": 2026,
-      "previewUrl": "/assets/poster-placeholder.svg",
+      "previewUrl": "/previews/historical_warships_icons_preview.jpg",
       "fileBase": "historical_warships_icons",
       "printDir": "/prints",
       "prices": {
@@ -63,7 +60,6 @@
         "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
-
     {
       "id": "vintage-cars-40s-70s",
       "slug": "vintage-cars-40s-70s",
@@ -71,7 +67,7 @@
       "category": "Vintage Cars",
       "tag": "automotive history",
       "year": 2026,
-      "previewUrl": "/assets/poster-placeholder.svg",
+      "previewUrl": "/previews/vintage_cars_40s_70s_preview.jpg",
       "fileBase": "vintage_cars_40s_70s",
       "printDir": "/prints",
       "prices": {
@@ -79,7 +75,6 @@
         "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
-
     {
       "id": "historical-buildings",
       "slug": "historical-buildings",
@@ -87,7 +82,7 @@
       "category": "Architecture",
       "tag": "monuments & landmarks",
       "year": 2026,
-      "previewUrl": "/assets/poster-placeholder.svg",
+      "previewUrl": "/previews/historical_buildings_icons_preview.jpg",
       "fileBase": "historical_buildings_icons",
       "printDir": "/prints",
       "prices": {
