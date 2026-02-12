@@ -28,6 +28,12 @@ function normalizeSizing(mode, provided = "") {
   return m === "STRICT" ? "fillPrintArea" : "fitPrintArea";
 }
 
+function joinUrl(base, path) {
+  const b = String(base || "").replace(/\/+$/, "");
+  const p = String(path || "").replace(/^\/+/, "");
+  return `${b}/${p}`;
+}
+
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -74,7 +80,24 @@ export async function onRequestPost(context) {
     const size = session.metadata?.size || null;
     const paper = session.metadata?.paper || null; // "standard" / "fineart"
     const mode = session.metadata?.mode || null;   // "STRICT" / "ART"
-    const printUrl = session.metadata?.print_url || session.metadata?.printUrl || null;
+
+    // NEW: Build print URL from R2 base + object path
+    // Backwards compatible: accept full URL if older checkout still sends it.
+    const printsBaseUrl = env.PRINTS_BASE_URL || env.PRINTS_BASE || env.PRINTS_URL || null;
+
+    const printPath =
+      session.metadata?.print_path ||
+      session.metadata?.printPath ||
+      session.metadata?.file_name ||
+      session.metadata?.fileName ||
+      null;
+
+    const printUrlFromMetadata = session.metadata?.print_url || session.metadata?.printUrl || null;
+
+    const printUrl =
+      printUrlFromMetadata
+        ? asText(printUrlFromMetadata)
+        : (printsBaseUrl && printPath ? joinUrl(printsBaseUrl, printPath) : null);
 
     const clerkUserId =
       session.metadata?.clerk_user_id ||
@@ -82,8 +105,12 @@ export async function onRequestPost(context) {
       session.metadata?.user_id ||
       null;
 
+    // Require these
     if (!posterId || !size || !paper || !mode || !printUrl) {
-      throw new Error(`Missing required metadata. posterId=${posterId} size=${size} paper=${paper} mode=${mode} printUrl=${printUrl}`);
+      throw new Error(
+        `Missing required metadata. posterId=${posterId} size=${size} paper=${paper} mode=${mode} ` +
+        `printUrl=${printUrl} printPath=${printPath} printsBaseUrl=${printsBaseUrl}`
+      );
     }
 
     const qty = session.line_items?.data?.[0]?.quantity || 1;
