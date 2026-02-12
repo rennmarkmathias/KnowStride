@@ -7,9 +7,15 @@
       "category": "World History",
       "tag": "25 icons",
       "year": 2026,
-      "previewUrl": "/previews/world_history_25_icons_preview.jpg",
+      "previewUrl": "/previews/world_history_25_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "world_history_25_icons",
       "printDir": "exports",
+      "variantFiles": {
+        "18x24_ART": "world_history_25_icons_18x24_in_ART_20260210_120504.png"
+      },
+      "variantPreviews": {
+        "18x24_ART": "/previews/world_history_25_icons_18x24_in_ART_20260210_120504_fixed.jpg"
+      },
       "prices": {
         "standard": { "12x18": 29, "18x24": 39 },
         "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
@@ -22,7 +28,7 @@
       "category": "European History",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/european_history_24_icons_preview.jpg",
+      "previewUrl": "/previews/european_history_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "european_history_24_icons",
       "printDir": "exports",
       "prices": {
@@ -37,7 +43,7 @@
       "category": "North American History",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/united_states_history_24_icons_preview.jpg",
+      "previewUrl": "/previews/united_states_history_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "united_states_history_24_icons",
       "printDir": "exports",
       "prices": {
@@ -52,7 +58,7 @@
       "category": "North American History",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/canada_history_24_icons_preview.jpg",
+      "previewUrl": "/previews/canada_history_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "canada_history_24_icons",
       "printDir": "exports",
       "prices": {
@@ -67,7 +73,7 @@
       "category": "World Culture",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/world_cities_24_icons_preview.jpg",
+      "previewUrl": "/previews/world_cities_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "world_cities_24_icons",
       "printDir": "exports",
       "prices": {
@@ -82,7 +88,7 @@
       "category": "Cultural History",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/women_s_fashion_western_world_24_icons_preview.jpg",
+      "previewUrl": "/previews/women_s_fashion_western_world_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "women_s_fashion_western_world_24_icons",
       "printDir": "exports",
       "prices": {
@@ -97,7 +103,7 @@
       "category": "Automotive History",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/american_european_classic_cars_24_icons_preview.jpg",
+      "previewUrl": "/previews/american_european_classic_cars_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "american_european_classic_cars_24_icons",
       "printDir": "exports",
       "prices": {
@@ -112,7 +118,7 @@
       "category": "Architecture",
       "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/buildings_of_world_history_24_icons_preview.jpg",
+      "previewUrl": "/previews/buildings_of_world_history_24_icons_18x24_in_STRICT_fixed.jpg",
       "fileBase": "buildings_of_world_history_24_icons",
       "printDir": "exports",
       "prices": {
