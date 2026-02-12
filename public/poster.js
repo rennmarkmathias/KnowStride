@@ -1,7 +1,6 @@
 /*
   Poster detail page (static).
   Reads /data/posters.json, finds poster by ?slug, renders variant pickers.
-  "Buy" is a placeholder for now — we'll wire to Stripe/Prodigi next.
 */
 
 const $ = (id) => document.getElementById(id);
@@ -53,8 +52,7 @@ async function getClerkTokenIfSignedIn() {
   }
 }
 
-// NEW: build size options based on selected paper.
-// Standard: only show sizes that exist (in your case 12x18 and 18x24).
+// Build size options based on selected paper (only show sizes that exist / have a price).
 function sizeOptionsForPaper(poster, paperKey) {
   const available = [];
   for (const s of SIZES) {
@@ -63,6 +61,45 @@ function sizeOptionsForPaper(poster, paperKey) {
     }
   }
   return available;
+}
+
+// --- NEW: Preview switching logic
+
+function normalizeMode(mode) {
+  return String(mode || "STRICT").toUpperCase() === "ART" ? "ART" : "STRICT";
+}
+
+// If we know the exact R2 filename (via variantFiles), we can guess the preview filename too.
+function guessPreviewFromVariantFile(fileName) {
+  if (!fileName) return null;
+  const f = String(fileName);
+
+  // Preferred: you often have "xxx.png" and preview "xxx_fixed.jpg"
+  if (f.toLowerCase().endsWith(".png")) {
+    return `/previews/${f.replace(/\.png$/i, "_fixed.jpg")}`;
+  }
+
+  // If someone stored the preview name directly, just use it
+  if (f.startsWith("/previews/")) return f;
+  return `/previews/${f}`;
+}
+
+function pickPreviewUrl(poster, sizeKey, modeKey) {
+  const size = String(sizeKey || "").toLowerCase();
+  const mode = normalizeMode(modeKey);
+
+  // 1) Explicit variant preview mapping in posters.json
+  const vKey = `${size}_${mode}`;
+  const explicit = poster?.variantPreviews?.[vKey];
+  if (explicit) return explicit;
+
+  // 2) If we have a variant file name (R2 object), guess its preview file
+  const vFile = poster?.variantFiles?.[vKey];
+  const guessed = guessPreviewFromVariantFile(vFile);
+  if (guessed) return guessed;
+
+  // 3) Fallback: use the main preview
+  return poster.previewUrl;
 }
 
 function render(poster) {
@@ -98,7 +135,6 @@ function render(poster) {
     `.trim()
   ).join("");
 
-  // We will render size <option>s dynamically after render (based on paper).
   const modeOptions = MODES.map(
     (m) => `
       <label class="radio">
@@ -111,11 +147,14 @@ function render(poster) {
     `.trim()
   ).join("");
 
+  // Initial preview
+  const initialPreviewUrl = pickPreviewUrl(poster, defaultSize, defaultMode);
+
   page.innerHTML = `
     <section class="poster-split">
       <div class="poster-preview">
         <div class="poster-img poster-img--large">
-          <img src="${poster.previewUrl}" alt="${title}" loading="eager" />
+          <img id="posterPreviewImg" src="${initialPreviewUrl}" alt="${title}" loading="eager" />
         </div>
       </div>
 
@@ -162,6 +201,7 @@ function render(poster) {
   const sizeHint = $("sizeHint");
   const priceEl = $("price");
   const buyBtn = $("buyBtn");
+  const previewImg = $("posterPreviewImg");
 
   const renderSizeSelect = (paperKey, selectedSize) => {
     const sizes = sizeOptionsForPaper(poster, paperKey);
@@ -184,6 +224,17 @@ function render(poster) {
     return nextSize;
   };
 
+  // Update preview whenever size/mode changes
+  const updatePreview = () => {
+    const size = sizeSelect?.value || defaultSize;
+    const mode = document.querySelector('input[name="mode"]:checked')?.value || defaultMode;
+    const next = pickPreviewUrl(poster, size, mode);
+
+    if (previewImg && next && previewImg.getAttribute("src") !== next) {
+      previewImg.setAttribute("src", next);
+    }
+  };
+
   // Initial render of size select based on default paper
   defaultSize = renderSizeSelect(defaultPaper, defaultSize);
 
@@ -194,22 +245,32 @@ function render(poster) {
     priceEl.textContent = p == null ? "—" : `$${p}`;
   };
 
+  // Paper change: re-render sizes, then update price + preview
   document.querySelectorAll('input[name="paper"]').forEach((el) => {
     el.addEventListener("change", () => {
       const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
       const currentSize = sizeSelect?.value || defaultSize;
 
-      // Re-render sizes for the newly selected paper
       const nextSize = renderSizeSelect(paper, currentSize);
-
-      // If we had to change size (e.g., user had A2/A3 and switched to Standard), update the select value
       if (sizeSelect) sizeSelect.value = nextSize;
 
       updatePrice();
+      updatePreview();
     });
   });
 
-  sizeSelect?.addEventListener("change", updatePrice);
+  // Size change: update price + preview
+  sizeSelect?.addEventListener("change", () => {
+    updatePrice();
+    updatePreview();
+  });
+
+  // Mode change: update preview (and price unchanged)
+  document.querySelectorAll('input[name="mode"]').forEach((el) => {
+    el.addEventListener("change", () => {
+      updatePreview();
+    });
+  });
 
   buyBtn?.addEventListener("click", () => {
     void (async () => {
@@ -250,6 +311,7 @@ function render(poster) {
   });
 
   updatePrice();
+  updatePreview();
 }
 
 async function main() {
