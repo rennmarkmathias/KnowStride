@@ -1,7 +1,7 @@
 {
   "posters": [
     {
-      "id": "world-history-icons",
+      "id": "world-history-25-icons",
       "slug": "world-history",
       "title": "World History — 25 Icons",
       "category": "World History",
@@ -9,85 +9,115 @@
       "year": 2026,
       "previewUrl": "/previews/world_history_25_icons_preview.jpg",
       "fileBase": "world_history_25_icons",
-      "printDir": "/prints",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 1, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
     {
-      "id": "european-history-icons",
+      "id": "european-history-24-icons",
       "slug": "european-history",
-      "title": "European History — Empires & Ideas",
+      "title": "European History — 24 Icons",
       "category": "European History",
-      "tag": "classical Europe",
+      "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/europe_history_25_icons_preview.jpg",
-      "fileBase": "europe_history_25_icons",
-      "printDir": "/prints",
+      "previewUrl": "/previews/european_history_24_icons_preview.jpg",
+      "fileBase": "european_history_24_icons",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
     {
-      "id": "north-american-history-icons",
-      "slug": "north-american-history",
-      "title": "North American History — 25 Icons",
+      "id": "united-states-history-24-icons",
+      "slug": "united-states-history",
+      "title": "United States History — 24 Icons",
       "category": "North American History",
-      "tag": "25 icons",
+      "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/north_america_history_25_icons_preview.jpg",
-      "fileBase": "north_america_history_25_icons",
-      "printDir": "/prints",
+      "previewUrl": "/previews/united_states_history_24_icons_preview.jpg",
+      "fileBase": "united_states_history_24_icons",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
     {
-      "id": "historical-warships",
-      "slug": "historical-warships",
-      "title": "Historical Warships",
-      "category": "Military History",
-      "tag": "naval history",
+      "id": "canada-history-24-icons",
+      "slug": "canada-history",
+      "title": "Canada History — 24 Icons",
+      "category": "North American History",
+      "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/historical_warships_icons_preview.jpg",
-      "fileBase": "historical_warships_icons",
-      "printDir": "/prints",
+      "previewUrl": "/previews/canada_history_24_icons_preview.jpg",
+      "fileBase": "canada_history_24_icons",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
     {
-      "id": "vintage-cars-40s-70s",
-      "slug": "vintage-cars-40s-70s",
-      "title": "Vintage Cars — 1940s to 1970s",
-      "category": "Vintage Cars",
-      "tag": "automotive history",
+      "id": "world-cities-24-icons",
+      "slug": "world-cities",
+      "title": "World Cities — 24 Icons",
+      "category": "World Culture",
+      "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/vintage_cars_40s_70s_preview.jpg",
-      "fileBase": "vintage_cars_40s_70s",
-      "printDir": "/prints",
+      "previewUrl": "/previews/world_cities_24_icons_preview.jpg",
+      "fileBase": "world_cities_24_icons",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
     {
-      "id": "historical-buildings",
-      "slug": "historical-buildings",
-      "title": "Historical Buildings",
+      "id": "women-fashion-western-world-24-icons",
+      "slug": "women-fashion-western-world",
+      "title": "Women’s Fashion — Western World — 24 Icons",
+      "category": "Cultural History",
+      "tag": "24 icons",
+      "year": 2026,
+      "previewUrl": "/previews/women_s_fashion_western_world_24_icons_preview.jpg",
+      "fileBase": "women_s_fashion_western_world_24_icons",
+      "printDir": "exports",
+      "prices": {
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "american-european-classic-cars-24-icons",
+      "slug": "american-european-classic-cars",
+      "title": "American & European Classic Cars — 24 Icons",
+      "category": "Automotive History",
+      "tag": "24 icons",
+      "year": 2026,
+      "previewUrl": "/previews/american_european_classic_cars_24_icons_preview.jpg",
+      "fileBase": "american_european_classic_cars_24_icons",
+      "printDir": "exports",
+      "prices": {
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "buildings-of-world-history-24-icons",
+      "slug": "buildings-of-world-history",
+      "title": "Buildings of World History — 24 Icons",
       "category": "Architecture",
-      "tag": "monuments & landmarks",
+      "tag": "24 icons",
       "year": 2026,
-      "previewUrl": "/previews/historical_buildings_icons_preview.jpg",
-      "fileBase": "historical_buildings_icons",
-      "printDir": "/prints",
+      "previewUrl": "/previews/buildings_of_world_history_24_icons_preview.jpg",
+      "fileBase": "buildings_of_world_history_24_icons",
+      "printDir": "exports",
       "prices": {
-        "standard": { "a3": 29, "a2": 39, "12x18": 29, "18x24": 39 },
-        "fineart":  { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     }
   ]
