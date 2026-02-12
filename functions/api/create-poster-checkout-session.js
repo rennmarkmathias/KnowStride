@@ -48,9 +48,7 @@ export async function onRequestPost(context) {
     const url = new URL(request.url);
     const origin = `${url.protocol}//${url.host}`;
 
-    // We no longer send a full URL in Stripe metadata.
-    // Instead we send a relative object path (print_path) that the Stripe webhook
-    // turns into a full URL via env.PRINTS_BASE_URL.
+    // Send a RELATIVE object path (print_path). Webhook turns into full URL via env.PRINTS_BASE_URL.
     const printPath = buildPrintPath(poster, size, mode);
 
     const clerkUserId = await getOptionalClerkUserId(request, env);
@@ -76,26 +74,7 @@ export async function onRequestPost(context) {
       billing_address_collection: "auto",
       shipping_address_collection: {
         allowed_countries: [
-          "US",
-          "CA",
-          "GB",
-          "IE",
-          "SE",
-          "NO",
-          "DK",
-          "FI",
-          "DE",
-          "FR",
-          "NL",
-          "BE",
-          "ES",
-          "IT",
-          "AT",
-          "CH",
-          "PL",
-          "PT",
-          "AU",
-          "NZ",
+          "US","CA","GB","IE","SE","NO","DK","FI","DE","FR","NL","BE","ES","IT","AT","CH","PL","PT","AU","NZ",
         ],
       },
       shipping_options: [
