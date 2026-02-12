@@ -53,6 +53,18 @@ async function getClerkTokenIfSignedIn() {
   }
 }
 
+// NEW: build size options based on selected paper.
+// Standard: only show sizes that exist (in your case 12x18 and 18x24).
+function sizeOptionsForPaper(poster, paperKey) {
+  const available = [];
+  for (const s of SIZES) {
+    if (priceFor(poster, paperKey, s.key) != null) {
+      available.push(s);
+    }
+  }
+  return available;
+}
+
 function render(poster) {
   const page = $("posterPage");
   if (!page) return;
@@ -61,9 +73,18 @@ function render(poster) {
   const cat = escapeHtml(poster.category || "");
   const tag = escapeHtml(poster.tag || "");
 
-  const defaultPaper = "standard";
-  const defaultSize = "a3";
+  // Defaults: pick first valid combo (prefer standard, but fall back if needed)
+  let defaultPaper = "standard";
+  if (!poster?.prices?.standard || Object.keys(poster.prices.standard).length === 0) {
+    defaultPaper = "fineart";
+  }
+
+  // Default size should be valid for the chosen paper
+  let defaultSize = "18x24";
   const defaultMode = "STRICT";
+
+  const initialSizes = sizeOptionsForPaper(poster, defaultPaper);
+  if (initialSizes.length > 0) defaultSize = initialSizes[0].key;
 
   const paperOptions = PAPERS.map(
     (p) => `
@@ -77,155 +98,9 @@ function render(poster) {
     `.trim()
   ).join("");
 
-  const sizeOptions = SIZES.map(
-    (s) => `
-      <option value="${s.key}" ${s.key === defaultSize ? "selected" : ""}>${s.label}</option>
-    `.trim()
-  ).join("");
-
+  // We will render size <option>s dynamically after render (based on paper).
   const modeOptions = MODES.map(
     (m) => `
       <label class="radio">
         <input type="radio" name="mode" value="${m.key}" ${m.key === defaultMode ? "checked" : ""} />
         <span class="radio-main">
-          <span class="radio-title">${m.label}</span>
-          <span class="radio-sub">${m.hint}</span>
-        </span>
-      </label>
-    `.trim()
-  ).join("");
-
-  page.innerHTML = `
-    <section class="poster-split">
-      <div class="poster-preview">
-        <div class="poster-img poster-img--large">
-          <img src="${poster.previewUrl}" alt="${title}" loading="eager" />
-        </div>
-      </div>
-
-      <div class="poster-buy card">
-        <div class="poster-kicker">
-          <span class="badge">${cat}</span>
-          ${tag ? `<span class="muted">${tag}</span>` : ""}
-        </div>
-        <h1 class="poster-h1">${title}</h1>
-        <p class="muted">A black‑and‑white icon poster in a classic engraving style. The item list is rendered separately beneath the artwork.</p>
-
-        <div class="buy-block">
-          <div class="buy-label">Paper</div>
-          <div class="radio-grid" role="radiogroup" aria-label="Paper">${paperOptions}</div>
-        </div>
-
-        <div class="buy-block">
-          <div class="buy-label">Size</div>
-          <select class="select" id="sizeSelect" aria-label="Size">${sizeOptions}</select>
-        </div>
-
-        <div class="buy-block" style="margin-top:4px;">
-          <div class="buy-label">Layout</div>
-          <div class="radio-grid" role="radiogroup" aria-label="Layout">${modeOptions}</div>
-        </div>
-
-        <div class="buy-row">
-          <div>
-            <div class="muted small">Total</div>
-            <div class="price" id="price">—</div>
-          </div>
-          <button class="btn" id="buyBtn" type="button">Buy with Stripe</button>
-        </div>
-
-        <div class="muted small" style="margin-top:10px;">
-          Printed & shipped by our print partner · Tracking included · No frames
-        </div>
-      </div>
-    </section>
-  `;
-
-  const sizeSelect = $("sizeSelect");
-  const priceEl = $("price");
-  const buyBtn = $("buyBtn");
-
-  const updatePrice = () => {
-    const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
-    const size = sizeSelect?.value || defaultSize;
-    const p = priceFor(poster, paper, size);
-    priceEl.textContent = p == null ? "—" : `$${p}`;
-  };
-
-  document.querySelectorAll('input[name="paper"]').forEach((el) => {
-    el.addEventListener("change", updatePrice);
-  });
-  sizeSelect?.addEventListener("change", updatePrice);
-
-  buyBtn?.addEventListener("click", () => {
-    void (async () => {
-      const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
-      const size = sizeSelect?.value || defaultSize;
-      const mode = document.querySelector('input[name="mode"]:checked')?.value || "STRICT";
-
-      buyBtn.disabled = true;
-      buyBtn.textContent = "Redirecting…";
-
-      const token = await getClerkTokenIfSignedIn();
-
-      const res = await fetch("/api/create-poster-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({
-          posterId: poster.id,
-          size,
-          paper,
-          mode,
-          quantity: 1,
-        }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data?.url) {
-        buyBtn.disabled = false;
-        buyBtn.textContent = "Buy with Stripe";
-        alert(data?.error || "Could not start checkout. Check your Stripe env vars and try again.");
-        return;
-      }
-
-      window.location.href = data.url;
-    })();
-  });
-
-  updatePrice();
-}
-
-async function main() {
-  const y = $("year");
-  if (y) y.textContent = String(new Date().getFullYear());
-
-  const slug = getParam("slug");
-  const page = $("posterPage");
-
-  if (!slug) {
-    if (page) page.innerHTML = `<div class="card"><strong>Missing poster</strong><div class="muted">No slug provided.</div></div>`;
-    return;
-  }
-
-  let posters = [];
-  try {
-    const res = await fetch("/data/posters.json", { cache: "no-store" });
-    const data = await res.json();
-    posters = Array.isArray(data.posters) ? data.posters : [];
-  } catch {
-    posters = [];
-  }
-
-  const poster = posters.find((p) => p.slug === slug);
-  if (!poster) {
-    if (page) page.innerHTML = `<div class="card"><strong>Not found</strong><div class="muted">This poster does not exist (yet).</div></div>`;
-    return;
-  }
-
-  render(poster);
-}
-
-main();
