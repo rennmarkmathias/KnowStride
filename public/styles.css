@@ -75,18 +75,6 @@ img{ max-width:100%; display:block; }
   gap: 12px;
 }
 
-.shipping-banner{
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 0 18px 12px;
-  display:flex;
-  justify-content:center;
-}
-
-.pill-ship{
-  font-weight: 900;
-}
-
 .brand{
   display:flex;
   flex-direction:column;
@@ -190,37 +178,55 @@ img{ max-width:100%; display:block; }
 .section-head h2{ margin: 0; font-size: 1.6rem; }
 .section-controls{ display:flex; gap: 10px; flex-wrap:wrap; }
 
+/* ---------- Poster grid ---------- */
+
 .poster-grid{
-  margin-top: 14px;
   display:grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* ✅ 2 på PC */
   gap: 14px;
+}
+
+@media (max-width: 720px){
+  .poster-grid{ grid-template-columns: 1fr; } /* ✅ 1 på mobil */
 }
 
 .poster-card{
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  overflow:hidden;
-  background: rgba(255,255,255,.75);
-  box-shadow: 0 10px 22px rgba(0,0,0,.08);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  transition: transform 140ms ease, border-color 140ms ease;
 }
 
-.poster-card:hover{ transform: translateY(-2px); box-shadow: 0 16px 30px rgba(0,0,0,.10); }
+.poster-card:hover{ transform: translateY(-2px); border-color: rgba(0,0,0,.22); text-decoration:none; }
 
 .poster-img{
-  background: rgba(0,0,0,.04);
-  aspect-ratio: 4/5;
-  overflow:hidden;
+  background: rgba(0,0,0,.02);
+  border-bottom: 1px solid var(--line);
+  /* Keep a consistent poster shape while letting the full artwork be visible */
+  aspect-ratio: 4 / 5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .poster-img img{
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  display:block;
+  /* ✅ Visa HELA postern (ingen cropping) */
+  object-fit: contain;
 }
 
-.poster-meta{ padding: 14px; }
+.poster-img--large{
+  aspect-ratio: 4 / 5;
+  max-height: 74vh;
+}
+
+.poster-img--large img{ max-height: 74vh; }
+
+.poster-meta{ padding: 12px 14px 14px; }
 .poster-title{ font-weight: 900; font-size: 1.05rem; letter-spacing: .1px; }
 .poster-sub{ margin-top: 6px; display:flex; gap: 10px; flex-wrap:wrap; align-items:center; }
 
@@ -236,15 +242,6 @@ img{ max-width:100%; display:block; }
 }
 
 .poster-price{ margin-top: 10px; font-weight: 900; }
-.poster-ship{ margin-top: 4px; font-size: .82rem; color: rgba(0,0,0,.6); }
-
-.empty{
-  border: 1px dashed rgba(0,0,0,.25);
-  border-radius: var(--radius);
-  padding: 18px;
-  color: rgba(0,0,0,.7);
-  background: rgba(255,255,255,.4);
-}
 
 /* ---------- How section ---------- */
 
@@ -272,13 +269,6 @@ img{ max-width:100%; display:block; }
   grid-template-columns: 1fr 420px;
   gap: 18px;
   align-items:start;
-}
-
-.poster-img--large{
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  overflow:hidden;
-  box-shadow: var(--shadow);
 }
 
 .poster-buy .poster-kicker{
@@ -347,12 +337,30 @@ img{ max-width:100%; display:block; }
 /* ---------- Responsive ---------- */
 
 @media (max-width: 980px){
-  .poster-grid{ grid-template-columns: repeat(3, 1fr); }
   .poster-split{ grid-template-columns: 1fr; }
+  .hero{ grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px){
-  .hero{ grid-template-columns: 1fr; }
-  .poster-grid{ grid-template-columns: repeat(2, 1fr); }
   .footer-grid{ grid-template-columns: 1fr; }
+}
+
+/* ---------- Shipping UI ---------- */
+
+.shipping-banner{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 18px 12px;
+  display:flex;
+  justify-content:center;
+}
+
+.pill-ship{
+  font-weight: 900;
+}
+
+.poster-ship{
+  margin-top: 4px;
+  font-size: .82rem;
+  color: rgba(0,0,0,.6);
 }
