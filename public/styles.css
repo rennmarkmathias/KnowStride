@@ -359,3 +359,9 @@ a:hover{ text-decoration:underline; }
 .footer-bottom{ margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 
 .footer-compact .footer-bottom{ margin-top: 0; padding-top: 0; border-top: 0; }
+.poster-ship {
+  font-size: 0.8rem;
+  color: #6b6b6b;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
