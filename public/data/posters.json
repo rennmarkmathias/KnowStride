@@ -17,8 +17,8 @@
         "18x24_ART": "/previews/world_history_25_icons_18x24_in_ART_20260210_120504_fixed.jpg"
       },
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -32,8 +32,8 @@
       "fileBase": "european_history_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -47,8 +47,8 @@
       "fileBase": "united_states_history_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -62,8 +62,8 @@
       "fileBase": "canada_history_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -77,8 +77,8 @@
       "fileBase": "world_cities_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -92,8 +92,8 @@
       "fileBase": "women_s_fashion_western_world_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -107,8 +107,8 @@
       "fileBase": "american_european_classic_cars_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     },
     {
@@ -122,8 +122,8 @@
       "fileBase": "buildings_of_world_history_24_icons",
       "printDir": "exports",
       "prices": {
-        "standard": { "12x18": 29, "18x24": 39 },
-        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+        "standard": { "12x18": 1, "18x24": 1 },
+        "fineart": { "a3": 1, "a2": 1, "12x18": 1, "18x24": 1 }
       }
     }
   ]
