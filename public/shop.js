@@ -48,6 +48,7 @@ function cardHtml(p) {
           ${tag ? `<span class="muted">${tag}</span>` : ""}
         </div>
         <div class="poster-price">${from}</div>
+        <div class="poster-ship">Free shipping</div>
       </div>
     </a>
   `.trim();
