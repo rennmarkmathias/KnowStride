@@ -35,6 +35,19 @@ function escapeHtml(s) {
     .replaceAll("'", "&#39;");
 }
 
+function normalizeMode(mode) {
+  return String(mode || "STRICT").toUpperCase() === "ART" ? "ART" : "STRICT";
+}
+
+function sizeTokenForPreview(sizeKey) {
+  const s = String(sizeKey || "").toLowerCase();
+  if (s === "12x18") return "12x18";
+  if (s === "18x24") return "18x24";
+  if (s === "a2") return "A2_(420x594mm)";
+  if (s === "a3") return "A3_(297x420mm)";
+  return s;
+}
+
 function priceFor(poster, paperKey, sizeKey) {
   const paper = poster?.prices?.[paperKey] || {};
   const v = Number(paper?.[sizeKey]);
@@ -52,54 +65,35 @@ async function getClerkTokenIfSignedIn() {
   }
 }
 
-// Build size options based on selected paper (only show sizes that exist / have a price).
+// Only show sizes that exist (have a price) for the selected paper.
 function sizeOptionsForPaper(poster, paperKey) {
   const available = [];
   for (const s of SIZES) {
-    if (priceFor(poster, paperKey, s.key) != null) {
-      available.push(s);
-    }
+    if (priceFor(poster, paperKey, s.key) != null) available.push(s);
   }
   return available;
 }
 
-// --- NEW: Preview switching logic
-
-function normalizeMode(mode) {
-  return String(mode || "STRICT").toUpperCase() === "ART" ? "ART" : "STRICT";
-}
-
-// If we know the exact R2 filename (via variantFiles), we can guess the preview filename too.
-function guessPreviewFromVariantFile(fileName) {
-  if (!fileName) return null;
-  const f = String(fileName);
-
-  // Preferred: you often have "xxx.png" and preview "xxx_fixed.jpg"
-  if (f.toLowerCase().endsWith(".png")) {
-    return `/previews/${f.replace(/\.png$/i, "_fixed.jpg")}`;
-  }
-
-  // If someone stored the preview name directly, just use it
-  if (f.startsWith("/previews/")) return f;
-  return `/previews/${f}`;
-}
-
-function pickPreviewUrl(poster, sizeKey, modeKey) {
+// Build preview URL based on your actual filenames in /public/previews
+function buildPreviewUrl(poster, sizeKey, modeKey) {
   const size = String(sizeKey || "").toLowerCase();
   const mode = normalizeMode(modeKey);
 
-  // 1) Explicit variant preview mapping in posters.json
+  // 1) Explicit override (if present)
   const vKey = `${size}_${mode}`;
   const explicit = poster?.variantPreviews?.[vKey];
   if (explicit) return explicit;
 
-  // 2) If we have a variant file name (R2 object), guess its preview file
-  const vFile = poster?.variantFiles?.[vKey];
-  const guessed = guessPreviewFromVariantFile(vFile);
-  if (guessed) return guessed;
+  // 2) Standard pattern in your repo:
+  // /previews/<fileBase>_<SIZE>_in_<MODE>_fixed.jpg
+  const base = poster?.fileBase;
+  if (base) {
+    const token = sizeTokenForPreview(size);
+    return `/previews/${base}_${token}_in_${mode}_fixed.jpg`;
+  }
 
-  // 3) Fallback: use the main preview
-  return poster.previewUrl;
+  // 3) Fallback
+  return poster?.previewUrl || "";
 }
 
 function render(poster) {
@@ -110,13 +104,11 @@ function render(poster) {
   const cat = escapeHtml(poster.category || "");
   const tag = escapeHtml(poster.tag || "");
 
-  // Defaults: pick first valid combo (prefer standard, but fall back if needed)
   let defaultPaper = "standard";
   if (!poster?.prices?.standard || Object.keys(poster.prices.standard).length === 0) {
     defaultPaper = "fineart";
   }
 
-  // Default size should be valid for the chosen paper
   let defaultSize = "18x24";
   const defaultMode = "STRICT";
 
@@ -147,8 +139,7 @@ function render(poster) {
     `.trim()
   ).join("");
 
-  // Initial preview
-  const initialPreviewUrl = pickPreviewUrl(poster, defaultSize, defaultMode);
+  const initialPreviewUrl = buildPreviewUrl(poster, defaultSize, defaultMode);
 
   page.innerHTML = `
     <section class="poster-split">
@@ -206,7 +197,6 @@ function render(poster) {
   const renderSizeSelect = (paperKey, selectedSize) => {
     const sizes = sizeOptionsForPaper(poster, paperKey);
 
-    // If selected size isn't available, choose the first available.
     let nextSize = selectedSize;
     if (!sizes.some((s) => s.key === nextSize)) {
       nextSize = sizes[0]?.key || "18x24";
@@ -216,7 +206,6 @@ function render(poster) {
       .map((s) => `<option value="${s.key}" ${s.key === nextSize ? "selected" : ""}>${s.label}</option>`)
       .join("");
 
-    // Tiny hint: show only when Standard is selected.
     if (sizeHint) {
       sizeHint.textContent = paperKey === "standard" ? "A2/A3: Fine Art" : "";
     }
@@ -224,18 +213,7 @@ function render(poster) {
     return nextSize;
   };
 
-  // Update preview whenever size/mode changes
-  const updatePreview = () => {
-    const size = sizeSelect?.value || defaultSize;
-    const mode = document.querySelector('input[name="mode"]:checked')?.value || defaultMode;
-    const next = pickPreviewUrl(poster, size, mode);
-
-    if (previewImg && next && previewImg.getAttribute("src") !== next) {
-      previewImg.setAttribute("src", next);
-    }
-  };
-
-  // Initial render of size select based on default paper
+  // Initial sizes
   defaultSize = renderSizeSelect(defaultPaper, defaultSize);
 
   const updatePrice = () => {
@@ -245,7 +223,16 @@ function render(poster) {
     priceEl.textContent = p == null ? "—" : `$${p}`;
   };
 
-  // Paper change: re-render sizes, then update price + preview
+  const updatePreview = () => {
+    const size = sizeSelect?.value || defaultSize;
+    const mode = document.querySelector('input[name="mode"]:checked')?.value || defaultMode;
+    const next = buildPreviewUrl(poster, size, mode);
+
+    if (previewImg && next && previewImg.getAttribute("src") !== next) {
+      previewImg.setAttribute("src", next);
+    }
+  };
+
   document.querySelectorAll('input[name="paper"]').forEach((el) => {
     el.addEventListener("change", () => {
       const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
@@ -259,13 +246,11 @@ function render(poster) {
     });
   });
 
-  // Size change: update price + preview
   sizeSelect?.addEventListener("change", () => {
     updatePrice();
     updatePreview();
   });
 
-  // Mode change: update preview (and price unchanged)
   document.querySelectorAll('input[name="mode"]').forEach((el) => {
     el.addEventListener("change", () => {
       updatePreview();
