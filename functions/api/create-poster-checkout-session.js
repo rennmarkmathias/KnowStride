@@ -1,7 +1,6 @@
--import { requireClerkAuth } from "./_auth";
--import { findPosterById, buildPrintPath, json } from "./_posters";
-+import { requireClerkAuth } from "./_auth.js";
-+import { findPosterById, buildPrintPath, json } from "./_posters.js";
+import Stripe from "stripe";
+import { requireClerkAuth } from "./_auth.js";
+import { findPosterById, buildPrintPath, json } from "./_posters.js";
 
 // Guest checkout is allowed. If the user is signed in, we attach their Clerk user id.
 async function getOptionalClerkUserId(request, env) {
