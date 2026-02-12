@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { requireClerkAuth } from "./_auth";
-import { findPosterById, buildPrintUrl, json } from "./_posters";
+import { findPosterById, buildPrintPath, json } from "./_posters";
 
 // Guest checkout is allowed. If the user is signed in, we attach their Clerk user id.
 async function getOptionalClerkUserId(request, env) {
@@ -48,7 +48,10 @@ export async function onRequestPost(context) {
     const url = new URL(request.url);
     const origin = `${url.protocol}//${url.host}`;
 
-    const printUrl = buildPrintUrl(origin, poster, size, mode);
+    // We no longer send a full URL in Stripe metadata.
+    // Instead we send a relative object path (print_path) that the Stripe webhook
+    // turns into a full URL via env.PRINTS_BASE_URL.
+    const printPath = buildPrintPath(poster, size, mode);
 
     const clerkUserId = await getOptionalClerkUserId(request, env);
 
@@ -117,7 +120,7 @@ export async function onRequestPost(context) {
         size,
         paper,
         mode: mode === "ART" ? "ART" : "STRICT",
-        print_url: printUrl,
+        print_path: printPath,
         ...(clerkUserId ? { clerk_user_id: clerkUserId } : {}),
       },
     });
