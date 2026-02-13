@@ -282,9 +282,16 @@ function render(poster) {
     return p == null ? 0 : p;
   };
 
+  const formatUsd = (amount) => {
+    // Keep it simple: "$29 USD". If you later add cents, you can swap this for Intl.NumberFormat.
+    const n = Number(amount);
+    if (!Number.isFinite(n) || n <= 0) return "—";
+    return `$${n} USD`;
+  };
+
   const updatePrice = () => {
     const v = getCurrentValue();
-    priceEl.textContent = v ? `$${v} USD` : "—";
+    priceEl.textContent = formatUsd(v);
   };
 
   const updatePreview = () => {
