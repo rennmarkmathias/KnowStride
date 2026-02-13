@@ -67,6 +67,36 @@
       }
     },
     {
+      "id": "united-kingdom-history-24-icons",
+      "slug": "united-kingdom-history",
+      "title": "United Kingdom History — 24 Icons",
+      "category": "European History",
+      "tag": "24 icons",
+      "year": 2026,
+      "previewUrl": "/previews/united_kingdom_history_24_icons_18x24_in_STRICT_fixed.jpg",
+      "fileBase": "united_kingdom_history_24_icons",
+      "printDir": "exports",
+      "prices": {
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
+      "id": "australia-history-24-icons",
+      "slug": "australia-history",
+      "title": "Australia History — 24 Icons",
+      "category": "World History",
+      "tag": "24 icons",
+      "year": 2026,
+      "previewUrl": "/previews/australia_history_24_icons_18x24_in_STRICT_fixed.jpg",
+      "fileBase": "australia_history_24_icons",
+      "printDir": "exports",
+      "prices": {
+        "standard": { "12x18": 29, "18x24": 39 },
+        "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
+      }
+    },
+    {
       "id": "world-cities-24-icons",
       "slug": "world-cities",
       "title": "World Cities — 24 Icons",
