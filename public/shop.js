@@ -18,7 +18,7 @@ function formatFromPrice(poster) {
   }
   if (!all.length) return "";
   const min = Math.min(...all);
-  return `From $${min}`;
+  return `From $${min} USD`;
 }
 
 function escapeHtml(s) {
