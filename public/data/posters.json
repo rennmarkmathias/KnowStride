@@ -17,7 +17,7 @@
         "18x24_ART": "/previews/world_history_25_icons_18x24_in_ART_20260210_120504_fixed.jpg"
       },
       "prices": {
-        "standard": { "12x18": 1, "18x24": 39 },
+        "standard": { "12x18": 29, "18x24": 39 },
         "fineart": { "a3": 44, "a2": 49, "12x18": 44, "18x24": 49 }
       }
     },
