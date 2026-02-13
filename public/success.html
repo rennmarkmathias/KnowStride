@@ -5,6 +5,24 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Order complete — KnowStride</title>
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1971126520280025');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1971126520280025&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 <body>
   <header class="topbar">
@@ -31,21 +49,31 @@
   </main>
 
   <script>
-    // Meta Pixel: Purchase
+    // Optional: track Purchase based on what we stored right before redirecting to Stripe.
+    // This is a pragmatic "good enough" setup for early campaigns without server-side events.
     (function () {
+      const fbqSafe = (...args) => {
+        try { if (typeof window.fbq === "function") window.fbq(...args); } catch {}
+      };
+
       try {
-        if (typeof window.fbq !== "function") return;
+        const raw = sessionStorage.getItem("ks_last_checkout");
+        if (!raw) return;
 
-        const url = new URL(window.location.href);
-        const sessionId = url.searchParams.get("session_id") || "";
+        const data = JSON.parse(raw);
 
-        // Minimal Purchase event.
-        // Later you can replace value with real order total by verifying the session server-side.
-        window.fbq("track", "Purchase", {
-          currency: "USD",
-          value: 0.00,
-          ...(sessionId ? { transaction_id: sessionId } : {}),
+        // Track Purchase
+        fbqSafe("track", "Purchase", {
+          value: Number(data?.value) || 0,
+          currency: data?.currency || "USD",
+          content_ids: data?.content_ids || [],
+          content_name: data?.content_name || "",
+          content_type: "product",
+          num_items: Number(data?.num_items) || 1
         });
+
+        // Clear so we don't double-fire on refresh
+        sessionStorage.removeItem("ks_last_checkout");
       } catch {}
     })();
   </script>
