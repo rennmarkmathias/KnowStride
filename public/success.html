@@ -31,7 +31,23 @@
   </main>
 
   <script>
-    document.getElementById('year')?.textContent = new Date().getFullYear();
+    // Meta Pixel: Purchase
+    (function () {
+      try {
+        if (typeof window.fbq !== "function") return;
+
+        const url = new URL(window.location.href);
+        const sessionId = url.searchParams.get("session_id") || "";
+
+        // Minimal Purchase event.
+        // Later you can replace value with real order total by verifying the session server-side.
+        window.fbq("track", "Purchase", {
+          currency: "USD",
+          value: 0.00,
+          ...(sessionId ? { transaction_id: sessionId } : {}),
+        });
+      } catch {}
+    })();
   </script>
 </body>
 </html>
