@@ -84,12 +84,17 @@ function buildPreviewUrl(poster, sizeKey, modeKey) {
   const explicit = poster?.variantPreviews?.[vKey];
   if (explicit) return explicit;
 
-  // 2) Standard pattern in your repo:
-  // /previews/<fileBase>_<SIZE>_in_<MODE>_fixed.jpg
+  // 2) Pattern in your repo:
+  // - 12x18/18x24: /previews/<fileBase>_<SIZE>_in_<MODE>_fixed.jpg
+  // - A2/A3:       /previews/<fileBase>_<SIZE>_<MODE>_fixed.jpg  (no "in_")
   const base = poster?.fileBase;
   if (base) {
     const token = sizeTokenForPreview(size);
-    return `/previews/${base}_${token}_in_${mode}_fixed.jpg`;
+    const isMetric = size === "a2" || size === "a3";
+
+    return isMetric
+      ? `/previews/${base}_${token}_${mode}_fixed.jpg`
+      : `/previews/${base}_${token}_in_${mode}_fixed.jpg`;
   }
 
   // 3) Fallback
