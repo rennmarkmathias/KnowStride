@@ -103,13 +103,12 @@ const fbqSafe = (...args) => {
   try { if (typeof window.fbq === "function") window.fbq(...args); } catch {}
 };
 
-// Pick a stable id for Meta events
+// Pick a stable id for Meta events note: stable id per poster
 function contentIdForPoster(p) {
   return String(p?.id ?? p?.slug ?? p?.fileBase ?? p?.title ?? "");
 }
 
 function trackViewContent({ poster, value, currency }) {
-  // ViewContent is typically fired on product page view
   fbqSafe("track", "ViewContent", {
     content_ids: [contentIdForPoster(poster)],
     content_name: poster?.title || "",
@@ -205,12 +204,27 @@ function render(poster) {
           <span class="badge">${cat}</span>
           ${tag ? `<span class="muted">${tag}</span>` : ""}
         </div>
+
         <h1 class="poster-h1">${title}</h1>
         <p class="muted">A black-and-white icon poster in a classic engraving style. The item list is rendered separately beneath the artwork.</p>
 
-        <div class="buy-block">
-          <div class="buy-label">Paper</div>
-          <div class="radio-grid" role="radiogroup" aria-label="Paper">${paperOptions}</div>
+        <!-- ✅ MOVED UP for mobile conversion: Price + CTA comes early -->
+        <div class="buy-row" style="margin-top:12px;">
+          <div>
+            <div class="muted small">Total</div>
+            <div class="price" id="price">—</div>
+          </div>
+          <button class="btn" id="buyBtn" type="button">Checkout with Stripe</button>
+        </div>
+
+        <div class="muted small" style="margin-top:10px;">
+          Free shipping · Tracking included · No frames
+        </div>
+
+        <!-- Layout first -->
+        <div class="buy-block" style="margin-top:18px;">
+          <div class="buy-label">Layout</div>
+          <div class="radio-grid" role="radiogroup" aria-label="Layout">${modeOptions}</div>
         </div>
 
         <div class="buy-block">
@@ -219,21 +233,9 @@ function render(poster) {
           <div id="sizeHint" class="muted small" style="margin-top:6px;"></div>
         </div>
 
-        <div class="buy-block" style="margin-top:4px;">
-          <div class="buy-label">Layout</div>
-          <div class="radio-grid" role="radiogroup" aria-label="Layout">${modeOptions}</div>
-        </div>
-
-        <div class="buy-row">
-          <div>
-            <div class="muted small">Total</div>
-            <div class="price" id="price">—</div>
-          </div>
-          <button class="btn" id="buyBtn" type="button">Buy with Stripe</button>
-        </div>
-
-        <div class="muted small" style="margin-top:10px;">
-          Free shipping · Tracking included · No frames
+        <div class="buy-block">
+          <div class="buy-label">Paper</div>
+          <div class="radio-grid" role="radiogroup" aria-label="Paper">${paperOptions}</div>
         </div>
       </div>
     </section>
@@ -310,8 +312,6 @@ function render(poster) {
 
       updatePrice();
       updatePreview();
-
-      // Optional: re-fire ViewContent on variant change (helps Meta learn which variants people view)
       fireViewContent();
     });
   });
@@ -363,7 +363,7 @@ function render(poster) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data?.url) {
         buyBtn.disabled = false;
-        buyBtn.textContent = "Buy with Stripe";
+        buyBtn.textContent = "Checkout with Stripe";
         alert(data?.error || "Could not start checkout. Check your Stripe env vars and try again.");
         return;
       }
