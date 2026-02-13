@@ -97,37 +97,54 @@ function buildPreviewUrl(poster, sizeKey, modeKey) {
 }
 
 /* ---------------------------
-   Meta Pixel helpers
---------------------------- */
-function fbqSafe(eventName, params) {
-  try {
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-      window.fbq("track", eventName, params || {});
-    }
-  } catch {
-    // ignore
-  }
+   Meta Pixel helpers/events
+---------------------------- */
+const fbqSafe = (...args) => {
+  try { if (typeof window.fbq === "function") window.fbq(...args); } catch {}
+};
+
+// Pick a stable id for Meta events
+function contentIdForPoster(p) {
+  return String(p?.id ?? p?.slug ?? p?.fileBase ?? p?.title ?? "");
 }
 
-function posterToPixelBase(poster) {
-  return {
+function trackViewContent({ poster, value, currency }) {
+  // ViewContent is typically fired on product page view
+  fbqSafe("track", "ViewContent", {
+    content_ids: [contentIdForPoster(poster)],
+    content_name: poster?.title || "",
+    content_category: poster?.category || "",
     content_type: "product",
-    content_ids: poster?.id ? [String(poster.id)] : [],
-    content_name: poster?.title ? String(poster.title) : "",
-    content_category: poster?.category ? String(poster.category) : "",
-  };
+    value: Number(value) || 0,
+    currency: currency || "USD"
+  });
 }
 
-// Fire ViewContent once per page view (even if user changes variant)
-function fireViewContentOnce(poster) {
-  if (!poster?.id) return;
-  const key = `ks_vc_${poster.id}`;
-  if (sessionStorage.getItem(key)) return;
-  sessionStorage.setItem(key, "1");
-
-  fbqSafe("ViewContent", {
-    ...posterToPixelBase(poster),
+function trackInitiateCheckout({ poster, value, currency }) {
+  fbqSafe("track", "InitiateCheckout", {
+    content_ids: [contentIdForPoster(poster)],
+    content_name: poster?.title || "",
+    content_category: poster?.category || "",
+    content_type: "product",
+    value: Number(value) || 0,
+    currency: currency || "USD",
+    num_items: 1
   });
+}
+
+/**
+ * Save last checkout context for succes.html to read (optional Purchase tracking)
+ */
+function stashCheckoutForSuccess({ poster, value, currency }) {
+  try {
+    sessionStorage.setItem("ks_last_checkout", JSON.stringify({
+      content_ids: [contentIdForPoster(poster)],
+      content_name: poster?.title || "",
+      value: Number(value) || 0,
+      currency: currency || "USD",
+      num_items: 1
+    }));
+  } catch {}
 }
 
 function render(poster) {
@@ -250,21 +267,37 @@ function render(poster) {
   // Initial sizes
   defaultSize = renderSizeSelect(defaultPaper, defaultSize);
 
-  const updatePrice = () => {
+  const getCurrentSelection = () => {
     const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
     const size = sizeSelect?.value || defaultSize;
+    const mode = document.querySelector('input[name="mode"]:checked')?.value || defaultMode;
+    return { paper, size, mode };
+  };
+
+  const getCurrentValue = () => {
+    const { paper, size } = getCurrentSelection();
     const p = priceFor(poster, paper, size);
-    priceEl.textContent = p == null ? "—" : `$${p}`;
+    return p == null ? 0 : p;
+  };
+
+  const updatePrice = () => {
+    const v = getCurrentValue();
+    priceEl.textContent = v ? `$${v}` : "—";
   };
 
   const updatePreview = () => {
-    const size = sizeSelect?.value || defaultSize;
-    const mode = document.querySelector('input[name="mode"]:checked')?.value || defaultMode;
+    const { size, mode } = getCurrentSelection();
     const next = buildPreviewUrl(poster, size, mode);
 
     if (previewImg && next && previewImg.getAttribute("src") !== next) {
       previewImg.setAttribute("src", next);
     }
+  };
+
+  // Fire ViewContent once on load (after initial price is computed)
+  const fireViewContent = () => {
+    const value = getCurrentValue();
+    trackViewContent({ poster, value, currency: "USD" });
   };
 
   document.querySelectorAll('input[name="paper"]').forEach((el) => {
@@ -277,38 +310,35 @@ function render(poster) {
 
       updatePrice();
       updatePreview();
+
+      // Optional: re-fire ViewContent on variant change (helps Meta learn which variants people view)
+      fireViewContent();
     });
   });
 
   sizeSelect?.addEventListener("change", () => {
     updatePrice();
     updatePreview();
+    fireViewContent();
   });
 
   document.querySelectorAll('input[name="mode"]').forEach((el) => {
     el.addEventListener("change", () => {
       updatePreview();
+      fireViewContent();
     });
   });
 
   buyBtn?.addEventListener("click", () => {
     void (async () => {
-      const paper = document.querySelector('input[name="paper"]:checked')?.value || defaultPaper;
-      const size = sizeSelect?.value || defaultSize;
-      const mode = document.querySelector('input[name="mode"]:checked')?.value || "STRICT";
+      const { paper, size, mode } = getCurrentSelection();
+      const value = getCurrentValue();
 
-      // Meta Pixel: InitiateCheckout (fire BEFORE redirect)
-      const price = priceFor(poster, paper, size);
-      fbqSafe("InitiateCheckout", {
-        ...posterToPixelBase(poster),
-        value: Number.isFinite(price) ? Number(price) : undefined,
-        currency: "USD",
-        custom_data: {
-          paper,
-          size,
-          mode: normalizeMode(mode),
-        },
-      });
+      // Track InitiateCheckout immediately on click
+      trackInitiateCheckout({ poster, value, currency: "USD" });
+
+      // Store for success page to track Purchase (optional but useful)
+      stashCheckoutForSuccess({ poster, value, currency: "USD" });
 
       buyBtn.disabled = true;
       buyBtn.textContent = "Redirecting…";
@@ -344,15 +374,10 @@ function render(poster) {
 
   updatePrice();
   updatePreview();
-
-  // Meta Pixel: ViewContent (once)
-  fireViewContentOnce(poster);
+  fireViewContent();
 }
 
 async function main() {
-  const y = $("year");
-  if (y) y.textContent = String(new Date().getFullYear());
-
   const slug = getParam("slug");
   const page = $("posterPage");
 
