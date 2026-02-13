@@ -56,6 +56,13 @@ export async function onRequestPost(context) {
     const successUrl = `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${origin}/p.html?id=${encodeURIComponent(posterId)}`;
 
+    // ✅ Shipping countries: EU + US + CA + GB + AU (no NZ, no NO/CH)
+    const ALLOWED_COUNTRIES = [
+      "US", "CA", "GB", "AU",
+      // EU (subset you had)
+      "AT", "BE", "DE", "DK", "ES", "FI", "FR", "IE", "IT", "NL", "PL", "PT", "SE",
+    ];
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [
@@ -73,9 +80,7 @@ export async function onRequestPost(context) {
       allow_promotion_codes: true,
       billing_address_collection: "auto",
       shipping_address_collection: {
-        allowed_countries: [
-          "US","CA","GB","IE","SE","NO","DK","FI","DE","FR","NL","BE","ES","IT","AT","CH","PL","PT","AU","NZ",
-        ],
+        allowed_countries: ALLOWED_COUNTRIES,
       },
       shipping_options: [
         {
