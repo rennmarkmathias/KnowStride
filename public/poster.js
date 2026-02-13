@@ -96,6 +96,40 @@ function buildPreviewUrl(poster, sizeKey, modeKey) {
   return poster?.previewUrl || "";
 }
 
+/* ---------------------------
+   Meta Pixel helpers
+--------------------------- */
+function fbqSafe(eventName, params) {
+  try {
+    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+      window.fbq("track", eventName, params || {});
+    }
+  } catch {
+    // ignore
+  }
+}
+
+function posterToPixelBase(poster) {
+  return {
+    content_type: "product",
+    content_ids: poster?.id ? [String(poster.id)] : [],
+    content_name: poster?.title ? String(poster.title) : "",
+    content_category: poster?.category ? String(poster.category) : "",
+  };
+}
+
+// Fire ViewContent once per page view (even if user changes variant)
+function fireViewContentOnce(poster) {
+  if (!poster?.id) return;
+  const key = `ks_vc_${poster.id}`;
+  if (sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key, "1");
+
+  fbqSafe("ViewContent", {
+    ...posterToPixelBase(poster),
+  });
+}
+
 function render(poster) {
   const page = $("posterPage");
   if (!page) return;
@@ -263,6 +297,19 @@ function render(poster) {
       const size = sizeSelect?.value || defaultSize;
       const mode = document.querySelector('input[name="mode"]:checked')?.value || "STRICT";
 
+      // Meta Pixel: InitiateCheckout (fire BEFORE redirect)
+      const price = priceFor(poster, paper, size);
+      fbqSafe("InitiateCheckout", {
+        ...posterToPixelBase(poster),
+        value: Number.isFinite(price) ? Number(price) : undefined,
+        currency: "USD",
+        custom_data: {
+          paper,
+          size,
+          mode: normalizeMode(mode),
+        },
+      });
+
       buyBtn.disabled = true;
       buyBtn.textContent = "Redirecting…";
 
@@ -297,6 +344,9 @@ function render(poster) {
 
   updatePrice();
   updatePreview();
+
+  // Meta Pixel: ViewContent (once)
+  fireViewContentOnce(poster);
 }
 
 async function main() {
