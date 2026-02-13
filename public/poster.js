@@ -284,7 +284,7 @@ function render(poster) {
 
   const updatePrice = () => {
     const v = getCurrentValue();
-    priceEl.textContent = v ? `$${v}` : "—";
+    priceEl.textContent = v ? `$${v} USD` : "—";
   };
 
   const updatePreview = () => {
