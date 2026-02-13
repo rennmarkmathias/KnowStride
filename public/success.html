@@ -16,14 +16,18 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
+
   fbq('init', '1971126520280025');
   fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1971126520280025&ev=PageView&noscript=1"
-  /></noscript>
+
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1971126520280025&ev=PageView&noscript=1"/>
+  </noscript>
   <!-- End Meta Pixel Code -->
 </head>
+
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Shop</a>
@@ -39,8 +43,13 @@
   <main class="container">
     <section class="card" style="max-width:680px;margin:24px auto;">
       <h1 style="margin-top:0">Thanks — your order is complete.</h1>
-      <p class="muted">We’ve received your payment. Production + shipping is handled by our print partner. Tracking will be sent to your email.</p>
-      <p class="muted small">If you checked out while signed in, you’ll also see the order in your account history.</p>
+      <p class="muted">
+        We’ve received your payment. Production and shipping is handled by our print partner.
+        Tracking details will be sent to your email.
+      </p>
+      <p class="muted small">
+        If you checked out while signed in, you’ll also see the order in your account history.
+      </p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
         <a class="btn" href="/">Back to shop</a>
         <a class="btn btn-ghost" href="/account.html">View account</a>
@@ -49,33 +58,31 @@
   </main>
 
   <script>
-    // Optional: track Purchase based on what we stored right before redirecting to Stripe.
-    // This is a pragmatic "good enough" setup for early campaigns without server-side events.
-    (function () {
-      const fbqSafe = (...args) => {
-        try { if (typeof window.fbq === "function") window.fbq(...args); } catch {}
-      };
+  (function () {
+    if (typeof fbq !== "function") return;
 
-      try {
-        const raw = sessionStorage.getItem("ks_last_checkout");
-        if (!raw) return;
+    try {
+      const raw = sessionStorage.getItem("ks_last_checkout");
+      if (!raw) return;
 
-        const data = JSON.parse(raw);
+      const data = JSON.parse(raw);
 
-        // Track Purchase
-        fbqSafe("track", "Purchase", {
-          value: Number(data?.value) || 0,
-          currency: data?.currency || "USD",
-          content_ids: data?.content_ids || [],
-          content_name: data?.content_name || "",
-          content_type: "product",
-          num_items: Number(data?.num_items) || 1
-        });
+      fbq("track", "Purchase", {
+        value: Number(data?.value) || 0,
+        currency: data?.currency || "USD",
+        content_ids: data?.content_ids || [],
+        content_name: data?.content_name || "",
+        content_type: "product",
+        num_items: Number(data?.num_items) || 1
+      });
 
-        // Clear so we don't double-fire on refresh
-        sessionStorage.removeItem("ks_last_checkout");
-      } catch {}
-    })();
+      // Prevent double firing
+      sessionStorage.removeItem("ks_last_checkout");
+
+    } catch (e) {
+      console.warn("Meta Purchase tracking failed", e);
+    }
+  })();
   </script>
 </body>
 </html>
