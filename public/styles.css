@@ -82,6 +82,23 @@ img{ max-width:100%; display:block; }
   min-width: 160px;
 }
 
+/* Brand logo (replaces text wordmark in header) */
+.brand-link{
+  text-decoration:none;
+  color:inherit;
+}
+
+.brand-logo{
+  display:block;
+  height:34px;
+  width:auto;
+}
+
+@media (max-width: 640px){
+  .brand-logo{ height:28px; }
+}
+
+
 .brand-name{
   font-weight: 900;
   letter-spacing:.2px;
