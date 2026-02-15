@@ -90,14 +90,15 @@ img{ max-width:100%; display:block; }
 
 .brand-logo{
   display:block;
-  height:34px;
-  width:auto;
+  height: 90px;
+  width: auto;
 }
 
-@media (max-width: 640px){
-  .brand-logo{ height:28px; }
+@media (max-width: 768px){
+  .brand-logo{
+    height: 55px;
+  }
 }
-
 
 .brand-name{
   font-weight: 900;
