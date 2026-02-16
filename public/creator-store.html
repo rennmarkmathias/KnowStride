@@ -40,7 +40,7 @@
     /* Minor helper */
     .pill.primary { font-weight: 700; }
 
-    /* Maintenance plan cards */
+    /* Simple pricing cards (no monthly model) */
     .plans { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 10px; }
     @media (max-width: 900px){ .plans{ grid-template-columns: 1fr; } }
     .plan { padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.03); }
@@ -72,9 +72,10 @@
         </p>
 
         <div class="trust-row">
-          <span class="pill">No platform fees</span>
-          <span class="pill">You keep 100%</span>
-          <span class="pill">Own your brand</span>
+          <span class="pill">You own your store</span>
+          <span class="pill">You own your payments</span>
+          <span class="pill">No revenue share</span>
+          <span class="pill">No marketplace risk</span>
         </div>
 
         <p class="muted small note">
@@ -82,7 +83,6 @@
         </p>
       </div>
 
-      <!-- Keep the right-side summary, but remove the monthly price claim here (now we have multiple plans below) -->
       <div class="hero-aside">
         <div class="aside-card">
           <div class="aside-title">Setup pricing</div>
@@ -98,9 +98,10 @@
             <div class="aside-line"><span class="dot"></span>Extra products: <strong>€5</strong> each</div>
           </div>
 
-          <div class="aside-title" style="margin-top:12px;">Ongoing support</div>
+          <div class="aside-title" style="margin-top:12px;">After launch</div>
           <div class="aside-lines">
-            <div class="aside-line"><span class="dot"></span>Choose a maintenance plan below</div>
+            <div class="aside-line"><span class="dot"></span><strong>No monthly platform fee</strong></div>
+            <div class="aside-line"><span class="dot"></span>Pay only when you need changes</div>
           </div>
         </div>
       </div>
@@ -148,57 +149,54 @@
       </div>
     </section>
 
-    <!-- ✅ New: Maintenance plans (moved above CTA, as agreed) -->
+    <!-- ✅ Replace maintenance plans with No Monthly Fee pricing -->
     <section class="section" id="pricing">
       <div class="section-head">
-        <h2>Maintenance plans</h2>
+        <h2>After launch: no monthly fee</h2>
       </div>
 
       <div class="card">
         <p class="muted" style="margin-top:0;">
-          Choose a plan after launch. Cancel anytime. Unused updates do not roll over.
+          Your store runs with <strong>no monthly platform fee</strong>. Pay only when you need updates.
         </p>
 
         <div class="plans">
           <div class="plan">
-            <span class="tag">Starter</span>
-            <h3>Basic</h3>
-            <p class="price">€19<span class="muted small">/month</span></p>
+            <span class="tag">Products</span>
+            <h3>Product update</h3>
+            <p class="price">€5<span class="muted small"> / product</span></p>
             <ul>
-              <li>Hosting + security updates</li>
-              <li>Technical maintenance</li>
-              <li>Product updates: <strong>€5</strong> each</li>
-              <li>Site changes: <strong>€20</strong> each</li>
+              <li>Add a new product</li>
+              <li>Edit title, price, images</li>
+              <li>Update variants/options</li>
             </ul>
           </div>
 
           <div class="plan">
-            <span class="tag">Most popular</span>
-            <h3>Standard</h3>
-            <p class="price">€29<span class="muted small">/month</span></p>
+            <span class="tag">Website</span>
+            <h3>Site change</h3>
+            <p class="price">€20<span class="muted small"> / change</span></p>
             <ul>
-              <li>Everything in Basic</li>
-              <li><strong>5</strong> product updates / month included</li>
-              <li>Extra products: <strong>€5</strong> each</li>
-              <li>Site changes: <strong>€20</strong> each</li>
+              <li>Update copy/sections</li>
+              <li>Tracking changes (pixel etc.)</li>
+              <li>Layout tweaks outside products</li>
             </ul>
           </div>
 
           <div class="plan">
-            <span class="tag">Best value</span>
-            <h3>Pro</h3>
-            <p class="price">€39<span class="muted small">/month</span></p>
+            <span class="tag">Major</span>
+            <h3>Design overhaul</h3>
+            <p class="price">€99<span class="muted small"> (fixed)</span></p>
             <ul>
-              <li>Everything in Standard</li>
-              <li><strong>10</strong> product updates / month included</li>
-              <li><strong>2</strong> site changes / month included</li>
-              <li>Extras: products <strong>€5</strong>, changes <strong>€20</strong></li>
+              <li>Bigger redesign / new look</li>
+              <li>New page structure</li>
+              <li>Style refresh</li>
             </ul>
           </div>
         </div>
 
         <p class="muted small" style="margin-top:12px;">
-          <strong>Definitions:</strong> Product update = add/edit a product listing (title, price, images, variants). Site change = changes outside the product catalog (layout/sections/copy/tracking).
+          <strong>Definition:</strong> Product update = changes to product listings. Site change = changes outside the product catalog (layout/sections/copy/tracking).
         </p>
       </div>
     </section>
