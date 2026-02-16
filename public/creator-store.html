@@ -1,0 +1,190 @@
+<!-- Save as: public/creator-store.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Launch your own independent print store — done for you." />
+  <title>Creator Store Setup — KnowStride</title>
+
+  <!-- Reuse your existing site styling -->
+  <link rel="stylesheet" href="/styles.css" />
+
+  <!-- (Optional) Meta Pixel – keep if you want this page tracked too -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1971126520280025');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1971126520280025&ev=PageView&noscript=1"
+  /></noscript>
+
+  <style>
+    /* Small page-specific tweaks (keeps your site look) */
+    .creator-wrap { padding-bottom: 10px; }
+    .creator-grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 22px; align-items:start; }
+    @media (max-width: 900px){ .creator-grid{ grid-template-columns: 1fr; } }
+    .creator-h1{ font-size: clamp(2rem, 4vw, 2.8rem); margin: 0; letter-spacing: -.4px; }
+    .creator-cta-row{ margin-top: 16px; display:flex; gap: 10px; flex-wrap:wrap; }
+    .list-tight{ margin: 10px 0 0; padding-left: 18px; }
+    .list-tight li{ margin: 6px 0; }
+    .note{ margin-top: 10px; }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand brand-link" href="/" aria-label="Home">
+      <img class="brand-logo" src="/assets/logo.png" alt="KnowStride" loading="eager" />
+      <div class="brand-tagline">Historical posters</div>
+    </a>
+
+    <nav class="topnav">
+      <a class="toplink secondary" href="/">Shop</a>
+      <a class="toplink" href="/account.html" id="accountLink">Account</a>
+    </nav>
+  </header>
+
+  <main class="container creator-wrap">
+    <section class="hero hero-shop">
+      <div>
+        <h1 class="creator-h1">Launch your own print store — done for you.</h1>
+        <p class="lead">
+          A clean, independent storefront for creators who want to sell prints without Shopify or marketplace fees.
+          Delivery within <strong>2–3 business days</strong>.
+        </p>
+
+        <div class="trust-row">
+          <span class="pill">No platform fees</span>
+          <span class="pill">You keep 100%</span>
+          <span class="pill">Own your brand</span>
+        </div>
+
+        <div class="creator-cta-row">
+          <!-- Replace with your PayPal payment link -->
+          <a class="btn" href="YOUR_PAYPAL_DEPOSIT_LINK_HERE" target="_blank" rel="noopener">Pay deposit (€199)</a>
+          <a class="btn ghost" href="#details">See what’s included</a>
+        </div>
+
+        <p class="muted small note">
+          Limited discounted slots available. After payment, onboarding instructions are sent within 24 hours.
+        </p>
+      </div>
+
+      <div class="hero-aside">
+        <div class="aside-card">
+          <div class="aside-title">Pricing</div>
+          <div class="aside-lines" style="margin-top:10px;">
+            <div class="aside-line"><span class="dot"></span><strong>€199</strong> deposit to secure your slot</div>
+            <div class="aside-line"><span class="dot"></span><strong>€399</strong> total setup (remaining €200 before launch)</div>
+            <div class="aside-line"><span class="dot"></span><strong>€29/month</strong> hosting & maintenance</div>
+          </div>
+
+          <div class="aside-title" style="margin-top:12px;">Maintenance includes</div>
+          <div class="aside-lines">
+            <div class="aside-line"><span class="dot"></span>Hosting + security updates</div>
+            <div class="aside-line"><span class="dot"></span>Technical maintenance</div>
+            <div class="aside-line"><span class="dot"></span>Up to <strong>2 minor updates</strong>/month</div>
+            <div class="aside-line"><span class="dot"></span>Extra updates: <strong>€20</strong> each</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="details">
+      <div class="section-head">
+        <h2>What you get</h2>
+      </div>
+
+      <div class="card">
+        <ul class="list-tight">
+          <li><strong>Branded storefront</strong> (your logo, colors, copy)</li>
+          <li><strong>Payments via your own Stripe</strong> (you receive payouts directly)</li>
+          <li><strong>Print-on-demand fulfillment setup</strong></li>
+          <li><strong>10 products uploaded</strong> and image-ready</li>
+          <li><strong>Mobile-optimized</strong> layout</li>
+          <li><strong>Meta Pixel</strong> installation (optional)</li>
+          <li><strong>1-year domain registration included</strong> (up to €20 value)</li>
+        </ul>
+        <p class="muted small" style="margin-top:12px;">
+          You own the store and the brand. No revenue share. No marketplace dependency.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="section-head">
+        <h2>How it works</h2>
+      </div>
+
+      <div class="card">
+        <ol class="how-steps" style="margin:0; padding-left: 18px;">
+          <li><strong>Deposit</strong> — you secure your build slot (€199).</li>
+          <li><strong>Send assets</strong> — 10 artworks, prices, short bio, logo (optional).</li>
+          <li><strong>Build</strong> — I set up the store and connect everything (2–3 business days).</li>
+          <li><strong>Launch</strong> — remaining balance is paid (€200) and your store goes live.</li>
+        </ol>
+        <p class="muted small" style="margin-top:12px;">
+          Want more than 10 products? No problem — we can add them as an extra batch.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="cta">
+      <div class="card">
+        <div class="section-head" style="margin-bottom:10px;">
+          <h2 style="margin:0;">Ready to launch?</h2>
+        </div>
+        <p class="muted" style="margin-top:0;">
+          Secure your discounted setup this week.
+        </p>
+        <a class="btn" href="YOUR_PAYPAL_DEPOSIT_LINK_HERE" target="_blank" rel="noopener">Pay deposit (€199)</a>
+        <p class="muted small" style="margin-top:10px;">
+          Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">Contact</div>
+          <div class="muted small">Questions or onboarding — email us.</div>
+          <div class="footer-links">
+            <a href="mailto:service@knowstride.com">service@knowstride.com</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Info</div>
+          <div class="footer-links">
+            <a href="/">Shop</a>
+            <a href="/account.html">Account</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-title">Notes</div>
+          <div class="muted small">
+            Deposit is used to reserve build time. Remaining balance is due before launch.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom muted small">© <span id="year"></span> KnowStride.</div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
