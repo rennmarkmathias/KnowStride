@@ -36,6 +36,13 @@
     .list-tight{ margin: 10px 0 0; padding-left: 18px; }
     .list-tight li{ margin: 6px 0; }
     .note{ margin-top: 10px; }
+
+    /* ✅ Mobile: keep desktop layout, but show value before price (pricing box comes after intro) */
+    @media (max-width: 900px) {
+      .hero.hero-shop { display: flex; flex-direction: column; }
+      .hero.hero-shop > div:first-child { order: 1; }  /* headline/intro */
+      .hero.hero-shop .hero-aside { order: 2; }        /* pricing box */
+    }
   </style>
 </head>
 
@@ -62,7 +69,7 @@
         </div>
 
         <p class="muted small note">
-          Limited discounted slots available. After payment, onboarding instructions are sent within 24 hours.
+          Limited discounted slots available. After your deposit, onboarding instructions are sent within 24 hours.
         </p>
       </div>
 
@@ -73,6 +80,12 @@
             <div class="aside-line"><span class="dot"></span><strong>€199</strong> deposit to secure your slot</div>
             <div class="aside-line"><span class="dot"></span><strong>€399</strong> total setup (remaining €200 before launch)</div>
             <div class="aside-line"><span class="dot"></span><strong>€29/month</strong> hosting & maintenance</div>
+          </div>
+
+          <!-- ✅ small value nudge -->
+          <div class="aside-title" style="margin-top:12px;">Includes</div>
+          <div class="aside-lines">
+            <div class="aside-line"><span class="dot"></span>1-year domain registration</div>
           </div>
 
           <div class="aside-title" style="margin-top:12px;">Maintenance includes</div>
@@ -133,7 +146,9 @@
         <p class="muted" style="margin-top:0;">
           Secure your discounted setup this week.
         </p>
-        <a class="btn" href=https://www.paypal.com/ncp/payment/TY83T3R69RLV6 target="_blank" rel="noopener">Pay deposit (€199)</a>
+        <a class="btn" href="https://www.paypal.com/ncp/payment/TY83T3R69RLV6" target="_blank" rel="noopener">
+          Pay deposit (€199)
+        </a>
         <p class="muted small" style="margin-top:10px;">
           Questions? Email <a href="mailto:service@knowstride.com">service@knowstride.com</a>
         </p>
