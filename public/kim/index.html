@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>KnowStride Publishing Systems – Investeringsunderlag (Version A – Fullständig)</title>
   <style>
 
@@ -379,6 +379,20 @@ table { max-width: 100%; }
   .header{ border-radius: 16px; }
   .toc{ width: min(92vw, 360px); }
   .table-scroll table{ min-width: 560px; }
+}
+
+
+/* --- Critical mobile width fix: prevent CSS Grid children from forcing overflow --- */
+.grid{min-width:0;}
+.toc, .main{min-width:0;}
+/* Clamp any accidental wide blocks */
+.header, .toc, .main, section, .container{width:100%;}
+/* Make sure overflow elements don't expand page width */
+.table-scroll{display:block; max-width:100%;}
+
+
+@supports (-webkit-touch-callout: none){
+  body{ min-width: 0; }
 }
 
 </style>
