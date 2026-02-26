@@ -400,24 +400,18 @@ table { max-width: 100%; }
 .mobile-cta{display:none!important;}
 
 
-/* --- Mobile table fit: avoid clipped tables in small cards --- */
+/* --- Mobile table scroll: ensure wide tables are fully readable --- */
 @media (max-width: 820px){
-  .table-scroll{
-    overflow-x: auto;
-    max-width: 100%;
-  }
+  .table-scroll{ overflow-x: auto; overflow-y: hidden; }
   .table-scroll table{
-    min-width: 0 !important;
-    width: 100% !important;
+    width: auto !important;
+    min-width: 680px !important;
   }
-  th, td{
-    white-space: normal !important;
-    overflow-wrap: normal !important;
-    word-break: normal !important;
-    hyphens: auto;
+  /* Keep words readable (no mid-word breaks) */
+  .table-scroll th, .table-scroll td{
+    white-space: nowrap;
   }
 }
-
 
 /* Prevent table overflow clipping */
 table{ overflow: visible !important; }
@@ -434,6 +428,26 @@ table{ overflow: visible !important; }
   .table-scroll table{ table-layout: auto; }
   .table-scroll th, .table-scroll td{ font-size: 12.5px; line-height: 1.35; }
   .table-scroll th{ min-width: 110px; }
+}
+
+
+/* Subtle scrollbar styling (where supported) */
+.table-scroll::-webkit-scrollbar{ height: 10px; }
+.table-scroll::-webkit-scrollbar-thumb{
+  background: rgba(30,91,255,.25);
+  border-radius: 999px;
+}
+.table-scroll::-webkit-scrollbar-track{ background: rgba(11,18,32,.05); }
+
+
+/* --- Large-screen readability: avoid extremely long lines --- */
+@media (min-width: 1100px){
+  .main section > p,
+  .main section > ul,
+  .main section > h3,
+  .main section > .note{
+    max-width: 78ch;
+  }
 }
 
 </style>
