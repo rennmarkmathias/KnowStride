@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>KnowStride Publishing Systems – Investeringsunderlag (Version A – Fullständig)</title>
   <style>
 
@@ -364,6 +364,21 @@ tbody tr:hover{ background: rgba(30,91,255,.05); }
   body.toc-open .toc-overlay{ display:block; }
   .main{ padding: 14px 16px 8px; }
   .mobile-cta{ display:block; }
+}
+
+
+/* --- Mobile fit / no-horizontal-overflow guardrails --- */
+html, body { width: 100%; overflow-x: hidden; }
+.container, .header, .grid, .toc, .main, section { max-width: 100%; }
+img, svg, canvas, video { max-width: 100%; height: auto; }
+table { max-width: 100%; }
+* { overflow-wrap: anywhere; word-break: normal; }
+
+
+@media (max-width: 480px){
+  .header{ border-radius: 16px; }
+  .toc{ width: min(92vw, 360px); }
+  .table-scroll table{ min-width: 560px; }
 }
 
 </style>
