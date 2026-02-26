@@ -363,7 +363,7 @@ tbody tr:hover{ background: rgba(30,91,255,.05); }
   body.toc-open .toc{ transform: translateX(0); }
   body.toc-open .toc-overlay{ display:block; }
   .main{ padding: 14px 16px 8px; }
-  .mobile-cta{ display:block; }
+  .mobile-cta{ display:none; }
 }
 
 
@@ -395,14 +395,37 @@ table { max-width: 100%; }
   body{ min-width: 0; }
 }
 
+
+/* Mobile CTA disabled (moved to Contact section) */
+.mobile-cta{display:none!important;}
+
+
+/* --- Mobile table fit: avoid clipped tables in small cards --- */
+@media (max-width: 820px){
+  .table-scroll{
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .table-scroll table{
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  th, td{
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+
+/* Prevent table overflow clipping */
+table{ overflow: visible !important; }
+
 </style>
 </head>
 <body>
   
   <div class="toc-overlay" id="tocOverlay" aria-hidden="true"></div>
-<div class="mobile-cta" aria-label="Kontakt">
-  <a href="https://www.facebook.com/mathias.rennmark" target="_blank" rel="noopener">Ring / Skicka meddelande</a>
-</div>
 <div class="container">
     <div class="header">
       <h1>KnowStride Publishing Systems</h1>
@@ -452,7 +475,7 @@ table { max-width: 100%; }
           <h3>B. Bokportfölj (IP-tillgångar)</h3>
           <p>Bolaget producerar och äger en egen portfölj av faktaböcker som publiceras via Kindle. Syftet är långsvansintäkter och värdebyggande IP. Efter publicering kräver varje titel minimal löpande arbetsinsats.</p>
           <h3>C. Posterportfölj (automatiserad e-handel)</h3>
-          <p>Posterverksamheten är en separat, helautomatiserad print-on-demand-modell. Produktion sker via extern leverantör och distribution via Amazon. Ingen lagerhållning och mycket låg löpande arbetsinsats.</p>
+          <p>Posterverksamheten är en separat, helautomatiserad print-on-demand-modell. Produktion och distribution sker via extern leverantör (print-on-demand) och posters listas via Amazon. Ingen lagerhållning och mycket låg löpande arbetsinsats.</p>
           <p class="note">Bolaget har ingen egen fysisk distribution. Distribution hanteras av etablerade tredjepartsaktörer (Amazon för böcker, extern print-on-demand-leverantör för posters).</p>
           <div class="table-scroll"><table><thead><tr><th>Affärsområde</th><th>Skalbarhet</th><th>Marginal</th><th>Risk</th><th>Kapitalbehov</th></tr></thead><tbody><tr><td>Mjukvara</td><td>Mycket hög</td><td>Mycket hög</td><td>Medel</td><td>Låg</td></tr><tr><td>Böcker</td><td>Medel</td><td>Hög</td><td>Låg</td><td>Mycket låg</td></tr><tr><td>Posters</td><td>Hög</td><td>Hög</td><td>Låg</td><td>Mycket låg</td></tr></tbody></table></div>
         </section>
