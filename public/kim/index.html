@@ -495,7 +495,7 @@ table{ overflow: visible !important; }
 <div class="container">
 <div class="header">
 <h1>KnowStride Book Builder</h1>
-<p class="sub">Investeringsunderlag – 1–8 % ägarandel</p><p class="note">Pre-money värdering: 4 000 000 kr. Målsättning i första rundan: 4–8 %.</p>
+<p class="sub">Investeringsunderlag – 1–8 % ägarandel</p><p class="note">Pre-money värdering: 4 000 000 kr. Målsättningen är att sälja 4–8 %.</p>
 <div class="header-actions">
 <button aria-controls="toc" aria-expanded="false" class="toc-toggle" id="tocToggle" type="button">
 <span aria-hidden="true" class="icon"></span>
@@ -540,102 +540,18 @@ table{ overflow: visible !important; }
 <h3>2.1 Kärnkomponenter</h3>
 <ul>
 <li><b>Strukturmotor:</b> fast mall / AI-genererad struktur / full manuell struktur (kapitel + underrubriker).</li>
-<li><b>Ankarlogik:</b> extraherar centrala fakta (t.ex. årtal, födelse-/dödsår) och återanvänder dem konsekvent över kapitlen.</li>
+<li><b>Faktakonsekvens:</b> identifierar centrala fakta och ser till att de används konsekvent genom hela boken.</li>
 <li><b>Terminologisk konsekvens:</b> enhetlig begreppsanvändning, namn och titlar genom hela boken.</li>
-<li><b>Språk- och stilkontroll:</b> automatisk justering av grammatik och konsekvent ton.</li>
+<li><b>Kvalitetskontroll:</b> hittar och korrigerar inkonsekvenser samt hjälper till med språk och ton före export.</li>
 <li><b>Exportmotor:</b> DOCX (redigerbart) och EPUB (publicerbart) samt omslagsunderlag.</li>
 <li><b>Översättning:</b> översätter en färdig bok och exporterar om i nytt språk – möjliggör multiplikatoreffekt.</li>
 <li><b>Kommande illustrationsmodul:</b> AI-genererade illustrationer, positionering i textflöde och anpassning till sidlayout.</li>
 </ul>
 <h3>2.2 Arkitektur och kostnadsstruktur</h3>
 <p>Användaren står för egen AI-förbrukning (egen API-nyckel). Detta ger full kostnadstransparens, ingen serverinfrastruktur och minimal skalningsrisk. Resultatet är hög bruttomarginal på licens- och abonnemangsintäkter.</p>
-<h3>2.3 konkurrensanalys</h3>
-<p>Marknaden är fragmenterad mellan text-AI, strukturverktyg och layout/exportverktyg. 
-          KnowStride integrerar hela kedjan och adderar faktakonsekvens och exportpipeline i ett sammanhållet system.</p>
-<ul>
-<li><b>Generativ text-AI:</b> ChatGPT (typiskt 20–30 USD/mån) – stark textgenerering men saknar bokpipeline, faktakonsekvens och export.</li>
-<li><b>Copywriting-AI:</b> Jasper (typiskt 49–99 USD/mån) – fokuserar på kortformat/marknadsföring, inte lång sakprosa.</li>
-<li><b>Skönlitteratur-AI:</b> Sudowrite (typiskt 19–59 USD/mån) – kreativt stöd, inte faktastruktur.</li>
-<li><b>Strukturverktyg:</b> Scrivener (~60 USD engång), Atticus (~147 USD engång) – struktur/layout men saknar integrerad AI-faktalogik.</li>
-<li><b>Layout/export:</b> Vellum (~250 USD engång), Canva – layout/design men saknar produktionslogik.</li>
-</ul>
-<div class="table-scroll">
-<table>
-<thead>
-<tr>
-<th>Funktion</th>
-<th>KnowStride</th>
-<th>ChatGPT</th>
-<th>Jasper</th>
-<th>Sudowrite</th>
-<th>Scrivener</th>
-<th>Atticus</th>
-<th>Vellum</th>
-<th>Canva</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Textproduktion</td>
-<td>Ja</td>
-<td>Ja</td>
-<td>Ja</td>
-<td>Ja</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-</tr>
-<tr>
-<td>Strukturmotor</td>
-<td>Ja</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Ja</td>
-<td>Delvis</td>
-<td>Nej</td>
-<td>Nej</td>
-</tr>
-<tr>
-<td>Faktakonsekvens</td>
-<td>Ja</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-</tr>
-<tr>
-<td>Export DOCX/EPUB</td>
-<td>Ja</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Delvis</td>
-<td>Ja</td>
-<td>Ja</td>
-<td>Nej</td>
-</tr>
-<tr>
-<td>Integrerad pipeline</td>
-<td>Ja</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-<td>Nej</td>
-</tr>
-</tbody>
-</table>
-</div>
-</section><section id="sec3b">
+<h3>2.3 konkurrensanalys</h3><p>Marknaden för AI-baserade skrivverktyg är snabbväxande men fragmenterad. De flesta aktörer fokuserar på en enskild del av produktionskedjan: generativ textproduktion, struktur/manus eller layout/export.</p><p>KnowStride positioneras inte som en skrivassistent utan som ett produktionssystem för strukturerad sakprosa. Systemet integrerar struktur, volymkontroll, konsekvens och export i ett sammanhållet flöde – vilket normalt kräver flera separata verktyg och manuella steg.</p><ul><li>Manuell, AI-genererad eller hybrid struktur (kapitel + underrubriker)</li><li>Kontrollerad volym och kapitelbalansering</li><li>Terminologisk och faktamässig konsekvens</li><li>Global publiceringspolicy (exempelvis enhetssystem)</li><li>Inbyggd kvalitetskontroll före export</li><li>Publicerbar DOCX- och EPUB-export</li><li>Integrerad översättning</li></ul><p>Verktyg som kan generera text snabbt finns på marknaden. Det som är ovanligt är möjligheten att styra, kvalitetssäkra och producera en publicerbar faktabok inom ett sammanhållet system. KnowStride möjliggör både snabb automatisk produktion och avancerad redaktionell kontroll.</p></section><section id="sec3b">
 <h2>3. Tidsplan – färdigställande av desktop-version</h2>
-<p>Desktop-versionen är funktionellt utvecklad. Återstående arbete består primärt av designförfining, UX-strukturering och kommersiell landningssida.</p>
+<p>Desktop-versionens kärnfunktionalitet är tekniskt färdigställd och testad. Återstående arbete består primärt av slutlig genomtestning, finjustering och kommersiell paketering inför lansering.</p><p>Kapitalet används därmed främst till kommersialisering och marknadsexpansion – inte grundutveckling.</p>
 <h3>Återstående huvudmoment</h3>
 <ul>
 <li><b>Design/UX-förfining:</b> modernisering av gränssnitt, flödeslogik och visuellt helhetsintryck.</li>
@@ -675,7 +591,7 @@ table{ overflow: visible !important; }
 </section><section id="sec4">
 <h2>4. Testad pipeline</h2>
 <p>Produktionskedjan är tekniskt verifierad. Bokexport (DOCX/EPUB) är testad och uppladdning till Kindle fungerar. Ett exempel på publicerad bok finns på <a href="https://www.amazon.com/dp/B0GQ79GLT9" rel="noopener" target="_blank">Amazon</a>.</p>
-<p class="note">Syftet med exemplet är att visa att exportkedjan fungerar i praktiken (struktur → text → QA → publicerbart format).</p>
+<p class="note">Syftet med exemplet är att visa att exportkedjan fungerar i praktiken (struktur → text → QA → publicerbart format).</p><p>Produkten kan demonstreras live via Teams där en komplett bok genereras från struktur till publicerbar export i realtid.</p>
 </section><section id="sec5">
 <h2>5. Marknad, målgrupp och marknadsstrategi</h2>
 <p>KnowStride verkar i skärningspunkten mellan AI-baserade skrivverktyg, självpublicering och digital kunskapsproduktion. Produkten används av individer och organisationer som producerar kommersiellt eller professionellt kunskapsmaterial – från faktaböcker och läromedel till interna manualer, policy, whitepapers och presentationer.</p>
@@ -697,9 +613,7 @@ table{ overflow: visible !important; }
 <li>Organisk spridning via innehåll och användarcase.</li>
 <li>Vid eventuell SaaS-lansering kan en enklare instegsversion användas för att gradvis konvertera användare till fullversion.</li>
 </ul>
-<h3>5.4 TAM / SAM / SOM (konservativ modell)</h3>
-<div class="table-scroll"><table><thead><tr><th>Mått</th><th>Definition</th><th>Konservativ uppskattning</th></tr></thead><tbody><tr><td>TAM</td><td>Globala användare med publicerings-/kunskapsproduktionsbehov</td><td>20–50 miljoner</td></tr><tr><td>SAM</td><td>Servicebar marknad i initiala språksegment (Fas 1)</td><td>5–10 miljoner</td></tr><tr><td>SOM</td><td>Uppnåelig marknadsandel på 5 år (betalande kunder)</td><td>1 000–10 000</td></tr></tbody></table></div>
-</section><section id="sec6">
+<h3>5.4 Marknadsstorlek – realistisk uppskattning</h3><p>KnowStride riktar sig till personer och organisationer som producerar strukturerat kunskapsmaterial – exempelvis faktaböcker, läromedel, interna manualer, whitepapers och guider.</p><p>Istället för att utgå från hela den globala bokmarknaden fokuserar vi på den del som är relevant: self‑publishing inom sakprosa, utbildare/kursproducenter, små förlag samt företag som producerar eget material.</p><div class="table-scroll"><table><thead><tr><th>Nivå</th><th>Förklaring</th><th>Försiktig uppskattning</th></tr></thead><tbody><tr><td>Global potential</td><td>Direkt relevant målgrupp globalt (sakprosa + utbildning + organisationer)</td><td>5–15 miljoner</td></tr><tr><td>Initial målmarknad</td><td>Nåbar målgrupp i första språk-/marknadsfaserna</td><td>1–3 miljoner</td></tr><tr><td>Praktiskt mål (5 år)</td><td>Betalande kunder som räcker för stabil lönsamhet</td><td>1 000–10 000</td></tr></tbody></table></div><h3>5.5 Timing – varför nu</h3><p>AI-tekniken har nått en mognadsnivå där den kan användas för strukturerad kunskapsproduktion, inte bara experimentell text. Samtidigt växer self‑publishing, digital utbildning och företagsintern dokumentation. Kombinationen skapar ett tydligt timingfönster för produktionsverktyg med verklig affärsnytta.</p></section><section id="sec6">
 <h2>6. Intäktsmodell och finansiell scenariostruktur</h2>
 <p>Intäktsmodellen bygger på tidsbaserade licenser med återkommande intäkter genom förnyelse. En eventuell webbaserad version kan utvärderas som ett framtida expansionsspår när produktdata (förnyelsegrad och användarbeteende) finns.</p>
 <h3>6.1 Intäktsmodell</h3>
@@ -714,7 +628,7 @@ table{ overflow: visible !important; }
 <div class="table-scroll"><table><thead><tr><th>Licens</th><th>Innehåll</th><th>Pris (USD/år)</th></tr></thead><tbody><tr><td>Individual</td><td>1 användare</td><td>99</td></tr><tr><td>Team</td><td>Upp till 5 användare</td><td>299</td></tr><tr><td>Organisation</td><td>Upp till 10–15 användare</td><td>499</td></tr></tbody></table></div>
 <p>Förväntad genomsnittlig intäkt per kund: ca 1 200–1 500 kr (mix mellan individuella och teamlicenser).</p>
 <h3>6.4 Break-even (licenser)</h3>
-<p>Break-even för personalkostnad (~750 000 kr) uppnås vid cirka 630 kunder per år (≈53 per månad, ≈2 per dag).</p>
+<p>Break-even uppnås när personalkostnad samt marknadsföring (12 % av omsättning) täcks. Detta motsvarar cirka 852 000 kr i årlig omsättning, vilket innebär ungefär 630–650 kunder per år (≈53–55 per månad, ≈2 per dag).</p>
 <h3>6.5 Kundvolym → resultat (år 1)</h3>
 <div class="table-scroll">
 <table>
@@ -744,10 +658,10 @@ table{ overflow: visible !important; }
 <table>
 <thead><tr><th>Scenario</th><th>Resultat (MSEK)</th><th>4x</th><th>6x</th></tr></thead>
 <tbody>
-<tr><td>Mycket låg</td><td>1,0</td><td>4</td><td>6</td></tr>
-<tr><td>Låg</td><td>3,2</td><td>12,8</td><td>19,2</td></tr>
-<tr><td>Mellan</td><td>6,5</td><td>26</td><td>39</td></tr>
-<tr><td>Hög</td><td>12,0</td><td>48</td><td>72</td></tr>
+<tr><td>Mycket låg</td><td>1,2</td><td>4,8</td><td>7,2</td></tr>
+<tr><td>Låg</td><td>3,5</td><td>14</td><td>21</td></tr>
+<tr><td>Mellan</td><td>7,8</td><td>31,2</td><td>46,8</td></tr>
+<tr><td>Hög</td><td>13,5</td><td>54</td><td>81</td></tr>
 </tbody>
 </table>
 </div>
@@ -797,14 +711,14 @@ table{ overflow: visible !important; }
   </p>
 </section><section id="sec1">
 <h2>11. Erbjudande</h2>
-<p>1–8 % ägarandel erbjuds. Pre-money värdering är 4 000 000 kr (1 % = 40 000 kr). Målsättningen är att sälja 4–8 % i första rundan.</p>
+<p>1–8 % ägarandel erbjuds. Pre-money värdering är 4 000 000 kr. Målsättningen är att nu sälja 4–8 %.</p>
 <p>Större eller mindre ägarandel kan diskuteras vid intresse (minsta investering: 1 %).</p>
 </section><div class="contact" style="margin-top:24px;">
 <div class="contact-title">Kontakt</div>
 <p class="contact-text">
     För ytterligare information eller presentation via Teams,
     ring, skicka meddelande via Facebook eller mejla 
-    <a href="mailto:service@knowstride.com">service@knowstride.com</a>.
+    <a href="mailto:rennmarkmathias@gmail.com">rennmarkmathias@gmail.com</a>.
   </p>
 <a class="btn primary" href="https://www.facebook.com/mathias.rennmark" rel="noopener" target="_blank">
      Ring / Skicka meddelande
