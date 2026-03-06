@@ -488,12 +488,68 @@ table{ overflow: visible !important; }
   }
 }
 
+
+/* --- BOLO logo integration --- */
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  margin: 2px 0 16px 0;
+}
+.logo-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg,
+      rgba(242,140,40,.14) 0%,
+      rgba(242,194,48,.14) 22%,
+      rgba(230,217,76,.14) 40%,
+      rgba(127,183,201,.14) 60%,
+      rgba(59,127,191,.14) 80%,
+      rgba(31,78,140,.14) 100%);
+  border: 1px solid rgba(11,18,32,.08);
+  box-shadow: 0 10px 24px rgba(2,6,23,.06);
+}
+.logo-chip img{
+  display:block;
+  width: min(100%, 320px);
+  height: auto;
+}
+.footer-brand{
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.footer-brand .logo-chip{
+  padding: 8px 12px;
+  border-radius: 14px;
+  display:inline-flex;
+}
+.footer-brand .logo-chip img{
+  width: 170px;
+}
+@media (max-width: 820px){
+  .logo-wrap{ margin-bottom: 12px; }
+  .logo-chip{ padding: 10px 12px; border-radius: 16px; }
+  .logo-chip img{ width: min(100%, 240px); }
+  .footer-brand .logo-chip img{ width: 140px; }
+}
+
 </style>
 </head>
 <body>
 <div aria-hidden="true" class="toc-overlay" id="tocOverlay"></div>
 <div class="container">
 <div class="header">
+
+<div class="logo-wrap">
+  <div class="logo-chip">
+    <img src="BOLO-logo.png" alt="BOLO logo">
+  </div>
+</div>
 <h1>BOLO – Publishing System</h1>
 <p class="sub">Investeringsunderlag – 1–12 % ägarandel</p><p class="note"><b>10 sekunder:</b> BOLO automatiserar hela produktionskedjan för sakprosa – från bokbrief och struktur till generering, kvalitetskontroll, redigering, översättning, omslag och export till publicerbara format (DOCX, EPUB och print‑PDF).</p>
 <div class="header-actions">
@@ -725,7 +781,14 @@ process i Hamburg.</p>
 <a class="btn primary" href="https://www.facebook.com/mathias.rennmark" rel="noopener" target="_blank">
      Ring / Skicka meddelande
   </a>
-<p class="footer" style="margin-top:16px;">© Cartographica Hamburg</p>
+
+<div class="footer-brand">
+  <div class="logo-chip">
+    <img src="BOLO-logo.png" alt="BOLO logo">
+  </div>
+</div>
+
+<p class="footer" style="margin-top:10px;">© Cartographica Hamburg</p>
 </div></main>
 </div>
 </div>
