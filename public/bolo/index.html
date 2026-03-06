@@ -493,29 +493,22 @@ table{ overflow: visible !important; }
 .logo-wrap{
   display:flex;
   align-items:center;
-  justify-content:flex-start;
-  margin: 2px 0 16px 0;
+  justify-content:center;
+  margin: 4px 0 18px 0;
 }
 .logo-chip{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding: 12px 16px;
-  border-radius: 18px;
-  background:
-    linear-gradient(90deg,
-      rgba(242,140,40,.14) 0%,
-      rgba(242,194,48,.14) 22%,
-      rgba(230,217,76,.14) 40%,
-      rgba(127,183,201,.14) 60%,
-      rgba(59,127,191,.14) 80%,
-      rgba(31,78,140,.14) 100%);
-  border: 1px solid rgba(11,18,32,.08);
-  box-shadow: 0 10px 24px rgba(2,6,23,.06);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 .logo-chip img{
   display:block;
-  width: min(100%, 320px);
+  width: min(100%, 420px);
   height: auto;
 }
 .footer-brand{
@@ -524,8 +517,8 @@ table{ overflow: visible !important; }
   border-top: 1px solid var(--line);
 }
 .footer-brand .logo-chip{
-  padding: 8px 12px;
-  border-radius: 14px;
+  padding: 0;
+  border-radius: 0;
   display:inline-flex;
 }
 .footer-brand .logo-chip img{
@@ -533,7 +526,6 @@ table{ overflow: visible !important; }
 }
 @media (max-width: 820px){
   .logo-wrap{ margin-bottom: 12px; }
-  .logo-chip{ padding: 10px 12px; border-radius: 16px; }
   .logo-chip img{ width: min(100%, 240px); }
   .footer-brand .logo-chip img{ width: 140px; }
 }
@@ -613,23 +605,11 @@ table{ overflow: visible !important; }
 <p>Användaren står för egen AI-förbrukning (egen API-nyckel). Detta ger full kostnadstransparens, ingen serverinfrastruktur och minimal skalningsrisk. Resultatet är hög bruttomarginal på licens- och abonnemangsintäkter.</p>
 <h3>2.3 konkurrensanalys</h3><p>Marknaden för AI-baserade skrivverktyg är snabbväxande men fragmenterad. De flesta aktörer fokuserar på en enskild del av produktionskedjan: generativ textproduktion, struktur/manus eller layout/export.</p><p>BOLO positioneras inte som en skrivassistent utan som ett produktionssystem för strukturerad sakprosa. Systemet integrerar struktur, volymkontroll, konsekvens och export i ett sammanhållet flöde – vilket normalt kräver flera separata verktyg och manuella steg.</p><ul><li>Manuell, AI-genererad eller hybrid struktur (kapitel + underrubriker)</li><li>Kontrollerad volym och kapitelbalansering</li><li>Terminologisk och faktamässig konsekvens</li><li>Global publiceringspolicy (exempelvis enhetssystem)</li><li>Inbyggd kvalitetskontroll före export</li><li>Publicerbar DOCX- och EPUB-export</li><li>Integrerad översättning</li></ul><p>Verktyg som kan generera text snabbt finns på marknaden. Det som är ovanligt är möjligheten att styra, kvalitetssäkra och producera en publicerbar faktabok inom ett sammanhållet system. BOLO möjliggör både snabb automatisk produktion och avancerad redaktionell kontroll.</p></section><section id="sec3b">
 <h2>3. Tidsplan – färdigställande av desktop-version</h2>
-<p>Desktop-versionens kärnfunktionalitet är tekniskt färdigställd och testad. Återstående arbete består primärt av slutlig genomtestning, finjustering och kommersiell paketering inför lansering.</p><p>Kapitalet används därmed främst till kommersialisering och marknadsexpansion – inte grundutveckling.</p>
-<h3>Återstående huvudmoment</h3>
-<ul>
-<li><b>Gränssnittsjusteringar:</b> modernisering av gränssnitt, flödeslogik och visuellt helhetsintryck.</li>
-<li><b>Funktionsförfining:</b> optimering av genereringslogik och kvalitetssäkring.</li>
-<li><b>Kommersiell lansering:</b> licenshantering, landningssida, betalflöde (grundarbete redan färdigt).</li>
-</ul>
-
+<p>Desktop-versionens kärnfunktionalitet är tekniskt färdigställd och testad. Återstående arbete består främst av slutlig testning, mindre justeringar samt kommersiell paketering inför lansering.</p>
+<p>Kapitalet används därmed främst till kommersialisering och marknadsexpansion – inte grundutveckling.</p>
 <h3>Realistisk lanseringstid</h3>
-<p>
-Desktop-versionens kärnfunktionalitet är tekniskt färdigställd och testad.
-Återstående arbete består av slutlig testning, mindre justeringar samt kommersiell
-paketering (landningssida, dokumentation och marknadsmaterial).
-</p>
+<p>Återstående arbete omfattar främst landningssida, dokumentation, marknadsmaterial och slutlig genomtestning.</p>
 <p><b>Realistisk tid till kommersiell lansering: cirka 3–5 veckor.</b></p>
-
-
 </section><section id="sec4">
 <h2>4. Testad pipeline</h2>
 <p>Produktionskedjan är tekniskt verifierad. Bokexport (DOCX/EPUB) är testad och uppladdning till Kindle fungerar. Ett exempel på publicerad bok finns på <a href="https://www.amazon.com/dp/B0GQ79GLT9" rel="noopener" target="_blank">Amazon</a>.</p>
@@ -645,7 +625,7 @@ paketering (landningssida, dokumentation och marknadsmaterial).
 <li><b>Utbildningsaktörer:</b> lärare, kursproducenter, mindre utbildningsföretag.</li>
 </ul>
 <h3>5.2 Språkstrategi</h3>
-<p>Fas 1: Engelska, tyska, franska, spanska, italienska, portugisiska samt skandinaviska språk. Detta omfattar flera hundra miljoner vuxna i stabila marknader. Realistiskt adresserbar målgrupp (publiceringsintresse/kunskapsproduktion): tiotals miljoner.</p>
+<p>Fas 1: Engelska, tyska, franska, spanska, italienska, portugisiska, nederländska samt skandinaviska språk. Dessa språk fungerar i praktiken mycket stabilt för både textgenerering och översättning i moderna språkmodeller. Detta omfattar flera hundra miljoner vuxna i stabila marknader. Realistiskt adresserbar målgrupp (publiceringsintresse/kunskapsproduktion): tiotals miljoner.</p>
 <h3>5.3 Marknadsföringsstrategi (översikt)</h3>
 <ul>
 <li>Riktad annonsering via Meta (Facebook/Instagram) till definierade målgrupper.</li>
