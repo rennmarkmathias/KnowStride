@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOLO – Publishing System</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --blue:#2d6cdf;
+      --blue-dark:#1f4ea3;
+      --line:#e5e7eb;
+      --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    .hero{
+      background:var(--grad);
+      padding:26px 16px 34px;
+      text-align:center;
+    }
+
+    .hero-inner{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .logo{
+      width:520px;
+      max-width:92%;
+      height:auto;
+      display:block;
+      margin:0 auto 10px;
+    }
+
+    .container{
+      max-width:1000px;
+      margin:0 auto;
+      padding:28px 16px 60px;
+    }
+
+    .intro{
+      text-align:center;
+      margin-bottom:28px;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(2rem, 5vw, 3rem);
+      line-height:1.15;
+    }
+
+    .subtitle{
+      margin:0 auto;
+      max-width:760px;
+      color:var(--muted);
+      font-size:1.05rem;
+    }
+
+    .pipeline{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:10px;
+      margin:28px 0 34px;
+    }
+
+    .pipe-step{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px 10px;
+      text-align:center;
+      font-weight:700;
+      font-size:0.98rem;
+      box-shadow:0 4px 14px rgba(0,0,0,0.05);
+    }
+
+    .pipe-step small{
+      display:block;
+      margin-top:4px;
+      font-weight:400;
+      color:var(--muted);
+      font-size:0.82rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:26px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .card h2{
+      margin-top:0;
+      margin-bottom:10px;
+      font-size:1.45rem;
+    }
+
+    .card h3{
+      margin-top:18px;
+      margin-bottom:8px;
+      font-size:1.08rem;
+    }
+
+    .button-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .button{
+      display:inline-block;
+      padding:14px 24px;
+      background:var(--blue);
+      color:#fff;
+      text-decoration:none;
+      border-radius:10px;
+      font-weight:700;
+      transition:background .15s ease;
+    }
+
+    .button:hover{
+      background:var(--blue-dark);
+    }
+
+    .button.secondary{
+      background:#ffffff;
+      color:var(--blue);
+      border:1px solid var(--blue);
+    }
+
+    .button.secondary:hover{
+      background:#f0f6ff;
+    }
+
+    ol{
+      padding-left:20px;
+      margin:10px 0 0;
+    }
+
+    ul{
+      margin:8px 0 10px 18px;
+    }
+
+    .note{
+      margin-top:16px;
+      padding:14px 16px;
+      background:#f3f7ff;
+      border-left:4px solid var(--blue);
+      border-radius:8px;
+      color:#334155;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .full{
+      grid-column:1 / -1;
+    }
+
+    .footer{
+      text-align:center;
+      padding-top:18px;
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .footer a{
+      color:var(--blue);
+      text-decoration:none;
+    }
+
+    .footer a:hover{
+      text-decoration:underline;
+    }
+
+    .links{
+      margin-top:8px;
+    }
+
+    @media (max-width: 820px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .pipeline{
+        grid-template-columns:1fr;
+      }
+
+      .card{
+        padding:20px;
+      }
+
+      .button-row{
+        flex-direction:column;
+      }
+
+      .button{
+        width:100%;
+        text-align:center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <img src="BOLO-logo.png" alt="BOLO-logo" class="logo" />
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h1>BOLO – Publishing System</h1>
+      <p class="subtitle">
+        AI-assisterad publiceringspipeline för fackböcker. Skapa bokbrief, outline, kapitel, DOCX och omslag i ett och samma arbetsflöde.
+      </p>
+    </section>
+
+    <section class="pipeline" aria-label="BOLO-pipeline">
+      <div class="pipe-step">Book Brief<small>beskriv boken</small></div>
+      <div class="pipe-step">Outline<small>struktur och kapitel</small></div>
+      <div class="pipe-step">AI-generering<small>skriv själva boken</small></div>
+      <div class="pipe-step">DOCX-export<small>redigera och kvalitetssäkra</small></div>
+      <div class="pipe-step">Cover<small>gör omslag och export</small></div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Ladda ner</h2>
+        <p>
+          Här laddar du ner BOLO-programmet och användarmanualen.
+        </p>
+
+        <div class="button-row">
+          <a class="button" href="BOLO_Publishing_System_Setup_1.0.exe">Ladda ner BOLO</a>
+          <a class="button secondary" href="BOLO_User_Guide.pdf">Ladda ner manual</a>
+        </div>
+
+        <div class="note">
+          Tips: Läs gärna igenom manualen först och gör sedan ett första test med 2–3 kapitel i testläge.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Innan du börjar</h2>
+        <p>
+          BOLO använder OpenAI:s API för att generera text. För att använda programmet behöver du därför en egen API-nyckel från OpenAI.
+        </p>
+
+        <h3>Så skaffar du en OpenAI API-nyckel</h3>
+        <ol>
+          <li>
+            Gå direkt till OpenAI:s API-nyckelsida:<br />
+            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">https://platform.openai.com/api-keys</a>
+          </li>
+          <li>Logga in eller skapa konto.</li>
+          <li>
+            OpenAI tillåter för närvarande endast inloggning via:
+            <ul>
+              <li>Google</li>
+              <li>Apple</li>
+              <li>Microsoft</li>
+            </ul>
+            Det finns i nuläget inga andra registreringsalternativ med vanlig e-post och lösenord.
+          </li>
+          <li>Klicka på <strong>Create new secret key</strong>.</li>
+          <li>Kopiera och spara nyckeln på ett säkert ställe. Du kan inte se den igen senare.</li>
+          <li>Gå till <strong>Billing</strong> och lägg till ett kort, ladda $5-20.</li>
+          <li>Klart – nu kan du använda OpenAI:s API i BOLO.</li>
+        </ol>
+
+        <div class="note">
+          En grov tumregel är att en sida text kostar ungefär $0.01 i API-kostnad vid cirka 300 ord per sida.
+        </div>
+      </article>
+
+      <article class="card full">
+        <h2>Vad BOLO gör</h2>
+        <p>
+          BOLO är byggt för att göra hela arbetsflödet kring AI-assisterad bokproduktion enklare och mer strukturerat.
+          Det passar särskilt bra för fackböcker, guideböcker, geografiska böcker, historiska projekt och andra typer av längre sakprosa.
+        </p>
+        <p class="muted">
+          Programmet är gjort för skrivande i längre format – inte för skönlitteratur och inte för korta chattliknande texter.
+        </p>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Feedback eller frågor:
+        <a href="mailto:rennmarkmathias@gmail.com">rennmarkmathias@gmail.com</a>
+      </p>
+      <p class="links">
+        <a href="https://knowstride.com/bolo/">Tillbaka till presentationen</a>
+      </p>
+    </footer>
+  </main>
+</body>
+</html>
