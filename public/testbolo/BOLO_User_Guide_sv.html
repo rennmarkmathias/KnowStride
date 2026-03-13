@@ -109,6 +109,52 @@
   .workflow{
     background:#eef2f7; border:1px solid var(--line); padding:12px 14px; font-size:18px; margin-top:18px;
   }
+  @media (max-width: 900px){
+    .page{
+      width:min(100%, calc(100vw - 24px));
+      margin:12px auto;
+      padding:22px 20px 24px;
+    }
+    .topline{margin:-6px -20px 12px}
+    .logo h1{font-size:clamp(64px, 18vw, 110px)}
+    .flow{height:auto; margin:6px auto 14px}
+    .title .main{font-size:clamp(28px, 5.2vw, 40px)}
+    .title .sub1{font-size:clamp(15px, 2.5vw, 18px)}
+    .title .sub2{font-size:clamp(16px, 2.8vw, 20px)}
+    .chips{grid-template-columns:repeat(2,1fr); max-width:none}
+    .chip:last-child{grid-column:1 / -1}
+    .quick ol{font-size:17px}
+    p{font-size:16px}
+    .twocol{grid-template-columns:1fr}
+  }
+
+  @media (max-width: 640px){
+    body{background:var(--paper)}
+    .page{
+      width:100%;
+      margin:0;
+      border:none;
+      box-shadow:none;
+      padding:18px 14px 20px;
+    }
+    .topline{margin:-6px -14px 10px}
+    .mast{font-size:12px; margin-bottom:12px}
+    .logo{margin:10px 0 12px}
+    .logo h1{font-size:clamp(52px, 21vw, 84px); letter-spacing:1px}
+    .title .main{font-size:clamp(24px, 7.2vw, 34px)}
+    .title .sub1{font-size:14px}
+    .title .sub2{font-size:15px}
+    .chips{grid-template-columns:1fr; margin:18px auto 14px}
+    .chip{font-size:15px; padding:10px}
+    h2{font-size:22px}
+    .section h3{font-size:18px}
+    .quick{padding:10px 10px}
+    .quick ol{padding-left:22px; font-size:16px; line-height:1.55}
+    .tip, .card, .note, .workflow{padding:10px 11px}
+    p{font-size:15px; line-height:1.5}
+    .footer{font-size:12px; margin-top:18px}
+  }
+
   @media print{
     body{background:white}
     .page{width:auto; margin:0; box-shadow:none; border:none; min-height:auto; page-break-after:always}
