@@ -62,14 +62,14 @@
   .title .sub1{font-size:18px; color:var(--muted); margin-top:6px}
   .title .sub2{font-size:20px; color:#6d7789; margin-top:2px}
   .chips{
-    margin:24px auto 16px; display:grid; grid-template-columns:repeat(5,1fr); gap:0; max-width:680px;
-    border-radius:0; overflow:hidden;
+    margin:24px auto 18px; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:760px;
   }
   .chip{
-    padding:10px 12px; text-align:center; font-weight:700; color:#fff; font-size:16px;
+    padding:11px 12px; text-align:center; font-weight:700; color:#fff; font-size:15px;
+    border-radius:10px; box-shadow:0 4px 14px rgba(16,24,40,.08);
   }
   .card{
-    background:#eef2f7; border:1px solid var(--line); padding:14px 16px; margin:14px 0 22px;
+    background:linear-gradient(180deg,#f4f8fd 0%, #eef4fb 100%); border:1px solid var(--line); padding:15px 17px; margin:14px 0 24px; border-radius:12px;
   }
   .card strong{display:block; margin-bottom:4px}
   h2{
@@ -107,7 +107,7 @@
     display:flex; justify-content:space-between; color:#697386; font-size:14px; margin-top:28px; padding-top:10px; border-top:1px solid var(--line);
   }
   .workflow{
-    background:#eef2f7; border:1px solid var(--line); padding:12px 14px; font-size:18px; margin-top:18px;
+    background:linear-gradient(180deg,#f4f8fd 0%, #eef4fb 100%); border:1px solid var(--line); padding:14px 16px; font-size:17px; margin-top:20px; border-radius:12px;
   }
   @media (max-width: 900px){
     .page{
@@ -223,6 +223,15 @@
   <div class="tip">Tips - Läs gärna igenom hela manualen innan du börjar använda programmet. Det sparar tid och gör testningen mer konsekvent.</div>
 
   <div class="section">
+    <h3><span class="bullet">■</span>Systemkrav</h3>
+    <p>BOLO är ett Windows-program och kräver Windows 10 eller Windows 11.</p>
+    <p>Du behöver även ha Microsoft Word eller LibreOffice installerat på datorn samt en egen OpenAI API-nyckel.</p>
+    <p>Word eller LibreOffice används för att öppna och eventuellt redigera DOCX-manuskriptet efter genereringen.</p>
+    <p>LibreOffice kan laddas ner gratis via nedladdningslänken längre ner på sidan.</p>
+  </div>
+
+
+  <div class="section">
     <h3><span class="bullet">■</span>1. Introduktion</h3>
     <p>BOLO är ett desktopverktyg för att skapa böcker med hjälp av AI. Programmet är utvecklat för faktaböcker, guideböcker och researchbaserade projekt.</p>
     <p>Det finns även ett experimentellt Fiction Mode som gör det möjligt att skriva skönlitteratur. Funktionen använder samma pipeline men är fortfarande i beta. BOLO är därför i första hand optimerat för sakprosa.</p>
@@ -230,7 +239,7 @@
 
   <div class="section">
     <h3><span class="bullet">■</span>2. När använder man programmet</h3>
-    <p>BOLO används när de viktigaste förberedelserna för boken är klara. Vanligtvis har man redan en idé om bokens innehåll, en Book Brief och en grundläggande outline. Programmet används då för att generera själva boken.</p>
+    <p>BOLO används när förberedelserna för boken är klara. Det viktigaste är en Book Brief. Programmet används då för att generera outline och själva boken.</p>
   </div>
 
   <div class="section">
@@ -245,7 +254,7 @@
 
   <div class="section">
     <h3><span class="bullet">■</span>5. Book Brief</h3>
-    <p>Book Brief är den viktigaste delen av processen. Den beskriver boken och fungerar som huvudinstruktion för AI. Rekommenderad längd är minst 200 ord men det finns ingen övre gräns.</p>
+    <p>Book Brief är den viktigaste delen av processen. Den beskriver boken och fungerar som huvudinstruktion för AI. Rekommenderad längd är minst 200 ord och det finns ingen övre gräns.</p>
   </div>
 
   <div class="section">
@@ -267,12 +276,12 @@
 
   <div class="section">
     <h3><span class="bullet">■</span>8. Strukturtyper</h3>
-    <p>AutoBook genererar automatiskt en outline från Book Brief. AI Sections används när du redan har kapitelrubriker men vill att programmet ska skapa    underrubriker. Manual Outline betyder att du skriver hela strukturen själv. Om generate outline/subheadings inte är "tänd", ändra till annat structure control mode och ändra sedan tillbaka</p>
+    <p>AutoBook genererar automatiskt en outline från Book Brief. AI Sections används när du redan har kapitelrubriker men vill att programmet ska skapa underrubriker. Manual Outline betyder att du skriver hela strukturen själv. Om Generate Outline eller Generate Subheadings inte är aktiv efter extern redigering kan du byta till ett annat structure mode och sedan byta tillbaka igen så "tänds" funktionen igen.</p>
   </div>
 
   <div class="twocol">
     <div class="note"><strong>Viktiga inställningar</strong><br>Book Size &amp; Length, Writing Style &amp; AI Control, Units och Anchor Data Density påverkar både textens innehåll och bokens slutliga format.</div>
-    <div class="note"><strong>Tänk på</strong><br>Förändringar i instruction strength och test mode är ofta de snabbaste sätten att jämföra resultat mellan körningar.</div>
+    <div class="note"><strong>Tänk på</strong><br>Förändringar i instruction strength och test mode är ofta de snabbaste sätten att jämföra resultat mellan inställningar och brief.</div>
   </div>
 
   <div class="section">
@@ -306,42 +315,74 @@
     <p>En grov tumregel är att en sida med cirka 300 ord kostar ungefär 1 cent att generera.</p>
   </div>
 
+  
   <div class="section">
-    <h3><span class="bullet">■</span>15. Cover Generator</h3>
-    <p>Cover Generator skapar ett komplett bokomslag. Ladda upp DOCX-manuskriptet, framsida och baksida. Programmet skapar automatiskt bokryggen.</p>
-    <div class="tip">Tips - Gör gärna några testexporter för att hitta rätt kombination av spine position och spine text size.</div>
+    <h3><span class="bullet">■</span>15. Export</h3>
+    <p>När du genererar en bok eller kör en testgenerering sparas resultaten automatiskt i den output-mapp du valt i programmet.</p>
+    <p>Det betyder att både testkörningar och fullständiga bokgenereringar hamnar på samma plats.</p>
+    <p>Efter en full generering skapas normalt två filer:</p>
+    <p>DOCX – huvudmanuskriptet<br>EPUB – e-boksversionen</p>
+    <p>DOCX-filen kan öppnas i Word eller LibreOffice för redigering och kvalitetskontroll. EPUB-filen kan användas direkt för e-bokspublicering.</p>
+    <p>Innan du laddar upp boken till en publiceringsplattform rekommenderas att du kör programmets Quality Check och gör en kort manuell genomläsning av några kapitel.</p>
+    <p><strong>Print-PDF</strong></p>
+    <p>Om du även vill skapa en print-PDF använder du funktionen Re-export i programmet.</p>
+    <p>Print-PDF genereras inte automatiskt eftersom detta format används mer sällan än DOCX i moderna publiceringsflöden. Många plattformar, till exempel Amazon KDP, arbetar direkt med DOCX-filer.</p>
   </div>
 
   <div class="section">
-    <h3><span class="bullet">■</span>16. Spine-inställningar</h3>
-    <p>Spine position styr hur högt upp på bokryggen texten börjar och Spine text size styr hur stor texten blir.</p>
+    <h3><span class="bullet">■</span>16. Cover Generator</h3>
+    <p>Cover Generator skapar ett komplett bokomslag. Du laddar upp DOCX-manuskriptet, framsidesbild och baksidesbild. Programmet beräknar automatiskt bokryggen utifrån sidantalet.</p>
+    <p><strong>Spine position</strong> styr hur högt upp på bokryggen texten börjar.</p>
+    <p>Du kan även välja färg på texten för titel, undertitel och författare samt färg på själva bokryggen.</p>
+    <div class="tip">Tips - Gör gärna några testexporter för att hitta rätt kombination av spine position och färger.</div>
   </div>
 
   <div class="footer"><div>Cartographica Hamburg</div><div>3</div></div>
+
 </section>
 
 <section class="page">
   <div class="topline"></div>
   <div class="mast"><div>BOLO - Publishing System</div><div>User Guide</div></div>
 
+  
   <div class="section">
     <h3><span class="bullet">■</span>17. Redigera DOCX utan Microsoft Word</h3>
     <p>BOLO fungerar med både Microsoft Word och LibreOffice. LibreOffice kan laddas ner gratis från https://www.libreoffice.org/download/.</p>
-    <div class="tip">Tips - Re-Export kan reparera dokumentstrukturen efter redigering i annat program.</div>
+    <div class="tip">Tips - Re-Export kan reparera dokumentstrukturen efter redigering i andra program.</div>
   </div>
 
   <div class="section">
     <h3><span class="bullet">■</span>18. Presentation och Flyer</h3>
     <p>Generate Presentation och Generate Flyer är extra funktioner och inte programmets huvudsyfte.</p>
+    <p>De kan användas för att snabbt skapa presentationsmaterial eller enklare informationsblad baserat på Book Brief.</p>
   </div>
 
   <div class="section">
-    <h3><span class="bullet">■</span>19. Feedback</h3>
+    <h3><span class="bullet">■</span>19. Rekommenderat arbetssätt</h3>
+    <p>Det mest effektiva sättet att använda BOLO är att först skapa en detaljerad Book Brief tillsammans med en AI-tjänst, till exempel ChatGPT.</p>
+    <p>Ett vanligt arbetssätt är:</p>
+    <p>1. Klicka på Copy Base Prompt i BOLO.<br>
+    2. Klistra in prompten i en AI-tjänst, till exempel ChatGPT.<br>
+    3. Beskriv din bokidé och diskutera fram en tydlig och detaljerad Book Brief.<br>
+    4. Förfina briefen genom några iterationer tills strukturen känns rätt.<br>
+    5. Klistra sedan in den färdiga briefen i BOLO.</p>
+    <p>Ju mer detaljerad Book Brief är, desto bättre blir resultatet.</p>
+    <p>För smalare ämnen är det särskilt viktigt att tydligt ange vilka delar som ska utvecklas till egna kapitel. Annars kan texten bli kortare än planerat.</p>
+    <p>För bredare ämnen är situationen ofta den motsatta – materialet kan bli mer omfattande. Programmet försöker dock hålla sig till de sidinställningar du har valt.</p>
+    <p>BOLO har en viss tolerans uppåt och nedåt, men om ämnet är mycket stort och sidantalet satts mycket lågt kan texten ibland bli upp till cirka 25 % längre för att kunna beskriva ämnet på ett begripligt sätt.</p>
+    <p>Om ämnet däremot är mycket smalt, eller om Book Brief är för vag, kan resultatet bli kortare än planerat. Då behöver man oftast arbeta om Book Brief så att den tydligare anger vad varje kapitel ska innehålla.</p>
+    <p>Oftast fungerar det dock som tänkt om man har rimliga förväntningar. Man kan till exempel inte be systemet skriva en världshistoria på femtio sidor.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>20. Feedback</h3>
     <p>Om du har synpunkter på förbättringar i manualen eller programmet får du gärna mejla: rennmarkmathias@gmail.com</p>
   </div>
 
   <div class="workflow">
-    <strong>BOLO Workflow - snabb översikt</strong><br>
+
+    <strong>BOLO Publishing System</strong><br>
     Book Brief -&gt; Outline -&gt; Generate -&gt; Edit -&gt; Translate -&gt; Cover -&gt; Export
   </div>
 
