@@ -1,331 +1,393 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BOLO – Publishing System</title>
-  <style>
-    :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --blue:#2d6cdf;
-      --blue-dark:#1f4ea3;
-      --line:#e5e7eb;
-      --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%);
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BOLO_User_Guide_sv</title>
+<style>
+  :root{
+    --bg:#eef2f7;
+    --paper:#f7f8fa;
+    --ink:#172033;
+    --muted:#667085;
+    --line:#d8dee8;
+    --card:#eef4fb;
+    --orange:#f08a24;
+    --yellow:#f0c635;
+    --lime:#cadb38;
+    --cyan:#8fd0df;
+    --blue:#2e69d6;
+    --purple:#7c3aed;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    color:var(--ink);
+    background:#e9edf3;
+  }
+  .page{
+    width:min(980px, calc(100vw - 40px));
+    margin:24px auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 8px 28px rgba(16,24,40,.08);
+    padding:26px 34px 34px;
+  }
+  .topline{
+    height:6px;
+    background:linear-gradient(90deg,var(--orange) 0 20%, var(--yellow) 20% 40%, var(--cyan) 40% 62%, var(--blue) 62% 84%, var(--purple) 84% 100%);
+    border-radius:2px;
+    margin:-6px -34px 14px;
+  }
+  .mast{
+    display:flex; justify-content:space-between; align-items:center;
+    color:#4b5565; font-size:14px; font-weight:600; margin-bottom:18px;
+  }
+  .logo{
+    text-align:center; margin:18px 0 18px;
+  }
+  .logo h1{
+    margin:0; font-size:132px; line-height:.9; letter-spacing:2px; font-weight:800;
+  }
+  .flow{
+    width:100%; max-width:760px; height:70px; margin:8px auto 18px; display:block;
+  }
+  .title{
+    text-align:center;
+  }
+  .title .main{
+    font-size:42px; font-weight:800; letter-spacing:.2px; margin:0;
+  }
+  .title .sub1{font-size:18px; color:var(--muted); margin-top:6px}
+  .title .sub2{font-size:20px; color:#6d7789; margin-top:2px}
+  .chips{
+    margin:24px auto 18px; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:760px;
+  }
+  .chip{
+    padding:11px 12px; text-align:center; font-weight:700; color:#fff; font-size:15px;
+    border-radius:10px; box-shadow:0 4px 14px rgba(16,24,40,.08);
+  }
+  .card{
+    background:linear-gradient(180deg,#f4f8fd 0%, #eef4fb 100%); border:1px solid var(--line); padding:15px 17px; margin:14px 0 24px; border-radius:12px;
+  }
+  .card strong{display:block; margin-bottom:4px}
+  h2{
+    font-size:26px; margin:12px 0 10px;
+  }
+  .quick{
+    border:1px solid var(--line); padding:12px 14px; background:white;
+  }
+  .quick ol{
+    margin:0; padding-left:28px; line-height:1.65; font-size:18px;
+  }
+  .tip{
+    margin:10px 0 18px; background:#eef6ff; border:1px solid #c9d9ee; padding:10px 12px; color:#425466;
+  }
+  .section{
+    margin:18px 0;
+    break-inside:avoid;
+  }
+  .section h3{
+    margin:0 0 8px; font-size:20px; border-bottom:1px solid #e2e8f0; padding-bottom:4px;
+  }
+  .bullet{
+    color:var(--blue); font-weight:900; margin-right:8px;
+  }
+  p{
+    font-size:17px; line-height:1.45; margin:0 0 8px;
+  }
+  .twocol{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:12px 0;
+  }
+  .note{
+    background:#eef2f7; border:1px solid var(--line); padding:12px 14px;
+  }
+  .footer{
+    display:flex; justify-content:space-between; color:#697386; font-size:14px; margin-top:28px; padding-top:10px; border-top:1px solid var(--line);
+  }
+  .workflow{
+    background:linear-gradient(180deg,#f4f8fd 0%, #eef4fb 100%); border:1px solid var(--line); padding:14px 16px; font-size:17px; margin-top:20px; border-radius:12px;
+  }
+  @media (max-width: 900px){
+    .page{
+      width:min(100%, calc(100vw - 24px));
+      margin:12px auto;
+      padding:22px 20px 24px;
     }
+    .topline{margin:-6px -20px 12px}
+    .logo h1{font-size:clamp(64px, 18vw, 110px)}
+    .flow{height:auto; margin:6px auto 14px}
+    .title .main{font-size:clamp(28px, 5.2vw, 40px)}
+    .title .sub1{font-size:clamp(15px, 2.5vw, 18px)}
+    .title .sub2{font-size:clamp(16px, 2.8vw, 20px)}
+    .chips{grid-template-columns:repeat(2,1fr); max-width:none}
+    .chip:last-child{grid-column:1 / -1}
+    .quick ol{font-size:17px}
+    p{font-size:16px}
+    .twocol{grid-template-columns:1fr}
+  }
 
-    *{box-sizing:border-box}
-
-    body{
+  @media (max-width: 640px){
+    body{background:var(--paper)}
+    .page{
+      width:100%;
       margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.6;
+      border:none;
+      box-shadow:none;
+      padding:18px 14px 20px;
     }
+    .topline{margin:-6px -14px 10px}
+    .mast{font-size:12px; margin-bottom:12px}
+    .logo{margin:10px 0 12px}
+    .logo h1{font-size:clamp(52px, 21vw, 84px); letter-spacing:1px}
+    .title .main{font-size:clamp(24px, 7.2vw, 34px)}
+    .title .sub1{font-size:14px}
+    .title .sub2{font-size:15px}
+    .chips{grid-template-columns:1fr; margin:18px auto 14px}
+    .chip{font-size:15px; padding:10px}
+    h2{font-size:22px}
+    .section h3{font-size:18px}
+    .quick{padding:10px 10px}
+    .quick ol{padding-left:22px; font-size:16px; line-height:1.55}
+    .tip, .card, .note, .workflow{padding:10px 11px}
+    p{font-size:15px; line-height:1.5}
+    .footer{font-size:12px; margin-top:18px}
+  }
 
-    .hero{
-      background:var(--grad);
-      padding:26px 16px 34px;
-      text-align:center;
-    }
-
-    .hero-inner{
-      max-width:1100px;
-      margin:0 auto;
-    }
-
-    .logo{
-      width:520px;
-      max-width:92%;
-      height:auto;
-      display:block;
-      margin:0 auto 10px;
-    }
-
-    .container{
-      max-width:1000px;
-      margin:0 auto;
-      padding:28px 16px 60px;
-    }
-
-    .intro{
-      text-align:center;
-      margin-bottom:28px;
-    }
-
-    h1{
-      margin:0 0 8px;
-      font-size:clamp(2rem, 5vw, 3rem);
-      line-height:1.15;
-    }
-
-    .subtitle{
-      margin:0 auto;
-      max-width:760px;
-      color:var(--muted);
-      font-size:1.05rem;
-    }
-
-    .pipeline{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:10px;
-      margin:28px 0 34px;
-    }
-
-    .pipe-step{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:14px 10px;
-      text-align:center;
-      font-weight:700;
-      font-size:0.94rem;
-      line-height:1.25;
-      box-shadow:0 4px 14px rgba(0,0,0,0.05);
-    }
-
-    .pipe-step small{
-      display:block;
-      margin-top:4px;
-      font-weight:400;
-      color:var(--muted);
-      font-size:0.82rem;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:22px;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:26px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.06);
-    }
-
-    .card h2{
-      margin-top:0;
-      margin-bottom:10px;
-      font-size:1.45rem;
-    }
-
-    .card h3{
-      margin-top:18px;
-      margin-bottom:8px;
-      font-size:1.08rem;
-    }
-
-    .button-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:14px;
-    }
-
-    .button{
-      display:inline-block;
-      padding:14px 24px;
-      background:var(--blue);
-      color:#fff;
-      text-decoration:none;
-      border-radius:10px;
-      font-weight:700;
-      transition:background .15s ease;
-    }
-
-    .button:hover{
-      background:var(--blue-dark);
-    }
-
-    .button.secondary{
-      background:#ffffff;
-      color:var(--blue);
-      border:1px solid var(--blue);
-    }
-
-    .button.secondary:hover{
-      background:#f0f6ff;
-    }
-
-    ol{
-      padding-left:20px;
-      margin:10px 0 0;
-    }
-
-    ul{
-      margin:8px 0 10px 18px;
-    }
-
-    .note{
-      margin-top:16px;
-      padding:14px 16px;
-      background:#f3f7ff;
-      border-left:4px solid var(--blue);
-      border-radius:8px;
-      color:#334155;
-    }
-
-    .muted{
-      color:var(--muted);
-    }
-
-    .full{
-      grid-column:1 / -1;
-    }
-
-    .footer{
-      text-align:center;
-      padding-top:18px;
-      color:var(--muted);
-      font-size:0.95rem;
-    }
-
-    .footer a{
-      color:var(--blue);
-      text-decoration:none;
-    }
-
-    .footer a:hover{
-      text-decoration:underline;
-    }
-
-    .links{
-      margin-top:8px;
-    }
-
-    @media (max-width: 820px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-
-      .pipeline{
-        grid-template-columns:1fr;
-      }
-
-      .card{
-        padding:20px;
-      }
-
-      .button-row{
-        flex-direction:column;
-      }
-
-      .button{
-        width:100%;
-        text-align:center;
-      }
-    }
-  </style>
+  @media print{
+    body{background:white}
+    .page{width:auto; margin:0; box-shadow:none; border:none; min-height:auto; page-break-after:always}
+    .page:last-child{page-break-after:auto}
+  }
+</style>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <img src="BOLO-logo.png" alt="BOLO-logo" class="logo" />
-    </div>
-  </header>
+<section class="page">
+  <div class="topline"></div>
+  <div class="mast"><div>BOLO - Publishing System</div><div>User Guide</div></div>
 
-  <main class="container">
-    <section class="intro">
-      <h1>BOLO – Publishing System</h1>
-      <p class="subtitle">
-        AI-assisterad publiceringspipeline för fackböcker. Skapa bokbrief, outline, kapitel, DOCX och omslag i ett och samma arbetsflöde.
-      </p>
-    </section>
+  <div class="logo">
+    <h1>BOLO</h1>
+    <svg class="flow" viewBox="0 0 760 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <line x1="56" y1="34" x2="675" y2="34" stroke="#2a5faa" stroke-width="6"/>
+      <circle cx="56" cy="34" r="18" fill="#f08a24"/>
+      <circle cx="150" cy="34" r="18" fill="#f0c635"/>
+      <circle cx="244" cy="34" r="18" fill="#cadb38"/>
+      <circle cx="338" cy="34" r="18" fill="#8fd0df"/>
+      <circle cx="432" cy="34" r="18" fill="#2e69d6"/>
+      <polygon points="675,12 735,34 675,56" fill="#214f93"/>
+    </svg>
+  </div>
 
-    <section class="pipeline" aria-label="BOLO-pipeline">
-      <div class="pipe-step">Book Brief<small>beskriv boken</small></div>
-      <div class="pipe-step">Outline<small>struktur och kapitel</small></div>
-      <div class="pipe-step">AI-generering<small>skriv själva boken</small></div>
-      <div class="pipe-step">DOCX, EPUB, PDF‑export<small>redigera och kvalitetssäkra</small></div>
-      <div class="pipe-step">Cover<small>komplett bokomslag</small></div>
-    </section>
+  <div class="title">
+    <p class="main">BOLO - Publishing System</p>
+    <div class="sub1">User Guide</div>
+    <div class="sub2">AI-assisted nonfiction publishing pipeline</div>
+  </div>
 
-    <section class="grid">
-      <article class="card">
-        <h2>Ladda ner</h2>
-        <p>
-          Här laddar du ner BOLO-programmet.
-        </p>
+  <div class="chips">
+    <div class="chip" style="background:var(--orange)">Book Brief</div>
+    <div class="chip" style="background:var(--yellow)">Outline</div>
+    <div class="chip" style="background:var(--cyan)">AI generation</div>
+    <div class="chip" style="background:var(--blue)">DOCX</div>
+    <div class="chip" style="background:var(--purple)">Cover</div>
+  </div>
 
-        <div class="button-row">
-          <a class="button" href="https://download.knowstride.com/testboloapp/bolo-setup.exe" download>
-  	  Ladda ner BOLO
-          </a>
-	<div class="note">
-	<strong>Obs:</strong> Eftersom BOLO är ett nytt program kan webbläsaren eller Windows visa en säkerhetsvarning vid nedladdning.
-	Detta är normalt för nya program som ännu inte har byggt upp ett säkerhetsrykte.
-	Om du litar på källan kan du välja <strong>Behåll</strong> eller <strong>Kör ändå</strong> i webbläsaren eller i Windows SmartScreen.
-	</div>
-          <a class="button secondary" href="BOLO_User_Guide.html">Manual</a>
-        </div>
+  <div class="card">
+    <strong>Quick overview</strong>
+    BOLO samlar hela arbetsflödet för AI-assisterad produktion av faktaböcker: brief, struktur, generering, kvalitetskontroll, omslag och export.
+  </div>
 
-        <div class="note">
-          Tips: Läs gärna igenom manualen först och gör sedan ett första test med 2–3 kapitel i testläge.
-        </div>
-      </article>
+  <div style="text-align:center;color:#7a8597;margin-top:180px;font-weight:600;">Version 1.0</div>
+  <div class="footer"><div>Cartographica Hamburg</div><div>1</div></div>
+</section>
 
-      <article class="card">
-        <h2>Innan du börjar</h2>
-        <p>
-          BOLO använder OpenAI:s API för att generera text. För att använda programmet behöver du därför en egen API-nyckel från OpenAI.
-        </p>
+<section class="page">
+  <div class="topline"></div>
+  <div class="mast"><div>BOLO - Publishing System</div><div>User Guide</div></div>
 
-        <h3>Så skaffar du en OpenAI API-nyckel</h3>
-        <ol>
-          <li>
-            Gå direkt till OpenAI:s API-nyckelsida:<br />
-            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">https://platform.openai.com/api-keys</a>
-          </li>
-          <li>Logga in.</li>
-          <li>
-            OpenAI tillåter för närvarande endast inloggning via:
-            <ul>
-              <li>Google</li>
-              <li>Apple</li>
-              <li>Microsoft</li>
-            </ul>
-            Det finns i nuläget inga andra registreringsalternativ med vanlig e-post och lösenord.
-          </li>
-          <li>Klicka på <strong>Create new secret key</strong>.</li>
-          <li>Kopiera och spara nyckeln på ett säkert ställe. Du kan inte se den igen senare.</li>
-          <li>Gå till <strong>Billing</strong> och lägg till ett kort, ladda $5-20.</li>
-          <li>Klart – nu kan du använda OpenAI:s API i BOLO.</li>
-        </ol>
+  <h2>Quick Start</h2>
+  <div class="quick">
+    <ol>
+      <li>Fyll i Book Information (titel, undertitel, författare).</li>
+      <li>Skapa eller klistra in en Book Brief.</li>
+      <li>Välj strukturtyp: AutoBook, AI Sections eller Manual Outline.</li>
+      <li>Justera inställningar i Book Size &amp; Length och Writing Style &amp; AI Control.</li>
+      <li>Kör gärna Test Mode först (t.ex. 3 kapitel).</li>
+      <li>Generera sedan hela boken.</li>
+    </ol>
+  </div>
 
-        <div class="note">
-          En grov tumregel är att en sida text kostar ungefär $0.01 i API-kostnad vid cirka 300 ord per sida.
-        </div>
-      </article>
+  <div class="tip">Tips - Läs gärna igenom hela manualen innan du börjar använda programmet. Det sparar tid och gör testningen mer konsekvent.</div>
 
-      <article class="card full">
-        <h2>Vad BOLO gör</h2>
-        <p>
-          BOLO är byggt för att göra hela arbetsflödet kring AI-assisterad bokproduktion enklare och mer strukturerat.
-          Det passar särskilt bra för fackböcker, guideböcker, geografiska böcker, historiska projekt och andra typer av längre sakprosa.
-        </p>
-        <p class="muted">
-          Programmet är gjort för skrivande i längre format – inte för skönlitteratur och inte för korta chattliknande texter.
-        </p>
-      </article>
-    </section>
+  <div class="section">
+    <h3><span class="bullet">■</span>Systemkrav</h3>
+    <p>BOLO är ett Windows-program och kräver Windows 10 eller Windows 11.</p>
+    <p>Du behöver även ha Microsoft Word eller LibreOffice installerat på datorn samt en egen OpenAI API-nyckel.</p>
+    <p>Word eller LibreOffice används för att öppna och eventuellt redigera DOCX-manuskriptet efter genereringen.</p>
+    <p>LibreOffice kan laddas ner gratis via nedladdningslänken längre ner på sidan.</p>
+  </div>
 
-    <footer class="footer">
-      <p class="links" style="font-size:1.15rem;font-weight:600;margin-bottom:12px;">
-        <a href="https://knowstride.com/bolo/">← Tillbaka till presentationen</a>
-      </p>
-      <p>
-        Feedback eller frågor:
-        <a href="mailto:rennmarkmathias@gmail.com">rennmarkmathias@gmail.com</a>
-      </p>
-    </footer>
-  </main>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>1. Introduktion</h3>
+    <p>BOLO är ett desktopverktyg för att skapa böcker med hjälp av AI. Programmet är utvecklat för faktaböcker, guideböcker och researchbaserade projekt.</p>
+    <p>Det finns även ett experimentellt Fiction Mode som gör det möjligt att skriva skönlitteratur. Funktionen använder samma pipeline men är fortfarande i beta. BOLO är därför i första hand optimerat för sakprosa.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>2. När använder man programmet</h3>
+    <p>BOLO används när förberedelserna för boken är klara. Det viktigaste är en Book Brief. Programmet används då för att generera outline och själva boken.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>3. Programfönster</h3>
+    <p>Programmet bör användas i helskärmsläge. Om fönstret är mindre kan vissa funktioner och knappar döljas.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>4. Book Information</h3>
+    <p>När du börjar ett projekt fyller du först i Book Information. Detta är bokens metadata, till exempel titel, undertitel och författare.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>5. Book Brief</h3>
+    <p>Book Brief är den viktigaste delen av processen. Den beskriver boken och fungerar som huvudinstruktion för AI. Rekommenderad längd är minst 200 ord och det finns ingen övre gräns.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>6. Skapa Book Brief med AI</h3>
+    <p>Ett effektivt sätt är att använda ChatGPT eller en annan AI-tjänst. I BOLO finns knappen 'Copy base prompt' som kan användas för att skapa en professionell Book Brief.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>7. Save Setup</h3>
+    <p>Om du gör många tester kan det vara bra att använda Save Setup. Det sparar alla aktuella inställningar så att du enkelt kan fortsätta senare.</p>
+  </div>
+
+  <div class="footer"><div>Cartographica Hamburg</div><div>2</div></div>
+</section>
+
+<section class="page">
+  <div class="topline"></div>
+  <div class="mast"><div>BOLO - Publishing System</div><div>User Guide</div></div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>8. Strukturtyper</h3>
+    <p>AutoBook genererar automatiskt en outline från Book Brief. AI Sections används när du redan har kapitelrubriker men vill att programmet ska skapa underrubriker. Manual Outline betyder att du skriver hela strukturen själv. Om Generate Outline eller Generate Subheadings inte är aktiv efter extern redigering kan du byta till ett annat structure mode och sedan byta tillbaka igen så "tänds" funktionen igen.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="note"><strong>Viktiga inställningar</strong><br>Book Size &amp; Length, Writing Style &amp; AI Control, Units och Anchor Data Density påverkar både textens innehåll och bokens slutliga format.</div>
+    <div class="note"><strong>Tänk på</strong><br>Förändringar i instruction strength och test mode är ofta de snabbaste sätten att jämföra resultat mellan inställningar och brief.</div>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>9. Book Size &amp; Length</h3>
+    <p>Här anger man hur många volymer boken ska ha och hur många sidor varje volym ska innehålla.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>10. Writing Style &amp; AI Control</h3>
+    <p>Denna sektion styr hur AI skriver texten. Instruction Strength påverkar hur strikt AI följer Book Brief och andra inställningar.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>11. Units</h3>
+    <p>Här väljer man om måttenheter ska visas i metriskt system eller imperial.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>12. Anchor Data Density</h3>
+    <p>Styr hur mycket konkreta siffror och faktadata texten innehåller.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>13. Test Mode</h3>
+    <p>Test Mode gör att du kan generera några testkapitel i stället för hela boken.</p>
+    <div class="tip">Tips - Ett bra arbetssätt är att generera 2-3 testkapitel för att jämföra olika inställningar innan du skapar hela boken.</div>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>14. Kostnad</h3>
+    <p>En grov tumregel är att en sida med cirka 300 ord kostar ungefär 1 cent att generera.</p>
+  </div>
+
+  
+  <div class="section">
+    <h3><span class="bullet">■</span>15. Export</h3>
+    <p>När du genererar en bok eller kör en testgenerering sparas resultaten automatiskt i den output-mapp du valt i programmet.</p>
+    <p>Det betyder att både testkörningar och fullständiga bokgenereringar hamnar på samma plats.</p>
+    <p>Efter en full generering skapas normalt två filer:</p>
+    <p>DOCX – huvudmanuskriptet<br>EPUB – e-boksversionen</p>
+    <p>DOCX-filen kan öppnas i Word eller LibreOffice för redigering och kvalitetskontroll. EPUB-filen kan användas direkt för e-bokspublicering.</p>
+    <p>Innan du laddar upp boken till en publiceringsplattform rekommenderas att du kör programmets Quality Check och gör en kort manuell genomläsning av några kapitel.</p>
+    <p><strong>Print-PDF</strong></p>
+    <p>Om du även vill skapa en print-PDF använder du funktionen Re-export i programmet.</p>
+    <p>Print-PDF genereras inte automatiskt eftersom detta format används mer sällan än DOCX i moderna publiceringsflöden. Många plattformar, till exempel Amazon KDP, arbetar direkt med DOCX-filer.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>16. Cover Generator</h3>
+    <p>Cover Generator skapar ett komplett bokomslag. Du laddar upp DOCX-manuskriptet, framsidesbild och baksidesbild. Programmet beräknar automatiskt bokryggen utifrån sidantalet. Tips: skapa fram och baksida i t.ex ChatGPT, det enda ChatGPT behöver veta är bokens mått och upplösning t.ex 300 dpi.</p>
+    <p><strong>Spine position</strong> styr hur högt upp på bokryggen texten börjar.</p>
+    <p>Du kan även välja färg på texten för titel, undertitel och författare samt färg på själva bokryggen.</p>
+    <div class="tip">Tips - Gör gärna några testexporter för att hitta rätt kombination av spine position och färger.</div>
+  </div>
+
+  <div class="footer"><div>Cartographica Hamburg</div><div>3</div></div>
+
+</section>
+
+<section class="page">
+  <div class="topline"></div>
+  <div class="mast"><div>BOLO - Publishing System</div><div>User Guide</div></div>
+
+  
+  <div class="section">
+    <h3><span class="bullet">■</span>17. Redigera DOCX utan Microsoft Word</h3>
+    <p>BOLO fungerar med både Microsoft Word och LibreOffice. LibreOffice kan laddas ner gratis från https://www.libreoffice.org/download/.</p>
+    <div class="tip">Tips - Re-Export kan reparera dokumentstrukturen efter redigering i andra program, spara som docx och re-exportera.</div>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>18. Presentation och Flyer</h3>
+    <p>Generate Presentation och Generate Flyer är extra funktioner och inte programmets huvudsyfte.</p>
+    <p>De kan användas för att snabbt skapa presentationsmaterial eller enklare informationsblad baserat på Book Brief.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>19. Rekommenderat arbetssätt</h3>
+    <p>Det mest effektiva sättet att använda BOLO är att först skapa en detaljerad Book Brief tillsammans med en AI-tjänst, till exempel ChatGPT.</p>
+    <p>Ett vanligt arbetssätt är:</p>
+    <p>1. Klicka på Copy Base Prompt i BOLO.<br>
+    2. Klistra in prompten i en AI-tjänst, till exempel ChatGPT.<br>
+    3. Beskriv din bokidé och diskutera fram en tydlig och detaljerad Book Brief.<br>
+    4. Förfina briefen genom några iterationer tills strukturen känns rätt.<br>
+    5. Klistra sedan in den färdiga briefen i BOLO.</p>
+    <p>Ju mer detaljerad Book Brief är, desto bättre blir resultatet.</p>
+    <p>För smalare ämnen är det särskilt viktigt att tydligt ange vilka delar som ska utvecklas till egna kapitel. Annars kan texten bli kortare än planerat.</p>
+    <p>För bredare ämnen är situationen ofta den motsatta – materialet kan bli mer omfattande. Programmet försöker dock hålla sig till de sidinställningar du har valt.</p>
+    <p>BOLO har en viss tolerans uppåt och nedåt, men om ämnet är mycket stort och sidantalet satts mycket lågt kan texten ibland bli upp till cirka 25 % längre för att kunna beskriva ämnet på ett begripligt sätt.</p>
+    <p>Om ämnet däremot är mycket smalt, eller om Book Brief är för vag, kan resultatet bli kortare än planerat. Då behöver man oftast arbeta om Book Brief så att den tydligare anger vad varje kapitel ska innehålla.</p>
+    <p>Oftast fungerar det dock som tänkt om man har rimliga förväntningar. Man kan till exempel inte be systemet skriva en världshistoria på femtio sidor.</p>
+  </div>
+
+  <div class="section">
+    <h3><span class="bullet">■</span>20. Feedback</h3>
+    <p>Om du har synpunkter på förbättringar i manualen eller programmet får du gärna mejla: rennmarkmathias@gmail.com</p>
+  </div>
+
+  <div class="workflow">
+
+    <strong>BOLO Publishing System</strong><br>
+    Book Brief -&gt; Outline -&gt; Generate -&gt; Edit -&gt; Translate -&gt; Cover -&gt; Export
+  </div>
+
+  <div class="footer"><div>Cartographica Hamburg</div><div>4</div></div>
+</section>
+
 </body>
 </html>
