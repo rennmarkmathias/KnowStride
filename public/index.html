@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BOLO Writer – AI-Assisted Nonfiction Publishing Software</title>
-  <meta name="description" content="Try BOLO Writer, an AI-assisted nonfiction publishing workflow for briefs, outlines, chapter generation, exports, and covers. Download the trial or choose a license." />
+  <title>BOLO AI Publishing Pipeline – Structured Nonfiction Publishing Software</title>
+  <meta name="description" content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." />
   <style>
     :root{
       --bg:#f6f7fb;
@@ -66,9 +66,20 @@
 
     .subtitle{
       margin:0 auto;
-      max-width:820px;
+      max-width:860px;
       color:var(--muted);
       font-size:1.08rem;
+    }
+
+    .sales-copy{
+      margin:18px auto 0;
+      max-width:860px;
+      color:#334155;
+      font-size:1rem;
+    }
+
+    .sales-copy p{
+      margin:0 0 10px;
     }
 
     .pipeline{
@@ -225,14 +236,6 @@
       font-weight:700;
     }
 
-    .coming-soon{
-      display:inline-block;
-      margin-top:12px;
-      font-size:0.86rem;
-      color:var(--green);
-      font-weight:700;
-    }
-
     .footer{
       text-align:center;
       padding-top:18px;
@@ -281,17 +284,20 @@
 
   <header class="hero">
     <div class="hero-inner">
-      <img src="BOLO-logo.png" alt="BOLO Writer logo" class="logo" />
+      <img src="BOLO-logo.png" alt="BOLO logo" class="logo" />
     </div>
   </header>
 
   <main class="container">
     <section class="intro">
-      <h1>BOLO Writer</h1>
+      <h1>BOLO AI Publishing Pipeline</h1>
       <p class="subtitle">
-        AI-assisted nonfiction publishing software for structured long-form writing. Build a book brief, generate an outline,
-        draft chapters, export your manuscript, and produce a complete cover in one workflow.
+        Structured AI publishing software for nonfiction books and knowledge content.
       </p>
+      <div class="sales-copy">
+        <p>BOLO enables authors, educators and organizations to create books, guides, manuals and knowledge material in a controlled workflow — from outline and generation to editing, translation and publishable export.</p>
+        <p>From steady, long-term niche book income through many specialized titles to educational material, company documentation, travel guides and subject-specific knowledge books, BOLO turns ideas into structured, publishable books.</p>
+      </div>
     </section>
 
     <section class="pipeline" aria-label="BOLO workflow">
@@ -304,7 +310,7 @@
 
     <section class="grid">
       <article class="card">
-        <h2>Try BOLO Writer</h2>
+        <h2>Try BOLO first</h2>
         <p>
           Start with the trial version and test the workflow with a small project before choosing a license.
         </p>
@@ -313,24 +319,22 @@
           <a class="button" href="https://download.knowstride.com/testboloapp/bolo-setup.exe" download>
             Download Trial
           </a>
-          <a class="button secondary" href="bolowriter.com/BOLO/BOLO_User_Guide.html">User Guide</a>
+          <a class="button secondary" href="/guide/">User Guide</a>
         </div>
 
         <div class="note">
-          <strong>Note:</strong> Because BOLO Writer is a new application, your browser or Windows may show a security warning during download.
-          This is normal for new software that has not yet built up a reputation with security systems. If you trust the source,
-          you can choose <strong>Keep</strong> or <strong>Run anyway</strong> in your browser or Windows SmartScreen.
+          <strong>Tip:</strong> The best way to learn BOLO is to run small test generations. Creating one to three chapters usually costs only a few cents and quickly shows how the workflow behaves.
         </div>
 
         <div class="note">
-          Recommended first test: read the guide, create a small 2–3 chapter project, and run it in trial mode before purchasing.
+          <strong>Note:</strong> Because BOLO is a new application, your browser or Windows may show a security warning during download. This is normal for newly released software.
         </div>
       </article>
 
       <article class="card">
         <h2>Before you begin</h2>
         <p>
-          BOLO Writer uses the OpenAI API to generate text. To use the program, you need your own OpenAI API key.
+          BOLO uses the OpenAI API to generate text. To use the program, you need your own OpenAI API key.
         </p>
 
         <h3>How to get an OpenAI API key</h3>
@@ -343,7 +347,7 @@
           <li>Click <strong>Create new secret key</strong>.</li>
           <li>Copy the key and store it safely. You will not be able to view it again later.</li>
           <li>Add billing in OpenAI and fund the account as needed.</li>
-          <li>Paste your API key into BOLO Writer and start generating.</li>
+          <li>Paste your API key into BOLO and start generating.</li>
         </ol>
 
         <div class="note">
@@ -354,18 +358,17 @@
       <article class="card full">
         <h2>Buy a license</h2>
         <p>
-          BOLO Writer is built for a simple trial-to-purchase flow. Customers can test first, then choose the license period that fits their work.
-          Stripe checkout and account-based license delivery can be connected next.
+          Customers can test first, then choose the license that fits their work. Individual and team options are shown here so the structure is ready before checkout goes live.
         </p>
 
+        <h3>Individual licenses</h3>
         <div class="pricing">
           <div class="price-card">
             <span class="tag">Trial to paid</span>
             <h3>6 months</h3>
             <div class="price">$69 <small>/ license</small></div>
-            <p class="muted">A low-friction option for first-time users and short publishing projects.</p>
-            <a class="button secondary" href="sign-up.html">Choose 6 months</a>
-            <span class="coming-soon">Checkout can be connected next</span>
+            <p class="muted">A low-friction option for first-time users and shorter publishing projects.</p>
+            <a class="button secondary" href="#">Choose 6 months</a>
           </div>
 
           <div class="price-card">
@@ -373,29 +376,54 @@
             <h3>12 months</h3>
             <div class="price">$99 <small>/ license</small></div>
             <p class="muted">The main option for ongoing nonfiction publishing work and repeated book projects.</p>
-            <a class="button" href="sign-up.html">Choose 12 months</a>
-            <span class="coming-soon">Checkout can be connected next</span>
+            <a class="button" href="#">Choose 12 months</a>
           </div>
 
           <div class="price-card">
             <span class="tag">Best value</span>
             <h3>36 months</h3>
             <div class="price">$179 <small>/ license</small></div>
-            <p class="muted">Best for long-term use, multiple books, and a lower effective annual cost.</p>
-            <a class="button secondary" href="sign-up.html">Choose 36 months</a>
-            <span class="coming-soon">Checkout can be connected next</span>
+            <p class="muted">Best for long-term use, multiple books and a lower effective annual cost.</p>
+            <a class="button secondary" href="#">Choose 36 months</a>
+          </div>
+        </div>
+
+        <h3 style="margin-top:24px;">Team and organization licenses</h3>
+        <div class="pricing">
+          <div class="price-card">
+            <span class="tag">Small team</span>
+            <h3>3 users</h3>
+            <div class="price">$249 <small>/ 12 months</small></div>
+            <p class="muted">Suitable for smaller editorial teams, course creators or compact publishing workflows.</p>
+            <a class="button secondary" href="#">Choose 3 users</a>
+          </div>
+
+          <div class="price-card">
+            <span class="tag">Recommended team</span>
+            <h3>5 users</h3>
+            <div class="price">$399 <small>/ 12 months</small></div>
+            <p class="muted">A balanced plan for organizations producing books, manuals or educational material.</p>
+            <a class="button" href="#">Choose 5 users</a>
+          </div>
+
+          <div class="price-card">
+            <span class="tag">Organization</span>
+            <h3>10 users</h3>
+            <div class="price">$699 <small>/ 12 months</small></div>
+            <p class="muted">Best for larger departments or organizations working with structured publishing at scale.</p>
+            <a class="button secondary" href="#">Choose 10 users</a>
           </div>
         </div>
       </article>
 
       <article class="card full">
-        <h2>What BOLO Writer is for</h2>
+        <h2>What BOLO is for</h2>
         <p>
-          BOLO Writer is designed to make the full workflow around AI-assisted book production simpler and more structured.
-          It is especially well suited to nonfiction books, guidebooks, geographic books, historical projects, and other long-form factual writing.
+          BOLO is designed to make AI-assisted book production simpler, more structured and more predictable.
+          It is especially well suited to nonfiction books, guidebooks, educational material, geographic books, historical projects and other long-form factual writing.
         </p>
         <p class="muted">
-          BOLO Writer is built for structured long-form writing, not for fiction and not for short chat-style text generation.
+          BOLO is optimized for structured nonfiction workflows. Fiction support exists in beta, but the product is not positioned as a chat-style writing tool.
         </p>
       </article>
     </section>
@@ -406,7 +434,7 @@
       </p>
       <p>
         Questions or feedback:
-        <a href="mailto:rennmarkmathias@gmail.com">rennmarkmathias@gmail.com</a>
+        <a href="mailto:info@bolowriter.com">info@bolowriter.com</a>
       </p>
     </footer>
   </main>
