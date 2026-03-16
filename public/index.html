@@ -7,16 +7,15 @@
   <meta name="description" content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." />
   <style>
     :root{
-      --bg:#eef4ff;
+      --bg:#f6f7fb;
       --card:#ffffff;
       --text:#1f2937;
       --muted:#6b7280;
       --blue:#2d6cdf;
       --blue-dark:#1f4ea3;
-      --line:#dbe5f1;
+      --line:#e5e7eb;
       --green:#0f9d58;
       --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%);
-      --hero-bg:linear-gradient(180deg, rgba(233,242,255,0.98) 0%, rgba(223,236,255,0.96) 100%);
     }
 
     *{box-sizing:border-box}
@@ -25,79 +24,54 @@
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(900px 320px at 10% 0%, rgba(126,200,227,0.22), transparent 60%),
-        radial-gradient(800px 280px at 90% 8%, rgba(45,108,223,0.16), transparent 58%),
+        radial-gradient(700px 260px at 0% 22%, rgba(126,200,227,0.13), transparent 60%),
+        radial-gradient(700px 260px at 100% 30%, rgba(45,108,223,0.11), transparent 60%),
         var(--bg);
       color:var(--text);
       line-height:1.6;
     }
 
     .hero{
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.10)),
-        var(--hero-bg);
-      padding:18px 16px 22px;
+      background:var(--grad);
+      padding:26px 16px 34px;
       text-align:center;
-      border-bottom:1px solid rgba(45,108,223,0.10);
-      box-shadow:inset 0 -1px 0 rgba(255,255,255,0.7);
     }
 
     .hero-inner{
       max-width:1100px;
       margin:0 auto;
-      position:relative;
-    }
-
-    .hero-inner::before{
-      content:"";
-      position:absolute;
-      left:8%;
-      right:8%;
-      top:-2px;
-      height:5px;
-      border-radius:999px;
-      background:var(--grad);
-      opacity:0.95;
     }
 
     .logo{
-      width:360px;
-      max-width:72%;
+      width:520px;
+      max-width:92%;
       height:auto;
       display:block;
-      margin:8px auto 6px;
-      filter:drop-shadow(0 8px 14px rgba(31,78,163,0.08));
+      margin:0 auto 10px;
     }
 
     .container{
       max-width:1080px;
       margin:0 auto;
-      padding:22px 16px 60px;
+      padding:28px 16px 60px;
     }
 
     .intro{
       text-align:center;
       margin-bottom:28px;
-      background:rgba(255,255,255,0.72);
-      border:1px solid rgba(45,108,223,0.10);
-      border-radius:18px;
-      padding:26px 22px 18px;
-      box-shadow:0 12px 34px rgba(45,108,223,0.06);
     }
 
     h1{
       margin:0 0 8px;
       font-size:clamp(2rem, 5vw, 3rem);
-      line-height:1.12;
-      letter-spacing:-0.02em;
+      line-height:1.15;
     }
 
     .subtitle{
       margin:0 auto;
       max-width:860px;
-      color:#49627f;
+      color:var(--muted);
       font-size:1.08rem;
-      font-weight:600;
     }
 
     .sales-copy{
@@ -105,7 +79,6 @@
       max-width:860px;
       color:#334155;
       font-size:1rem;
-      text-wrap:balance;
     }
 
     .sales-copy p{
@@ -129,7 +102,7 @@
       font-weight:700;
       font-size:0.94rem;
       line-height:1.25;
-      box-shadow:0 6px 18px rgba(45,108,223,0.06);
+      box-shadow:0 4px 14px rgba(45,108,223,0.06);
     }
 
     .pipe-step:nth-child(1){border-top-color:#f47a20;}
@@ -182,26 +155,22 @@
     .button{
       display:inline-block;
       padding:14px 24px;
-      background:linear-gradient(180deg, #3e73e2 0%, #2d6cdf 100%);
+      background:var(--blue);
       color:#fff;
       text-decoration:none;
       border-radius:10px;
       font-weight:700;
-      transition:background .15s ease, transform .15s ease, box-shadow .15s ease;
-      box-shadow:0 8px 18px rgba(45,108,223,0.20);
+      transition:background .15s ease;
     }
 
     .button:hover{
-      background:linear-gradient(180deg, #3568d3 0%, #1f4ea3 100%);
-      transform:translateY(-1px);
-      box-shadow:0 10px 22px rgba(45,108,223,0.24);
+      background:var(--blue-dark);
     }
 
     .button.secondary{
       background:#ffffff;
       color:var(--blue);
-      border:1px solid rgba(45,108,223,0.65);
-      box-shadow:none;
+      border:1px solid var(--blue);
     }
 
     .button.secondary:hover{
@@ -222,7 +191,7 @@
       padding:14px 16px;
       background:#eef5ff;
       border-left:4px solid var(--blue);
-      border-radius:10px;
+      border-radius:8px;
       color:#334155;
     }
 
@@ -250,8 +219,8 @@
     }
 
     .price-card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 12px 28px rgba(45,108,223,0.10);
+      transform:translateY(-2px);
+      box-shadow:0 10px 24px rgba(45,108,223,0.09);
       border-color:rgba(45,108,223,0.24);
     }
 
@@ -378,7 +347,7 @@
         </p>
 
         <div class="button-row">
-          <a class="button" href="https://download.bolowriter.com/bolo-setup.exe" download>
+          <a class="button" href="https://download.knowstride.com/testboloapp/bolo-setup.exe" download>
             Download Trial
           </a>
           <a class="button secondary" href="/user-guide/BOLO_User_Guide.html">User Guide</a>
@@ -418,7 +387,6 @@
       </article>
 
       <article class="card full">
-        <div style="height:6px;background:linear-gradient(90deg,#f47a20,#f2c300,#d7d91f,#7ec8e3,#2d6cdf,#1f4ea3);border-radius:4px;margin-bottom:20px;"></div>
         <h2>Buy a license</h2>
         <p>
           Customers can test first, then choose the license period that fits their work. BOLO keeps the license cost low, while AI generation is paid separately through your own OpenAI API key only when you actually produce content.
