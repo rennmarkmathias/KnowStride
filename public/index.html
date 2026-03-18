@@ -325,7 +325,61 @@
         text-align:center;
       }
     }
-  </style>
+
+    
+    .language-nav{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:18px auto 12px;
+      max-width:1080px;
+      padding:0 16px;
+    }
+    .language-nav a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:48px;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.88);
+      border:1px solid rgba(45,108,223,0.22);
+      box-shadow:0 4px 14px rgba(45,108,223,0.08);
+      color:var(--blue-dark);
+      text-decoration:none;
+      font-size:1rem;
+      font-weight:800;
+      letter-spacing:0.4px;
+      line-height:1;
+      white-space:nowrap;
+      transition:all .15s ease;
+    }
+    .language-nav a:hover{
+      background:#eef5ff;
+      border-color:rgba(45,108,223,0.40);
+      color:var(--blue);
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(45,108,223,0.12);
+    }
+    .intro::before{
+      top:6px;
+    }
+    @media (max-width: 920px){
+      .language-nav{
+        gap:8px;
+        margin:16px auto 10px;
+      }
+      .language-nav a{
+        min-width:44px;
+        padding:7px 10px;
+        font-size:0.95rem;
+      }
+    }
+    
+
+</style>
 </head>
 <body>
 
@@ -335,8 +389,32 @@
     </div>
   </header>
 
+<div style="text-align:center;margin:10px 0 0;">
+  <span style="display:inline-block;padding:8px 14px;border-radius:999px;
+  background:#fff3cd;color:#7a5d00;font-weight:700;border:1px solid #ffe69c;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+    Launching soon
+  </span>
+</div>
+
+
+  
+  <nav class="language-nav" aria-label="Language navigation">
+    <a href="BOLO_landing_multilingual_onepage_v2.html#danish">DK</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#german">DE</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#spanish">ES</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#french">FR</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#italian">IT</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#dutch">NL</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#norwegian">NO</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#swedish">SE</a>
+    <a href="BOLO_landing_multilingual_onepage_v2.html#portuguese">PT</a>
+  </nav>
+
+
+
   <main class="container">
-    <section class="intro">
+<section class="intro">
       <h1>BOLO AI Publishing Pipeline</h1>
       <p class="subtitle">
         Structured AI publishing software for nonfiction books and knowledge content.
@@ -366,10 +444,9 @@
           <a class="button" href="https://download.knowstride.com/testboloapp/bolo-setup.exe" download>
             Download Trial
           </a>
-          <a class="button secondary" href="/user-guide/BOLO_User_Guide.html">User Guide</a>
+          <a class="button secondary" href="/user-guide/BOLO_User_Guide_multilingual_final_fixed_api.html#english">User Guide</a>
         </div>
-
-        <div class="note">
+<div class="note">
           <strong>Tip:</strong> The best way to learn BOLO is to run small test generations. Creating one to three chapters usually costs only a few cents and quickly shows how the workflow behaves.
         </div>
 
@@ -384,21 +461,32 @@
           BOLO uses the OpenAI API to generate text. To use the program, you need your own OpenAI API key.
         </p>
 
-        <h3>How to get an OpenAI API key</h3>
+        <h3>How to get your OpenAI API key</h3>
         <ol>
           <li>
-            Go directly to OpenAI's API keys page:<br />
+            Go to:<br />
             <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">https://platform.openai.com/api-keys</a>
           </li>
-          <li>Sign in to your OpenAI account.</li>
-          <li>Click <strong>Create new secret key</strong>.</li>
-          <li>Copy the key and store it safely. You will not be able to view it again later.</li>
-          <li>Add billing in OpenAI and fund the account as needed.</li>
-          <li>Paste your API key into BOLO and start generating.</li>
+          <li>
+            Sign in if needed (you can use Google, Apple, Microsoft or email).
+          </li>
+          <li>
+            Click <strong>Create new secret key</strong> and save it.
+          </li>
+          <li>
+            Open <strong>Billing</strong> in the left menu and add a small amount (for example $5 to start).
+          </li>
+          <li>
+            Paste the key into BOLO and start generating.
+          </li>
         </ol>
 
         <div class="note">
-          A rough rule of thumb is that one page of generated text costs about <strong>$0.01</strong> in API usage, assuming roughly 300 words per page.
+          This usually takes just a few minutes.
+        </div>
+
+        <div class="note">
+          You only pay for what you generate. Small tests typically cost in the tens of cents.
         </div>
       </article>
 
@@ -483,8 +571,7 @@
       <article class="card full">
         <h2>What BOLO is for</h2>
         <p>
-          BOLO is designed to make AI-assisted book production simpler, more structured and more predictable.
-          It is especially well suited to nonfiction books, guidebooks, educational material, geographic books, historical projects and other long-form factual writing.
+          BOLO is designed to make AI-assisted book production simpler, more structured and more predictable. It is especially well suited to nonfiction books, guidebooks, educational material, geographic books, historical projects and other long-form factual writing.
         </p>
         <p class="muted">
           BOLO is optimized for structured nonfiction workflows. Fiction support exists in beta, but the product is not positioned as a chat-style writing tool.
@@ -498,7 +585,8 @@
       </p>
       <p>
         Questions or feedback:
-        <a href="mailto:info@bolowriter.com">info@bolowriter.com</a>
+        <a href="mailto:info@bolowriter.com">info@bolowriter.com</a><br>
+        <span style="color:#6b7280;font-size:0.9rem;">We aim to respond within 24 hours on business days.</span>
       </p>
     </footer>
   </main>
