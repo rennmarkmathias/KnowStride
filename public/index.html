@@ -377,6 +377,99 @@
         font-size:0.95rem;
       }
     }
+
+    .demo-overlay-wrap{
+      margin:-4px 0 30px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .demo-overlay{
+      width:min(560px, 92%);
+      text-decoration:none;
+      color:inherit;
+      display:block;
+      border-radius:18px;
+      overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.99) 100%);
+      border:1px solid rgba(45,108,223,0.14);
+      box-shadow:0 12px 28px rgba(45,108,223,0.10);
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+
+    .demo-overlay:hover{
+      transform:translateY(-2px);
+      box-shadow:0 16px 34px rgba(45,108,223,0.16);
+      border-color:rgba(45,108,223,0.24);
+    }
+
+    .demo-thumb{
+      position:relative;
+      aspect-ratio:16 / 9;
+      background:
+        linear-gradient(rgba(20,32,58,0.18), rgba(20,32,58,0.18)),
+        linear-gradient(180deg, #edf4ff 0%, #dfeeff 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .demo-play{
+      width:88px;
+      height:88px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.92);
+      box-shadow:0 10px 30px rgba(0,0,0,0.14);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:transform .15s ease, background .15s ease;
+    }
+
+    .demo-overlay:hover .demo-play{
+      transform:scale(1.04);
+      background:#ffffff;
+    }
+
+    .demo-play::before{
+      content:"";
+      display:block;
+      margin-left:6px;
+      width:0;
+      height:0;
+      border-top:16px solid transparent;
+      border-bottom:16px solid transparent;
+      border-left:24px solid #2d6cdf;
+    }
+
+    .demo-caption{
+      padding:16px 18px 18px;
+      text-align:center;
+    }
+
+    .demo-caption strong{
+      display:block;
+      font-size:1.08rem;
+      color:#10233f;
+      margin-bottom:4px;
+    }
+
+    .demo-caption span{
+      display:block;
+      color:var(--muted);
+      font-size:0.92rem;
+    }
+
+    @media (max-width: 920px){
+      .demo-overlay-wrap{
+        margin:0 0 26px;
+      }
+
+      .demo-play{
+        width:76px;
+        height:76px;
+      }
+    }
     
 
 </style>
@@ -431,6 +524,18 @@
       <div class="pipe-step">BOLO generates the book<small>automatic generation</small></div>
       <div class="pipe-step">BOLO exports files<small>DOCX, EPUB, PDF</small></div>
       <div class="pipe-step">BOLO creates full cover<small>with your front and back images</small></div>
+    </section>
+
+    <section class="demo-overlay-wrap" aria-label="BOLO demo video">
+      <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+        <div class="demo-thumb">
+          <div class="demo-play" aria-hidden="true"></div>
+        </div>
+        <div class="demo-caption">
+          <strong>See BOLO generate a book in real time</strong>
+          <span>Watch the full uncut 2:45 demo</span>
+        </div>
+      </a>
     </section>
 
     <section class="grid">
