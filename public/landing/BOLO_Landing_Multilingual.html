@@ -10,6 +10,100 @@
   <meta content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." name="description"/>
   <style>
       :root{ --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --blue:#2d6cdf; --blue-dark:#1f4ea3; --line:#e5e7eb; --green:#0f9d58; --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%); } *{box-sizing:border-box} body{ margin:0; font-family:Arial, Helvetica, sans-serif; background: radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.16), transparent 60%), radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.14), transparent 60%), linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%); color:var(--text); line-height:1.6; } .hero{ background:var(--grad); padding:26px 16px 34px; text-align:center; } .hero-inner{ max-width:1100px; margin:0 auto; } .logo{ width:520px; max-width:92%; height:auto; display:block; margin:0 auto 10px; } .container{ max-width:1080px; margin:0 auto; padding:28px 16px 60px; position:relative; } .intro{ text-align:center; margin-bottom:28px; background:linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,251,255,0.96) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:18px; padding:26px 26px 18px; box-shadow:0 10px 28px rgba(45,108,223,0.06); position:relative; overflow:hidden; } .intro::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:var(--grad); opacity:0.95; } h1{ margin:0 0 8px; font-size:clamp(2rem, 5vw, 3rem); line-height:1.15; } .subtitle{ margin:0 auto; max-width:860px; color:var(--muted); font-size:1.08rem; } .sales-copy{ margin:18px auto 0; max-width:860px; color:#334155; font-size:1rem; } .sales-copy p{ margin:0 0 10px; } .pipeline{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:28px 0 34px; } .pipe-step{ background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.98) 100%); border:1px solid var(--line); border-top:4px solid transparent; border-radius:12px; padding:14px 10px; text-align:center; font-weight:700; font-size:0.94rem; line-height:1.25; box-shadow:0 6px 18px rgba(45,108,223,0.06); } .pipe-step:nth-child(1){border-top-color:#f47a20;} .pipe-step:nth-child(2){border-top-color:#f2c300;} .pipe-step:nth-child(3){border-top-color:#d7d91f;} .pipe-step:nth-child(4){border-top-color:#7ec8e3;} .pipe-step:nth-child(5){border-top-color:#2d6cdf;} .pipe-step small{ display:block; margin-top:4px; font-weight:400; color:var(--muted); font-size:0.82rem; } .grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; } .card{ background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,251,255,0.98) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:14px; padding:26px; box-shadow:0 10px 26px rgba(45,108,223,0.06); } .card h2{ margin-top:0; margin-bottom:10px; font-size:1.45rem; } .card h3{ margin-top:18px; margin-bottom:8px; font-size:1.08rem; } .button-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; } .button{ display:inline-block; padding:14px 24px; background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%); color:#fff; text-decoration:none; border-radius:10px; font-weight:700; transition:background .15s ease, transform .15s ease, box-shadow .15s ease; box-shadow:0 8px 18px rgba(45,108,223,0.18); } .button:hover{ background:linear-gradient(180deg, #3769d3 0%, #1f4ea3 100%); transform:translateY(-1px); box-shadow:0 10px 22px rgba(45,108,223,0.24); } .button.secondary{ background:#ffffff; color:var(--blue); border:1px solid rgba(45,108,223,0.50); box-shadow:none; } .button.secondary:hover{ background:#f0f6ff; } ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin-top:8px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:1fr; } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; } @media (max-width: 920px){ .logo-separator{ margin:24px 0 22px; padding:26px 12px; border-radius:16px; } .logo-separator img{ width:180px; max-width:78%; } }
+    
+  .demo-overlay-wrap{
+    margin:-4px 0 30px;
+    display:flex;
+    justify-content:center;
+  }
+
+  .demo-overlay{
+    width:min(560px, 92%);
+    text-decoration:none;
+    color:inherit;
+    display:block;
+    border-radius:18px;
+    overflow:hidden;
+    background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.99) 100%);
+    border:1px solid rgba(45,108,223,0.14);
+    box-shadow:0 12px 28px rgba(45,108,223,0.10);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+
+  .demo-overlay:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 34px rgba(45,108,223,0.16);
+    border-color:rgba(45,108,223,0.24);
+  }
+
+  .demo-thumb{
+    position:relative;
+    aspect-ratio:16 / 9;
+    background:
+      linear-gradient(rgba(20,32,58,0.18), rgba(20,32,58,0.18)),
+      linear-gradient(180deg, #edf4ff 0%, #dfeeff 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .demo-play{
+    width:88px;
+    height:88px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.92);
+    box-shadow:0 10px 30px rgba(0,0,0,0.14);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s ease, background .15s ease;
+  }
+
+  .demo-overlay:hover .demo-play{
+    transform:scale(1.04);
+    background:#ffffff;
+  }
+
+  .demo-play::before{
+    content:"";
+    display:block;
+    margin-left:6px;
+    width:0;
+    height:0;
+    border-top:16px solid transparent;
+    border-bottom:16px solid transparent;
+    border-left:24px solid #2d6cdf;
+  }
+
+  .demo-caption{
+    padding:16px 18px 18px;
+    text-align:center;
+  }
+
+  .demo-caption strong{
+    display:block;
+    font-size:1.08rem;
+    color:#10233f;
+    margin-bottom:4px;
+  }
+
+  .demo-caption span{
+    display:block;
+    color:var(--muted);
+    font-size:0.92rem;
+  }
+
+  @media (max-width: 920px){
+    .demo-overlay-wrap{
+      margin:0 0 26px;
+    }
+
+    .demo-play{
+      width:76px;
+      height:76px;
+    }
+  }
+
     </style>
 </head>
   <body>
@@ -105,6 +199,17 @@ SE
         med dine for- og bagsidebilleder
       </small>
     </div>
+  </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Se hvordan BOLO genererer en bog i realtid</strong>
+        <span>Se den fulde uklippede demo på 2:45</span>
+      </div>
+    </a>
   </section>
   <section class="grid">
     <article class="card">
@@ -453,6 +558,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Sehen Sie, wie BOLO ein Buch in Echtzeit erstellt</strong>
+        <span>Sehen Sie die vollständige ungeschnittene 2:45-Demo</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -495,11 +611,11 @@ SE
   <ol>
     <li>
       Gehen Sie zu:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Melden Sie sich bei Bedarf an (Sie können Google, Apple, Microsoft oder E-Mail verwenden).
@@ -801,6 +917,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Mira cómo BOLO genera un libro en tiempo real</strong>
+        <span>Mira la demo completa sin cortes de 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -843,11 +970,11 @@ SE
   <ol>
     <li>
       Ve a:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Inicia sesión si es necesario (puedes usar Google, Apple, Microsoft o correo electrónico).
@@ -1149,6 +1276,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Découvrez comment BOLO génère un livre en temps réel</strong>
+        <span>Regardez la démo complète non coupée de 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -1191,11 +1329,11 @@ SE
   <ol>
     <li>
       Allez sur :
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Connectez-vous si nécessaire (vous pouvez utiliser Google, Apple, Microsoft ou e-mail).
@@ -1497,6 +1635,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Scopri come BOLO genera un libro in tempo reale</strong>
+        <span>Guarda la demo completa non tagliata di 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -1539,11 +1688,11 @@ SE
   <ol>
     <li>
       Vai a:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Accedi se necessario (puoi usare Google, Apple, Microsoft o e-mail).
@@ -1845,6 +1994,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Zie hoe BOLO een boek in realtime genereert</strong>
+        <span>Bekijk de volledige onbewerkte demo van 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -1887,11 +2047,11 @@ SE
   <ol>
     <li>
       Ga naar:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Log in indien nodig (je kunt Google, Apple, Microsoft of e-mail gebruiken).
@@ -2193,6 +2353,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Se hvordan BOLO genererer en bok i sanntid</strong>
+        <span>Se hele den uklippede demoen på 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -2235,11 +2406,11 @@ SE
   <ol>
     <li>
       Gå til:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Logg inn om nødvendig (du kan bruke Google, Apple, Microsoft eller e-post).
@@ -2541,6 +2712,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Se hur BOLO genererar en bok i realtid</strong>
+        <span>Se hela oklippta demon på 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -2583,11 +2765,11 @@ SE
   <ol>
     <li>
       Gå till:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Logga in vid behov (du kan använda Google, Apple, Microsoft eller e-post).
@@ -2889,6 +3071,17 @@ SE
     </small>
   </div>
 </section>
+<section class="demo-overlay-wrap" aria-label="BOLO demo video">
+    <a class="demo-overlay" href="https://bolowriter.com/testboloapp/BOLO-Demo.mp4" target="_blank" rel="noopener">
+      <div class="demo-thumb">
+        <div class="demo-play" aria-hidden="true"></div>
+      </div>
+      <div class="demo-caption">
+        <strong>Veja como o BOLO gera um livro em tempo real</strong>
+        <span>Veja a demonstração completa sem cortes de 2:45</span>
+      </div>
+    </a>
+  </section>
 <section class="grid">
   <article class="card">
     <h2>
@@ -2931,11 +3124,11 @@ SE
   <ol>
     <li>
       Vá a:
-      <br>
+      <br/>
       <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">
       https://platform.openai.com/api-keys
     </a>
-  </br>
+  
 </li>
 <li>
   Inicie sessão se necessário (pode usar Google, Apple, Microsoft ou e-mail).
