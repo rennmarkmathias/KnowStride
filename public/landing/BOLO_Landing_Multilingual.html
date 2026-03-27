@@ -51,7 +51,7 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
 .top-actions{ justify-content:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; }
 .section-hero{
   margin:30px 0 10px;
-  scroll-margin-top:0;
+  scroll-margin-top:0 !important;
 }
 .section-hero .logo{
   margin-bottom:0;
@@ -3531,6 +3531,41 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
     </video>
   </div>
 </div>
+
+
+<script>
+  (function(){
+    function goToHashTarget(hash){
+      if(!hash || hash.charAt(0) !== '#') return;
+      var target = document.querySelector(hash);
+      if(!target) return;
+      target.scrollIntoView({block:'start', behavior:'auto'});
+      setTimeout(function(){
+        target.scrollIntoView({block:'start', behavior:'auto'});
+      }, 120);
+    }
+
+    document.querySelectorAll('.language-nav a[href^="#"]').forEach(function(link){
+      link.addEventListener('click', function(event){
+        var hash = link.getAttribute('href');
+        if(!hash) return;
+        event.preventDefault();
+        history.replaceState(null, '', hash);
+        goToHashTarget(hash);
+      });
+    });
+
+    window.addEventListener('load', function(){
+      if(window.location.hash){
+        goToHashTarget(window.location.hash);
+      }
+    });
+
+    window.addEventListener('hashchange', function(){
+      goToHashTarget(window.location.hash);
+    });
+  })();
+</script>
 
 
 <script>
