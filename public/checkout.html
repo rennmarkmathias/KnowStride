@@ -65,9 +65,33 @@
       </div>
     </section>
   </main>
-
-  <script defer crossorigin="anonymous" data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+<script crossorigin="anonymous" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
   <script>
+    const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k";
+
+    function setClerkError(message) {
+      const errEl = document.getElementById("err");
+      if (errEl) errEl.textContent = message || "";
+    }
+
+    async function waitForClerk(timeoutMs = 10000) {
+      const start = Date.now();
+      while (!window.Clerk) {
+        if (Date.now() - start > timeoutMs) {
+          throw new Error("Clerk script did not load. Check your publishable key and allowed domains in Clerk.");
+        }
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      return window.Clerk;
+    }
+
+    async function initClerk() {
+      const clerk = await waitForClerk();
+      await clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
+      return clerk;
+    }
+  </script>
+<script>
     const PLAN_MAP = {
       solo_6m:  { name: "Individual – 6 months", seats: 1, period: "6 months", amount: "$49", oldAmount: "$69", kind: "Individual license" },
       solo_12m: { name: "Individual – 12 months", seats: 1, period: "12 months", amount: "$79", oldAmount: "$99", kind: "Individual license" },
@@ -117,8 +141,8 @@
       updateSummary(planKey);
 
       try {
-        await Clerk.load();
-        const user = Clerk.user;
+        const clerk = await initClerk();
+        const user = clerk.user;
         if (!user) {
           location.href = `/sign-in.html?plan=${encodeURIComponent(planKey)}`;
           return;
@@ -133,7 +157,7 @@
           msg.textContent = "Creating secure checkout session…";
           err.textContent = "";
           try {
-            const token = await Clerk.session.getToken();
+            const token = await clerk.session.getToken();
             const res = await fetch("/api/create-license-checkout-session", {
               method: "POST",
               headers: {
@@ -152,7 +176,7 @@
           }
         });
       } catch (e) {
-        document.getElementById("err").textContent = e?.message || String(e);
+        setClerkError(e?.message || String(e));
       }
     });
   </script>
