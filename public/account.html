@@ -3,82 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Account — KnowStride</title>
+  <title>Account — BOLO</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- Small UI polish just for this page -->
   <style>
-    .order-row { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .order-title { font-weight:800; }
-    .order-meta { color:#666; font-size:13px; }
-    .order-right { text-align:right; }
-    .order-amount { font-weight:800; }
-    .order-when { color:#666; font-size:13px; }
-
-    .status-line { margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .badge {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 10px; border-radius:999px;
-      font-size:12px; font-weight:700;
-      border:1px solid rgba(0,0,0,.08);
-      background: rgba(0,0,0,.03);
-      white-space:nowrap;
-    }
-    .dot { width:8px; height:8px; border-radius:999px; background:#999; }
-
-    .badge.received { background: rgba(0,0,0,.03); }
-    .badge.production { background: rgba(255, 193, 7, .12); border-color: rgba(255, 193, 7, .35); }
-    .badge.shipped { background: rgba(33, 150, 243, .12); border-color: rgba(33, 150, 243, .35); }
-    .badge.delivered { background: rgba(76, 175, 80, .12); border-color: rgba(76, 175, 80, .35); }
-    .badge.cancelled { background: rgba(244, 67, 54, .10); border-color: rgba(244, 67, 54, .30); }
-    .badge.refunded { background: rgba(156, 39, 176, .10); border-color: rgba(156, 39, 176, .28); }
-
-    .badge.received .dot { background:#666; }
-    .badge.production .dot { background:#f5a623; }
-    .badge.shipped .dot { background:#1976d2; }
-    .badge.delivered .dot { background:#2e7d32; }
-    .badge.cancelled .dot { background:#c62828; }
-    .badge.refunded .dot { background:#7b1fa2; }
-
-    .track-btn {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px; border-radius:10px;
-      border:1px solid rgba(0,0,0,.10);
-      background:#fff;
-      font-weight:700; font-size:13px;
-      text-decoration:none;
-    }
-    .track-btn:hover { background: rgba(0,0,0,.03); }
-    .track-muted { color:#666; font-size:13px; }
-
-    details.more { margin-top:4px; }
-    details.more > summary {
-      cursor:pointer;
-      color:#666;
-      font-size:13px;
-      user-select:none;
-      list-style:none;
-    }
-    details.more > summary::-webkit-details-marker { display:none; }
-    .more-box {
-      margin-top:8px;
-      padding:10px;
-      border-radius:10px;
-      border:1px solid rgba(0,0,0,.08);
-      background: rgba(0,0,0,.02);
-      color:#444;
-      font-size:13px;
-    }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .license-card { padding:16px; border:1px solid rgba(0,0,0,.08); border-radius:16px; background:#fff; margin-top:14px; }
+    .license-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start; }
+    .license-title { font-weight:800; }
+    .license-meta { color:#666; font-size:13px; margin-top:4px; }
+    .badge { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; background:rgba(46,125,50,.12); color:#1b5e20; border:1px solid rgba(46,125,50,.22); }
+    .badge.expired { background:rgba(176,0,32,.08); color:#8b0f24; border-color:rgba(176,0,32,.18); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px; margin-top:14px; }
+    .kv { padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.03); }
+    .kv .k { font-size:12px; color:#666; }
+    .kv .v { margin-top:4px; font-weight:700; word-break:break-word; }
+    .license-key-box { margin-top:14px; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fafafa; }
+    .license-key-box pre { margin:8px 0 0 0; white-space:pre-wrap; word-break:break-all; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
   </style>
 </head>
-
 <body>
   <header class="topbar">
-    <a class="toplink" href="/">← Shop</a>
+    <a class="toplink" href="/">← Home</a>
     <a class="brand brand-link" href="/">
-  <img class="brand-logo" src="/assets/logo.png" alt="KnowStride" loading="eager" />
-</a>
+      <img class="brand-logo" src="/BOLO-logo.png" alt="BOLO" loading="eager" />
+    </a>
     <nav class="topnav">
       <a class="toplink" href="/sign-in.html" id="loginLink">Log in</a>
     </nav>
@@ -87,21 +35,20 @@
   <main class="container">
     <section class="card">
       <h1>Account</h1>
-      <p class="muted">Sign in to see your order history. Guest checkouts are always available.</p>
+      <p class="muted">Sign in to see your BOLO licenses and copy your license key.</p>
 
       <div id="userArea" style="display:none;">
         <div class="callout" style="margin-top:14px;">
           <div class="muted small">Signed in as</div>
           <div id="userEmail" style="font-weight:800;"></div>
-
           <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <button class="btn" id="logoutBtn" type="button">Log out</button>
             <div id="userButton"></div>
           </div>
         </div>
 
-        <h2 style="margin-top:22px;">Orders</h2>
-        <div id="ordersArea" class="muted">Loading orders…</div>
+        <h2 style="margin-top:22px;">Your licenses</h2>
+        <div id="licensesArea" class="muted">Loading licenses…</div>
       </div>
 
       <div id="guestArea" style="display:none;">
@@ -113,206 +60,120 @@
 
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
-
-    <footer class="footer footer-compact">
-      <div class="footer-bottom muted small">© <span id="year"></span> KnowStride.</div>
-    </footer>
   </main>
 
-  <script
-    defer
-    crossorigin="anonymous"
-    data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k"
-    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
-  </script>
-
+  <script defer crossorigin="anonymous" data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
   <script>
-    window.addEventListener("load", async () => {
-      const y = document.getElementById("year");
-      if (y) y.textContent = String(new Date().getFullYear());
+    function fmtDate(value) {
+      if (!value) return "-";
+      const d = new Date(value.length <= 10 ? value + 'T00:00:00Z' : value);
+      return isNaN(d.getTime()) ? value : d.toLocaleDateString();
+    }
 
-      function norm(s) { return String(s || "").trim().toLowerCase(); }
+    function isExpired(expiresAt) {
+      if (!expiresAt) return false;
+      const today = new Date();
+      const d = new Date(expiresAt + 'T23:59:59Z');
+      return !isNaN(d.getTime()) && today > d;
+    }
 
-      function friendlyStatus(order) {
-        const s = norm(order?.status);
-        if (!s) return "Order received";
+    function esc(s) {
+      return String(s || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
 
-        // internal / technical -> Order received
-        if (s === "paid") return "Order received";
-        if (s === "stripe_received") return "Order received";
-        if (s === "prodigi_created") return "Order received";
-
-        // customer statuses
-        if (s === "in_production" || s === "production" || s === "submitted") return "In production";
-        if (s === "shipped" || s === "dispatched") return "Shipped";
-        if (s === "delivered") return "Delivered";
-        if (s === "cancelled" || s === "canceled") return "Cancelled";
-        if (s === "refunded") return "Refunded";
-
-        return s.replace(/_/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('License key copied.');
+      } catch {
+        alert('Could not copy automatically.');
       }
+    }
 
-      function statusBadgeClass(label) {
-        const v = norm(label);
-        if (v.includes("production")) return "production";
-        if (v.includes("shipped")) return "shipped";
-        if (v.includes("delivered")) return "delivered";
-        if (v.includes("cancel")) return "cancelled";
-        if (v.includes("refund")) return "refunded";
-        return "received";
-      }
-
-      function friendlyProductionStatus(prodigiStatus) {
-        const p = norm(prodigiStatus);
-        if (!p) return null;
-
-        if (p === "created") return "created";
-        if (p === "in_production" || p === "in production" || p === "printing") return "in production";
-        if (p === "shipped" || p === "dispatched") return "shipped";
-        if (p === "delivered") return "delivered";
-        if (p === "cancelled" || p === "canceled") return "cancelled";
-
-        return null;
-      }
-
-      function formatMoneySmart(amountTotal, currency) {
-        if (amountTotal == null) return "";
-        const ccy = String(currency || "usd").toUpperCase();
-        const n = Number(amountTotal);
-        if (Number.isNaN(n)) return "";
-
-        // Heuristic: >= 10 is probably cents; < 10 is probably dollars
-        const isProbablyCents = n >= 10;
-        const isZeroDecimal = ["JPY", "KRW"].includes(ccy);
-        const value = isZeroDecimal ? n : (isProbablyCents ? (n / 100) : n);
-
-        try {
-          return new Intl.NumberFormat(undefined, { style: "currency", currency: ccy }).format(value);
-        } catch {
-          return `${value.toFixed(2)} ${ccy}`;
-        }
-      }
-
-      function formatWhen(created_at) {
-        if (!created_at) return "";
-        let dt;
-        const num = Number(created_at);
-        if (!Number.isNaN(num) && String(created_at).trim() !== "") {
-          dt = new Date(num < 1e12 ? num * 1000 : num);
-        } else {
-          dt = new Date(created_at);
-        }
-        if (isNaN(dt.getTime())) return "";
-        return dt.toLocaleString();
-      }
-
+    window.addEventListener('load', async () => {
       try {
         await Clerk.load();
-
         const user = Clerk.user;
-        const userArea = document.getElementById("userArea");
-        const guestArea = document.getElementById("guestArea");
-        const loginLink = document.getElementById("loginLink");
+        const userArea = document.getElementById('userArea');
+        const guestArea = document.getElementById('guestArea');
+        const loginLink = document.getElementById('loginLink');
 
-        if (user) {
-          if (loginLink) loginLink.style.display = "none";
-          userArea.style.display = "block";
-
-          const email =
-            user?.primaryEmailAddress?.emailAddress ||
-            user?.emailAddresses?.[0]?.emailAddress ||
-            "";
-          document.getElementById("userEmail").textContent = email ? email : "Signed in";
-
-          const logoutBtn = document.getElementById("logoutBtn");
-          logoutBtn.onclick = async () => {
-            try { await Clerk.signOut(); }
-            finally { window.location.href = "/"; }
-          };
-
-          const userButtonEl = document.getElementById("userButton");
-          if (userButtonEl) Clerk.mountUserButton(userButtonEl);
-
-          const token = await Clerk.session.getToken();
-          const res = await fetch("/api/orders", {
-            headers: token ? { Authorization: `Bearer ${token}`, "X-User-Email": email || "" } : {},
-          });
-
-          const data = await res.json().catch(() => ({}));
-          const ordersArea = document.getElementById("ordersArea");
-
-          if (!res.ok) {
-            ordersArea.textContent = data?.error || "Could not load orders.";
-            return;
-          }
-
-          const orders = Array.isArray(data?.orders) ? data.orders : [];
-          if (!orders.length) {
-            ordersArea.textContent = "No orders yet.";
-            return;
-          }
-
-          ordersArea.classList.remove("muted");
-
-          ordersArea.innerHTML = orders.map(o => {
-            const when = formatWhen(o.created_at);
-            const amount = formatMoneySmart(o.amount_total, o.currency);
-            const labelPaper = o.paper === "fineart" ? "Fine Art" : "Standard";
-            const labelSize = (o.size || "").toUpperCase();
-
-            const statusLabel = friendlyStatus(o);
-            const badgeKind = statusBadgeClass(statusLabel);
-
-            const prod = friendlyProductionStatus(o.prodigi_status);
-
-            const trackingBtn = o.tracking_url
-              ? `<a class="track-btn" href="${o.tracking_url}" target="_blank" rel="noopener">📦 Track package</a>`
-              : (o.tracking_number
-                  ? `<div class="track-muted">Tracking: <span class="mono">${o.tracking_number}</span></div>`
-                  : "");
-
-            // More details (support info)
-            const hasMore = Boolean(prod || o.prodigi_order_id);
-            const moreHtml = hasMore ? `
-              <details class="more">
-                <summary>More details</summary>
-                <div class="more-box">
-                  ${prod ? `<div><strong>Production</strong>: ${prod}</div>` : ""}
-                  ${o.prodigi_order_id ? `<div style="margin-top:6px;"><strong>Print ref</strong>: <span class="mono">${o.prodigi_order_id}</span></div>` : ""}
-                </div>
-              </details>
-            ` : "";
-
-            return `
-              <div class="card" style="margin-top:12px;">
-                <div class="order-row">
-                  <div>
-                    <div class="order-title">${(o.poster_title || o.poster_id || "Poster")}</div>
-                    <div class="order-meta">${labelPaper} · ${labelSize} · ${o.mode || "STRICT"}</div>
-                  </div>
-                  <div class="order-right">
-                    <div class="order-amount">${amount}</div>
-                    <div class="order-when">${when}</div>
-                  </div>
-                </div>
-
-                <div class="status-line">
-                  <span class="badge ${badgeKind}">
-                    <span class="dot"></span>
-                    ${statusLabel}
-                  </span>
-                  ${trackingBtn}
-                </div>
-
-                ${moreHtml}
-              </div>
-            `;
-          }).join("");
-        } else {
-          guestArea.style.display = "block";
+        if (!user) {
+          guestArea.style.display = 'block';
+          return;
         }
-      } catch (e) {
-        document.getElementById("err").textContent = e?.message || String(e);
+
+        if (loginLink) loginLink.style.display = 'none';
+        userArea.style.display = 'block';
+
+        const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
+        document.getElementById('userEmail').textContent = email || 'Signed in';
+        document.getElementById('logoutBtn').onclick = async () => {
+          try { await Clerk.signOut(); } finally { window.location.href = '/'; }
+        };
+        Clerk.mountUserButton(document.getElementById('userButton'));
+
+        const token = await Clerk.session.getToken();
+        const res = await fetch('/api/licenses', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const data = await res.json().catch(() => ({}));
+        const area = document.getElementById('licensesArea');
+
+        if (!res.ok) {
+          area.textContent = data?.error || 'Could not load licenses.';
+          return;
+        }
+
+        const licenses = Array.isArray(data?.licenses) ? data.licenses : [];
+        if (!licenses.length) {
+          area.innerHTML = '<div class="muted">No licenses yet.</div>';
+          return;
+        }
+
+        area.classList.remove('muted');
+        area.innerHTML = licenses.map((lic, idx) => {
+          const expired = isExpired(lic.expires_at);
+          const badgeClass = expired ? 'badge expired' : 'badge';
+          const badgeText = expired ? 'Expired' : (lic.status || 'Active');
+          const invoice = lic.stripe_invoice_url
+            ? `<a class="btn ghost" href="${esc(lic.stripe_invoice_url)}" target="_blank" rel="noopener">Open invoice</a>`
+            : '';
+          return `
+            <div class="license-card">
+              <div class="license-head">
+                <div>
+                  <div class="license-title">${esc(lic.plan || 'BOLO License')}</div>
+                  <div class="license-meta">Issued ${esc(fmtDate(lic.issued_at))}</div>
+                </div>
+                <div class="${badgeClass}">${esc(badgeText)}</div>
+              </div>
+
+              <div class="grid">
+                <div class="kv"><div class="k">Seats</div><div class="v">${esc(lic.seats || 1)}</div></div>
+                <div class="kv"><div class="k">Period</div><div class="v">${esc(lic.period_months || '-')} months</div></div>
+                <div class="kv"><div class="k">Expires</div><div class="v">${esc(fmtDate(lic.expires_at))}</div></div>
+              </div>
+
+              <div class="license-key-box">
+                <div class="row" style="justify-content:space-between;">
+                  <strong>License key</strong>
+                  <div class="row">
+                    <button class="btn" type="button" onclick="copyText(${JSON.stringify(String(lic.license_key || ''))})">Copy license key</button>
+                    ${invoice}
+                  </div>
+                </div>
+                <pre>${esc(lic.license_key || '')}</pre>
+              </div>
+            </div>`;
+        }).join('');
+      } catch (err) {
+        document.getElementById('err').textContent = err?.message || String(err);
       }
     });
   </script>
