@@ -3,14 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KnowStride — Sign in</title>
+  <title>BOLO — Sign in</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
-
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Back</a>
-    <div class="brand">KnowStride</div>
+    <div class="brand">BOLO</div>
   </header>
 
   <main class="container">
@@ -22,7 +21,6 @@
     </section>
   </main>
 
-  <!-- ClerkJS (PINNA version – undvik @latest i prod) -->
   <script
     defer
     crossorigin="anonymous"
@@ -31,12 +29,18 @@
   </script>
 
   <script>
+    function getAfterAuthUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get("plan");
+      return plan ? `/checkout.html?plan=${encodeURIComponent(plan)}` : "/account.html";
+    }
+
     window.addEventListener("load", async () => {
       try {
         await Clerk.load();
         Clerk.mountSignIn(document.getElementById("sign-in"), {
-          signUpUrl: "/sign-up.html",
-          afterSignInUrl: '/account.html',
+          signUpUrl: window.location.search ? `/sign-up.html${window.location.search}` : "/sign-up.html",
+          afterSignInUrl: getAfterAuthUrl(),
         });
       } catch (e) {
         document.getElementById("err").textContent = e?.message || String(e);
@@ -45,4 +49,3 @@
   </script>
 </body>
 </html>
-
