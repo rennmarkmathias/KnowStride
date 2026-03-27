@@ -54,20 +54,18 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
   scroll-margin-top:0;
 }
 .hero-anchor{
-  position:relative;
-  top:-8px;
   display:block;
-  height:0;
+  height:18px;
   visibility:hidden;
 }
 @media (max-width: 1024px){
   .hero-anchor{
-    top:-18px;
+    height:24px;
   }
 }
 @media (max-width: 768px){
   .hero-anchor{
-    top:-28px;
+    height:34px;
   }
 }
 .section-hero .logo{
@@ -3566,7 +3564,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
       if(!window.location.hash) return;
       var target = document.querySelector(window.location.hash);
       if(!target) return;
-      var y = target.getBoundingClientRect().top + window.pageYOffset - 6;
+      var y = target.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({ top: y, behavior: 'auto' });
     }
 
@@ -3587,7 +3585,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
         setTimeout(function(){
           var target = document.querySelector(href);
           if(!target) return;
-          var y = target.getBoundingClientRect().top + window.pageYOffset - 6;
+          var y = target.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }, 20);
       });
