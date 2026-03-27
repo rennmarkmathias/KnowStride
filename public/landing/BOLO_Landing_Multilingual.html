@@ -53,21 +53,6 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
   margin:30px 0 10px;
   scroll-margin-top:0;
 }
-.hero-anchor{
-  display:block;
-  height:18px;
-  visibility:hidden;
-}
-@media (max-width: 1024px){
-  .hero-anchor{
-    height:72px;
-  }
-}
-@media (max-width: 768px){
-  .hero-anchor{
-    height:128px;
-  }
-}
 .section-hero .logo{
   margin-bottom:0;
 }
@@ -285,9 +270,7 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
 </style>
 </head>
   <body>
-
-    <span class="hero-anchor" id="danish-top"></span>
-    <header class="hero">
+<header class="hero" id="danish-top">
       <div class="hero-inner">
         <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
       </div>
@@ -682,8 +665,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="german-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="german-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -1040,8 +1022,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="spanish-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="spanish-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -1398,8 +1379,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="french-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="french-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -1756,8 +1736,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="italian-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="italian-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -2114,8 +2093,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="dutch-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="dutch-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -2472,8 +2450,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="norwegian-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="norwegian-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -2830,8 +2807,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="swedish-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="swedish-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -3188,8 +3164,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
 <div aria-hidden="true" class="logo-separator">
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
-<span class="hero-anchor" id="portuguese-top"></span>
-<header class="hero section-hero">
+<header class="hero section-hero" id="portuguese-top">
   <div class="hero-inner">
     <img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
   </div>
@@ -3557,41 +3532,6 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
   </div>
 </div>
 
-
-<script>
-  (function(){
-    function scrollToHeroAnchor(){
-      if(!window.location.hash) return;
-      var target = document.querySelector(window.location.hash);
-      if(!target) return;
-      var y = target.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({ top: y, behavior: 'auto' });
-    }
-
-    window.addEventListener('load', function(){
-      setTimeout(scrollToHeroAnchor, 60);
-      setTimeout(scrollToHeroAnchor, 220);
-    });
-
-    window.addEventListener('hashchange', function(){
-      setTimeout(scrollToHeroAnchor, 20);
-      setTimeout(scrollToHeroAnchor, 180);
-    });
-
-    document.querySelectorAll('.language-nav a[href^="#"]').forEach(function(link){
-      link.addEventListener('click', function(){
-        var href = link.getAttribute('href');
-        if(!href) return;
-        setTimeout(function(){
-          var target = document.querySelector(href);
-          if(!target) return;
-          var y = target.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }, 20);
-      });
-    });
-  })();
-</script>
 
 <script>
   (function(){
