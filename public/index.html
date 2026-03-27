@@ -31,6 +31,30 @@
       line-height:1.6;
     }
 
+
+    .top-actions{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 16px 0;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .button.small{
+      padding:10px 16px;
+      font-size:0.95rem;
+      border-radius:999px;
+    }
+
+    .login-helper{
+      margin-top:16px;
+      text-align:center;
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
     .hero{
       background:var(--grad);
       padding:26px 16px 34px;
@@ -324,6 +348,10 @@
         width:100%;
         text-align:center;
       }
+
+      .top-actions{
+        justify-content:center;
+      }
     }
 
     
@@ -586,6 +614,12 @@
 </head>
 <body>
 
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Sign in</a>
+    <a class="button small" href="/sign-up.html">Create account</a>
+  </div>
+
+
   <header class="hero">
     <div class="hero-inner">
       <img src="/BOLO-logo.png" alt="BOLO logo" class="logo" />
@@ -628,6 +662,11 @@
         <p>BOLO acts as an AI orchestration layer for book production. Instead of generating isolated text, it controls structure, content flow, terminology and output quality across the entire publishing pipeline.</p>
         <p>BOLO is designed as a system, not a prompt-based tool — enabling consistent, scalable and production-ready output rather than isolated text generation.</p>
 
+      </div>
+
+      <div class="button-row" style="justify-content:center; margin-top:18px;">
+        <a class="button secondary" href="/sign-in.html">Already have an account?</a>
+        <a class="button" href="/sign-up.html">Create account to buy a license</a>
       </div>
     </section>
 
@@ -729,7 +768,7 @@
             
             <p class="muted">A low-friction option for first-time users and shorter publishing projects.</p>
             <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button secondary" href="#">Start with 6 months</a>
+            <a class="button secondary" href="/sign-up.html?plan=solo_6m">Start with 6 months</a>
           </div>
 
           <div class="price-card">
@@ -740,7 +779,7 @@
             
             <p class="muted">The main option for ongoing nonfiction publishing work and repeated book projects.</p>
             <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button" href="#">Start with 12 months</a>
+            <a class="button" href="/sign-up.html?plan=solo_12m">Start with 12 months</a>
           </div>
 
           <div class="price-card">
@@ -751,7 +790,7 @@
             
             <p class="muted">Best for long-term use, multiple books and a lower effective annual cost.</p>
             <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button secondary" href="#">Start with 36 months</a>
+            <a class="button secondary" href="/sign-up.html?plan=solo_36m">Start with 36 months</a>
           </div>
         </div>
 
@@ -764,7 +803,7 @@
             <div class="price-month">≈ $6.92 / user / month</div>
             <p class="muted">Suitable for smaller editorial teams, course creators or compact publishing workflows.</p>
             <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button secondary" href="#">Choose 3 users</a>
+            <a class="button secondary" href="/sign-up.html?plan=team_3">Choose 3 users</a>
           </div>
 
           <div class="price-card">
@@ -774,7 +813,7 @@
             <div class="price-month">≈ $6.65 / user / month</div>
             <p class="muted">A balanced plan for organizations producing books, manuals or educational material.</p>
             <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button" href="#">Choose 5 users</a>
+            <a class="button" href="/sign-up.html?plan=team_5">Choose 5 users</a>
           </div>
 
           <div class="price-card">
@@ -784,8 +823,12 @@
             <div class="price-month">≈ $5.83 / user / month</div>
             <p class="muted">Best for larger departments or organizations working with structured publishing at scale.</p>
             <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button secondary" href="#">Choose 10 users</a>
+            <a class="button secondary" href="/sign-up.html?plan=team_10">Choose 10 users</a>
           </div>
+        </div>
+
+        <div class="login-helper">
+          If you are not signed in, these buttons will take you to account creation first, then continue to checkout.
         </div>
       </article>
 
