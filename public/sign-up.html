@@ -3,66 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BOLO — Sign up</title>
+  <title>BOLO AI Publishing Pipeline — Sign up</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="topbar">
-    <a class="toplink" href="/sign-in.html">← Back</a>
-    <div class="brand">BOLO</div>
+    <a class="toplink" href="/">← Back</a>
+    <div class="brand">BOLO AI Publishing Pipeline</div>
   </header>
 
   <main class="container">
     <section class="card">
-      <h1>Sign up</h1>
-      <p class="muted">Create an account with email or Google.</p>
+      <h1>Create your account</h1>
+      <p class="muted">
+        Sign up with Google or email to buy and manage your BOLO license.
+      </p>
+
       <div id="sign-up" style="margin-top:14px;"></div>
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
   </main>
-<script crossorigin="anonymous" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsuYm9sb3dyaXRlci5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+
   <script>
-    const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k";
-
-    function setClerkError(message) {
-      const errEl = document.getElementById("err");
-      if (errEl) errEl.textContent = message || "";
-    }
-
-    async function waitForClerk(timeoutMs = 10000) {
-      const start = Date.now();
-      while (!window.Clerk) {
-        if (Date.now() - start > timeoutMs) {
-          throw new Error("Clerk script did not load. Check your publishable key and allowed domains in Clerk.");
-        }
-        await new Promise(resolve => setTimeout(resolve, 50));
-      }
-      return window.Clerk;
-    }
-
-    async function initClerk() {
-      const clerk = await waitForClerk();
-      await clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
-      return clerk;
-    }
-  </script>
-<script>
-    function getAfterAuthUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const plan = params.get("plan");
-      return plan ? `/checkout.html?plan=${encodeURIComponent(plan)}` : "/account.html";
-    }
-
     window.addEventListener("load", async () => {
+      const params = new URLSearchParams(location.search);
+      const plan = params.get("plan");
+      const nextUrl = plan
+        ? `/checkout.html?plan=${encodeURIComponent(plan)}`
+        : "/account.html";
+
       try {
-        const clerk = await initClerk();
-        clerk.mountSignUp(document.getElementById("sign-up"), {
-          signInUrl: window.location.search ? `/sign-in.html${window.location.search}` : "/sign-in.html",
-          forceRedirectUrl: getAfterAuthUrl(),
-          fallbackRedirectUrl: getAfterAuthUrl(),
+        await Clerk.load();
+
+        Clerk.mountSignUp(document.getElementById("sign-up"), {
+          signInUrl: plan
+            ? `/sign-in.html?plan=${encodeURIComponent(plan)}`
+            : "/sign-in.html",
+          afterSignUpUrl: nextUrl,
         });
       } catch (e) {
-        setClerkError(e?.message || String(e));
+        document.getElementById("err").textContent = e?.message || String(e);
       }
     });
   </script>
