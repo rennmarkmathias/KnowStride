@@ -13,6 +13,40 @@
 .top-actions{ max-width:1100px; margin:0 auto; padding:14px 16px 0; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
 .button.small{ padding:10px 16px; font-size:0.95rem; border-radius:999px; }
 .login-helper{ margin-top:16px; text-align:center; color:var(--muted); font-size:0.95rem; }
+
+.auth-strip{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin:14px auto 8px;
+}
+
+.auth-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 16px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#f7b733 0%, #f47a20 100%);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(244,122,32,0.25);
+  border:1px solid rgba(190,104,24,0.22);
+  white-space:nowrap;
+}
+
+.auth-pill:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(244,122,32,0.30);
+}
+
+.auth-pill.is-static{
+  cursor:default;
+}
+
 ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin-top:8px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:1fr; } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; }
 .top-actions{ justify-content:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; } @media (max-width: 920px){ .logo-separator{ margin:24px 0 22px; padding:26px 12px; border-radius:16px; } .logo-separator img{ width:180px; max-width:78%; } }
     
@@ -234,11 +268,7 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
     </div>
     <div id="top">
     </div>
-    <div class="top-actions">
-      <a class="button secondary small" href="/sign-in.html">Sign in</a>
-      <a class="button small" href="/sign-up.html">Create account</a>
-    </div>
-    <nav aria-label="Language navigation" class="language-nav">
+<nav aria-label="Language navigation" class="language-nav">
       <a href="#german">
       DE
     </a>
@@ -274,9 +304,11 @@ SE
   <div class="section-divider">
   </div>
   <section class="intro lang-section" id="danish">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Log ind</a>
-    <a class="button small" href="/sign-up.html">Opret konto</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Log ind</a>
+    <a class="auth-pill" href="/sign-up.html">Opret konto</a>
+    <span class="auth-pill is-static">Kommer snart</span>
   </div>
     <h1>
       BOLO AI Publishing Pipeline
@@ -299,11 +331,6 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
 </p>
 
     </div>
-  
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Har du allerede en konto?</a>
-    <a class="button" href="/sign-up.html">Opret konto for at købe en licens</a>
-  </div>
 </section>
   <section aria-label="BOLO workflow" class="pipeline">
     <div class="pipe-step">
@@ -628,9 +655,11 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="german">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Anmelden</a>
-    <a class="button small" href="/sign-up.html">Konto erstellen</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Anmelden</a>
+    <a class="auth-pill" href="/sign-up.html">Konto erstellen</a>
+    <span class="auth-pill is-static">Kommt bald</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -652,11 +681,6 @@ BOLO fungiert als KI-Orchestrierungsschicht für die Buchproduktion. Anstatt iso
 BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglicht dadurch konsistente, skalierbare und produktionsreife Ergebnisse statt isolierter Textgenerierung.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Sie haben bereits ein Konto?</a>
-    <a class="button" href="/sign-up.html">Konto erstellen, um eine Lizenz zu kaufen</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -983,9 +1007,11 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="spanish">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Iniciar sesión</a>
-    <a class="button small" href="/sign-up.html">Crear cuenta</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Iniciar sesión</a>
+    <a class="auth-pill" href="/sign-up.html">Crear cuenta</a>
+    <span class="auth-pill is-static">Próximamente</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -1007,11 +1033,6 @@ BOLO actúa como una capa de orquestación de IA para la producción de libros. 
 BOLO está diseñado como un sistema, no como una herramienta basada en prompts — lo que permite una producción consistente, escalable y lista para publicación en lugar de generación de texto aislado.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">¿Ya tienes una cuenta?</a>
-    <a class="button" href="/sign-up.html">Crear cuenta para comprar una licencia</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -1338,9 +1359,11 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="french">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Se connecter</a>
-    <a class="button small" href="/sign-up.html">Créer un compte</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Se connecter</a>
+    <a class="auth-pill" href="/sign-up.html">Créer un compte</a>
+    <span class="auth-pill is-static">Bientôt disponible</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -1362,11 +1385,6 @@ BOLO agit comme une couche d’orchestration IA pour la production de livres. Au
 BOLO est conçu comme un système, et non comme un outil basé sur des prompts — permettant une production cohérente, évolutive et prête à être publiée, plutôt qu’une génération de texte isolée.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Vous avez déjà un compte ?</a>
-    <a class="button" href="/sign-up.html">Créer un compte pour acheter une licence</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -1693,9 +1711,11 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="italian">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Accedi</a>
-    <a class="button small" href="/sign-up.html">Crea account</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Accedi</a>
+    <a class="auth-pill" href="/sign-up.html">Crea account</a>
+    <span class="auth-pill is-static">Prossimamente</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -1717,11 +1737,6 @@ BOLO funziona come un livello di orchestrazione AI per la produzione di libri. I
 BOLO è progettato come un sistema, non come uno strumento basato su prompt — consentendo output coerenti, scalabili e pronti per la produzione invece di semplice generazione di testo isolato.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Hai già un account?</a>
-    <a class="button" href="/sign-up.html">Crea un account per acquistare una licenza</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2048,9 +2063,11 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="dutch">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Inloggen</a>
-    <a class="button small" href="/sign-up.html">Account aanmaken</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Inloggen</a>
+    <a class="auth-pill" href="/sign-up.html">Account aanmaken</a>
+    <span class="auth-pill is-static">Binnenkort beschikbaar</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -2072,11 +2089,6 @@ BOLO fungeert als een AI-orkestratielaag voor boekproductie. In plaats van losse
 BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardoor consistente, schaalbare en productieklare output mogelijk wordt in plaats van geïsoleerde tekstgeneratie.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Heb je al een account?</a>
-    <a class="button" href="/sign-up.html">Maak een account aan om een licentie te kopen</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2403,9 +2415,11 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="norwegian">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Logg inn</a>
-    <a class="button small" href="/sign-up.html">Opprett konto</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Logg inn</a>
+    <a class="auth-pill" href="/sign-up.html">Opprett konto</a>
+    <span class="auth-pill is-static">Kommer snart</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -2427,11 +2441,6 @@ BOLO fungerer som et AI-orkestreringslag for bokproduksjon. I stedet for å gene
 BOLO er designet som et system, ikke et promptbasert verktøy — noe som muliggjør konsistent, skalerbar og produksjonsklar output i stedet for isolert tekstgenerering.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Har du allerede en konto?</a>
-    <a class="button" href="/sign-up.html">Opprett konto for å kjøpe en lisens</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2758,9 +2767,11 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="swedish">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Logga in</a>
-    <a class="button small" href="/sign-up.html">Skapa konto</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Logga in</a>
+    <a class="auth-pill" href="/sign-up.html">Skapa konto</a>
+    <span class="auth-pill is-static">Lanseras snart</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -2782,11 +2793,6 @@ BOLO fungerar som ett AI-orkestreringslager för bokproduktion. Istället för a
 BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket möjliggör konsekvent, skalbar och produktionsredo output istället för isolerad textgenerering.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Har du redan ett konto?</a>
-    <a class="button" href="/sign-up.html">Skapa konto för att köpa en licens</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -3113,9 +3119,11 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="portuguese">
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Iniciar sessão</a>
-    <a class="button small" href="/sign-up.html">Criar conta</a>
+  
+  <div class="auth-strip">
+    <a class="auth-pill" href="/sign-in.html">Iniciar sessão</a>
+    <a class="auth-pill" href="/sign-up.html">Criar conta</a>
+    <span class="auth-pill is-static">Disponível em breve</span>
   </div>
   <h1>
     BOLO AI Publishing Pipeline
@@ -3137,11 +3145,6 @@ O BOLO funciona como uma camada de orquestração de IA para a produção de liv
 O BOLO é concebido como um sistema, e não como uma ferramenta baseada em prompts — permitindo uma produção consistente, escalável e pronta para publicação, em vez de geração de texto isolado.
 </p>
 
-  </div>
-
-  <div class="button-row" style="justify-content:center; margin-top:18px;">
-    <a class="button secondary" href="/sign-in.html">Já tem uma conta?</a>
-    <a class="button" href="/sign-up.html">Criar conta para comprar uma licença</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
