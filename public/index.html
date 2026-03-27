@@ -31,23 +31,6 @@
       line-height:1.6;
     }
 
-
-    .top-actions{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px 16px 0;
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .button.small{
-      padding:10px 16px;
-      font-size:0.95rem;
-      border-radius:999px;
-    }
-
     .login-helper{
       margin-top:16px;
       text-align:center;
@@ -348,13 +331,65 @@
         width:100%;
         text-align:center;
       }
-
-      .top-actions{
-        justify-content:center;
-      }
     }
 
     
+
+    .auth-strip{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      max-width:1080px;
+      margin:14px auto 6px;
+      padding:0 16px;
+    }
+
+    .auth-chip{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:140px;
+      padding:10px 18px;
+      border-radius:999px;
+      background:linear-gradient(180deg,#f7b733 0%, #f47a20 100%);
+      color:#fff;
+      text-decoration:none;
+      font-size:0.98rem;
+      font-weight:800;
+      letter-spacing:0.2px;
+      line-height:1;
+      white-space:nowrap;
+      box-shadow:0 6px 16px rgba(244,122,32,0.22);
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      border:1px solid rgba(196,102,28,0.28);
+    }
+
+    .auth-chip:hover{
+      transform:translateY(-1px);
+      box-shadow:0 8px 18px rgba(244,122,32,0.28);
+      filter:saturate(1.03);
+    }
+
+    .auth-chip.is-status{
+      cursor:default;
+    }
+
+    @media (max-width: 920px){
+      .auth-strip{
+        gap:10px;
+        margin:12px auto 6px;
+      }
+
+      .auth-chip{
+        min-width:0;
+        padding:9px 14px;
+        font-size:0.94rem;
+      }
+    }
+
+
     .language-nav{
       display:flex;
       justify-content:center;
@@ -614,25 +649,19 @@
 </head>
 <body>
 
-  <div class="top-actions">
-    <a class="button secondary small" href="/sign-in.html">Sign in</a>
-    <a class="button small" href="/sign-up.html">Create account</a>
-  </div>
-
-
   <header class="hero">
     <div class="hero-inner">
       <img src="/BOLO-logo.png" alt="BOLO logo" class="logo" />
     </div>
   </header>
 
-<div style="text-align:center;margin:10px 0 0;">
-  <span style="display:inline-block;padding:8px 14px;border-radius:999px;
-  background:#fff3cd;color:#7a5d00;font-weight:700;border:1px solid #ffe69c;
-  box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-    Launching soon
-  </span>
-</div>
+
+  <div class="auth-strip" aria-label="Account actions">
+    <a class="auth-chip" href="/sign-in.html">Sign in</a>
+    <a class="auth-chip" href="/sign-up.html">Create account</a>
+    <span class="auth-chip is-status">Launching soon</span>
+  </div>
+
 
 
   
@@ -663,12 +692,7 @@
         <p>BOLO is designed as a system, not a prompt-based tool — enabling consistent, scalable and production-ready output rather than isolated text generation.</p>
 
       </div>
-
-      <div class="button-row" style="justify-content:center; margin-top:18px;">
-        <a class="button secondary" href="/sign-in.html">Already have an account?</a>
-        <a class="button" href="/sign-up.html">Create account to buy a license</a>
-      </div>
-    </section>
+</section>
 
     <section class="pipeline" aria-label="BOLO workflow">
       <div class="pipe-step">Paste Book Brief<small>define the project</small></div>
