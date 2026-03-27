@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BOLO — Checkout</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .plan-card{border:1px solid rgba(0,0,0,.12);border-radius:18px;padding:18px;background:#fff;box-shadow:0 10px 24px rgba(0,0,0,.06)}
+    .plan-card.active{border-color:#1d4ed8;box-shadow:0 14px 28px rgba(29,78,216,.12)}
+    .plan-price{font-size:2rem;font-weight:900;line-height:1.1;margin:8px 0}
+    .pill{display:inline-flex;padding:4px 10px;border-radius:999px;background:#eef4ff;color:#1d4ed8;font-size:.82rem;font-weight:800}
+    .checkout-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+    .muted-box{padding:14px;border-radius:14px;background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.08)}
+    .row{display:flex;justify-content:space-between;gap:12px;margin:8px 0}
+    .danger{color:#b00020}
+    .old-price{font-size:1rem;color:#666;text-decoration:line-through;margin-left:8px;font-weight:700}
+    @media (max-width: 920px){.plans,.checkout-wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Back</a>
+    <div class="brand">BOLO</div>
+    <nav class="topnav"><a class="toplink" href="/account.html">Account</a></nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1 style="margin-top:0">Checkout</h1>
+      <p class="muted">Choose a plan, confirm your account and continue to secure Stripe checkout.</p>
+
+      <div class="checkout-wrap" style="margin-top:18px;">
+        <div><div class="plans" id="plans"></div></div>
+
+        <aside class="card" style="padding:18px;">
+          <h2 style="margin-top:0;font-size:1.3rem;">Order summary</h2>
+          <div class="muted-box">
+            <div class="row"><span>Account</span><strong id="userEmail">Checking…</strong></div>
+            <div class="row"><span>Selected plan</span><strong id="selectedPlan">—</strong></div>
+            <div class="row"><span>Seats</span><strong id="selectedSeats">—</strong></div>
+            <div class="row"><span>Billing period</span><strong id="selectedPeriod">—</strong></div>
+            <div class="row"><span>Total</span><strong id="selectedPrice">—</strong></div>
+          </div>
+
+          <div class="muted-box" style="margin-top:12px;">
+            <strong>What customers receive</strong>
+            <ul>
+              <li>Stripe confirmation email</li>
+              <li>Stripe invoice / receipt by email</li>
+              <li>License activation after payment</li>
+              <li>Access to the BOLO account area</li>
+            </ul>
+          </div>
+
+          <p id="msg" class="muted" style="margin-top:12px;"></p>
+          <p id="err" class="danger" style="margin-top:8px;"></p>
+
+          <div class="hero-actions" style="margin-top:14px;">
+            <button class="btn" id="checkoutBtn" type="button">Continue to Stripe</button>
+            <a class="btn ghost" href="/account.html">Open account</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script defer crossorigin="anonymous" data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+  <script>
+    const PLAN_MAP = {
+      solo_6m:  { name: "Individual – 6 months", seats: 1, period: "6 months", amount: "$49", oldAmount: "$69", kind: "Individual license" },
+      solo_12m: { name: "Individual – 12 months", seats: 1, period: "12 months", amount: "$79", oldAmount: "$99", kind: "Individual license" },
+      solo_36m: { name: "Individual – 36 months", seats: 1, period: "36 months", amount: "$149", oldAmount: "$179", kind: "Individual license" },
+      team_3:   { name: "Team – 3 users", seats: 3, period: "12 months", amount: "$249", oldAmount: null, kind: "Team license" },
+      team_5:   { name: "Team – 5 users", seats: 5, period: "12 months", amount: "$399", oldAmount: null, kind: "Team license" },
+      team_10:  { name: "Organization – 10 users", seats: 10, period: "12 months", amount: "$699", oldAmount: null, kind: "Team license" },
+    };
+
+    function getPlanFromUrl(){
+      const p = new URLSearchParams(location.search);
+      const value = p.get("plan") || "solo_12m";
+      return PLAN_MAP[value] ? value : "solo_12m";
+    }
+
+    function renderPlans(active){
+      const wrap = document.getElementById("plans");
+      wrap.innerHTML = Object.entries(PLAN_MAP).map(([k,p]) => `
+        <article class="plan-card ${k===active?"active":""}">
+          <span class="pill">${p.kind}</span>
+          <h3>${p.name}</h3>
+          <div class="plan-price">${p.amount}${p.oldAmount ? `<span class="old-price">${p.oldAmount}</span>` : ""}</div>
+          <p class="muted">Seats: ${p.seats}<br>Period: ${p.period}</p>
+          <button class="btn ${k===active?"":"ghost"}" data-plan="${k}" type="button">${k===active?"Selected":"Select this plan"}</button>
+        </article>
+      `).join("");
+
+      wrap.querySelectorAll("[data-plan]").forEach(btn => btn.addEventListener("click", () => {
+        const plan = btn.getAttribute("data-plan");
+        const url = new URL(location.href);
+        url.searchParams.set("plan", plan);
+        location.href = url.toString();
+      }));
+    }
+
+    function updateSummary(k){
+      const p = PLAN_MAP[k];
+      document.getElementById("selectedPlan").textContent = p.name;
+      document.getElementById("selectedSeats").textContent = String(p.seats);
+      document.getElementById("selectedPeriod").textContent = p.period;
+      document.getElementById("selectedPrice").textContent = p.amount;
+    }
+
+    window.addEventListener("load", async () => {
+      const planKey = getPlanFromUrl();
+      renderPlans(planKey);
+      updateSummary(planKey);
+
+      try {
+        await Clerk.load();
+        const user = Clerk.user;
+        if (!user) {
+          location.href = `/sign-in.html?plan=${encodeURIComponent(planKey)}`;
+          return;
+        }
+
+        const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || "Signed in";
+        document.getElementById("userEmail").textContent = email;
+
+        document.getElementById("checkoutBtn").addEventListener("click", async () => {
+          const msg = document.getElementById("msg");
+          const err = document.getElementById("err");
+          msg.textContent = "Creating secure checkout session…";
+          err.textContent = "";
+          try {
+            const token = await Clerk.session.getToken();
+            const res = await fetch("/api/create-license-checkout-session", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "authorization": `Bearer ${token}`,
+              },
+              body: JSON.stringify({ plan: planKey }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data?.error || "Could not create checkout session.");
+            if (!data?.url) throw new Error("Missing Stripe checkout URL.");
+            location.href = data.url;
+          } catch (e) {
+            msg.textContent = "";
+            err.textContent = e?.message || String(e);
+          }
+        });
+      } catch (e) {
+        document.getElementById("err").textContent = e?.message || String(e);
+      }
+    });
+  </script>
+</body>
+</html>
