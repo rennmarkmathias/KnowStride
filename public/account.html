@@ -61,9 +61,33 @@
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
   </main>
-
-  <script defer crossorigin="anonymous" data-clerk-publishable-key="pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+<script crossorigin="anonymous" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
   <script>
+    const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k";
+
+    function setClerkError(message) {
+      const errEl = document.getElementById("err");
+      if (errEl) errEl.textContent = message || "";
+    }
+
+    async function waitForClerk(timeoutMs = 10000) {
+      const start = Date.now();
+      while (!window.Clerk) {
+        if (Date.now() - start > timeoutMs) {
+          throw new Error("Clerk script did not load. Check your publishable key and allowed domains in Clerk.");
+        }
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      return window.Clerk;
+    }
+
+    async function initClerk() {
+      const clerk = await waitForClerk();
+      await clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
+      return clerk;
+    }
+  </script>
+<script>
     function fmtDate(value) {
       if (!value) return "-";
       const d = new Date(value.length <= 10 ? value + 'T00:00:00Z' : value);
@@ -97,8 +121,8 @@
 
     window.addEventListener('load', async () => {
       try {
-        await Clerk.load();
-        const user = Clerk.user;
+        const clerk = await initClerk();
+        const user = clerk.user;
         const userArea = document.getElementById('userArea');
         const guestArea = document.getElementById('guestArea');
         const loginLink = document.getElementById('loginLink');
@@ -114,11 +138,11 @@
         const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
         document.getElementById('userEmail').textContent = email || 'Signed in';
         document.getElementById('logoutBtn').onclick = async () => {
-          try { await Clerk.signOut(); } finally { window.location.href = '/'; }
+          try { await clerk.signOut(); } finally { window.location.href = '/'; }
         };
-        Clerk.mountUserButton(document.getElementById('userButton'));
+        clerk.mountUserButton(document.getElementById('userButton'));
 
-        const token = await Clerk.session.getToken();
+        const token = await clerk.session.getToken();
         const res = await fetch('/api/licenses', {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
@@ -173,7 +197,7 @@
             </div>`;
         }).join('');
       } catch (err) {
-        document.getElementById('err').textContent = err?.message || String(err);
+        setClerkError(err?.message || String(err));
       }
     });
   </script>
