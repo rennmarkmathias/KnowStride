@@ -1,7 +1,16 @@
-// functions/api/stripe-webhook.js
 import Stripe from "stripe";
-import { prodigiCreateOrder, prodigiSkuFor } from "./_prodigi.js";
-import { sendOrderReceivedEmail } from "./_mail.js";
+import { generateLicenseRecord } from "./_licenses.js";
+import { sendLicenseIssuedEmail } from "./_mail.js";
+
+function json(data, init = {}) {
+  return new Response(JSON.stringify(data), {
+    ...init,
+    headers: {
+      "content-type": "application/json",
+      ...(init.headers || {}),
+    },
+  });
+}
 
 function asText(v) {
   if (v == null) return null;
@@ -10,41 +19,39 @@ function asText(v) {
   try { return JSON.stringify(v); } catch { return String(v); }
 }
 
-/**
- * Prodigi sizing accepted values:
- * - fillPrintArea (may crop)
- * - fitPrintArea  (may add border)
- *
- * STRICT => fillPrintArea (looks “poster-tight”)
- * ART    => fitPrintArea (safer, preserves whole image)
- */
-function normalizeSizing(mode, provided = "") {
-  const m = String(mode || "").toUpperCase();
-  const p = String(provided || "").toLowerCase();
-
-  if (p.includes("fill") || p.includes("crop")) return "fillPrintArea";
-  if (p.includes("fit") || p.includes("shrink")) return "fitPrintArea";
-
-  return m === "STRICT" ? "fillPrintArea" : "fitPrintArea";
+function planLabel(plan) {
+  const key = String(plan || "").trim();
+  const labels = {
+    solo_6m: "BOLO Individual — 6 months",
+    solo_12m: "BOLO Individual — 12 months",
+    solo_36m: "BOLO Individual — 36 months",
+    team_3: "BOLO Team — 3 users",
+    team_5: "BOLO Team — 5 users",
+    team_10: "BOLO Team — 10 users",
+  };
+  return labels[key] || key || "BOLO License";
 }
 
-function joinUrl(base, path) {
-  const b = String(base || "").replace(/\/+$/, "");
-  const p = String(path || "").replace(/^\/+/, "");
-  return `${b}/${p}`;
+async function alreadyProcessed(env, stripeSessionId) {
+  if (!env.DB) return false;
+  const row = await env.DB.prepare(
+    `SELECT id FROM licenses WHERE stripe_session_id = ? LIMIT 1`
+  ).bind(stripeSessionId).first();
+  return Boolean(row?.id);
 }
 
-export async function onRequestPost(context) {
-  const { env, request } = context;
-
-  const stripeSecret = env.STRIPE_SECRET_KEY;
-  const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
-
-  if (!stripeSecret || !webhookSecret) {
+export async function onRequestPost({ request, env }) {
+  if (!env.STRIPE_SECRET_KEY || !env.STRIPE_WEBHOOK_SECRET) {
     return new Response("Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET", { status: 500 });
   }
+  if (!env.DB) {
+    return new Response("Missing DB binding", { status: 500 });
+  }
+  if (!env.LICENSE_SECRET) {
+    return new Response("Missing LICENSE_SECRET", { status: 500 });
+  }
 
-  const stripe = new Stripe(stripeSecret, {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: "2024-06-20",
     httpClient: Stripe.createFetchHttpClient(),
   });
@@ -54,7 +61,7 @@ export async function onRequestPost(context) {
 
   let event;
   try {
-    event = await stripe.webhooks.constructEventAsync(body, sig, webhookSecret);
+    event = await stripe.webhooks.constructEventAsync(body, sig, env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     return new Response(`Webhook signature verification failed: ${err?.message || String(err)}`, { status: 400 });
   }
@@ -64,214 +71,112 @@ export async function onRequestPost(context) {
   }
 
   const sessionId = event.data.object?.id;
+  if (!sessionId) {
+    return new Response("Missing session id", { status: 400 });
+  }
+
+  if (await alreadyProcessed(env, sessionId)) {
+    return new Response("ok", { status: 200 });
+  }
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ["line_items", "payment_intent", "payment_intent.latest_charge", "customer_details"],
+      expand: ["customer_details", "payment_intent", "invoice"],
     });
 
-    // Only handle posters
-    if (session.metadata?.kind && session.metadata.kind !== "poster") {
+    if (session.metadata?.kind !== "bolo_license") {
       return new Response("ok", { status: 200 });
     }
 
-    const posterId = session.metadata?.poster_id || session.metadata?.posterId || null;
-    const posterTitle = session.metadata?.poster_title || session.metadata?.posterTitle || null;
-    const size = session.metadata?.size || null;
-    const paper = session.metadata?.paper || null; // "standard" / "fineart"
-    const mode = session.metadata?.mode || null;   // "STRICT" / "ART"
-
-    // NEW: Build print URL from R2 base + object path
-    // Backwards compatible: accept full URL if older checkout still sends it.
-    const printsBaseUrl = env.PRINTS_BASE_URL || env.PRINTS_BASE || env.PRINTS_URL || null;
-
-    const printPath =
-      session.metadata?.print_path ||
-      session.metadata?.printPath ||
-      session.metadata?.file_name ||
-      session.metadata?.fileName ||
+    const plan = asText(session.metadata?.plan) || "licensed";
+    const seats = Number(session.metadata?.seats || 1);
+    const periodMonths = Number(session.metadata?.period_months || 12);
+    const clerkUserId = asText(session.metadata?.clerk_user_id) || null;
+    const email =
+      asText(session.customer_details?.email) ||
+      asText(session.customer_email) ||
+      asText(session.metadata?.email) ||
       null;
 
-    const printUrlFromMetadata = session.metadata?.print_url || session.metadata?.printUrl || null;
-
-    const printUrl =
-      printUrlFromMetadata
-        ? asText(printUrlFromMetadata)
-        : (printsBaseUrl && printPath ? joinUrl(printsBaseUrl, printPath) : null);
-
-    const clerkUserId =
-      session.metadata?.clerk_user_id ||
-      session.metadata?.clerkUserId ||
-      session.metadata?.user_id ||
-      null;
-
-    // Require these
-    if (!posterId || !size || !paper || !mode || !printUrl) {
-      throw new Error(
-        `Missing required metadata. posterId=${posterId} size=${size} paper=${paper} mode=${mode} ` +
-        `printUrl=${printUrl} printPath=${printPath} printsBaseUrl=${printsBaseUrl}`
-      );
+    if (!email && !clerkUserId) {
+      throw new Error("Missing purchaser identity on session metadata");
     }
 
-    const qty = session.line_items?.data?.[0]?.quantity || 1;
+    const issuedAt = new Date();
+    const license = await generateLicenseRecord({
+      secret: env.LICENSE_SECRET,
+      plan,
+      periodMonths,
+      seats,
+      clerkUserId,
+      email,
+      issuedAt,
+    });
 
-    // Shipping (prefer collected_information.shipping_details)
-    const shippingDetails =
-      session.collected_information?.shipping_details ||
-      session.shipping_details ||
-      (session.customer_details?.address
-        ? { name: session.customer_details?.name || "Customer", address: session.customer_details.address }
-        : null) ||
-      (session.payment_intent?.latest_charge?.shipping
-        ? { name: session.payment_intent.latest_charge.shipping.name, address: session.payment_intent.latest_charge.shipping.address }
-        : null);
+    const invoiceObj = typeof session.invoice === "object" ? session.invoice : null;
+    const paymentIntentId =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : asText(session.payment_intent?.id) || null;
 
-    if (!shippingDetails?.address) {
-      throw new Error("Missing shipping address on Stripe session");
-    }
+    await env.DB.prepare(
+      `INSERT INTO licenses (
+        id, created_at, updated_at, email, clerk_user_id,
+        license_key, license_fingerprint, plan, period_months, seats,
+        status, issued_at, expires_at,
+        stripe_session_id, stripe_payment_intent_id, stripe_invoice_id, stripe_invoice_url
+      ) VALUES (
+        ?, datetime('now'), datetime('now'), ?, ?,
+        ?, ?, ?, ?, ?,
+        'active', ?, ?,
+        ?, ?, ?, ?
+      )`
+    ).bind(
+      license.id,
+      email,
+      clerkUserId,
+      license.licenseKey,
+      license.licenseFingerprint,
+      license.plan,
+      license.periodMonths,
+      license.seats,
+      license.issuedAt,
+      license.expiresAt,
+      session.id,
+      paymentIntentId,
+      asText(invoiceObj?.id) || null,
+      asText(invoiceObj?.hosted_invoice_url) || null,
+    ).run();
 
-    const addr = shippingDetails.address;
+    await env.DB.prepare(
+      `INSERT INTO purchases (
+        id, user_id, stripe_event_id, stripe_session_id, plan, amount_total, currency, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      crypto.randomUUID(),
+      clerkUserId || email || "guest",
+      event.id,
+      session.id,
+      license.plan,
+      Number(session.amount_total || 0),
+      asText(session.currency) || "usd",
+      Math.floor(Date.now() / 1000),
+    ).run().catch(() => null);
 
-    // Prodigi recipient address (don’t send empty optionals)
-    const recipientAddress = {
-      line1: asText(addr.line1) || "",
-      townOrCity: asText(addr.city) || "",
-      postalOrZipCode: asText(addr.postal_code) || "",
-      countryCode: asText(addr.country) || "",
-    };
-    if (addr.line2) recipientAddress.line2 = asText(addr.line2);
-    if (addr.state) recipientAddress.stateOrCounty = asText(addr.state);
+    const origin = new URL(request.url).origin;
+    await sendLicenseIssuedEmail(env, {
+      to: email,
+      email,
+      plan: planLabel(plan),
+      seats,
+      expiresAt: license.expiresAt,
+      licenseKey: license.licenseKey,
+      accountUrl: `${origin}/account.html`,
+    }).catch(() => null);
 
-    const customerEmail = asText(session.customer_details?.email) || null;
-
-    const recipient = {
-      name: asText(shippingDetails.name) || asText(session.customer_details?.name) || "Customer",
-      email: customerEmail || undefined,
-      address: recipientAddress,
-    };
-
-    // Amount in MINOR units (cents)
-    const amountTotalMinor = Number(session.amount_total || 0);
-    const currency = asText(session.currency) || "usd";
-
-    // --- DB: idempotency & store stripe_received first
-    if (env.DB) {
-      const existing = await env.DB.prepare(
-        `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
-      ).bind(session.id).first();
-
-      if (existing?.prodigi_order_id) {
-        return new Response("ok", { status: 200 });
-      }
-
-      await env.DB.prepare(
-        `INSERT INTO orders
-          (id, created_at, email, clerk_user_id, poster_id, poster_title, size, paper, mode, currency,
-           amount_total, stripe_session_id, stripe_payment_intent_id, status, updated_at)
-         VALUES
-          (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
-         ON CONFLICT(stripe_session_id) DO UPDATE SET
-          email = COALESCE(excluded.email, orders.email),
-          clerk_user_id = COALESCE(excluded.clerk_user_id, orders.clerk_user_id),
-          poster_title = COALESCE(excluded.poster_title, orders.poster_title),
-          currency = COALESCE(excluded.currency, orders.currency),
-          amount_total = COALESCE(excluded.amount_total, orders.amount_total),
-          stripe_payment_intent_id = COALESCE(excluded.stripe_payment_intent_id, orders.stripe_payment_intent_id),
-          status = CASE
-            WHEN orders.prodigi_order_id IS NOT NULL THEN orders.status
-            ELSE excluded.status
-          END,
-          updated_at = datetime('now')
-        `
-      )
-        .bind(
-          crypto.randomUUID(),
-          customerEmail,
-          asText(clerkUserId),
-          asText(posterId),
-          asText(posterTitle),
-          asText(size),
-          asText(paper),
-          asText(mode),
-          currency,
-          amountTotalMinor, // ✅ cents in DB
-          asText(session.id),
-          asText(session.payment_intent) || null,
-          "stripe_received"
-        )
-        .run();
-    }
-
-    // Race-safe: check again
-    if (env.DB) {
-      const existing2 = await env.DB.prepare(
-        `SELECT prodigi_order_id FROM orders WHERE stripe_session_id = ? LIMIT 1`
-      ).bind(session.id).first();
-
-      if (existing2?.prodigi_order_id) {
-        return new Response("ok", { status: 200 });
-      }
-    }
-
-    // --- Create Prodigi order
-    const prodigiSku = prodigiSkuFor(env, { paper, size });
-    const sizing = normalizeSizing(mode, session.metadata?.sizing || "");
-
-    const prodigiOrderPayload = {
-      merchantReference: `ks_${session.id}`,
-      shippingMethod: "Standard",
-      recipient,
-      items: [
-        {
-          sku: prodigiSku,
-          copies: qty,
-          sizing,
-          assets: [{ url: printUrl, printArea: "default" }],
-        },
-      ],
-    };
-
-    const prodigiResult = await prodigiCreateOrder(env, prodigiOrderPayload);
-    if (!prodigiResult?.ok) {
-      throw new Error(`Prodigi create order failed: ${asText(prodigiResult?.error) || "unknown"}`);
-    }
-
-    const prodigi = prodigiResult.response || {};
-    const prodigiOrderId = asText(prodigi.id || prodigi.orderId || prodigi.order?.id) || null;
-
-    // --- DB update: prodigi created
-    if (env.DB) {
-      await env.DB.prepare(
-        `UPDATE orders
-         SET prodigi_order_id = COALESCE(prodigi_order_id, ?),
-             status = 'prodigi_created',
-             prodigi_status = COALESCE(prodigi_status, 'created'),
-             updated_at = datetime('now')
-         WHERE stripe_session_id = ?`
-      )
-        .bind(prodigiOrderId, asText(session.id))
-        .run();
-    }
-
-    // --- Email: Order received (non-fatal)
-    try {
-      await sendOrderReceivedEmail(env, {
-        to: customerEmail,
-        posterTitle: posterTitle || posterId,
-        size,
-        paper,
-        mode,
-        amountTotalMinor,
-        currency,
-        prodigiOrderId,
-        accountUrl: "https://knowstride.com/account.html",
-      });
-    } catch (e) {
-      console.log("[mail] order received failed", e?.message || String(e));
-    }
-
-    return new Response("ok", { status: 200 });
+    return json({ ok: true });
   } catch (err) {
-    return new Response(`Webhook handler error: ${err?.message || String(err)}`, { status: 500 });
+    console.log("[stripe-webhook] failed", err);
+    return new Response(`Webhook processing failed: ${err?.message || String(err)}`, { status: 500 });
   }
 }
