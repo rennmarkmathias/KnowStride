@@ -9,7 +9,12 @@
     </title>
   <meta content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." name="description"/>
   <style>
-      :root{ --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --blue:#2d6cdf; --blue-dark:#1f4ea3; --line:#e5e7eb; --green:#0f9d58; --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%); } *{box-sizing:border-box} body{ margin:0; font-family:Arial, Helvetica, sans-serif; background: radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.16), transparent 60%), radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.14), transparent 60%), linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%); color:var(--text); line-height:1.6; } .hero{ background:var(--grad); padding:26px 16px 34px; text-align:center; } .hero-inner{ max-width:1100px; margin:0 auto; } .logo{ width:520px; max-width:92%; height:auto; display:block; margin:0 auto 10px; } .container{ max-width:1080px; margin:0 auto; padding:20px 16px 60px; position:relative; } .intro{ text-align:center; margin-bottom:28px; background:linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,251,255,0.96) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:18px; padding:26px 26px 18px; box-shadow:0 10px 28px rgba(45,108,223,0.06); position:relative; overflow:hidden; } .intro::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:var(--grad); opacity:0.95; } h1{ margin:0 0 8px; font-size:clamp(2rem, 5vw, 3rem); line-height:1.15; } .subtitle{ margin:0 auto; max-width:860px; color:var(--muted); font-size:1.08rem; } .sales-copy{ margin:18px auto 0; max-width:860px; color:#334155; font-size:1rem; } .sales-copy p{ margin:0 0 10px; } .pipeline{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:20px 0 16px; } .pipe-step{ background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.98) 100%); border:1px solid var(--line); border-top:4px solid transparent; border-radius:12px; padding:14px 10px; text-align:center; font-weight:700; font-size:0.94rem; line-height:1.25; box-shadow:0 6px 18px rgba(45,108,223,0.06); } .pipe-step:nth-child(1){border-top-color:#f47a20;} .pipe-step:nth-child(2){border-top-color:#f2c300;} .pipe-step:nth-child(3){border-top-color:#d7d91f;} .pipe-step:nth-child(4){border-top-color:#7ec8e3;} .pipe-step:nth-child(5){border-top-color:#2d6cdf;} .pipe-step small{ display:block; margin-top:4px; font-weight:400; color:var(--muted); font-size:0.82rem; } .grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; } .card{ background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,251,255,0.98) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:14px; padding:26px; box-shadow:0 10px 26px rgba(45,108,223,0.06); } .card h2{ margin-top:0; margin-bottom:10px; font-size:1.45rem; } .card h3{ margin-top:18px; margin-bottom:8px; font-size:1.08rem; } .button-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; } .button{ display:inline-block; padding:14px 24px; background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%); color:#fff; text-decoration:none; border-radius:10px; font-weight:700; transition:background .15s ease, transform .15s ease, box-shadow .15s ease; box-shadow:0 8px 18px rgba(45,108,223,0.18); } .button:hover{ background:linear-gradient(180deg, #3769d3 0%, #1f4ea3 100%); transform:translateY(-1px); box-shadow:0 10px 22px rgba(45,108,223,0.24); } .button.secondary{ background:#ffffff; color:var(--blue); border:1px solid rgba(45,108,223,0.50); box-shadow:none; } .button.secondary:hover{ background:#f0f6ff; } ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin-top:8px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:1fr; } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; } @media (max-width: 920px){ .logo-separator{ margin:24px 0 22px; padding:26px 12px; border-radius:16px; } .logo-separator img{ width:180px; max-width:78%; } }
+      :root{ --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --blue:#2d6cdf; --blue-dark:#1f4ea3; --line:#e5e7eb; --green:#0f9d58; --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%); } *{box-sizing:border-box} body{ margin:0; font-family:Arial, Helvetica, sans-serif; background: radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.16), transparent 60%), radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.14), transparent 60%), linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%); color:var(--text); line-height:1.6; } .hero{ background:var(--grad); padding:26px 16px 34px; text-align:center; } .hero-inner{ max-width:1100px; margin:0 auto; } .logo{ width:520px; max-width:92%; height:auto; display:block; margin:0 auto 10px; } .container{ max-width:1080px; margin:0 auto; padding:20px 16px 60px; position:relative; } .intro{ text-align:center; margin-bottom:28px; background:linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,251,255,0.96) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:18px; padding:26px 26px 18px; box-shadow:0 10px 28px rgba(45,108,223,0.06); position:relative; overflow:hidden; } .intro::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:var(--grad); opacity:0.95; } h1{ margin:0 0 8px; font-size:clamp(2rem, 5vw, 3rem); line-height:1.15; } .subtitle{ margin:0 auto; max-width:860px; color:var(--muted); font-size:1.08rem; } .sales-copy{ margin:18px auto 0; max-width:860px; color:#334155; font-size:1rem; } .sales-copy p{ margin:0 0 10px; } .pipeline{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:20px 0 16px; } .pipe-step{ background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.98) 100%); border:1px solid var(--line); border-top:4px solid transparent; border-radius:12px; padding:14px 10px; text-align:center; font-weight:700; font-size:0.94rem; line-height:1.25; box-shadow:0 6px 18px rgba(45,108,223,0.06); } .pipe-step:nth-child(1){border-top-color:#f47a20;} .pipe-step:nth-child(2){border-top-color:#f2c300;} .pipe-step:nth-child(3){border-top-color:#d7d91f;} .pipe-step:nth-child(4){border-top-color:#7ec8e3;} .pipe-step:nth-child(5){border-top-color:#2d6cdf;} .pipe-step small{ display:block; margin-top:4px; font-weight:400; color:var(--muted); font-size:0.82rem; } .grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; } .card{ background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,251,255,0.98) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:14px; padding:26px; box-shadow:0 10px 26px rgba(45,108,223,0.06); } .card h2{ margin-top:0; margin-bottom:10px; font-size:1.45rem; } .card h3{ margin-top:18px; margin-bottom:8px; font-size:1.08rem; } .button-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; } .button{ display:inline-block; padding:14px 24px; background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%); color:#fff; text-decoration:none; border-radius:10px; font-weight:700; transition:background .15s ease, transform .15s ease, box-shadow .15s ease; box-shadow:0 8px 18px rgba(45,108,223,0.18); } .button:hover{ background:linear-gradient(180deg, #3769d3 0%, #1f4ea3 100%); transform:translateY(-1px); box-shadow:0 10px 22px rgba(45,108,223,0.24); } .button.secondary{ background:#ffffff; color:var(--blue); border:1px solid rgba(45,108,223,0.50); box-shadow:none; } .button.secondary:hover{ background:#f0f6ff; }
+.top-actions{ max-width:1100px; margin:0 auto; padding:14px 16px 0; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
+.button.small{ padding:10px 16px; font-size:0.95rem; border-radius:999px; }
+.login-helper{ margin-top:16px; text-align:center; color:var(--muted); font-size:0.95rem; }
+ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin-top:8px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:1fr; } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; }
+.top-actions{ justify-content:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; } @media (max-width: 920px){ .logo-separator{ margin:24px 0 22px; padding:26px 12px; border-radius:16px; } .logo-separator img{ width:180px; max-width:78%; } }
     
   
 .demo-overlay-wrap{
@@ -229,6 +234,10 @@
     </div>
     <div id="top">
     </div>
+    <div class="top-actions">
+      <a class="button secondary small" href="/sign-in.html">Sign in</a>
+      <a class="button small" href="/sign-up.html">Create account</a>
+    </div>
     <nav aria-label="Language navigation" class="language-nav">
       <a href="#german">
       DE
@@ -265,6 +274,10 @@ SE
   <div class="section-divider">
   </div>
   <section class="intro lang-section" id="danish">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Log ind</a>
+    <a class="button small" href="/sign-up.html">Opret konto</a>
+  </div>
     <h1>
       BOLO AI Publishing Pipeline
     </h1>
@@ -286,7 +299,12 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
 </p>
 
     </div>
-  </section>
+  
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Har du allerede en konto?</a>
+    <a class="button" href="/sign-up.html">Opret konto for at købe en licens</a>
+  </div>
+</section>
   <section aria-label="BOLO workflow" class="pipeline">
     <div class="pipe-step">
       Indsæt Book Brief
@@ -358,6 +376,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
     </strong>
     Da BOLO er en ny applikation, kan din browser eller Windows vise en sikkerhedsadvarsel under download. Det er normalt for nyligt udgivet software.
   </div>
+<div class="login-helper">Hvis du ikke er logget ind, fører disse knapper dig først til kontooprettelse eller login og derefter videre til checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -444,7 +463,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
       <div class="price-subnote">
         AI-generering betales separat via din egen OpenAI API-nøgle.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Vælg 6 måneder
     </a>
   </div>
@@ -463,7 +482,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
     <div class="price-subnote">
       AI-generering betales separat via din egen OpenAI API-nøgle.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Vælg 12 måneder
   </a>
 </div>
@@ -482,7 +501,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
   <div class="price-subnote">
     AI-generering betales separat via din egen OpenAI API-nøgle.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Vælg 36 måneder
 </a>
 </div>
@@ -513,7 +532,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
     <div class="price-subnote">
       Lav omkostning pr. bruger, med AI-generering faktureret separat i hvert workflow.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Vælg 3 brugere
   </a>
 </div>
@@ -539,7 +558,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
   <div class="price-subnote">
     Lav omkostning pr. bruger, med AI-generering faktureret separat i hvert workflow.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Vælg 5 brugere
 </a>
 </div>
@@ -565,7 +584,7 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
   <div class="price-subnote">
     Lav omkostning pr. bruger, med AI-generering faktureret separat i hvert workflow.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Vælg 10 brugere
 </a>
 </div>
@@ -609,6 +628,10 @@ BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muli
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="german">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Anmelden</a>
+    <a class="button small" href="/sign-up.html">Konto erstellen</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -629,6 +652,11 @@ BOLO fungiert als KI-Orchestrierungsschicht für die Buchproduktion. Anstatt iso
 BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglicht dadurch konsistente, skalierbare und produktionsreife Ergebnisse statt isolierter Textgenerierung.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Sie haben bereits ein Konto?</a>
+    <a class="button" href="/sign-up.html">Konto erstellen, um eine Lizenz zu kaufen</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -702,6 +730,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   </strong>
   Da BOLO eine neue Anwendung ist, kann Ihr Browser oder Windows beim Download eine Sicherheitswarnung anzeigen. Das ist bei neu veröffentlichter Software normal.
 </div>
+<div class="login-helper">Wenn Sie nicht angemeldet sind, führen diese Schaltflächen Sie zuerst zur Kontoerstellung oder Anmeldung und danach weiter zum Checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -789,7 +818,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
       <div class="price-subnote">
         KI-Generierung wird separat über Ihren eigenen OpenAI API-Schlüssel bezahlt.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       6 Monate wählen
     </a>
   </div>
@@ -808,7 +837,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
     <div class="price-subnote">
       KI-Generierung wird separat über Ihren eigenen OpenAI API-Schlüssel bezahlt.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     12 Monate wählen
   </a>
 </div>
@@ -827,7 +856,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   <div class="price-subnote">
     KI-Generierung wird separat über Ihren eigenen OpenAI API-Schlüssel bezahlt.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   36 Monate wählen
 </a>
 </div>
@@ -858,7 +887,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
     <div class="price-subnote">
       Niedrige Sitzplatzkosten pro Nutzer, KI-Generierung wird separat je Workflow abgerechnet.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     3 Nutzer wählen
   </a>
 </div>
@@ -884,7 +913,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   <div class="price-subnote">
     Niedrige Sitzplatzkosten pro Nutzer, KI-Generierung wird separat je Workflow abgerechnet.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   5 Nutzer wählen
 </a>
 </div>
@@ -910,7 +939,7 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   <div class="price-subnote">
     Niedrige Sitzplatzkosten pro Nutzer, KI-Generierung wird separat je Workflow abgerechnet.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   10 Nutzer wählen
 </a>
 </div>
@@ -954,6 +983,10 @@ BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglic
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="spanish">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Iniciar sesión</a>
+    <a class="button small" href="/sign-up.html">Crear cuenta</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -974,6 +1007,11 @@ BOLO actúa como una capa de orquestación de IA para la producción de libros. 
 BOLO está diseñado como un sistema, no como una herramienta basada en prompts — lo que permite una producción consistente, escalable y lista para publicación en lugar de generación de texto aislado.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">¿Ya tienes una cuenta?</a>
+    <a class="button" href="/sign-up.html">Crear cuenta para comprar una licencia</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -1047,6 +1085,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   </strong>
   Como BOLO es una aplicación nueva, tu navegador o Windows pueden mostrar una advertencia de seguridad durante la descarga. Esto es normal en software recién lanzado.
 </div>
+<div class="login-helper">Si no has iniciado sesión, estos botones te llevarán primero a crear una cuenta o iniciar sesión y después al checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -1134,7 +1173,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
       <div class="price-subnote">
         La generación con IA se paga por separado mediante tu propia clave API de OpenAI.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Elegir 6 meses
     </a>
   </div>
@@ -1153,7 +1192,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
     <div class="price-subnote">
       La generación con IA se paga por separado mediante tu propia clave API de OpenAI.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Elegir 12 meses
   </a>
 </div>
@@ -1172,7 +1211,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   <div class="price-subnote">
     La generación con IA se paga por separado mediante tu propia clave API de OpenAI.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Elegir 36 meses
 </a>
 </div>
@@ -1203,7 +1242,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
     <div class="price-subnote">
       Bajo coste por usuario, con la generación de IA facturada por separado en cada flujo de trabajo.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Elegir 3 usuarios
   </a>
 </div>
@@ -1229,7 +1268,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   <div class="price-subnote">
     Bajo coste por usuario, con la generación de IA facturada por separado en cada flujo de trabajo.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Elegir 5 usuarios
 </a>
 </div>
@@ -1255,7 +1294,7 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   <div class="price-subnote">
     Bajo coste por usuario, con la generación de IA facturada por separado en cada flujo de trabajo.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Elegir 10 usuarios
 </a>
 </div>
@@ -1299,6 +1338,10 @@ BOLO está diseñado como un sistema, no como una herramienta basada en prompts 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="french">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Se connecter</a>
+    <a class="button small" href="/sign-up.html">Créer un compte</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -1319,6 +1362,11 @@ BOLO agit comme une couche d’orchestration IA pour la production de livres. Au
 BOLO est conçu comme un système, et non comme un outil basé sur des prompts — permettant une production cohérente, évolutive et prête à être publiée, plutôt qu’une génération de texte isolée.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Vous avez déjà un compte ?</a>
+    <a class="button" href="/sign-up.html">Créer un compte pour acheter une licence</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -1392,6 +1440,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   </strong>
   Comme BOLO est une nouvelle application, votre navigateur ou Windows peut afficher un avertissement de sécurité pendant le téléchargement. C’est normal pour un logiciel nouvellement publié.
 </div>
+<div class="login-helper">Si vous n’êtes pas connecté, ces boutons vous mèneront d’abord à la création de compte ou à la connexion, puis au paiement.</div>
 </article>
 <article class="card">
   <h2>
@@ -1479,7 +1528,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
       <div class="price-subnote">
         La génération IA est facturée séparément via votre propre clé API OpenAI.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Choisir 6 mois
     </a>
   </div>
@@ -1498,7 +1547,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
     <div class="price-subnote">
       La génération IA est facturée séparément via votre propre clé API OpenAI.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Choisir 12 mois
   </a>
 </div>
@@ -1517,7 +1566,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   <div class="price-subnote">
     La génération IA est facturée séparément via votre propre clé API OpenAI.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Choisir 36 mois
 </a>
 </div>
@@ -1548,7 +1597,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
     <div class="price-subnote">
       Coût par utilisateur réduit, avec génération IA facturée séparément selon chaque workflow.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Choisir 3 utilisateurs
   </a>
 </div>
@@ -1574,7 +1623,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   <div class="price-subnote">
     Coût par utilisateur réduit, avec génération IA facturée séparément selon chaque workflow.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Choisir 5 utilisateurs
 </a>
 </div>
@@ -1600,7 +1649,7 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   <div class="price-subnote">
     Coût par utilisateur réduit, avec génération IA facturée séparément selon chaque workflow.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Choisir 10 utilisateurs
 </a>
 </div>
@@ -1644,6 +1693,10 @@ BOLO est conçu comme un système, et non comme un outil basé sur des prompts �
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="italian">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Accedi</a>
+    <a class="button small" href="/sign-up.html">Crea account</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -1664,6 +1717,11 @@ BOLO funziona come un livello di orchestrazione AI per la produzione di libri. I
 BOLO è progettato come un sistema, non come uno strumento basato su prompt — consentendo output coerenti, scalabili e pronti per la produzione invece di semplice generazione di testo isolato.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Hai già un account?</a>
+    <a class="button" href="/sign-up.html">Crea un account per acquistare una licenza</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -1737,6 +1795,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   </strong>
   Poiché BOLO è una nuova applicazione, il browser o Windows potrebbero mostrare un avviso di sicurezza durante il download. È normale per software appena rilasciati.
 </div>
+<div class="login-helper">Se non hai effettuato l’accesso, questi pulsanti ti porteranno prima alla creazione dell’account o al login e poi al checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -1824,7 +1883,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
       <div class="price-subnote">
         La generazione AI viene pagata separatamente tramite la tua chiave API OpenAI.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Scegli 6 mesi
     </a>
   </div>
@@ -1843,7 +1902,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
     <div class="price-subnote">
       La generazione AI viene pagata separatamente tramite la tua chiave API OpenAI.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Scegli 12 mesi
   </a>
 </div>
@@ -1862,7 +1921,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   <div class="price-subnote">
     La generazione AI viene pagata separatamente tramite la tua chiave API OpenAI.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Scegli 36 mesi
 </a>
 </div>
@@ -1893,7 +1952,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
     <div class="price-subnote">
       Basso costo per utente, con la generazione AI fatturata separatamente per ogni workflow.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Scegli 3 utenti
   </a>
 </div>
@@ -1919,7 +1978,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   <div class="price-subnote">
     Basso costo per utente, con la generazione AI fatturata separatamente per ogni workflow.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Scegli 5 utenti
 </a>
 </div>
@@ -1945,7 +2004,7 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   <div class="price-subnote">
     Basso costo per utente, con la generazione AI fatturata separatamente per ogni workflow.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Scegli 10 utenti
 </a>
 </div>
@@ -1989,6 +2048,10 @@ BOLO è progettato come un sistema, non come uno strumento basato su prompt — 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="dutch">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Inloggen</a>
+    <a class="button small" href="/sign-up.html">Account aanmaken</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -2009,6 +2072,11 @@ BOLO fungeert als een AI-orkestratielaag voor boekproductie. In plaats van losse
 BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardoor consistente, schaalbare en productieklare output mogelijk wordt in plaats van geïsoleerde tekstgeneratie.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Heb je al een account?</a>
+    <a class="button" href="/sign-up.html">Maak een account aan om een licentie te kopen</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2082,6 +2150,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   </strong>
   Omdat BOLO een nieuwe applicatie is, kan je browser of Windows tijdens het downloaden een beveiligingswaarschuwing tonen. Dit is normaal bij nieuw uitgebrachte software.
 </div>
+<div class="login-helper">Als je niet bent ingelogd, brengen deze knoppen je eerst naar accountaanmaak of inloggen en daarna naar de checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -2169,7 +2238,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
       <div class="price-subnote">
         AI-generatie wordt apart betaald via je eigen OpenAI API key.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Kies 6 maanden
     </a>
   </div>
@@ -2188,7 +2257,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
     <div class="price-subnote">
       AI-generatie wordt apart betaald via je eigen OpenAI API key.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Kies 12 maanden
   </a>
 </div>
@@ -2207,7 +2276,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   <div class="price-subnote">
     AI-generatie wordt apart betaald via je eigen OpenAI API key.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Kies 36 maanden
 </a>
 </div>
@@ -2238,7 +2307,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
     <div class="price-subnote">
       Lage seat-kosten per gebruiker, met AI-generatie die per workflow apart wordt gefactureerd.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Kies 3 gebruikers
   </a>
 </div>
@@ -2264,7 +2333,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   <div class="price-subnote">
     Lage seat-kosten per gebruiker, met AI-generatie die per workflow apart wordt gefactureerd.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Kies 5 gebruikers
 </a>
 </div>
@@ -2290,7 +2359,7 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   <div class="price-subnote">
     Lage seat-kosten per gebruiker, met AI-generatie die per workflow apart wordt gefactureerd.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Kies 10 gebruikers
 </a>
 </div>
@@ -2334,6 +2403,10 @@ BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardo
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="norwegian">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Logg inn</a>
+    <a class="button small" href="/sign-up.html">Opprett konto</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -2354,6 +2427,11 @@ BOLO fungerer som et AI-orkestreringslag for bokproduksjon. I stedet for å gene
 BOLO er designet som et system, ikke et promptbasert verktøy — noe som muliggjør konsistent, skalerbar og produksjonsklar output i stedet for isolert tekstgenerering.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Har du allerede en konto?</a>
+    <a class="button" href="/sign-up.html">Opprett konto for å kjøpe en lisens</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2427,6 +2505,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   </strong>
   Fordi BOLO er en ny applikasjon, kan nettleseren eller Windows vise en sikkerhetsadvarsel under nedlasting. Dette er normalt for nyutgitt programvare.
 </div>
+<div class="login-helper">Hvis du ikke er logget inn, tar disse knappene deg først til konto-oppretting eller innlogging og deretter videre til checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -2514,7 +2593,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
       <div class="price-subnote">
         AI-generering betales separat via din egen OpenAI API key.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Velg 6 måneder
     </a>
   </div>
@@ -2533,7 +2612,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
     <div class="price-subnote">
       AI-generering betales separat via din egen OpenAI API key.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Velg 12 måneder
   </a>
 </div>
@@ -2552,7 +2631,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   <div class="price-subnote">
     AI-generering betales separat via din egen OpenAI API key.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Velg 36 måneder
 </a>
 </div>
@@ -2583,7 +2662,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
     <div class="price-subnote">
       Lav kostnad per bruker, med AI-generering fakturert separat gjennom hver arbeidsflyt.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Velg 3 brukere
   </a>
 </div>
@@ -2609,7 +2688,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   <div class="price-subnote">
     Lav kostnad per bruker, med AI-generering fakturert separat gjennom hver arbeidsflyt.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Velg 5 brukere
 </a>
 </div>
@@ -2635,7 +2714,7 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   <div class="price-subnote">
     Lav kostnad per bruker, med AI-generering fakturert separat gjennom hver arbeidsflyt.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Velg 10 brukere
 </a>
 </div>
@@ -2679,6 +2758,10 @@ BOLO er designet som et system, ikke et promptbasert verktøy — noe som muligg
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="swedish">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Logga in</a>
+    <a class="button small" href="/sign-up.html">Skapa konto</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -2699,6 +2782,11 @@ BOLO fungerar som ett AI-orkestreringslager för bokproduktion. Istället för a
 BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket möjliggör konsekvent, skalbar och produktionsredo output istället för isolerad textgenerering.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Har du redan ett konto?</a>
+    <a class="button" href="/sign-up.html">Skapa konto för att köpa en licens</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -2772,6 +2860,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   </strong>
   Eftersom BOLO är en ny applikation kan din webbläsare eller Windows visa en säkerhetsvarning under nedladdningen. Detta är normalt för nyutgiven programvara.
 </div>
+<div class="login-helper">Om du inte är inloggad tar de här knapparna dig först till att skapa konto eller logga in och sedan vidare till checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -2859,7 +2948,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
       <div class="price-subnote">
         AI-generering betalas separat via din egen OpenAI API key.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Välj 6 månader
     </a>
   </div>
@@ -2878,7 +2967,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
     <div class="price-subnote">
       AI-generering betalas separat via din egen OpenAI API key.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Välj 12 månader
   </a>
 </div>
@@ -2897,7 +2986,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   <div class="price-subnote">
     AI-generering betalas separat via din egen OpenAI API key.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Välj 36 månader
 </a>
 </div>
@@ -2928,7 +3017,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
     <div class="price-subnote">
       Låg kostnad per användare, med AI-generering debiterad separat i varje arbetsflöde.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Välj 3 användare
   </a>
 </div>
@@ -2954,7 +3043,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   <div class="price-subnote">
     Låg kostnad per användare, med AI-generering debiterad separat i varje arbetsflöde.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Välj 5 användare
 </a>
 </div>
@@ -2980,7 +3069,7 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   <div class="price-subnote">
     Låg kostnad per användare, med AI-generering debiterad separat i varje arbetsflöde.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Välj 10 användare
 </a>
 </div>
@@ -3024,6 +3113,10 @@ BOLO är utformat som ett system, inte som ett promptbaserat verktyg — vilket 
   <img alt="BOLO logo" src="/BOLO-logo.png"/>
 </div>
 <section class="intro lang-section" id="portuguese">
+  <div class="top-actions">
+    <a class="button secondary small" href="/sign-in.html">Iniciar sessão</a>
+    <a class="button small" href="/sign-up.html">Criar conta</a>
+  </div>
   <h1>
     BOLO AI Publishing Pipeline
   </h1>
@@ -3044,6 +3137,11 @@ O BOLO funciona como uma camada de orquestração de IA para a produção de liv
 O BOLO é concebido como um sistema, e não como uma ferramenta baseada em prompts — permitindo uma produção consistente, escalável e pronta para publicação, em vez de geração de texto isolado.
 </p>
 
+  </div>
+
+  <div class="button-row" style="justify-content:center; margin-top:18px;">
+    <a class="button secondary" href="/sign-in.html">Já tem uma conta?</a>
+    <a class="button" href="/sign-up.html">Criar conta para comprar uma licença</a>
   </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
@@ -3117,6 +3215,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
   </strong>
   Como o BOLO é uma aplicação nova, o seu navegador ou o Windows podem mostrar um aviso de segurança durante a transferência. Isto é normal em software lançado recentemente.
 </div>
+<div class="login-helper">Se não tiver sessão iniciada, estes botões levam-no primeiro à criação de conta ou início de sessão e depois ao checkout.</div>
 </article>
 <article class="card">
   <h2>
@@ -3207,7 +3306,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
       <div class="price-subnote">
         A geração com IA é paga separadamente através da sua própria chave API da OpenAI.
       </div>
-      <a class="button secondary" href="#">
+      <a class="button secondary" href="/sign-up.html?plan=solo_6m">
       Escolher 6 meses
     </a>
   </div>
@@ -3226,7 +3325,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
     <div class="price-subnote">
       A geração com IA é paga separadamente através da sua própria chave API da OpenAI.
     </div>
-    <a class="button" href="#">
+    <a class="button" href="/sign-up.html?plan=solo_12m">
     Escolher 12 meses
   </a>
 </div>
@@ -3245,7 +3344,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
   <div class="price-subnote">
     A geração com IA é paga separadamente através da sua própria chave API da OpenAI.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=solo_36m">
   Escolher 36 meses
 </a>
 </div>
@@ -3276,7 +3375,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
     <div class="price-subnote">
       Baixo custo por utilizador, com a geração com IA faturada separadamente em cada fluxo de trabalho.
     </div>
-    <a class="button secondary" href="#">
+    <a class="button secondary" href="/sign-up.html?plan=team_3">
     Escolher 3 utilizadores
   </a>
 </div>
@@ -3302,7 +3401,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
   <div class="price-subnote">
     Baixo custo por utilizador, com a geração com IA faturada separadamente em cada fluxo de trabalho.
   </div>
-  <a class="button" href="#">
+  <a class="button" href="/sign-up.html?plan=team_5">
   Escolher 5 utilizadores
 </a>
 </div>
@@ -3328,7 +3427,7 @@ O BOLO é concebido como um sistema, e não como uma ferramenta baseada em promp
   <div class="price-subnote">
     Baixo custo por utilizador, com a geração com IA faturada separadamente em cada fluxo de trabalho.
   </div>
-  <a class="button secondary" href="#">
+  <a class="button secondary" href="/sign-up.html?plan=team_10">
   Escolher 10 utilizadores
 </a>
 </div>
