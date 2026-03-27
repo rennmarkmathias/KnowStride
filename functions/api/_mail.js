@@ -180,3 +180,55 @@ export async function sendOrderShippedEmail(env, {
 
   return sendViaResend(env, { to, subject, html, text });
 }
+
+
+export async function sendLicenseIssuedEmail(env, {
+  to,
+  email,
+  plan,
+  seats,
+  expiresAt,
+  licenseKey,
+  accountUrl,
+}) {
+  const recipient = to || email;
+  if (!recipient) return { ok: false, skipped: "missing_to" };
+
+  const safeAccountUrl = accountUrl || "https://bolowriter.com/account.html";
+  const subject = "Your BOLO license is ready";
+
+  const text =
+`Thanks for your purchase!
+
+Plan: ${plan || "BOLO license"}
+Seats: ${seats || 1}
+Expires: ${expiresAt || "-"}
+
+Your license key:
+${licenseKey || ""}
+
+You can also view your licenses here:
+${safeAccountUrl}`;
+
+  const html = `
+    <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;line-height:1.5;">
+      <h2 style="margin:0 0 8px 0;">Your BOLO license is ready</h2>
+      <p style="margin:0 0 12px 0;">Thanks for your purchase. Stripe will send your receipt or invoice separately.</p>
+
+      <div style="padding:12px;border:1px solid #eee;border-radius:10px;">
+        <div><strong>Plan:</strong> ${escapeHtml(plan || "BOLO license")}</div>
+        <div><strong>Seats:</strong> ${escapeHtml(String(seats || 1))}</div>
+        <div><strong>Expires:</strong> ${escapeHtml(expiresAt || "-")}</div>
+      </div>
+
+      <p style="margin:12px 0 6px 0;"><strong>License key</strong></p>
+      <pre style="white-space:pre-wrap;word-break:break-all;padding:12px;border:1px solid #eee;border-radius:10px;background:#fafafa;">${escapeHtml(licenseKey || "")}</pre>
+
+      <p style="margin:12px 0 0 0;">
+        View your account: <a href="${escapeHtml(safeAccountUrl)}">${escapeHtml(safeAccountUrl)}</a>
+      </p>
+    </div>
+  `;
+
+  return sendViaResend(env, { to: recipient, subject, html, text });
+}
