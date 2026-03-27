@@ -3,30 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Account — BOLO</title>
+  <title>Account — BOLO AI Publishing Pipeline</title>
   <link rel="stylesheet" href="/styles.css" />
   <style>
-    .license-card { padding:16px; border:1px solid rgba(0,0,0,.08); border-radius:16px; background:#fff; margin-top:14px; }
-    .license-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start; }
-    .license-title { font-weight:800; }
-    .license-meta { color:#666; font-size:13px; margin-top:4px; }
-    .badge { display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; background:rgba(46,125,50,.12); color:#1b5e20; border:1px solid rgba(46,125,50,.22); }
-    .badge.expired { background:rgba(176,0,32,.08); color:#8b0f24; border-color:rgba(176,0,32,.18); }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px; margin-top:14px; }
-    .kv { padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.03); }
-    .kv .k { font-size:12px; color:#666; }
-    .kv .v { margin-top:4px; font-weight:700; word-break:break-word; }
-    .license-key-box { margin-top:14px; padding:12px; border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fafafa; }
-    .license-key-box pre { margin:8px 0 0 0; white-space:pre-wrap; word-break:break-all; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .license-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, .08);
+      background: rgba(0, 0, 0, .02);
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 8px 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef6ff;
+      color: #1d4ed8;
+      font-weight: 800;
+      font-size: .82rem;
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Home</a>
-    <a class="brand brand-link" href="/">
-      <img class="brand-logo" src="/BOLO-logo.png" alt="BOLO" loading="eager" />
-    </a>
+    <div class="brand">BOLO AI Publishing Pipeline</div>
     <nav class="topnav">
       <a class="toplink" href="/sign-in.html" id="loginLink">Log in</a>
     </nav>
@@ -35,20 +45,25 @@
   <main class="container">
     <section class="card">
       <h1>Account</h1>
-      <p class="muted">Sign in to see your BOLO licenses and copy your license key.</p>
+      <p class="muted">
+        Use your account to review your BOLO purchases and active license details.
+      </p>
 
       <div id="userArea" style="display:none;">
-        <div class="callout" style="margin-top:14px;">
+        <div class="license-box">
           <div class="muted small">Signed in as</div>
           <div id="userEmail" style="font-weight:800;"></div>
-          <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+
+          <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <button class="btn" id="logoutBtn" type="button">Log out</button>
             <div id="userButton"></div>
           </div>
         </div>
 
-        <h2 style="margin-top:22px;">Your licenses</h2>
-        <div id="licensesArea" class="muted">Loading licenses…</div>
+        <h2 style="margin-top:22px;">License status</h2>
+        <div id="licensesArea" class="muted">
+          No license endpoint connected yet. Once your license API is available, this page can display active plans, seats and expiry dates.
+        </div>
       </div>
 
       <div id="guestArea" style="display:none;">
@@ -61,143 +76,99 @@
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
   </main>
-<script crossorigin="anonymous" src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsuYm9sb3dyaXRlci5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+
   <script>
-    const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsua25vd3N0cmlkZS5jb20k";
-
-    function setClerkError(message) {
-      const errEl = document.getElementById("err");
-      if (errEl) errEl.textContent = message || "";
-    }
-
-    async function waitForClerk(timeoutMs = 10000) {
-      const start = Date.now();
-      while (!window.Clerk) {
-        if (Date.now() - start > timeoutMs) {
-          throw new Error("Clerk script did not load. Check your publishable key and allowed domains in Clerk.");
-        }
-        await new Promise(resolve => setTimeout(resolve, 50));
-      }
-      return window.Clerk;
-    }
-
-    async function initClerk() {
-      const clerk = await waitForClerk();
-      await clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
-      return clerk;
-    }
-  </script>
-<script>
-    function fmtDate(value) {
-      if (!value) return "-";
-      const d = new Date(value.length <= 10 ? value + 'T00:00:00Z' : value);
-      return isNaN(d.getTime()) ? value : d.toLocaleDateString();
-    }
-
-    function isExpired(expiresAt) {
-      if (!expiresAt) return false;
-      const today = new Date();
-      const d = new Date(expiresAt + 'T23:59:59Z');
-      return !isNaN(d.getTime()) && today > d;
-    }
-
-    function esc(s) {
-      return String(s || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    async function copyText(text) {
+    window.addEventListener("load", async () => {
       try {
-        await navigator.clipboard.writeText(text);
-        alert('License key copied.');
-      } catch {
-        alert('Could not copy automatically.');
-      }
-    }
+        await Clerk.load();
 
-    window.addEventListener('load', async () => {
-      try {
-        const clerk = await initClerk();
-        const user = clerk.user;
-        const userArea = document.getElementById('userArea');
-        const guestArea = document.getElementById('guestArea');
-        const loginLink = document.getElementById('loginLink');
+        const user = Clerk.user;
+        const userArea = document.getElementById("userArea");
+        const guestArea = document.getElementById("guestArea");
+        const loginLink = document.getElementById("loginLink");
 
         if (!user) {
-          guestArea.style.display = 'block';
+          guestArea.style.display = "block";
           return;
         }
 
-        if (loginLink) loginLink.style.display = 'none';
-        userArea.style.display = 'block';
+        if (loginLink) {
+          loginLink.style.display = "none";
+        }
 
-        const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || '';
-        document.getElementById('userEmail').textContent = email || 'Signed in';
-        document.getElementById('logoutBtn').onclick = async () => {
-          try { await clerk.signOut(); } finally { window.location.href = '/'; }
+        userArea.style.display = "block";
+
+        const email =
+          user?.primaryEmailAddress?.emailAddress ||
+          user?.emailAddresses?.[0]?.emailAddress ||
+          "Signed in";
+
+        document.getElementById("userEmail").textContent = email;
+
+        document.getElementById("logoutBtn").onclick = async () => {
+          try {
+            await Clerk.signOut();
+          } finally {
+            location.href = "/";
+          }
         };
-        clerk.mountUserButton(document.getElementById('userButton'));
 
-        const token = await clerk.session.getToken();
-        const res = await fetch('/api/licenses', {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        });
-        const data = await res.json().catch(() => ({}));
-        const area = document.getElementById('licensesArea');
-
-        if (!res.ok) {
-          area.textContent = data?.error || 'Could not load licenses.';
-          return;
+        if (typeof Clerk.mountUserButton === "function") {
+          Clerk.mountUserButton(document.getElementById("userButton"));
         }
 
-        const licenses = Array.isArray(data?.licenses) ? data.licenses : [];
-        if (!licenses.length) {
-          area.innerHTML = '<div class="muted">No licenses yet.</div>';
-          return;
+        try {
+          const token = await Clerk.session.getToken();
+          const res = await fetch("/functions/api/licenses", {
+            headers: {
+              "authorization": `Bearer ${token}`
+            }
+          });
+
+          if (!res.ok) {
+            return;
+          }
+
+          const data = await res.json();
+
+          if (!Array.isArray(data?.licenses) || !data.licenses.length) {
+            document.getElementById("licensesArea").textContent = "No active licenses found yet.";
+            return;
+          }
+
+          document.getElementById("licensesArea").innerHTML = data.licenses
+            .map((l) => `
+              <div class="license-box">
+                <div class="row">
+                  <span>Plan</span>
+                  <strong>${l.plan || "—"}</strong>
+                </div>
+                <div class="row">
+                  <span>Seats</span>
+                  <strong>${l.seats || 1}</strong>
+                </div>
+                <div class="row">
+                  <span>Expires</span>
+                  <strong>${l.expires_at || "—"}</strong>
+                </div>
+                <div class="row">
+                  <span>Status</span>
+                  <span class="badge">${l.status || "active"}</span>
+                </div>
+              </div>
+            `)
+            .join("");
+        } catch (e) {
+          // Intentionally silent while API is being finalized.
         }
-
-        area.classList.remove('muted');
-        area.innerHTML = licenses.map((lic, idx) => {
-          const expired = isExpired(lic.expires_at);
-          const badgeClass = expired ? 'badge expired' : 'badge';
-          const badgeText = expired ? 'Expired' : (lic.status || 'Active');
-          const invoice = lic.stripe_invoice_url
-            ? `<a class="btn ghost" href="${esc(lic.stripe_invoice_url)}" target="_blank" rel="noopener">Open invoice</a>`
-            : '';
-          return `
-            <div class="license-card">
-              <div class="license-head">
-                <div>
-                  <div class="license-title">${esc(lic.plan || 'BOLO License')}</div>
-                  <div class="license-meta">Issued ${esc(fmtDate(lic.issued_at))}</div>
-                </div>
-                <div class="${badgeClass}">${esc(badgeText)}</div>
-              </div>
-
-              <div class="grid">
-                <div class="kv"><div class="k">Seats</div><div class="v">${esc(lic.seats || 1)}</div></div>
-                <div class="kv"><div class="k">Period</div><div class="v">${esc(lic.period_months || '-')} months</div></div>
-                <div class="kv"><div class="k">Expires</div><div class="v">${esc(fmtDate(lic.expires_at))}</div></div>
-              </div>
-
-              <div class="license-key-box">
-                <div class="row" style="justify-content:space-between;">
-                  <strong>License key</strong>
-                  <div class="row">
-                    <button class="btn" type="button" onclick="copyText(${JSON.stringify(String(lic.license_key || ''))})">Copy license key</button>
-                    ${invoice}
-                  </div>
-                </div>
-                <pre>${esc(lic.license_key || '')}</pre>
-              </div>
-            </div>`;
-        }).join('');
-      } catch (err) {
-        setClerkError(err?.message || String(err));
+      } catch (e) {
+        document.getElementById("err").textContent = e?.message || String(e);
       }
     });
   </script>
