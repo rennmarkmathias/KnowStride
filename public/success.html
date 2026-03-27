@@ -3,85 +3,30 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Order complete — KnowStride</title>
+  <title>BOLO — Purchase complete</title>
   <link rel="stylesheet" href="/styles.css" />
-
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-
-  fbq('init', '1971126520280025');
-  fbq('track', 'PageView');
-  </script>
-
-  <noscript>
-    <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1971126520280025&ev=PageView&noscript=1"/>
-  </noscript>
-  <!-- End Meta Pixel Code -->
 </head>
-
 <body>
   <header class="topbar">
-    <a class="toplink" href="/">← Shop</a>
-    <a class="brand" href="/">
-      <div class="brand-name">KnowStride</div>
-      </a>
-    <nav class="topnav">
-      <a class="toplink" href="/account.html">Account</a>
-    </nav>
+    <a class="toplink" href="/">← Home</a>
+    <div class="brand">BOLO</div>
+    <nav class="topnav"><a class="toplink" href="/account.html">Account</a></nav>
   </header>
 
   <main class="container">
     <section class="card" style="max-width:680px;margin:24px auto;">
-      <h1 style="margin-top:0">Thanks — your order is complete.</h1>
+      <h1 style="margin-top:0">Thanks — your purchase is complete.</h1>
       <p class="muted">
-        We’ve received your payment. Production and shipping is handled by our print partner.
-        Tracking details will be sent to your email.
+        We’ve received your payment. Stripe will email your receipt or invoice automatically.
       </p>
-      <p class="muted small">
-        If you checked out while signed in, you’ll also see the order in your account history.
+      <p class="muted">
+        Your BOLO license will appear in your account once the license webhook has finished processing the payment.
       </p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-        <a class="btn" href="/">Back to shop</a>
-        <a class="btn btn-ghost" href="/account.html">View account</a>
+        <a class="btn" href="/account.html">Open account</a>
+        <a class="btn ghost" href="/">Back to home</a>
       </div>
     </section>
   </main>
-
-  <script>
-  (function () {
-    if (typeof fbq !== "function") return;
-
-    try {
-      const raw = sessionStorage.getItem("ks_last_checkout");
-      if (!raw) return;
-
-      const data = JSON.parse(raw);
-
-      fbq("track", "Purchase", {
-        value: Number(data?.value) || 0,
-        currency: data?.currency || "USD",
-        content_ids: data?.content_ids || [],
-        content_name: data?.content_name || "",
-        content_type: "product",
-        num_items: Number(data?.num_items) || 1
-      });
-
-      // Prevent double firing
-      sessionStorage.removeItem("ks_last_checkout");
-
-    } catch (e) {
-      console.warn("Meta Purchase tracking failed", e);
-    }
-  })();
-  </script>
 </body>
 </html>
