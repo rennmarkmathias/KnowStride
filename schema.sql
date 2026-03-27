@@ -55,3 +55,31 @@ CREATE TABLE IF NOT EXISTS purchases (
   currency TEXT,
   created_at INTEGER NOT NULL
 );
+
+
+-- BOLO licenses
+CREATE TABLE IF NOT EXISTS licenses (
+  id TEXT PRIMARY KEY,
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now')),
+  email TEXT,
+  clerk_user_id TEXT,
+  license_key TEXT NOT NULL,
+  license_fingerprint TEXT,
+  plan TEXT NOT NULL,
+  period_months INTEGER NOT NULL,
+  seats INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'active',
+  issued_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  stripe_session_id TEXT NOT NULL,
+  stripe_payment_intent_id TEXT,
+  stripe_invoice_id TEXT,
+  stripe_invoice_url TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_licenses_clerk_user_id ON licenses(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_licenses_email ON licenses(email);
+CREATE INDEX IF NOT EXISTS idx_licenses_expires_at ON licenses(expires_at);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_licenses_stripe_session_id ON licenses(stripe_session_id);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_licenses_fingerprint ON licenses(license_fingerprint);
