@@ -31,6 +31,22 @@
       font-weight: 800;
       font-size: .82rem;
     }
+
+    .license-key {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .92rem;
+      word-break: break-all;
+    }
+
+    .invoice-link {
+      margin-top: 10px;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -61,9 +77,7 @@
         </div>
 
         <h2 style="margin-top:22px;">License status</h2>
-        <div id="licensesArea" class="muted">
-          No license endpoint connected yet. Once your license API is available, this page can display active plans, seats and expiry dates.
-        </div>
+        <div id="licensesArea" class="muted">Loading licenses…</div>
       </div>
 
       <div id="guestArea" style="display:none;">
@@ -84,6 +98,15 @@
     src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
 
   <script>
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     window.addEventListener("load", async () => {
       try {
         await Clerk.load();
@@ -92,6 +115,8 @@
         const userArea = document.getElementById("userArea");
         const guestArea = document.getElementById("guestArea");
         const loginLink = document.getElementById("loginLink");
+        const licensesArea = document.getElementById("licensesArea");
+        const errEl = document.getElementById("err");
 
         if (!user) {
           guestArea.style.display = "block";
@@ -125,47 +150,65 @@
 
         try {
           const token = await Clerk.session.getToken();
-          const res = await fetch("/functions/api/licenses", {
+          const res = await fetch("/api/licenses", {
             headers: {
               "authorization": `Bearer ${token}`
             }
           });
 
+          const contentType = res.headers.get("content-type") || "";
+          const data = contentType.includes("application/json")
+            ? await res.json()
+            : { error: await res.text() };
+
           if (!res.ok) {
+            licensesArea.textContent = "";
+            errEl.textContent = data?.error || data?.message || `Could not load licenses (${res.status}).`;
             return;
           }
-
-          const data = await res.json();
 
           if (!Array.isArray(data?.licenses) || !data.licenses.length) {
-            document.getElementById("licensesArea").textContent = "No active licenses found yet.";
+            licensesArea.textContent = "No active licenses found yet.";
             return;
           }
 
-          document.getElementById("licensesArea").innerHTML = data.licenses
-            .map((l) => `
-              <div class="license-box">
-                <div class="row">
-                  <span>Plan</span>
-                  <strong>${l.plan || "—"}</strong>
-                </div>
-                <div class="row">
-                  <span>Seats</span>
-                  <strong>${l.seats || 1}</strong>
-                </div>
-                <div class="row">
-                  <span>Expires</span>
-                  <strong>${l.expires_at || "—"}</strong>
-                </div>
-                <div class="row">
-                  <span>Status</span>
-                  <span class="badge">${l.status || "active"}</span>
-                </div>
+          licensesArea.innerHTML = data.licenses.map((l) => `
+            <div class="license-box">
+              <div class="row">
+                <span>Plan</span>
+                <strong>${escapeHtml(l.plan || "—")}</strong>
               </div>
-            `)
-            .join("");
+              <div class="row">
+                <span>Seats</span>
+                <strong>${escapeHtml(l.seats || 1)}</strong>
+              </div>
+              <div class="row">
+                <span>Issued</span>
+                <strong>${escapeHtml(l.issued_at || "—")}</strong>
+              </div>
+              <div class="row">
+                <span>Expires</span>
+                <strong>${escapeHtml(l.expires_at || "—")}</strong>
+              </div>
+              <div class="row">
+                <span>Status</span>
+                <span class="badge">${escapeHtml(l.status || "active")}</span>
+              </div>
+              ${
+                l.license_key
+                  ? `<div class="license-key">${escapeHtml(l.license_key)}</div>`
+                  : ``
+              }
+              ${
+                l.stripe_invoice_url
+                  ? `<a class="invoice-link" href="${escapeHtml(l.stripe_invoice_url)}" target="_blank" rel="noopener">Open invoice</a>`
+                  : ``
+              }
+            </div>
+          `).join("");
         } catch (e) {
-          // Intentionally silent while API is being finalized.
+          licensesArea.textContent = "";
+          errEl.textContent = e?.message || String(e);
         }
       } catch (e) {
         document.getElementById("err").textContent = e?.message || String(e);
