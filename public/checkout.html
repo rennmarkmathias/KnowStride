@@ -259,7 +259,7 @@
 
           try {
             const token = await Clerk.session.getToken();
-            const res = await fetch("/functions/api/create-license-checkout-session", {
+            const res = await fetch("/api/create-license-checkout-session", {
               method: "POST",
               headers: {
                 "content-type": "application/json",
@@ -268,10 +268,13 @@
               body: JSON.stringify({ plan: planKey })
             });
 
-            const data = await res.json();
+            const contentType = res.headers.get("content-type") || "";
+            const data = contentType.includes("application/json")
+              ? await res.json()
+              : { error: await res.text() };
 
             if (!res.ok) {
-              throw new Error(data?.error || "Could not create checkout session.");
+              throw new Error(data?.error || `Could not create checkout session (${res.status}).`);
             }
 
             if (!data?.url) {
