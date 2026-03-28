@@ -1,147 +1,306 @@
-<script>
-  const PLAN_MAP = {
-    solo_6m: {
-      name: "Individual – 6 months",
-      seats: 1,
-      period: "6 months",
-      amount: "$49"
-    },
-    solo_12m: {
-      name: "Individual – 12 months",
-      seats: 1,
-      period: "12 months",
-      amount: "$79"
-    },
-    solo_36m: {
-      name: "Individual – 36 months",
-      seats: 1,
-      period: "36 months",
-      amount: "$149"
-    },
-    team_3: {
-      name: "Team – 3 seats",
-      seats: 3,
-      period: "12 months",
-      amount: "$249"
-    },
-    team_5: {
-      name: "Team – 5 seats",
-      seats: 5,
-      period: "12 months",
-      amount: "$399"
-    },
-    team_10: {
-      name: "Organization – 10 seats",
-      seats: 10,
-      period: "12 months",
-      amount: "$499"
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BOLO AI Publishing Pipeline — Checkout</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
-  };
 
-  function getPlanFromUrl() {
-    const p = new URLSearchParams(location.search);
-    return p.get("plan") || "solo_12m";
-  }
+    .plan-card {
+      border: 1px solid rgba(0, 0, 0, .12);
+      border-radius: 18px;
+      padding: 18px;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+    }
 
-  function renderPlans(active) {
-    const wrap = document.getElementById("plans");
+    .plan-card.active {
+      border-color: #1d4ed8;
+      box-shadow: 0 14px 28px rgba(29, 78, 216, .12);
+    }
 
-    wrap.innerHTML = Object.entries(PLAN_MAP)
-      .map(([k, p]) => `
-        <article class="plan-card ${k === active ? "active" : ""}">
-          <span class="pill">${p.seats > 1 ? "Team license" : "Individual license"}</span>
-          <h3>${p.name}</h3>
-          <div class="plan-price">${p.amount}</div>
-          <p class="muted">Seats: ${p.seats}<br>Period: ${p.period}</p>
-          <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
-            ${k === active ? "Selected" : "Select this plan"}
-          </button>
-        </article>
-      `)
-      .join("");
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 8px 0;
+    }
 
-    wrap.querySelectorAll("[data-plan]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const plan = btn.getAttribute("data-plan");
-        const url = new URL(location.href);
-        url.searchParams.set("plan", plan);
-        location.href = url.toString();
-      });
-    });
-  }
+    .pill {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #1d4ed8;
+      font-size: .82rem;
+      font-weight: 800;
+    }
 
-  function updateSummary(k) {
-    const p = PLAN_MAP[k];
-    document.getElementById("selectedPlan").textContent = p.name;
-    document.getElementById("selectedSeats").textContent = String(p.seats);
-    document.getElementById("selectedPeriod").textContent = p.period;
-    document.getElementById("selectedPrice").textContent = p.amount;
-  }
+    .checkout-wrap {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+    }
 
-  window.addEventListener("load", async () => {
-    const planKey = getPlanFromUrl();
-    renderPlans(planKey);
-    updateSummary(planKey);
+    .muted-box {
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, .03);
+      border: 1px solid rgba(0, 0, 0, .08);
+    }
 
-    try {
-      await Clerk.load();
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 8px 0;
+    }
 
-      const user = Clerk.user;
-      if (!user) {
-        location.href = `/sign-in.html?plan=${encodeURIComponent(planKey)}`;
-        return;
+    .danger {
+      color: #b00020;
+    }
+
+    @media (max-width: 920px) {
+      .plans,
+      .checkout-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="toplink" href="/">← Back</a>
+    <div class="brand">BOLO AI Publishing Pipeline</div>
+    <nav class="topnav">
+      <a class="toplink" href="/account.html">Account</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1 style="margin-top:0">Checkout</h1>
+      <p class="muted">
+        Choose a plan, confirm your account and continue to secure Stripe checkout.
+      </p>
+
+      <div class="checkout-wrap" style="margin-top:18px;">
+        <div>
+          <div class="plans" id="plans"></div>
+        </div>
+
+        <aside class="card" style="padding:18px;">
+          <h2 style="margin-top:0;font-size:1.3rem;">Order summary</h2>
+
+          <div class="muted-box">
+            <div class="row">
+              <span>Account</span>
+              <strong id="userEmail">Checking…</strong>
+            </div>
+            <div class="row">
+              <span>Selected plan</span>
+              <strong id="selectedPlan">—</strong>
+            </div>
+            <div class="row">
+              <span>Seats</span>
+              <strong id="selectedSeats">—</strong>
+            </div>
+            <div class="row">
+              <span>Billing period</span>
+              <strong id="selectedPeriod">—</strong>
+            </div>
+            <div class="row">
+              <span>Total</span>
+              <strong id="selectedPrice">—</strong>
+            </div>
+          </div>
+
+          <div class="muted-box" style="margin-top:12px;">
+            <strong>What customers receive</strong>
+            <ul>
+              <li>Stripe confirmation email</li>
+              <li>Invoice / receipt by email</li>
+              <li>License activation after payment</li>
+              <li>Access to account-based license management</li>
+            </ul>
+          </div>
+
+          <p id="msg" class="muted" style="margin-top:12px;"></p>
+          <p id="err" class="danger" style="margin-top:8px;"></p>
+
+          <div class="hero-actions" style="margin-top:14px;">
+            <button class="btn" id="checkoutBtn" type="button">Continue to Stripe</button>
+            <a class="btn ghost" href="/account.html">Open account</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script
+    defer
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsuYm9sb3dyaXRlci5jb20k"
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
+
+  <script>
+    const PLAN_MAP = {
+      solo_6m: {
+        name: "Individual – 6 months",
+        seats: 1,
+        period: "6 months",
+        amount: "$49"
+      },
+      solo_12m: {
+        name: "Individual – 12 months",
+        seats: 1,
+        period: "12 months",
+        amount: "$79"
+      },
+      solo_36m: {
+        name: "Individual – 36 months",
+        seats: 1,
+        period: "36 months",
+        amount: "$149"
+      },
+      team_3: {
+        name: "Team – 3 seats",
+        seats: 3,
+        period: "12 months",
+        amount: "$249"
+      },
+      team_5: {
+        name: "Team – 5 seats",
+        seats: 5,
+        period: "12 months",
+        amount: "$399"
+      },
+      team_10: {
+        name: "Organization – 10 seats",
+        seats: 10,
+        period: "12 months",
+        amount: "$499"
+      }
+    };
+
+    function getPlanFromUrl() {
+      const p = new URLSearchParams(location.search);
+      return p.get("plan") || "solo_12m";
+    }
+
+    function renderPlans(active) {
+      const wrap = document.getElementById("plans");
+      if (!wrap) {
+        throw new Error('Missing #plans container');
       }
 
-      const email =
-        user?.primaryEmailAddress?.emailAddress ||
-        user?.emailAddresses?.[0]?.emailAddress ||
-        "Signed in";
+      wrap.innerHTML = Object.entries(PLAN_MAP)
+        .map(([k, p]) => `
+          <article class="plan-card ${k === active ? "active" : ""}">
+            <span class="pill">${p.seats > 1 ? "Team license" : "Individual license"}</span>
+            <h3>${p.name}</h3>
+            <div class="plan-price">${p.amount}</div>
+            <p class="muted">Seats: ${p.seats}<br>Period: ${p.period}</p>
+            <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
+              ${k === active ? "Selected" : "Select this plan"}
+            </button>
+          </article>
+        `)
+        .join("");
 
-      document.getElementById("userEmail").textContent = email;
-
-      document.getElementById("checkoutBtn").addEventListener("click", async () => {
-        const msg = document.getElementById("msg");
-        const err = document.getElementById("err");
-
-        msg.textContent = "Creating secure checkout session…";
-        err.textContent = "";
-
-        try {
-          const token = await Clerk.session.getToken();
-          const res = await fetch("/api/create-license-checkout-session", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              "authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ plan: planKey })
-          });
-
-          const contentType = res.headers.get("content-type") || "";
-          const data = contentType.includes("application/json")
-            ? await res.json()
-            : { error: await res.text() };
-
-          if (!res.ok) {
-            throw new Error(
-              data?.message ||
-              data?.error ||
-              `Could not create checkout session (${res.status}).`
-            );
-          }
-
-          if (!data?.url) {
-            throw new Error("Missing Stripe checkout URL.");
-          }
-
-          location.href = data.url;
-        } catch (e) {
-          msg.textContent = "";
-          err.textContent = e?.message || String(e);
-        }
+      wrap.querySelectorAll("[data-plan]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const plan = btn.getAttribute("data-plan");
+          const url = new URL(location.href);
+          url.searchParams.set("plan", plan);
+          location.href = url.toString();
+        });
       });
-    } catch (e) {
-      document.getElementById("err").textContent = e?.message || String(e);
     }
-  });
-</script>
+
+    function updateSummary(k) {
+      const p = PLAN_MAP[k];
+      if (!p) {
+        throw new Error(`Unknown plan: ${k}`);
+      }
+      document.getElementById("selectedPlan").textContent = p.name;
+      document.getElementById("selectedSeats").textContent = String(p.seats);
+      document.getElementById("selectedPeriod").textContent = p.period;
+      document.getElementById("selectedPrice").textContent = p.amount;
+    }
+
+    window.addEventListener("load", async () => {
+      const planKey = getPlanFromUrl();
+      renderPlans(planKey);
+      updateSummary(planKey);
+
+      try {
+        await Clerk.load();
+
+        const user = Clerk.user;
+        if (!user) {
+          location.href = `/sign-in.html?plan=${encodeURIComponent(planKey)}`;
+          return;
+        }
+
+        const email =
+          user?.primaryEmailAddress?.emailAddress ||
+          user?.emailAddresses?.[0]?.emailAddress ||
+          "Signed in";
+
+        document.getElementById("userEmail").textContent = email;
+
+        document.getElementById("checkoutBtn").addEventListener("click", async () => {
+          const msg = document.getElementById("msg");
+          const err = document.getElementById("err");
+
+          msg.textContent = "Creating secure checkout session…";
+          err.textContent = "";
+
+          try {
+            const token = await Clerk.session.getToken();
+            const res = await fetch("/api/create-license-checkout-session", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "authorization": `Bearer ${token}`
+              },
+              body: JSON.stringify({ plan: planKey })
+            });
+
+            const contentType = res.headers.get("content-type") || "";
+            const data = contentType.includes("application/json")
+              ? await res.json()
+              : { error: await res.text() };
+
+            if (!res.ok) {
+              throw new Error(
+                data?.message ||
+                data?.error ||
+                `Could not create checkout session (${res.status}).`
+              );
+            }
+
+            if (!data?.url) {
+              throw new Error("Missing Stripe checkout URL.");
+            }
+
+            location.href = data.url;
+          } catch (e) {
+            msg.textContent = "";
+            err.textContent = e?.message || String(e);
+          }
+        });
+      } catch (e) {
+        document.getElementById("err").textContent = e?.message || String(e);
+      }
+    });
+  </script>
+</body>
+</html>
