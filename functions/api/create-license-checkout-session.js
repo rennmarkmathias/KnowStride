@@ -19,7 +19,7 @@ export async function onRequestPost(context) {
 
     // 3. Plan definitions (dynamic pricing in cents)
     const plans = {
-      solo_6m: { amount: 4900, months: 6, seats: 1 },
+      solo_6m: { amount: 50, months: 6, seats: 1 },
       solo_12m: { amount: 7900, months: 12, seats: 1 },
       solo_36m: { amount: 14900, months: 36, seats: 1 },
       team_3: { amount: 24900, months: 12, seats: 3 },
