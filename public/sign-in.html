@@ -48,11 +48,13 @@
             ? `/sign-up.html?plan=${encodeURIComponent(plan)}`
             : "/sign-up.html",
           afterSignInUrl: nextUrl,
-          socialButtonsVariant: "block",
+          signInFallbackRedirectUrl: nextUrl,
+          signUpFallbackRedirectUrl: nextUrl,
+          socialButtonsVariant: "iconButton",
           appearance: {
             elements: {
               card: "shadow-none border-none bg-transparent",
-              rootBox: "w-full",
+              rootBox: "w-full"
             }
           }
         });
