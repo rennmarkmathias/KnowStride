@@ -19,15 +19,13 @@
         Use Google or email to access your BOLO account and continue to checkout.
       </p>
 
-      <!-- Clerk UI mount -->
       <div id="sign-in" style="margin-top:20px;"></div>
-
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
     </section>
   </main>
 
   <script
-    defer
+    async
     crossorigin="anonymous"
     data-clerk-publishable-key="pk_live_Y2xlcmsuYm9sb3dyaXRlci5jb20k"
     src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
@@ -50,7 +48,7 @@
             ? `/sign-up.html?plan=${encodeURIComponent(plan)}`
             : "/sign-up.html",
           afterSignInUrl: nextUrl,
-
+          socialButtonsVariant: "block",
           appearance: {
             elements: {
               card: "shadow-none border-none bg-transparent",
@@ -58,7 +56,6 @@
             }
           }
         });
-
       } catch (e) {
         document.getElementById("err").textContent = e?.message || String(e);
       }
