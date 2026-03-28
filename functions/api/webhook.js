@@ -121,18 +121,17 @@ export async function onRequestPost({ request, env }) {
 
     await env.DB.prepare(
       `INSERT INTO licenses (
-        id, created_at, updated_at, email, clerk_user_id,
+        created_at, updated_at, email, clerk_user_id,
         license_key, license_fingerprint, plan, period_months, seats,
         status, issued_at, expires_at,
         stripe_session_id, stripe_payment_intent_id, stripe_invoice_id, stripe_invoice_url
       ) VALUES (
-        ?, datetime('now'), datetime('now'), ?, ?,
+        datetime('now'), datetime('now'), ?, ?,
         ?, ?, ?, ?, ?,
         'active', ?, ?,
         ?, ?, ?, ?
       )`
     ).bind(
-      license.id,
       email,
       clerkUserId,
       license.licenseKey,
@@ -150,10 +149,9 @@ export async function onRequestPost({ request, env }) {
 
     await env.DB.prepare(
       `INSERT INTO purchases (
-        id, user_id, stripe_event_id, stripe_session_id, plan, amount_total, currency, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        user_id, stripe_event_id, stripe_session_id, plan, amount_total, currency, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`
     ).bind(
-      crypto.randomUUID(),
       clerkUserId || email || "guest",
       event.id,
       session.id,
