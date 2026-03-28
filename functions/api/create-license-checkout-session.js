@@ -1,6 +1,11 @@
 import Stripe from 'stripe';
 import { requireClerkAuth } from './_auth';
 
+function isValidEmail(value) {
+  const s = String(value || '').trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -49,9 +54,9 @@ export async function onRequestPost(context) {
 
     const origin = new URL(request.url).origin;
 
-    const session = await stripe.checkout.sessions.create({
+    const sessionPayload = {
       mode: 'payment',
-      customer_email: email,
+
       line_items: [
         {
           price_data: {
@@ -64,8 +69,10 @@ export async function onRequestPost(context) {
           quantity: 1
         }
       ],
+
       success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout.html?plan=${plan}`,
+
       metadata: {
         kind: 'bolo_license',
         plan,
@@ -73,12 +80,22 @@ export async function onRequestPost(context) {
         seats: selected.seats.toString(),
         clerk_user_id: userId
       },
+
       invoice_creation: {
         enabled: true
       }
-    });
+    };
 
-    return new Response(JSON.stringify({ url: session.url }), {
+    if (isValidEmail(email)) {
+      sessionPayload.customer_email = String(email).trim();
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionPayload);
+
+    return new Response(JSON.stringify({
+      url: session.url,
+      debug_email_used: isValidEmail(email) ? String(email).trim() : null
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
