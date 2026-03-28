@@ -6,8 +6,12 @@ export async function onRequestPost(context) {
 
   try {
     const auth = await requireClerkAuth(request, env);
-    if (!auth.ok) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+
+    if (!auth || !auth.ok) {
+      return new Response(JSON.stringify({
+        error: 'Unauthorized',
+        message: auth?.error || 'Clerk auth failed or returned null'
+      }), {
         status: 401,
         headers: { 'Content-Type': 'application/json' }
       });
@@ -78,9 +82,9 @@ export async function onRequestPost(context) {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
+
   } catch (err) {
     console.error('Checkout error:', err);
-
     return new Response(JSON.stringify({
       error: 'Server error',
       message: err?.message || String(err),
