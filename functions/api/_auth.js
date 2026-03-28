@@ -1,25 +1,66 @@
 export async function requireClerkAuth(request, env) {
-  const authz = request.headers.get("Authorization") || "";
-  const m = authz.match(/^Bearer\s+(.+)$/i);
-  if (!m) return null;
+  try {
+    const authz = request.headers.get("Authorization") || "";
+    const m = authz.match(/^Bearer\s+(.+)$/i);
 
-  const token = m[1].trim();
-  // Cloudflare Pages env-var names can differ depending on how they were added.
-  // We accept a few common variants to avoid "works in one deploy, breaks in another".
-  const jwkPublicPem =
-    env.CLERK_JWKS_PUBLIC_KEY ||
-    env.JWKS_PUBLIC_KEY ||
-    env["JWKS Public Key"] ||
-    env["JWKS_PUBLIC_KEY"];
+    if (!m) {
+      return {
+        ok: false,
+        error: "Missing Bearer token"
+      };
+    }
 
-  const payload = await verifyClerkJwt(token, jwkPublicPem);
-  if (!payload) return null;
+    const token = m[1].trim();
 
-  // Clerk brukar ha userId i "sub"
-  const userId = payload.sub;
-  if (!userId) return null;
+    const jwkPublicPem =
+      env.CLERK_JWKS_PUBLIC_KEY ||
+      env.JWKS_PUBLIC_KEY ||
+      env["JWKS Public Key"] ||
+      env["JWKS_PUBLIC_KEY"];
 
-  return { userId, claims: payload };
+    if (!jwkPublicPem) {
+      return {
+        ok: false,
+        error: "Missing CLERK_JWKS_PUBLIC_KEY"
+      };
+    }
+
+    const payload = await verifyClerkJwt(token, jwkPublicPem);
+
+    if (!payload) {
+      return {
+        ok: false,
+        error: "Invalid Clerk token"
+      };
+    }
+
+    const userId = payload.sub;
+    if (!userId) {
+      return {
+        ok: false,
+        error: "Missing user id in Clerk token"
+      };
+    }
+
+    const email =
+      payload.email ||
+      payload.email_address ||
+      payload.primary_email_address ||
+      payload?.claims?.email ||
+      null;
+
+    return {
+      ok: true,
+      userId,
+      email,
+      claims: payload
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err?.message || String(err)
+    };
+  }
 }
 
 async function verifyClerkJwt(jwt, jwkPublicPem) {
@@ -38,10 +79,8 @@ async function verifyClerkJwt(jwt, jwkPublicPem) {
     return null;
   }
 
-  // Vi förväntar oss RS256 från Clerk
   if (header.alg !== "RS256") return null;
 
-  // exp-check
   const now = Math.floor(Date.now() / 1000);
   if (payload.exp && now >= payload.exp) return null;
   if (payload.nbf && now < payload.nbf) return null;
@@ -61,7 +100,6 @@ async function verifyClerkJwt(jwt, jwkPublicPem) {
 }
 
 async function importRsaPublicKeyFromPem(pem) {
-  // pem = "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
   const clean = pem
     .replace("-----BEGIN PUBLIC KEY-----", "")
     .replace("-----END PUBLIC KEY-----", "")
