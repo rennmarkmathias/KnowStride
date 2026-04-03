@@ -55,9 +55,8 @@
     </nav>
   </header>
 
-  <!-- 🔥 LOGO -->
   <div style="text-align:center;margin:20px 0;">
-    <img src="/logo.png" alt="BOLO" style="height:50px;">
+    <img src="/BOLO-logo.png" alt="BOLO" style="height:50px;">
   </div>
 
   <main class="container">
@@ -161,7 +160,7 @@
         try {
           const token = await Clerk.session.getToken();
 
-          const res = await fetch("/functions/api/licenses", {
+          const res = await fetch("/api/licenses", {
             headers: {
               "authorization": `Bearer ${token}`
             }
