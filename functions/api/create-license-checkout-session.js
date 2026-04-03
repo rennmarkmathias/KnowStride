@@ -29,7 +29,7 @@ export async function onRequestPost(context) {
 
     const plans = {
       solo_6m: { amount: 4900, months: 6, seats: 1 },
-      solo_12m: { amount: 7900, months: 12, seats: 1 },
+      solo_12m: { amount: 700, months: 12, seats: 1 },
       solo_36m: { amount: 14900, months: 36, seats: 1 },
       team_3: { amount: 24900, months: 12, seats: 3 },
       team_5: { amount: 39900, months: 12, seats: 5 },
