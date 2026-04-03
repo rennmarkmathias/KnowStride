@@ -4,9 +4,9 @@
 //
 // Env vars to enable:
 // - RESEND_API_KEY
-// - MAIL_FROM (e.g. "KnowStride <orders@knowstride.com>")
+// - MAIL_FROM (e.g. "Bolowriter <info@bolowriter.com>")
 // Optional:
-// - MAIL_REPLY_TO (e.g. "service@knowstride.com")
+// - MAIL_REPLY_TO (e.g. "info@bolowriter.com")
 
 function escapeHtml(s) {
   return String(s || "")
@@ -111,7 +111,7 @@ ${orderNo ? `Order number: ${orderNo}` : ""}
 You can view your order status here:
 ${safeAccountUrl}
 
-If you don’t see future updates, check your spam folder and mark KnowStride as safe.`;
+If you don’t see future updates, check your spam folder and mark Bolowriter as safe.`;
 
   const html = `
     <div style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;line-height:1.5;">
@@ -152,7 +152,7 @@ export async function sendOrderShippedEmail(env, {
 }) {
   if (!to) return { ok: false, skipped: "missing_to" };
 
-  const subject = "Your KnowStride order has shipped";
+  const subject = "Your Bolowriter order has shipped";
   const safeTitle = posterTitle || "Your poster";
   const money = (amountTotalMinor != null) ? formatMoneyFromMinor(amountTotalMinor, currency) : null;
 
@@ -170,7 +170,7 @@ export async function sendOrderShippedEmail(env, {
       ${money ? `<p style="margin:0 0 10px 0;color:#666;">Total: ${escapeHtml(money)}</p>` : ""}
       ${trackingLine}
       ${prodigiOrderId ? `<p style="color:#888;font-size:12px;margin:12px 0 0 0;">Production ref: ${escapeHtml(prodigiOrderId)}</p>` : ""}
-      <p style="color:#666;font-size:13px;margin:12px 0 0 0;">— KnowStride</p>
+      <p style="color:#666;font-size:13px;margin:12px 0 0 0;">— Bolowriter</p>
     </div>
   `;
 
