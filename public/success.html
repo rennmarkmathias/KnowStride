@@ -3,30 +3,151 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BOLO — Purchase complete</title>
+  <title>Purchase successful — BOLO AI Publishing Pipeline</title>
   <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .success-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 18px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #ecfdf3 0%, #dcfce7 100%);
+      color: #15803d;
+      font-size: 2rem;
+      font-weight: 900;
+      box-shadow: 0 16px 34px rgba(21, 128, 61, 0.14);
+      border: 1px solid rgba(21, 128, 61, 0.12);
+    }
+
+    .success-lead {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .info-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.03);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      text-align: left;
+    }
+
+    .info-box ul {
+      margin-top: 10px;
+    }
+
+    .next-step {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #eef4ff;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      text-align: left;
+    }
+
+    .session-id {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88rem;
+      word-break: break-all;
+      text-align: left;
+    }
+
+    .logo-wrap {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .logo-wrap img {
+      height: 52px;
+      width: auto;
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
     <a class="toplink" href="/">← Home</a>
-    <div class="brand">BOLO</div>
-    <nav class="topnav"><a class="toplink" href="/account.html">Account</a></nav>
+    <div class="brand">BOLO AI Publishing Pipeline</div>
+    <nav class="topnav">
+      <a class="toplink" href="/account.html">Account</a>
+    </nav>
   </header>
 
+  <div class="logo-wrap">
+    <img src="/logo.png" alt="BOLO" />
+  </div>
+
   <main class="container">
-    <section class="card" style="max-width:680px;margin:24px auto;">
-      <h1 style="margin-top:0">Thanks — your purchase is complete.</h1>
-      <p class="muted">
-        We’ve received your payment. Stripe will email your receipt or invoice automatically.
-      </p>
-      <p class="muted">
-        Your BOLO license will appear in your account once the license webhook has finished processing the payment.
-      </p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
-        <a class="btn" href="/account.html">Open account</a>
-        <a class="btn ghost" href="/">Back to home</a>
+    <section class="card">
+      <div class="success-wrap">
+        <div class="success-icon">✓</div>
+
+        <h1>Purchase successful</h1>
+        <p class="muted success-lead">
+          Your payment was completed successfully. Your BOLO license should appear in your account as soon as the webhook has finished processing the order.
+        </p>
+
+        <div class="hero-actions" style="justify-content:center; margin-top:20px;">
+          <a class="btn" href="/account.html">View license</a>
+          <a class="btn ghost" href="/">Back to home</a>
+        </div>
+
+        <div class="next-step">
+          <strong>Next step</strong>
+          <p style="margin-top:8px;" class="muted">
+            Open your account page and copy your license key. Then paste it into the BOLO desktop application to activate your license.
+          </p>
+        </div>
+
+        <div class="info-box">
+          <strong>What to expect</strong>
+          <ul class="muted">
+            <li>Stripe sends your confirmation email and receipt or invoice.</li>
+            <li>Your license is created automatically after payment.</li>
+            <li>Your account page will show the plan, expiry date and license key.</li>
+          </ul>
+        </div>
+
+        <div id="sessionWrap" style="display:none;">
+          <div class="info-box">
+            <strong>Checkout session reference</strong>
+            <div id="sessionId" class="session-id"></div>
+          </div>
+        </div>
+
+        <p id="statusMsg" class="muted" style="margin-top:18px;"></p>
       </div>
     </section>
   </main>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const sessionId = params.get("session_id");
+      const sessionWrap = document.getElementById("sessionWrap");
+      const sessionIdEl = document.getElementById("sessionId");
+      const statusMsg = document.getElementById("statusMsg");
+
+      if (sessionId && sessionWrap && sessionIdEl) {
+        sessionWrap.style.display = "block";
+        sessionIdEl.textContent = sessionId;
+      }
+
+      statusMsg.textContent = "If your license is not visible immediately, wait a few seconds and refresh the account page.";
+    })();
+  </script>
 </body>
 </html>
