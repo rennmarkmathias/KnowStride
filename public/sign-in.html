@@ -3,63 +3,152 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BOLO AI Publishing Pipeline — Sign in</title>
+  <title>Sign in — BOLO AI Publishing Pipeline</title>
   <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .auth-shell {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .logo-wrap {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .logo-wrap img {
+      height: 52px;
+      width: auto;
+    }
+
+    .auth-lead {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .auth-card {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.03);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      text-align: left;
+    }
+
+    .helper-box {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #eef4ff;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      text-align: left;
+    }
+
+    .helper-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    #signInMount {
+      min-height: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .auth-card,
+      .helper-box {
+        padding: 18px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="toplink" href="/">← Back</a>
+    <a class="toplink" href="/">← Home</a>
     <div class="brand">BOLO AI Publishing Pipeline</div>
+    <nav class="topnav">
+      <a class="toplink" href="/sign-up.html" id="createAccountLink">Create account</a>
+    </nav>
   </header>
+
+  <div class="logo-wrap">
+    <img src="/logo.png" alt="BOLO" />
+  </div>
 
   <main class="container">
     <section class="card">
-      <h1>Log in</h1>
-      <p class="muted">
-        Use Google or email to access your BOLO account and continue to checkout.
-      </p>
+      <div class="auth-shell">
+        <h1>Sign in</h1>
+        <p class="muted auth-lead">
+          Sign in to continue to checkout, review your purchases and access your BOLO license from your account.
+        </p>
 
-      <div id="sign-in" style="margin-top:20px;"></div>
-      <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
+        <div class="auth-card">
+          <div id="signInMount"></div>
+        </div>
+
+        <div class="helper-box">
+          <strong>New customer?</strong>
+          <p class="muted" style="margin-top:8px;">
+            Create an account first, then continue to secure checkout and license activation.
+          </p>
+          <div class="hero-actions" style="margin-top:12px;">
+            <a class="btn ghost" id="createAccountBtn" href="/sign-up.html">Create account</a>
+          </div>
+        </div>
+
+        <p id="err" class="muted" style="margin-top:18px;color:#b00020;"></p>
+      </div>
     </section>
   </main>
 
   <script
-    async
+    defer
     crossorigin="anonymous"
     data-clerk-publishable-key="pk_live_Y2xlcmsuYm9sb3dyaXRlci5jb20k"
-    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js">
-  </script>
+    src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
 
   <script>
-    window.addEventListener("load", async () => {
-      const params = new URLSearchParams(location.search);
-      const plan = params.get("plan");
+    function getPlanFromUrl() {
+      const p = new URLSearchParams(location.search);
+      return p.get("plan") || "";
+    }
 
-      const nextUrl = plan
+    function buildCheckoutRedirect() {
+      const plan = getPlanFromUrl();
+      return plan
         ? `/checkout.html?plan=${encodeURIComponent(plan)}`
         : "/account.html";
+    }
+
+    function buildSignUpLink() {
+      const plan = getPlanFromUrl();
+      return plan
+        ? `/sign-up.html?plan=${encodeURIComponent(plan)}`
+        : "/sign-up.html";
+    }
+
+    window.addEventListener("load", async () => {
+      const errEl = document.getElementById("err");
+      const signUpHref = buildSignUpLink();
+
+      document.getElementById("createAccountLink").href = signUpHref;
+      document.getElementById("createAccountBtn").href = signUpHref;
 
       try {
         await Clerk.load();
 
-        Clerk.mountSignIn(document.getElementById("sign-in"), {
-          signUpUrl: plan
-            ? `/sign-up.html?plan=${encodeURIComponent(plan)}`
-            : "/sign-up.html",
-          afterSignInUrl: nextUrl,
-          signInFallbackRedirectUrl: nextUrl,
-          signUpFallbackRedirectUrl: nextUrl,
-          socialButtonsVariant: "iconButton",
-          appearance: {
-            elements: {
-              card: "shadow-none border-none bg-transparent",
-              rootBox: "w-full"
-            }
-          }
+        if (Clerk.user) {
+          location.href = buildCheckoutRedirect();
+          return;
+        }
+
+        Clerk.mountSignIn(document.getElementById("signInMount"), {
+          forceRedirectUrl: buildCheckoutRedirect(),
+          fallbackRedirectUrl: buildCheckoutRedirect(),
+          signUpUrl: signUpHref
         });
       } catch (e) {
-        document.getElementById("err").textContent = e?.message || String(e);
+        errEl.textContent = e?.message || String(e);
       }
     });
   </script>
