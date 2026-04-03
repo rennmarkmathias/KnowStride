@@ -3,24 +3,91 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BOLO AI Publishing Pipeline — Sign up</title>
+  <title>Create account — BOLO AI Publishing Pipeline</title>
   <link rel="stylesheet" href="/styles.css" />
+
+  <style>
+    .auth-shell {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .logo-wrap {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .logo-wrap img {
+      height: 52px;
+    }
+
+    .auth-card {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.03);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      text-align: left;
+    }
+
+    .helper-box {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #eef4ff;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      text-align: left;
+    }
+
+    #signUpMount {
+      min-height: 24px;
+    }
+  </style>
 </head>
 <body>
+
   <header class="topbar">
-    <a class="toplink" href="/">← Back</a>
+    <a class="toplink" href="/">← Home</a>
     <div class="brand">BOLO AI Publishing Pipeline</div>
+    <nav class="topnav">
+      <a class="toplink" href="/sign-in.html" id="loginLink">Log in</a>
+    </nav>
   </header>
+
+  <div class="logo-wrap">
+    <img src="/logo.png" alt="BOLO">
+  </div>
 
   <main class="container">
     <section class="card">
-      <h1>Create your account</h1>
-      <p class="muted">
-        Sign up with Google or email to buy and manage your BOLO license.
-      </p>
 
-      <div id="sign-up" style="margin-top:14px;"></div>
-      <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
+      <div class="auth-shell">
+
+        <h1>Create account</h1>
+        <p class="muted">
+          Create your account to continue to checkout and manage your BOLO license.
+        </p>
+
+        <div class="auth-card">
+          <div id="signUpMount"></div>
+        </div>
+
+        <div class="helper-box">
+          <strong>Already have an account?</strong>
+          <p class="muted" style="margin-top:8px;">
+            Sign in and continue to checkout or access your existing license.
+          </p>
+
+          <div class="hero-actions" style="margin-top:12px;">
+            <a class="btn ghost" id="loginBtn" href="/sign-in.html">Sign in</a>
+          </div>
+        </div>
+
+        <p id="err" class="muted" style="margin-top:18px;color:#b00020;"></p>
+
+      </div>
+
     </section>
   </main>
 
@@ -31,26 +98,51 @@
     src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
 
   <script>
-    window.addEventListener("load", async () => {
-      const params = new URLSearchParams(location.search);
-      const plan = params.get("plan");
-      const nextUrl = plan
+    function getPlanFromUrl() {
+      const p = new URLSearchParams(location.search);
+      return p.get("plan") || "";
+    }
+
+    function buildCheckoutRedirect() {
+      const plan = getPlanFromUrl();
+      return plan
         ? `/checkout.html?plan=${encodeURIComponent(plan)}`
         : "/account.html";
+    }
+
+    function buildSignInLink() {
+      const plan = getPlanFromUrl();
+      return plan
+        ? `/sign-in.html?plan=${encodeURIComponent(plan)}`
+        : "/sign-in.html";
+    }
+
+    window.addEventListener("load", async () => {
+      const errEl = document.getElementById("err");
+      const signInHref = buildSignInLink();
+
+      document.getElementById("loginLink").href = signInHref;
+      document.getElementById("loginBtn").href = signInHref;
 
       try {
         await Clerk.load();
 
-        Clerk.mountSignUp(document.getElementById("sign-up"), {
-          signInUrl: plan
-            ? `/sign-in.html?plan=${encodeURIComponent(plan)}`
-            : "/sign-in.html",
-          afterSignUpUrl: nextUrl,
+        if (Clerk.user) {
+          location.href = buildCheckoutRedirect();
+          return;
+        }
+
+        Clerk.mountSignUp(document.getElementById("signUpMount"), {
+          forceRedirectUrl: buildCheckoutRedirect(),
+          fallbackRedirectUrl: buildCheckoutRedirect(),
+          signInUrl: signInHref
         });
+
       } catch (e) {
-        document.getElementById("err").textContent = e?.message || String(e);
+        errEl.textContent = e?.message || String(e);
       }
     });
   </script>
+
 </body>
 </html>
