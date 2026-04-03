@@ -96,9 +96,9 @@ export async function sendOrderReceivedEmail(env, {
   const niceSize = String(size || "").toUpperCase();
 
   const orderNo = shortOrderNumber(prodigiOrderId);
-  const subject = `Order received — ${posterTitle || "KnowStride"}`;
+  const subject = `Order received — ${posterTitle || "Bolowriter"}`;
 
-  const safeAccountUrl = accountUrl || "https://knowstride.com/account.html";
+  const safeAccountUrl = accountUrl || "https://bolowriter.com/account.html";
 
   const text =
 `Thanks for your order!
@@ -132,7 +132,7 @@ If you don’t see future updates, check your spam folder and mark Bolowriter as
       </p>
 
       <p style="margin:12px 0 0 0;color:#777;font-size:12px;">
-        If you don’t see future updates, check your spam folder and mark KnowStride as safe.
+        If you don’t see future updates, check your spam folder and mark Bolowriter as safe.
       </p>
     </div>
   `;
