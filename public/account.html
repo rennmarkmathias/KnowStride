@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Account — BOLO AI Publishing Pipeline</title>
   <link rel="stylesheet" href="/styles.css" />
+
   <style>
     .license-box {
       margin-top: 14px;
-      padding: 14px;
+      padding: 16px;
       border-radius: 14px;
       border: 1px solid rgba(0, 0, 0, .08);
       background: rgba(0, 0, 0, .02);
@@ -33,23 +34,19 @@
     }
 
     .license-key {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: #fff;
-      border: 1px solid rgba(0,0,0,.08);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: .92rem;
-      word-break: break-all;
-    }
-
-    .invoice-link {
-      margin-top: 10px;
-      display: inline-block;
+      font-family: monospace;
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      margin-top: 8px;
     }
   </style>
 </head>
 <body>
+
   <header class="topbar">
     <a class="toplink" href="/">← Home</a>
     <div class="brand">BOLO AI Publishing Pipeline</div>
@@ -58,14 +55,21 @@
     </nav>
   </header>
 
+  <!-- 🔥 LOGO -->
+  <div style="text-align:center;margin:20px 0;">
+    <img src="/logo.png" alt="BOLO" style="height:50px;">
+  </div>
+
   <main class="container">
     <section class="card">
+
       <h1>Account</h1>
       <p class="muted">
-        Use your account to review your BOLO purchases and active license details.
+        Review your BOLO license and purchase details.
       </p>
 
       <div id="userArea" style="display:none;">
+
         <div class="license-box">
           <div class="muted small">Signed in as</div>
           <div id="userEmail" style="font-weight:800;"></div>
@@ -76,8 +80,12 @@
           </div>
         </div>
 
-        <h2 style="margin-top:22px;">License status</h2>
-        <div id="licensesArea" class="muted">Loading licenses…</div>
+        <h2 style="margin-top:22px;">License</h2>
+
+        <div id="licensesArea" class="muted">
+          Loading license...
+        </div>
+
       </div>
 
       <div id="guestArea" style="display:none;">
@@ -88,6 +96,7 @@
       </div>
 
       <p id="err" class="muted" style="margin-top:12px;color:#b00020;"></p>
+
     </section>
   </main>
 
@@ -98,13 +107,15 @@
     src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
 
   <script>
-    function escapeHtml(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    function formatPlan(plan) {
+      return {
+        solo_6m: "Individual — 6 months",
+        solo_12m: "Individual — 12 months",
+        solo_36m: "Individual — 36 months",
+        team_3: "Team — 3 users",
+        team_5: "Team — 5 users",
+        team_10: "Team — 10 users"
+      }[plan] || plan;
     }
 
     window.addEventListener("load", async () => {
@@ -115,8 +126,6 @@
         const userArea = document.getElementById("userArea");
         const guestArea = document.getElementById("guestArea");
         const loginLink = document.getElementById("loginLink");
-        const licensesArea = document.getElementById("licensesArea");
-        const errEl = document.getElementById("err");
 
         if (!user) {
           guestArea.style.display = "block";
@@ -124,7 +133,8 @@
         }
 
         if (loginLink) {
-          loginLink.style.display = "none";
+          loginLink.textContent = "Account";
+          loginLink.href = "/account.html";
         }
 
         userArea.style.display = "block";
@@ -150,70 +160,76 @@
 
         try {
           const token = await Clerk.session.getToken();
-          const res = await fetch("/api/licenses", {
+
+          const res = await fetch("/functions/api/licenses", {
             headers: {
               "authorization": `Bearer ${token}`
             }
           });
 
-          const contentType = res.headers.get("content-type") || "";
-          const data = contentType.includes("application/json")
-            ? await res.json()
-            : { error: await res.text() };
-
           if (!res.ok) {
-            licensesArea.textContent = "";
-            errEl.textContent = data?.error || data?.message || `Could not load licenses (${res.status}).`;
+            document.getElementById("licensesArea").textContent = "Failed to load licenses.";
             return;
           }
+
+          const data = await res.json();
 
           if (!Array.isArray(data?.licenses) || !data.licenses.length) {
-            licensesArea.textContent = "No active licenses found yet.";
+            document.getElementById("licensesArea").textContent = "No active licenses found.";
             return;
           }
 
-          licensesArea.innerHTML = data.licenses.map((l) => `
-            <div class="license-box">
-              <div class="row">
-                <span>Plan</span>
-                <strong>${escapeHtml(l.plan || "—")}</strong>
+          document.getElementById("licensesArea").innerHTML = data.licenses
+            .map((l) => `
+              <div class="license-box">
+
+                <div class="row">
+                  <span>Plan</span>
+                  <strong>${formatPlan(l.plan)}</strong>
+                </div>
+
+                <div class="row">
+                  <span>Seats</span>
+                  <strong>${l.seats || 1}</strong>
+                </div>
+
+                <div class="row">
+                  <span>Issued</span>
+                  <strong>${l.issued_at || "—"}</strong>
+                </div>
+
+                <div class="row">
+                  <span>Expires</span>
+                  <strong>${l.expires_at || "—"}</strong>
+                </div>
+
+                <div class="row">
+                  <span>Status</span>
+                  <span class="badge">${l.status || "active"}</span>
+                </div>
+
+                <div style="margin-top:12px;font-weight:700;">License key</div>
+
+                <div class="license-key">${l.license_key}</div>
+
+                <button class="btn" style="margin-top:10px;"
+                  onclick="navigator.clipboard.writeText('${l.license_key}')">
+                  Copy license
+                </button>
+
               </div>
-              <div class="row">
-                <span>Seats</span>
-                <strong>${escapeHtml(l.seats || 1)}</strong>
-              </div>
-              <div class="row">
-                <span>Issued</span>
-                <strong>${escapeHtml(l.issued_at || "—")}</strong>
-              </div>
-              <div class="row">
-                <span>Expires</span>
-                <strong>${escapeHtml(l.expires_at || "—")}</strong>
-              </div>
-              <div class="row">
-                <span>Status</span>
-                <span class="badge">${escapeHtml(l.status || "active")}</span>
-              </div>
-              ${
-                l.license_key
-                  ? `<div class="license-key">${escapeHtml(l.license_key)}</div>`
-                  : ``
-              }
-              ${
-                l.stripe_invoice_url
-                  ? `<a class="invoice-link" href="${escapeHtml(l.stripe_invoice_url)}" target="_blank" rel="noopener">Open invoice</a>`
-                  : ``
-              }
-            </div>
-          `).join("");
+            `)
+            .join("");
+
         } catch (e) {
-          licensesArea.textContent = "";
-          errEl.textContent = e?.message || String(e);
+          document.getElementById("licensesArea").textContent = "Error loading license.";
         }
+
       } catch (e) {
         document.getElementById("err").textContent = e?.message || String(e);
       }
     });
   </script>
+
 </body>
 </html>
