@@ -6,6 +6,34 @@
   <title>BOLO AI Publishing Pipeline — Checkout</title>
   <link rel="stylesheet" href="/styles.css" />
   <style>
+    .logo-wrap {
+      text-align: center;
+      margin: 20px 0 10px;
+    }
+
+    .logo-wrap img {
+      height: 52px;
+      width: auto;
+    }
+
+    .checkout-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .checkout-intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 22px;
+    }
+
+    .checkout-wrap {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 20px;
+      align-items: start;
+    }
+
     .plans {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -13,62 +41,89 @@
     }
 
     .plan-card {
-      border: 1px solid rgba(0, 0, 0, .12);
+      border: 1px solid rgba(15, 23, 42, 0.08);
       border-radius: 18px;
       padding: 18px;
       background: #fff;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
     }
 
     .plan-card.active {
-      border-color: #1d4ed8;
-      box-shadow: 0 14px 28px rgba(29, 78, 216, .12);
+      border-color: rgba(37, 99, 235, 0.45);
+      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.14);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .plan-card h3 {
+      margin-top: 10px;
+      margin-bottom: 8px;
     }
 
     .plan-price {
       font-size: 2rem;
       font-weight: 900;
-      line-height: 1.1;
-      margin: 8px 0;
+      line-height: 1.05;
+      margin: 10px 0 8px;
+      letter-spacing: -0.03em;
     }
 
-    .pill {
-      display: inline-flex;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #eef4ff;
-      color: #1d4ed8;
-      font-size: .82rem;
-      font-weight: 800;
+    .plan-meta {
+      margin-bottom: 14px;
     }
 
-    .checkout-wrap {
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 18px;
+    .summary-card {
+      padding: 22px;
+    }
+
+    .summary-card h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
     }
 
     .muted-box {
-      padding: 14px;
-      border-radius: 14px;
-      background: rgba(0, 0, 0, .03);
-      border: 1px solid rgba(0, 0, 0, .08);
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, .03);
+      border: 1px solid rgba(15, 23, 42, .08);
     }
 
     .row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      margin: 8px 0;
+      margin: 10px 0;
+      flex-wrap: wrap;
     }
 
     .danger {
       color: #b00020;
     }
 
-    @media (max-width: 920px) {
-      .plans,
+    .helper-note {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #eef4ff;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+    }
+
+    .helper-note p:last-child,
+    .muted-box ul li:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 980px) {
       .checkout-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .plans {
         grid-template-columns: 1fr;
       }
     }
@@ -83,62 +138,77 @@
     </nav>
   </header>
 
+  <div class="logo-wrap">
+    <img src="/logo.png" alt="BOLO" />
+  </div>
+
   <main class="container">
     <section class="card">
-      <h1 style="margin-top:0">Checkout</h1>
-      <p class="muted">
-        Choose a plan, confirm your account and continue to secure Stripe checkout.
-      </p>
-
-      <div class="checkout-wrap" style="margin-top:18px;">
-        <div>
-          <div class="plans" id="plans"></div>
+      <div class="checkout-shell">
+        <div class="checkout-intro">
+          <h1 style="margin-top:0">Checkout</h1>
+          <p class="muted">
+            Choose a plan, confirm your account and continue to secure Stripe checkout.
+          </p>
         </div>
 
-        <aside class="card" style="padding:18px;">
-          <h2 style="margin-top:0;font-size:1.3rem;">Order summary</h2>
-
-          <div class="muted-box">
-            <div class="row">
-              <span>Account</span>
-              <strong id="userEmail">Checking…</strong>
-            </div>
-            <div class="row">
-              <span>Selected plan</span>
-              <strong id="selectedPlan">—</strong>
-            </div>
-            <div class="row">
-              <span>Seats</span>
-              <strong id="selectedSeats">—</strong>
-            </div>
-            <div class="row">
-              <span>Billing period</span>
-              <strong id="selectedPeriod">—</strong>
-            </div>
-            <div class="row">
-              <span>Total</span>
-              <strong id="selectedPrice">—</strong>
-            </div>
+        <div class="checkout-wrap" style="margin-top:18px;">
+          <div>
+            <div class="plans" id="plans"></div>
           </div>
 
-          <div class="muted-box" style="margin-top:12px;">
-            <strong>What customers receive</strong>
-            <ul>
-              <li>Stripe confirmation email</li>
-              <li>Invoice / receipt by email</li>
-              <li>License activation after payment</li>
-              <li>Access to account-based license management</li>
-            </ul>
-          </div>
+          <aside class="card summary-card">
+            <h2>Order summary</h2>
 
-          <p id="msg" class="muted" style="margin-top:12px;"></p>
-          <p id="err" class="danger" style="margin-top:8px;"></p>
+            <div class="muted-box">
+              <div class="row">
+                <span>Account</span>
+                <strong id="userEmail">Checking…</strong>
+              </div>
+              <div class="row">
+                <span>Selected plan</span>
+                <strong id="selectedPlan">—</strong>
+              </div>
+              <div class="row">
+                <span>Seats</span>
+                <strong id="selectedSeats">—</strong>
+              </div>
+              <div class="row">
+                <span>Billing period</span>
+                <strong id="selectedPeriod">—</strong>
+              </div>
+              <div class="row">
+                <span>Total</span>
+                <strong id="selectedPrice">—</strong>
+              </div>
+            </div>
 
-          <div class="hero-actions" style="margin-top:14px;">
-            <button class="btn" id="checkoutBtn" type="button">Continue to Stripe</button>
-            <a class="btn ghost" href="/account.html">Open account</a>
-          </div>
-        </aside>
+            <div class="muted-box" style="margin-top:14px;">
+              <strong>What customers receive</strong>
+              <ul>
+                <li>Stripe confirmation email</li>
+                <li>Invoice / receipt by email</li>
+                <li>License activation after payment</li>
+                <li>Access to account-based license management</li>
+              </ul>
+            </div>
+
+            <div class="helper-note">
+              <strong>After payment</strong>
+              <p class="muted" style="margin-top:8px;">
+                Your license will appear in your account page, where you can copy it and paste it into the BOLO desktop app.
+              </p>
+            </div>
+
+            <p id="msg" class="muted" style="margin-top:14px;"></p>
+            <p id="err" class="danger" style="margin-top:8px;"></p>
+
+            <div class="hero-actions" style="margin-top:16px;">
+              <button class="btn" id="checkoutBtn" type="button">Continue to Stripe</button>
+              <a class="btn ghost" href="/account.html">Open account</a>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
@@ -152,37 +222,37 @@
   <script>
     const PLAN_MAP = {
       solo_6m: {
-        name: "Individual – 6 months",
+        name: "Individual — 6 months",
         seats: 1,
         period: "6 months",
         amount: "$49"
       },
       solo_12m: {
-        name: "Individual – 12 months",
+        name: "Individual — 12 months",
         seats: 1,
         period: "12 months",
         amount: "$79"
       },
       solo_36m: {
-        name: "Individual – 36 months",
+        name: "Individual — 36 months",
         seats: 1,
         period: "36 months",
         amount: "$149"
       },
       team_3: {
-        name: "Team – 3 seats",
+        name: "Team — 3 users",
         seats: 3,
         period: "12 months",
         amount: "$249"
       },
       team_5: {
-        name: "Team – 5 seats",
+        name: "Team — 5 users",
         seats: 5,
         period: "12 months",
         amount: "$399"
       },
       team_10: {
-        name: "Organization – 10 seats",
+        name: "Organization — 10 users",
         seats: 10,
         period: "12 months",
         amount: "$499"
@@ -197,7 +267,7 @@
     function renderPlans(active) {
       const wrap = document.getElementById("plans");
       if (!wrap) {
-        throw new Error('Missing #plans container');
+        throw new Error("Missing #plans container");
       }
 
       wrap.innerHTML = Object.entries(PLAN_MAP)
@@ -206,7 +276,7 @@
             <span class="pill">${p.seats > 1 ? "Team license" : "Individual license"}</span>
             <h3>${p.name}</h3>
             <div class="plan-price">${p.amount}</div>
-            <p class="muted">Seats: ${p.seats}<br>Period: ${p.period}</p>
+            <p class="muted plan-meta">Seats: ${p.seats}<br>Period: ${p.period}</p>
             <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
               ${k === active ? "Selected" : "Select this plan"}
             </button>
@@ -229,6 +299,7 @@
       if (!p) {
         throw new Error(`Unknown plan: ${k}`);
       }
+
       document.getElementById("selectedPlan").textContent = p.name;
       document.getElementById("selectedSeats").textContent = String(p.seats);
       document.getElementById("selectedPeriod").textContent = p.period;
