@@ -599,7 +599,6 @@ table{ overflow: visible !important; }
 <p class="sub">Investeraröversikt – Erbjudande om 1–10 % ägarandel</p>
 <p class="sub" style="margin-top:6px;font-size:13px;">Officiell webbplats: <strong>bolowriter.com</strong></p>
 <p class="note"><b>10 sekunder:</b> BOLO AI Publishing Pipeline är en liveprodukt för desktop publishing av strukturerad facklitterär produktion.<span class="line2">Det gör det möjligt för författare, utbildare och organisationer att skapa böcker, guider, manualer och kunskapsmaterial i ett kontrollerat arbetsflöde — från struktur och generering till redigering, översättning, omslagsskapande och export till publicerbara format (DOCX, EPUB och tryckfärdig PDF).</span></p>
-
 </div>
 <div class="header-actions">
 <button aria-controls="toc" aria-expanded="false" class="toc-toggle" id="tocToggle" type="button">
@@ -643,7 +642,8 @@ table{ overflow: visible !important; }
 </section><section id="sec3">
 <h2>2. Produkt och teknisk differentiering</h2>
 <p><b>BOLO AI Publishing Pipeline</b> är ett strukturerat produktionssystem för facklitteratur. Det är inte en enkel textgenerator, utan en kontrollerad motor för bokproduktion med inbyggd strukturlogik, konsekvenskontroll och exportkapacitet.</p>
-<p>Systemet hanterar arbetsflödet <b>structure → text generation → quality control → editing → translation → layout/cover → export</b>.</p>
+<p>Systemet hanterar arbetsflödet <b>structure → text generation → quality control → illustration → editing → translation → layout/cover → export</b>.</p>
+<p>Systemet stödjer även automatiserad generering av illustrationer samt integrering av dessa i manuskriptet.</p>
 <h3>2.1 Kärnkomponenter</h3>
 <ul>
 <li><b>Strukturmotor:</b> AI-genererad struktur, manuell struktur eller hybridstruktur (kapitel + underrubriker).</li>
@@ -656,7 +656,7 @@ table{ overflow: visible !important; }
 <li><b>Layoutteman:</b> flera färdiga boklayouter (rubriker, avstånd, typografi) som kan väljas per projekt.</li>
 <li><b>Exportmotor:</b> DOCX (redigerbar), EPUB (publicerbar) och tryckfärdig inlaga som PDF (tryckfärdig PDF).</li>
 <li><b>Omslagsgenerator:</b> skapar omslag (framsida/rygg/baksida) anpassade till bokformat, bleed och ryggtext.</li>
-<li><b>Illustrationsmodul (planerad utbyggnad):</b> AI-genererade illustrationer, placering i textflödet och anpassning till sidlayout.</li>
+<li><b>Illustrationsmodul:</b> AI-genererade illustrationer, placering i textflödet och anpassning till sidlayout.</li>
 </ul>
 <h3>2.2 Arkitektur och kostnadsstruktur</h3>
 <p>Användaren betalar för sin egen AI-användning via sin egen API-nyckel. Detta skapar full kostnadstransparens, eliminerar serverinfrastruktur och minimerar skalningsrisken. Resultatet är en hög bruttomarginal på licens- och abonnemangsintäkter.</p>
@@ -666,11 +666,8 @@ table{ overflow: visible !important; }
 <p>Systemet är i första hand utformat för <b>strukturerad fackboksutgivning</b>. Men ett experimentellt <b>fiktionläge (beta)</b> har också implementerats, där samma produktionspipeline kan användas för att generera berättande text utifrån en strukturerad story brief, inklusive handling, karaktärer, miljöer och element i berättelsestrukturen.</p>
 <p>Inledande tester tyder på att arkitekturen även kan stödja arbetsflöden för fiktion, men produkten är för närvarande optimerad för facklitteratur. Vidare utveckling av fiktionläget kan utforskas senare. Den potentiella fiktionmarknaden är <b>inte inkluderad i de finansiella prognoserna</b> i denna investeraröversikt.</p>
 <h2>3. Produktstatus – Live desktopversion</h2>
-<p>Desktopversionen av BOLO AI Publishing Pipeline är live och operativ. Kärnprodukten är byggd, testad och redo för kommersiell användning i sin nuvarande desktopform med användartillhandahållna API-nycklar.</p><p class="note">Desktopsystemet består av mer än 18 000 rader produktionskod, vilket visar på en fullt byggd och operativ produkt med betydande utvecklingsdjup.</p>
+<p>Desktopversionen av BOLO AI Publishing Pipeline är live och operativ. Kärnprodukten är byggd, testad och redo för kommersiell användning i sin nuvarande desktopform med användartillhandahållna API-nycklar.</p><p class="note">Desktopsystemet består av mer än 20 000 rader produktionskod, vilket visar på en fullt byggd och operativ produkt med betydande utvecklingsdjup.</p>
 <p>Kapital som tas in är främst avsett för kommersialisering, distribution och marknadsexpansion — inte för att bygga kärnprodukten.</p>
-<h3>Nuvarande fokus</h3>
-<p>Det nuvarande arbetet fokuserar på det sista steget i kommersialiseringen: färdigställande av landningssidan, onboardingmaterial, dokumentation, marknadsförberedelser och användarutbildning.</p>
-<p><b>Cirka en vecka av slutliga lanseringsförberedelser återstår.</b> Produkten är redan operativ i sin desktopform, och en skarp kommersiell lansering är realistisk under sista veckan i mars eller första veckan i april.</p>
 </section><section id="sec4">
 <h2>4. Validerad pipeline</h2>
 <p>Produktionskedjan har verifierats tekniskt. Bokexport (DOCX/EPUB) har testats och uppladdning till Kindle (Amazon KDP) fungerar. Ett exempel på en publicerad bok finns på <a href="https://www.amazon.com/dp/B0GS6B6D9R" rel="noopener" target="_blank">Amazon</a>.</p>
@@ -799,17 +796,7 @@ table{ overflow: visible !important; }
 <p>Systemet kan användas för long-tail-utgivning av facklitteratur, utbildningsmaterial, företagsdokumentation, reseguider, specialiserade kunskapsböcker och specialanpassade böcker för personligt eller professionellt bruk.</p>
 <p>I ett traditionellt arbetsflöde kräver bokproduktion normalt flera separata verktyg: ett för struktur och disposition, ett annat för textproduktion, ytterligare verktyg för språkgranskning och konsekvenskontroll samt separata lösningar för layout, export och omslagsskapande. BOLO samlar hela processen i ett sammanhängande system.</p>
 <p>När en <b>bokbrief</b> har definierats kan systemet automatiskt:</p>
-<ul>
-<li>generera en fullständig <b>bokstruktur</b> (kapitel och underrubriker)</li>
-<li>definiera <b>boklängd, bokformat</b> och <b>layouttema</b></li>
-<li>skapa <b>förord</b> och initial struktur</li>
-<li>producera text enligt den definierade strukturen och balansera kapitellängd</li>
-<li>genomföra <b>automatiska kvalitetskontroller</b> och föreslå eller tillämpa korrigeringar</li>
-<li>stödja <b>riktad redigering</b> av kapitel eller avsnitt utan att allt genereras om</li>
-<li>översätta en färdig bok till <b>andra språk</b></li>
-<li>generera <b>publicerbara exportformat</b> (DOCX, EPUB och tryckfärdig PDF)</li>
-<li>skapa <b>bokomslag</b>, inklusive rygglayout anpassad till bokformat och tryckformat</li>
-</ul>
+<ul><li>generera en fullständig <b>bokstruktur</b> (kapitel och underrubriker)</li><li>definiera <b>boklängd, bokformat (trim size)</b> och <b>layouttema</b></li><li>skapa <b>förord</b> och initial struktur</li><li>producera text enligt den definierade strukturen och balansera kapitellängd</li><li>genomföra <b>automatiska kvalitetskontroller</b> och föreslå eller tillämpa korrigeringar</li><li>stödja <b>riktad redigering</b> av kapitel eller avsnitt utan att allt genereras om</li><li>översätta en färdig bok till <b>andra språk</b></li><li>generera <b>publicerbara exportformat</b> (DOCX, EPUB och tryckfärdig PDF)</li><li>skapa <b>bokomslag</b>, inklusive rygglayout anpassad till bokformat och tryckformat</li><li>generera och infoga <b>AI-genererade illustrationer</b> med bildtexter och föreslagen placering i textflödet</li><li>integrera <b>egna bilder</b> i boken</li></ul>
 <p>Systemet innehåller också verktyg för att styra <b>informationstäthet</b> och faktavolym, samt funktioner för konsekvent användning av <b>enheter och terminologi</b> genom hela boken.</p>
 <p>Det innebär att en <b>presentation</b> kan produceras på några minuter, en <b>ämnesspecifik bok</b> kan produceras inom en kort tidsram (från minuter till några timmar, beroende på omfattning och komplexitet), och en mer omfattande <b>fackbokstitel</b> kan produceras på timmar eller dagar snarare än månader.</p>
 <p>BOLO är därför inte bara ett AI-skrivverktyg, utan ett <b>AI-baserat publiceringssystem</b> som håller struktur, konsekvens och export redo för praktisk användning.</p>
@@ -824,13 +811,11 @@ table{ overflow: visible !important; }
 <h2>11. Erbjudande</h2>
 <p>En ägarandel på 1–10 % erbjuds. Värderingen är <b>€400,000</b>. Målet är att sälja 8–10 %.</p>
 <p><b>Produktwebbplats:</b><br/><a href="https://bolowriter.com" rel="noopener" target="_blank">https://bolowriter.com</a></p>
-<p><b>För den som är intresserad:</b> meddela grundaren senast <b>04.04</b>.</p>
-<p><b>Betalningsdeadline:</b> <b>09.04</b>. Först mottagna medel, första tilldelning. Investerare kontaktar grundaren för betalningsuppgifter. Svenska och tyska banköverföringsalternativ finns tillgängliga.</p>
-<p>Efter investeringen kommer ett nytt <b>UG (haftungsbeschränkt)</b> att etableras, och samtliga rättigheter till BOLO AI Publishing Pipeline kommer att överföras till bolaget. Ägandet kommer att struktureras som andelar och formellt registreras genom den notariella processen i Hamburg.</p>
-</section>
+<p><b>För den som är intresserad:</b> meddela grundaren senast <b>28.04</b>.</p>
+<p><b>Betalningsdeadline:</b> <b>01.05</b>. Först mottagna medel, första tilldelning. Investerare kontaktar grundaren för betalningsuppgifter.</p>
 <div class="contact" style="margin-top:24px;">
 <div class="contact-title">Kontakt</div>
-<p class="contact-text"><b>Grundare:</b> Mathias Rennmark<br/><b>Datum:</b> mars 2026<br/><b>Investerarsida:</b> <a href="https://bolowriter.com/bolo" rel="noopener" target="_blank">bolowriter.com/bolo</a></p>
+<p class="contact-text"><b>Grundare:</b> Mathias Rennmark<br/><b>Datum:</b> April 2026<br/><b>Investerarsida:</b> <a href="https://bolowriter.com/bolo" rel="noopener" target="_blank">bolowriter.com/bolo</a></p>
 <p class="contact-text">
     För mer information eller en presentation via Teams,
     ring, skicka ett meddelande via Messenger eller mejla 
