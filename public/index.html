@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BOLO AI Publishing Pipeline – Structured Nonfiction Publishing Software</title>
-  <meta name="description" content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BOLO AI Publishing Pipeline – Structured Nonfiction Publishing Software</title>
+<meta content="Structured AI publishing software for nonfiction books, guides, manuals and knowledge content. Download the trial or choose an individual or team license." name="description"/>
+<style>
     :root{
       --bg:#f6f7fb;
       --card:#ffffff;
@@ -113,7 +114,7 @@
 
     .pipeline{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(6,minmax(0,1fr));
       gap:10px;
       margin:20px 0 16px;
     }
@@ -123,10 +124,10 @@
       border:1px solid var(--line);
       border-top:4px solid transparent;
       border-radius:12px;
-      padding:14px 10px;
+      padding:12px 8px;
       text-align:center;
       font-weight:700;
-      font-size:0.94rem;
+      font-size:0.88rem;
       line-height:1.25;
       box-shadow:0 6px 18px rgba(45,108,223,0.06);
     }
@@ -136,13 +137,14 @@
     .pipe-step:nth-child(3){border-top-color:#d7d91f;}
     .pipe-step:nth-child(4){border-top-color:#7ec8e3;}
     .pipe-step:nth-child(5){border-top-color:#2d6cdf;}
+    .pipe-step:nth-child(6){border-top-color:#7c3aed;}
 
     .pipe-step small{
       display:block;
       margin-top:4px;
       font-weight:400;
       color:var(--muted);
-      font-size:0.82rem;
+      font-size:0.78rem;
     }
 
     .grid{
@@ -646,249 +648,227 @@
     }
 
 </style>
-</head>
+<style>
+</style></head>
 <body>
-
-  <header class="hero">
-    <div class="hero-inner">
-      <img src="/BOLO-logo.png" alt="BOLO logo" class="logo" />
-    </div>
-  </header>
-
-
-  <div class="auth-strip" aria-label="Account actions">
-    <a class="auth-chip" href="/sign-in.html">Sign in</a>
-    <a class="auth-chip" href="/sign-up.html">Create account</a>
-    <span class="auth-chip is-status">Launching soon</span>
-  </div>
-
-
-
-  
-  <nav class="language-nav" aria-label="Language navigation">
-    <a href="/landing/BOLO_Landing_Multilingual.html#german-top">DE</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#danish-top">DK</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#spanish-top">ES</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#french-top">FR</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#italian-top">IT</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#dutch-top">NL</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#norwegian-top">NO</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#portuguese-top">PT</a>
-    <a href="/landing/BOLO_Landing_Multilingual.html#swedish-top">SE</a>
-  </nav>
-
-
-
-  <main class="container">
+<header class="hero">
+<div class="hero-inner">
+<img alt="BOLO logo" class="logo" src="/BOLO-logo.png"/>
+</div>
+</header>
+<div aria-label="Account actions" class="auth-strip">
+<a class="auth-chip" href="/sign-in.html">Sign in</a>
+<a class="auth-chip" href="/sign-up.html">Create account</a>
+<span class="auth-chip is-status">Launching soon</span>
+</div>
+<nav aria-label="Language navigation" class="language-nav">
+<a href="/landing/BOLO_Landing_Multilingual.html#german-top">DE</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#danish-top">DK</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#spanish-top">ES</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#french-top">FR</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#italian-top">IT</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#dutch-top">NL</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#norwegian-top">NO</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#portuguese-top">PT</a>
+<a href="/landing/BOLO_Landing_Multilingual.html#swedish-top">SE</a>
+</nav>
+<main class="container">
 <section class="intro">
-      <h1>BOLO AI Publishing Pipeline</h1>
-      <p class="subtitle">
+<h1>BOLO AI Publishing Pipeline</h1>
+<p class="subtitle">
         Structured AI publishing software for nonfiction books and knowledge content.
       </p>
-      <div class="sales-copy">
-        <p>BOLO enables authors, educators and organizations to create books, guides, manuals and knowledge material in a controlled workflow — from outline and generation to editing, translation and publishable export.</p>
-        <p>From long-tail nonfiction publishing — steady income from many specialized niche titles — to educational material, company documentation, travel guides and specialized knowledge books, BOLO turns ideas into structured, publishable books.</p>
-        <p>BOLO acts as an AI orchestration layer for book production. Instead of generating isolated text, it controls structure, content flow, terminology and output quality across the entire publishing pipeline.</p>
-        <p>BOLO is designed as a system, not a prompt-based tool — enabling consistent, scalable and production-ready output rather than isolated text generation.</p>
-
-      </div>
+<div class="sales-copy"><p>BOLO enables authors, educators and organizations to create books, guides, manuals and knowledge material in a controlled workflow — from outline and generation to editing, illustration, translation and publishable export.</p><p>From long-tail nonfiction publishing — steady income from many specialized niche titles — to educational material, company documentation, travel guides and specialized knowledge books, BOLO turns ideas into structured, publishable books.</p><p>In addition, BOLO can automatically suggest illustrations based on your content. You choose how many images you want, and BOLO handles the rest — generating them and placing them correctly into the book with captions, without requiring manual prompting.</p><p>BOLO acts as an AI orchestration layer for book production. Instead of generating isolated text, it controls structure, content flow, terminology and output quality across the entire publishing pipeline.</p><p>BOLO is designed as a system, not a prompt-based tool — enabling consistent, scalable and production-ready output rather than isolated text generation.</p></div>
 </section>
-
-    <section class="pipeline" aria-label="BOLO workflow">
-      <div class="pipe-step">Paste Book Brief<small>define the project</small></div>
-      <div class="pipe-step">BOLO creates an outline<small>automatic structure</small></div>
-      <div class="pipe-step">BOLO generates the book<small>automatic generation</small></div>
-      <div class="pipe-step">BOLO exports files<small>DOCX, EPUB, PDF</small></div>
-      <div class="pipe-step">BOLO creates full cover<small>with your front and back images</small></div>
-    </section>
-
-    <section class="demo-overlay-wrap" aria-label="BOLO demo video">
-      <a class="demo-overlay" href="#demo-video" data-video-open="true" aria-label="Open BOLO demo video">
-        <div class="demo-thumb">
-          <div class="demo-play" aria-hidden="true"></div>
-        </div>
-        <div class="demo-caption">
-          <strong>See BOLO generate a book in real time</strong>
-          <span>Watch the full uncut 2:45 demo</span>
-        </div>
-      </a>
-    </section>
-
-    <section class="grid">
-      <article class="card">
-        <h2>Try BOLO first</h2>
-        <p>
+<section aria-label="BOLO workflow" class="pipeline">
+<div class="pipe-step">Paste Book Brief<small>define the project</small></div>
+<div class="pipe-step">BOLO creates an outline<small>automatic structure</small></div>
+<div class="pipe-step">BOLO generates the book<small>automatic generation</small></div>
+<div class="pipe-step">BOLO exports files<small>DOCX, EPUB, PDF</small></div>
+<div class="pipe-step">BOLO illustrates the book<small>automatic image generation</small></div>
+<div class="pipe-step">BOLO creates full cover<small>with your front and back images</small></div>
+</section>
+<section aria-label="BOLO demo video" class="demo-overlay-wrap">
+<a aria-label="Open BOLO demo video" class="demo-overlay" data-video-open="true" href="#demo-video">
+<div class="demo-thumb">
+<div aria-hidden="true" class="demo-play"></div>
+</div>
+<div class="demo-caption">
+<strong>See BOLO generate a book in real time</strong>
+<span>Watch the full uncut 2:45 demo</span>
+</div>
+</a>
+</section>
+<section class="grid">
+<article class="card">
+<h2>Try BOLO first</h2>
+<p>
           Start with the trial version and test the workflow with a small project before choosing a license.
         </p>
-
-        <div class="button-row">
-          <a class="button" href="https://files.bolowriter.com/testboloapp/bolo-setup.exe" download>
+<div class="button-row">
+<a class="button" download="" href="https://files.bolowriter.com/testboloapp/bolo-setup.exe">
             Download Trial
           </a>
-          <a class="button secondary" href="/user-guide/BOLO_User_Guide.html#english">User Guide</a>
+<a class="button secondary" href="/user-guide/BOLO_User_Guide.html#english">User Guide</a>
+</div>
+<div class="note">
+<strong>Tip:</strong> The best way to learn BOLO is to run small test generations. Creating one to three chapters usually costs only a few cents and quickly shows how the workflow behaves.
         </div>
 <div class="note">
-          <strong>Tip:</strong> The best way to learn BOLO is to run small test generations. Creating one to three chapters usually costs only a few cents and quickly shows how the workflow behaves.
+<strong>Note:</strong> Because BOLO is a new application, your browser or Windows may show a security warning during download. This is normal for newly released software.
         </div>
-
-        <div class="note">
-          <strong>Note:</strong> Because BOLO is a new application, your browser or Windows may show a security warning during download. This is normal for newly released software.
-        </div>
-      </article>
-
-      <article class="card">
-        <h2>Before you begin</h2>
-        <p>
+</article>
+<article class="card">
+<h2>Before you begin</h2>
+<p>
           BOLO uses the OpenAI API to generate text. To use the program, you need your own OpenAI API key.
         </p>
-
-        <h3>How to get your OpenAI API key</h3>
-        <ol>
-          <li>
-            Go to:<br />
-            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">https://platform.openai.com/api-keys</a>
-          </li>
-          <li>
+<h3>How to get your OpenAI API key</h3>
+<ol>
+<li>
+            Go to:<br/>
+<a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">https://platform.openai.com/api-keys</a>
+</li>
+<li>
             Sign in if needed (you can use Google, Apple, Microsoft or email).
           </li>
-          <li>
+<li>
             Click <strong>Create new secret key</strong> and save it.
           </li>
-          <li>
+<li>
             Open <strong>Billing</strong> in the left menu and add a small amount (for example $5 to start).
           </li>
-          <li>
+<li>
             Paste the key into BOLO and start generating.
           </li>
-        </ol>
-
-        <div class="note">
+</ol>
+<div class="note">
           This usually takes just a few minutes.
         </div>
-
-        <div class="note">
+<div class="note">
           You only pay for what you generate. Small tests typically cost in the tens of cents.
         </div>
-      </article>
-
-      <article class="card full">
-        <div style="height:6px;background:linear-gradient(90deg,#f47a20,#f2c300,#d7d91f,#7ec8e3,#2d6cdf,#1f4ea3);border-radius:4px;margin-bottom:20px;"></div>
-        <h2>Buy a license</h2>
-        <p>
+</article>
+<article class="card full">
+<div style="height:6px;background:linear-gradient(90deg,#f47a20,#f2c300,#d7d91f,#7ec8e3,#2d6cdf,#1f4ea3);border-radius:4px;margin-bottom:20px;"></div>
+<h2>Buy a license</h2>
+<p>
           Customers can test first, then choose the license period that fits their work. BOLO keeps the license cost low, while AI generation is paid separately through your own OpenAI API key only when you actually produce content.
         </p>
-
-        <div class="note">
-          <strong>Low monthly cost, pay for generation only when needed.</strong> Unlike many AI writing services with high monthly subscriptions, BOLO uses your own OpenAI API key. Typical costs are around <strong>$1–4 for nonfiction books</strong>. Fiction books can cost <strong>3–10x more depending on complexity and narrative depth</strong>.
+<div class="note">
+<strong>Low monthly cost, pay for generation only when needed.</strong> Unlike many AI writing services with high monthly subscriptions, BOLO uses your own OpenAI API key. Typical costs are around <strong>$1–4 for nonfiction books</strong>. Fiction books can cost <strong>3–10x more depending on complexity and narrative depth</strong>.
         </div>
-
-        <h3>Individual licenses <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Launch offer - April</span></h3>
-        <div class="pricing">
-          <div class="price-card">
-            <span class="tag">Trial to paid</span>
-            <h3>6 months</h3>
-            <div class="price discounted">$49 <small>/ license</small><span class="price-old">$69</span></div>
-            <div class="price-month">≈ $8.17 / month</div>
-            
-            <p class="muted">A low-friction option for first-time users and shorter publishing projects.</p>
-            <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button secondary" href="/sign-up.html?plan=solo_6m">Start with 6 months</a>
-          </div>
-
-          <div class="price-card">
-            <span class="tag">Most balanced</span>
-            <h3>12 months</h3>
-            <div class="price discounted">$79 <small>/ license</small><span class="price-old">$99</span></div>
-            <div class="price-month">≈ $6.58 / month</div>
-            
-            <p class="muted">The main option for ongoing nonfiction publishing work and repeated book projects.</p>
-            <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button" href="/sign-up.html?plan=solo_12m">Start with 12 months</a>
-          </div>
-
-          <div class="price-card">
-            <span class="tag" style="background:#2d6cdf;color:#fff;">Best value</span>
-            <h3>36 months</h3>
-            <div class="price discounted">$149 <small>/ license</small><span class="price-old">$179</span></div>
-            <div class="price-month">≈ $4.14 / month</div>
-            
-            <p class="muted">Best for long-term use, multiple books and a lower effective annual cost.</p>
-            <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
-            <a class="button secondary" href="/sign-up.html?plan=solo_36m">Start with 36 months</a>
-          </div>
-        </div>
-
-        <h3 style="margin-top:24px;">Team and organization licenses</h3>
-        <div class="pricing">
-          <div class="price-card">
-            <span class="tag">Small team</span>
-            <h3>3 users</h3>
-            <div class="price">$249 <small>/ 12 months</small></div>
-            <div class="price-month">≈ $6.92 / user / month</div>
-            <p class="muted">Suitable for smaller editorial teams, course creators or compact publishing workflows.</p>
-            <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button secondary" href="/sign-up.html?plan=team_3">Choose 3 users</a>
-          </div>
-
-          <div class="price-card">
-            <span class="tag">Recommended team</span>
-            <h3>5 users</h3>
-            <div class="price">$399 <small>/ 12 months</small></div>
-            <div class="price-month">≈ $6.65 / user / month</div>
-            <p class="muted">A balanced plan for organizations producing books, manuals or educational material.</p>
-            <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button" href="/sign-up.html?plan=team_5">Choose 5 users</a>
-          </div>
-
-          <div class="price-card">
-            <span class="tag">Organization</span>
-            <h3>10 users</h3>
-            <div class="price">$699 <small>/ 12 months</small></div>
-            <div class="price-month">≈ $5.83 / user / month</div>
-            <p class="muted">Best for larger departments or organizations working with structured publishing at scale.</p>
-            <div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
-            <a class="button secondary" href="/sign-up.html?plan=team_10">Choose 10 users</a>
-          </div>
-        </div>
-
-        <div class="login-helper">
+<h3>Individual licenses <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Launch offer</span></h3>
+<div class="pricing">
+<div class="price-card">
+<span class="tag">Trial to paid</span>
+<h3>6 months</h3>
+<div class="price discounted">$49 <small>/ license</small><span class="price-old">$69</span></div>
+<div class="price-month">≈ $8.17 / month</div>
+<p class="muted">A low-friction option for first-time users and shorter publishing projects.</p>
+<div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
+<a class="button secondary" href="/sign-up.html?plan=solo_6m">Start with 6 months</a>
+</div>
+<div class="price-card">
+<span class="tag">Most balanced</span>
+<h3>12 months</h3>
+<div class="price discounted">$79 <small>/ license</small><span class="price-old">$99</span></div>
+<div class="price-month">≈ $6.58 / month</div>
+<p class="muted">The main option for ongoing nonfiction publishing work and repeated book projects.</p>
+<div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
+<a class="button" href="/sign-up.html?plan=solo_12m">Start with 12 months</a>
+</div>
+<div class="price-card">
+<span class="tag" style="background:#2d6cdf;color:#fff;">Best value</span>
+<h3>36 months</h3>
+<div class="price discounted">$149 <small>/ license</small><span class="price-old">$179</span></div>
+<div class="price-month">≈ $4.14 / month</div>
+<p class="muted">Best for long-term use, multiple books and a lower effective annual cost.</p>
+<div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
+<a class="button secondary" href="/sign-up.html?plan=solo_36m">Start with 36 months</a>
+</div>
+</div>
+<h3 style="margin-top:24px;">Team and organization licenses</h3>
+<div class="pricing">
+<div class="price-card">
+<span class="tag">Small team</span>
+<h3>3 users</h3>
+<div class="price">$249 <small>/ 12 months</small></div>
+<div class="price-month">≈ $6.92 / user / month</div>
+<p class="muted">Suitable for smaller editorial teams, course creators or compact publishing workflows.</p>
+<div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
+<a class="button secondary" href="/sign-up.html?plan=team_3">Choose 3 users</a>
+</div>
+<div class="price-card">
+<span class="tag">Recommended team</span>
+<h3>5 users</h3>
+<div class="price">$399 <small>/ 12 months</small></div>
+<div class="price-month">≈ $6.65 / user / month</div>
+<p class="muted">A balanced plan for organizations producing books, manuals or educational material.</p>
+<div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
+<a class="button" href="/sign-up.html?plan=team_5">Choose 5 users</a>
+</div>
+<div class="price-card">
+<span class="tag">Organization</span>
+<h3>10 users</h3>
+<div class="price">$699 <small>/ 12 months</small></div>
+<div class="price-month">≈ $5.83 / user / month</div>
+<p class="muted">Best for larger departments or organizations working with structured publishing at scale.</p>
+<div class="price-subnote">Low seat cost per user, with AI generation billed separately through each workflow.</div>
+<a class="button secondary" href="/sign-up.html?plan=team_10">Choose 10 users</a>
+</div>
+</div>
+<div class="login-helper">
           If you are not signed in, these buttons will take you to account creation first, then continue to checkout.
         </div>
-      </article>
-
-      <article class="card full">
-        <h2>What BOLO is for</h2>
-        <p>
+</article>
+<article class="card full">
+<h2>What BOLO is for</h2>
+<p>
           BOLO is designed to make AI-assisted book production simpler, more structured and more predictable. It is especially well suited to nonfiction books, guidebooks, educational material, geographic books, historical projects and other long-form factual writing.
         </p>
-        <p class="muted">
+<p class="muted">
           BOLO is optimized for structured nonfiction workflows. Fiction support exists in beta, but the product is not positioned as a chat-style writing tool.
         </p>
-      </article>
-    </section>
-
-    <footer class="footer">
-      <p class="links" style="font-size:1.15rem;font-weight:600;margin-bottom:12px;">
-        <a href="/bolo">View investor presentation</a>
-      </p>
-      <p>
+</article>
+</section>
+<footer class="footer">
+<p class="links" style="font-size:1.15rem;font-weight:600;margin-bottom:12px;">
+<a href="/bolo">View investor presentation</a>
+</p>
+<p>
         Questions or feedback:
-        <a href="mailto:info@bolowriter.com">info@bolowriter.com</a><br>
-        <span style="color:#6b7280;font-size:0.9rem;">We aim to respond within 24 hours on business days.</span>
-      </p>
-    </footer>
-  </main>
-
-  <div class="video-modal" id="demo-video-modal" aria-hidden="true">
-    <div class="video-modal-dialog" role="dialog" aria-modal="true" aria-label="BOLO demo video">
-      <button class="video-modal-close" type="button" aria-label="Close video">×</button>
-      <video controls preload="metadata" playsinline poster="/BOLO-thumbnail.png">
-        <source src="https://files.bolowriter.com/testboloapp/BOLO-Demo.mp4" type="video/mp4" />
-      </video>
-    </div>
-  </div>
-
-  <script>
+        <a href="mailto:info@bolowriter.com">info@bolowriter.com</a><br/>
+<span style="color:#6b7280;font-size:0.9rem;">We aim to respond within 24 hours on business days.</span>
+</p>
+<div style="margin-top:20px; text-align:center;">
+<details style="max-width:700px;margin:0 auto;text-align:left;">
+<summary style="cursor:pointer;font-weight:600;color:#2d6cdf;">
+      Privacy &amp; Terms
+    </summary>
+<div style="margin-top:10px;font-size:0.9rem;color:#4b5563;line-height:1.5;">
+<p><strong>Privacy</strong><br/>
+      This website does not collect or store personal data directly. 
+      No cookies or tracking scripts are used by the site itself.</p>
+<p>Some external services (such as OpenAI API, payment providers, or advertising platforms like Google or Meta) may process data independently according to their own policies.</p>
+<p><strong>Terms of use</strong><br/>
+      BOLO AI Publishing Pipeline is a software tool for structured content generation. 
+      Users are responsible for their own API usage, generated content, and compliance with applicable laws and platform policies.</p>
+<p>The software is designed to provide a reliable and structured workflow for content generation. We continuously improve the system, but cannot guarantee that it will always be error-free or uninterrupted.</p>
+</div>
+</details>
+</div>
+</footer>
+</main>
+<div aria-hidden="true" class="video-modal" id="demo-video-modal">
+<div aria-label="BOLO demo video" aria-modal="true" class="video-modal-dialog" role="dialog">
+<button aria-label="Close video" class="video-modal-close" type="button">×</button>
+<video controls="" playsinline="" poster="/BOLO-thumbnail.png" preload="metadata">
+<source src="https://files.bolowriter.com/testboloapp/BOLO-Demo.mp4" type="video/mp4"/>
+</video>
+</div>
+</div>
+<script>
     (function(){
       const trigger = document.querySelector('[data-video-open="true"]');
       const modal = document.getElementById('demo-video-modal');
@@ -929,6 +909,5 @@
       });
     })();
   </script>
-
 </body>
 </html>
