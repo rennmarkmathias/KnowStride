@@ -376,14 +376,20 @@ Next Chapter Title<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>You can easily add illustrations to your book after generating your manuscript.</p>
+<p>You can add illustrations after generating your manuscript. All illustration formats follow the same logic as image markers. Regular images are the most stable option. If you want <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> or <strong>TABLE</strong>, enter the amount manually.</p>
+<div class="note"><strong>Basic workflow:</strong> Set the number of suggestions, generate more suggestions than needed, keep the best ones, then click <strong>Update marker DOCX</strong>. The illustrated DOCX becomes your new working source.</div>
 <h3>The Fastest Way (Recommended)</h3>
 <ol>
 <li>Go to the <strong>Illustrate</strong> tab.</li>
 <li>Upload your manuscript.</li>
-<li>Choose <strong>Image size in DOCX</strong>.</li>
+<li>Choose <strong>Image style</strong> and <strong>Image size in DOCX</strong>.</li>
+<li>Set <strong>Number of suggestions</strong>.</li>
+<li>Click <strong>Suggest Image Placement</strong>.</li>
+<li>Review the suggestions and keep the best ones.</li>
+<li>Click <strong>Update marker DOCX</strong>.</li>
+<li>Click <strong>Generate Images</strong>.</li>
 </ol>
-<p>You can either let BOLO decide the image size automatically (<strong>BOLO decides (mixed)</strong>), or choose a fixed size for all images.</p>
+<p>You can either let BOLO decide the image size automatically (<strong>BOLO decides (mixed)</strong>) or choose a fixed size for all images.</p>
 <p>Available fixed sizes:</p>
 <ul>
 <li>Thumbnail</li>
@@ -391,49 +397,52 @@ Next Chapter Title<br/>
 <li>Medium (~45% width)</li>
 <li>Large</li>
 </ul>
-<p>If you choose a fixed size, all images will use that size. If you let BOLO decide, image sizes will be adapted automatically based on context, you can of course change the suggested size in the list M instead of L for example.</p>
-<ol start="4">
-<li>Enter the number of suggestions.</li>
-<li>Click <strong>Suggest Image Placement</strong>.</li>
-</ol>
-<div class="callout"><strong>Tip:</strong> Request 2–3× more images than you actually need. For example, request 30 suggestions if you want 10 images.</div>
-<ol start="6">
-<li>Review the suggestions.</li>
-<li>Select the ones you like.</li>
-<li>Click <strong>Update marker DOCX</strong>.</li>
-</ol>
-<p>This removes all unused image markers and keeps only the selected ones in your manuscript.</p>
-<div class="callout"><strong>Important:</strong> If you skip this step, all suggested markers will remain in the document — including those you did not select — and must be removed manually.</div>
-<ol start="9">
-<li>Click <strong>Generate Images</strong>.</li>
-</ol>
-<p>BOLO will automatically create relevant illustrations, place them in your book and add captions.</p>
-<h3>Option 2: Write Image Instructions</h3>
-<p>You can manually define images directly in your manuscript.</p>
-<p>Use the following format:</p>
-<p><code>(IMAGE: location; year; description)</code></p>
-<p>Example:</p>
-<p><code>(IMAGE: Stockholm waterfront; 1750; Formal quays, warehouses, bridges, and ships at a growing port-capital)</code></p>
+<p>If you choose a fixed size, all images use that size. If you let BOLO decide, sizes are adapted automatically based on context, and you can still change the suggested size in the list later.</p>
+<div class="callout"><strong>Best practice:</strong> Generate more suggestions than needed. Example: if you want 10 illustrations, generate 20–30 suggestions first.</div>
+<p><strong>Default behaviour:</strong> if all specialty types are set to 0, BOLO uses regular image suggestions. <strong>Diagram / Timeline</strong> are usually reliable. <strong>Map / Table</strong> are experimental.</p>
+<p>This removes all unused markers and keeps only the selected ones in your manuscript.</p>
+<div class="callout"><strong>Important:</strong> If you skip <strong>Update marker DOCX</strong>, all suggested markers remain in the document, including the ones you did not select, and must be removed manually.</div>
+<h3>Manual Markers</h3>
+<p>You can write markers directly in your manuscript using normal parentheses. Use only <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> and <strong>TABLE</strong>.</p>
+<p>Examples:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Rule:</strong> format = <code>(TYPE: description)</code> or <code>(TYPE: M; description)</code>. Size is optional: <strong>S / M / L</strong>. If size is omitted, BOLO treats it as medium.</p>
 <ol>
 <li>Upload the manuscript in the <strong>Illustrate</strong> tab.</li>
 <li>Click <strong>Scan Image Markers</strong>.</li>
 <li>Generate images.</li>
 </ol>
-<h3>Option 3: Upload Your Own Images</h3>
-<p>You can upload your own images with captions and place them in the manuscript.</p>
+<h3>Own Images</h3>
+<p>The own-image section is at the <strong>bottom of the Illustrate window</strong>. You can upload your own images, add captions, and place matching markers in the manuscript.</p>
+<p>Marker examples:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>These markers must match the number exactly, including parentheses.</p>
 <ol>
 <li>Scroll to the bottom of the <strong>Illustrate</strong> tab.</li>
-<li>Upload your images.</li>
-<li>Add captions.</li>
-<li>Place markers in your manuscript: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li>
+<li>Upload your own image.</li>
+<li>Add a caption if needed.</li>
+<li>Place the matching marker in the manuscript.</li>
 <li>Click <strong>Scan Image Markers</strong>.</li>
 <li>Generate images.</li>
 </ol>
+<h3>Important Notes</h3>
+<ul>
+<li>What you see in the suggestion list is formatted to match the manual marker logic.</li>
+<li><strong>[scanned]</strong> may appear in the list as status information.</li>
+<li>After any changes in the suggestion list, click <strong>Update marker DOCX</strong>.</li>
+<li>You can always move, delete, edit or regenerate illustrations later.</li>
+<li>Large images require enough image resolution.</li>
+</ul>
 <div class="callout"><strong>Important workflow note:</strong> Illustrations affect the layout and total page count of your book. For this reason, illustration should be completed before creating the cover, so the final page count and spine width are calculated correctly.</div>
 <h3>Final Step</h3>
 <p>Once your images are generated, export your document and review the result.</p>
 <h3>Note on Table of Contents</h3>
-<p>Adding images and editing text can affect page layout. Because BOLO allows multiple ways of modifying content — both through editing and image generation — automatically updating the table of contents continuously can become unstable.</p>
+<p>Adding images and editing text can affect page layout. Because BOLO allows multiple ways of modifying content, both through editing and image generation, automatically updating the table of contents continuously can become unstable.</p>
 <p>For this reason, BOLO uses a static table of contents without page numbers. We recommend adding page numbers manually at the final stage. This only takes a few minutes and ensures full control and accuracy.</p>
 </div>
 <div class="section">
@@ -714,40 +723,50 @@ Næste kapiteloverskrift<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Du kan nemt tilføje illustrationer til din bog, efter at du har genereret manuskriptet.</p>
+<p>Du kan tilføje illustrationer efter, at manuskriptet er genereret. Alle illustrationstyper følger samme logik som billedmarkører. Almindelige billeder er den mest stabile løsning. Hvis du vil have <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> eller <strong>TABLE</strong>, skal du angive antal manuelt.</p>
+<div class="note"><strong>Grundworkflow:</strong> Angiv antal forslag, generér flere forslag end du har brug for, behold de bedste, og klik derefter på <strong>Update marker DOCX</strong>.
 <h3>Den hurtigste måde (anbefalet)</h3>
 <ol>
-<li>Gå til fanen <strong>Illustrate</strong>.</li>
-<li>Upload dit manuskript.</li>
-<li>Vælg <strong>Image size in DOCX</strong>.</li>
+<li>Gå til fanen <strong>Illustrate</strong>.</li><li>Upload dit manuskript.</li><li>Vælg <strong>Image style</strong> og <strong>Image size in DOCX</strong>.</li><li>Angiv <strong>Number of suggestions</strong>.</li><li>Klik på <strong>Suggest Image Placements</strong>.</li><li>Gennemgå forslagene og behold de bedste.</li><li>Klik på <strong>Update marker DOCX</strong>.</li><li>Klik på <strong>Generate Images</strong>.</li>
 </ol>
 <p>Du kan enten lade BOLO bestemme billedstørrelsen automatisk (<strong>BOLO decides (mixed)</strong>) eller vælge en fast størrelse til alle billeder.</p>
 <p>Tilgængelige faste størrelser:</p>
 <ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
-<p>Hvis du vælger en fast størrelse, bruger alle billeder denne størrelse. Hvis du lader BOLO bestemme, tilpasses billedstørrelserne automatisk efter konteksten; du kan selvfølgelig ændre den foreslåede størrelse i listen, for eksempel M i stedet for L.</p>
-<ol start="4"><li>Angiv antal forslag.</li><li>Klik på <strong>Suggest Image Placement</strong>.</li></ol>
-<div class="callout"><strong>Tip:</strong> Bed om 2–3 gange flere billeder, end du faktisk har brug for. Hvis du for eksempel vil have 10 billeder, så bed om 30 forslag.</div>
-<ol start="6"><li>Gennemgå forslagene.</li><li>Vælg dem, du kan lide.</li><li>Klik på <strong>Update marker DOCX</strong>.</li></ol>
-<p>Dette fjerner alle ubrugte billedmarkører og bevarer kun de valgte i manuskriptet.</p>
-<div class="callout"><strong>Vigtigt:</strong> Hvis du springer dette trin over, bliver alle foreslåede markører i dokumentet – også dem du ikke valgte – og de skal fjernes manuelt.</div>
-<ol start="9"><li>Klik på <strong>Generate Images</strong>.</li></ol>
-<p>BOLO skaber derefter automatisk relevante illustrationer, placerer dem i bogen og tilføjer billedtekster.</p>
-<h3>Mulighed 2: Skriv billedinstruktioner</h3>
-<p>Du kan definere billeder manuelt direkte i dit manuskript.</p>
-<p>Brug følgende format:</p>
-<p><code>(IMAGE: sted; år; beskrivelse)</code></p>
-<p>Eksempel:</p>
-<p><code>(IMAGE: Stockholms kajer; 1750; Formelle kajer, pakhuse, broer og skibe ved en voksende havne- og hovedstad)</code></p>
-<ol><li>Upload manuskriptet i fanen <strong>Illustrate</strong>.</li><li>Klik på <strong>Scan Image Markers</strong>.</li><li>Generér billeder.</li></ol>
-<h3>Mulighed 3: Upload dine egne billeder</h3>
-<p>Du kan uploade dine egne billeder med billedtekster og placere dem i manuskriptet.</p>
-<ol><li>Scroll til bunden af fanen <strong>Illustrate</strong>.</li><li>Upload dine billeder.</li><li>Tilføj billedtekster.</li><li>Placér markører i manuskriptet: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li><li>Klik på <strong>Scan Image Markers</strong>.</li><li>Generér billeder.</li></ol>
-<div class="callout"><strong>Vigtig workflow-note:</strong> Illustrationer påvirker layoutet og det samlede sidetal i bogen. Derfor bør illustration være færdig, før du skaber coveret, så det endelige sidetal og rygbredden beregnes korrekt.</div>
+<p>Hvis du vælger en fast størrelse, bruger alle billeder den størrelse. Hvis du lader BOLO bestemme, tilpasses størrelserne automatisk efter konteksten, og du kan stadig ændre den foreslåede størrelse i listen senere.</p>
+<div class="callout"><strong>Bedste praksis:</strong> Generér flere forslag end du har brug for. Eksempel: hvis du vil have 10 illustrationer, så generér først 20–30 forslag.</div>
+<p><strong>Standardadfærd:</strong> hvis alle specialtyper står på 0, bruger BOLO almindelige billedforslag. <strong>Diagram / Timeline</strong> er normalt pålidelige. <strong>Map / Table</strong> er eksperimentelle.</p>
+<h3>Manuelle markører</h3>
+<p>Du kan skrive markører direkte i manuskriptet med almindelige parenteser. Brug kun <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> og <strong>TABLE</strong>.</p>
+<p>Eksempler:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regel:</strong> format = <code>(TYPE: description)</code> eller <code>(TYPE: M; description)</code>. Størrelse er valgfri: <strong>S / M / L</strong>. Hvis størrelse udelades, behandler BOLO det som medium.</p>
+<ol>
+<li>Upload manuskriptet i fanen <strong>Illustrate</strong>.</li><li>Klik på <strong>Scan Image Markers</strong>.</li><li>Generér billeder.</li>
+</ol>
+<h3>Egne billeder</h3>
+<p>Sektionen til egne billeder findes <strong>nederst i Illustrate-vinduet</strong>. Du kan uploade dine egne billeder, tilføje billedtekster og placere matchende markører i manuskriptet.</p>
+<p>Markør-eksempler:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Disse markører skal matche nummeret præcist, inklusive parenteser.</p>
+<ol>
+<li>Scroll til bunden af fanen <strong>Illustrate</strong>.</li><li>Upload dit eget billede.</li><li>Tilføj en billedtekst om nødvendigt.</li><li>Placér den matchende markør i manuskriptet.</li><li>Klik på <strong>Scan Image Markers</strong>.</li><li>Generér billeder.</li>
+</ol>
+<h3>Vigtige noter</h3>
+<ul>
+<li>Det, du ser i forslaglisten, er formateret, så det matcher den manuelle markørlogik.</li><li><strong>[scanned]</strong> kan vises i listen som statusinformation.</li><li>Efter ændringer i forslaglisten skal du klikke på <strong>Update marker DOCX</strong>.</li><li>Du kan altid flytte, slette, redigere eller regenerere illustrationer senere.</li><li>Store billeder kræver tilstrækkelig billedopløsning.</li>
+</ul>
+<div class="callout"><strong>Vigtig workflow-note:</strong> Illustrationer påvirker layoutet og det samlede sidetal i din bog. Derfor bør illustration færdiggøres, før du laver coveret, så det endelige sidetal og rygbredden beregnes korrekt.</div>
 <h3>Sidste trin</h3>
-<p>Når dine billeder er genereret, eksporterer du dokumentet og gennemgår resultatet.</p>
+<p>Når billederne er genereret, eksporterer du dokumentet og gennemgår resultatet.</p>
 <h3>Bemærkning om indholdsfortegnelse</h3>
-<p>Tilføjelse af billeder og redigering af tekst kan påvirke sidelayoutet. Fordi BOLO giver flere måder at ændre indhold på – både gennem redigering og billedgenerering – kan en automatisk løbende opdatering af indholdsfortegnelsen blive ustabil.</p>
-<p>Derfor bruger BOLO en statisk indholdsfortegnelse uden sidetal. Vi anbefaler, at du tilføjer sidetal manuelt i slutfasen. Det tager kun få minutter og giver fuld kontrol og nøjagtighed.</p>
+<p>Tilføjelse af billeder og redigering af tekst kan påvirke sidelayoutet. Fordi BOLO giver flere måder at ændre indhold på, både gennem redigering og billedgenerering, kan en løbende automatisk opdatering af indholdsfortegnelsen blive ustabil.</p>
+<p>Derfor bruger BOLO en statisk indholdsfortegnelse uden sidetal. Vi anbefaler at tilføje sidetal manuelt i slutfasen. Det tager kun få minutter og sikrer fuld kontrol og nøjagtighed. Du kan også selv ændre layoutet på indholdsfortegnelsen eller generere en designet version med værktøjer som ChatGPT og indsætte den.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - anbefalet workflow</h2>
@@ -940,36 +959,50 @@ Nächster Kapiteltitel<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Sie können Ihrem Buch nach der Manuskriptgenerierung ganz einfach Illustrationen hinzufügen.</p>
+<p>Sie können nach der Generierung Ihres Manuskripts Illustrationen hinzufügen. Alle Illustrationsformate folgen derselben Logik wie Bildmarker. Normale Bilder sind die stabilste Option. Wenn Sie <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> oder <strong>TABLE</strong> möchten, geben Sie die Anzahl manuell ein.</p>
+<div class="note"><strong>Grundablauf:</strong> Legen Sie die Anzahl der Vorschläge fest, erzeugen Sie mehr Vorschläge als benötigt, behalten Sie die besten und klicken Sie dann auf <strong>Update marker DOCX</strong>.
 <h3>Der schnellste Weg (empfohlen)</h3>
-<ol><li>Gehen Sie zum Tab <strong>Illustrate</strong>.</li><li>Laden Sie Ihr Manuskript hoch.</li><li>Wählen Sie <strong>Image size in DOCX</strong>.</li></ol>
+<ol>
+<li>Gehen Sie zum Tab <strong>Illustrate</strong>.</li><li>Laden Sie Ihr Manuskript hoch.</li><li>Wählen Sie <strong>Image style</strong> und <strong>Image size in DOCX</strong>.</li><li>Legen Sie <strong>Number of suggestions</strong> fest.</li><li>Klicken Sie auf <strong>Suggest Image Placements</strong>.</li><li>Prüfen Sie die Vorschläge und behalten Sie die besten.</li><li>Klicken Sie auf <strong>Update marker DOCX</strong>.</li><li>Klicken Sie auf <strong>Generate Images</strong>.</li>
+</ol>
 <p>Sie können entweder BOLO die Bildgröße automatisch bestimmen lassen (<strong>BOLO decides (mixed)</strong>) oder eine feste Größe für alle Bilder wählen.</p>
 <p>Verfügbare feste Größen:</p>
 <ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
-<p>Wenn Sie eine feste Größe wählen, verwenden alle Bilder diese Größe. Wenn Sie BOLO entscheiden lassen, werden die Bildgrößen automatisch an den Kontext angepasst; natürlich können Sie die vorgeschlagene Größe in der Liste ändern, zum Beispiel M statt L.</p>
-<ol start="4"><li>Geben Sie die Anzahl der Vorschläge ein.</li><li>Klicken Sie auf <strong>Suggest Image Placement</strong>.</li></ol>
-<div class="callout"><strong>Tipp:</strong> Fordern Sie 2–3× mehr Bilder an, als Sie tatsächlich benötigen. Wenn Sie zum Beispiel 10 Bilder möchten, fordern Sie 30 Vorschläge an.</div>
-<ol start="6"><li>Prüfen Sie die Vorschläge.</li><li>Wählen Sie die aus, die Ihnen gefallen.</li><li>Klicken Sie auf <strong>Update marker DOCX</strong>.</li></ol>
-<p>Dadurch werden alle ungenutzten Bildmarker entfernt und nur die ausgewählten Marker im Manuskript behalten.</p>
-<div class="callout"><strong>Wichtig:</strong> Wenn Sie diesen Schritt überspringen, bleiben alle vorgeschlagenen Marker im Dokument – auch diejenigen, die Sie nicht ausgewählt haben – und müssen manuell entfernt werden.</div>
-<ol start="9"><li>Klicken Sie auf <strong>Generate Images</strong>.</li></ol>
-<p>BOLO erstellt dann automatisch passende Illustrationen, platziert sie im Buch und fügt Bildunterschriften hinzu.</p>
-<h3>Option 2: Bildanweisungen schreiben</h3>
-<p>Sie können Bilder direkt im Manuskript manuell definieren.</p>
-<p>Verwenden Sie folgendes Format:</p>
-<p><code>(IMAGE: Ort; Jahr; Beschreibung)</code></p>
-<p>Beispiel:</p>
-<p><code>(IMAGE: Stockholmer Ufer; 1750; Formale Kais, Lagerhäuser, Brücken und Schiffe an einer wachsenden Hafen- und Hauptstadt)</code></p>
-<ol><li>Laden Sie das Manuskript im Tab <strong>Illustrate</strong> hoch.</li><li>Klicken Sie auf <strong>Scan Image Markers</strong>.</li><li>Generieren Sie Bilder.</li></ol>
-<h3>Option 3: Eigene Bilder hochladen</h3>
-<p>Sie können eigene Bilder mit Bildunterschriften hochladen und im Manuskript platzieren.</p>
-<ol><li>Scrollen Sie zum unteren Ende des Tabs <strong>Illustrate</strong>.</li><li>Laden Sie Ihre Bilder hoch.</li><li>Fügen Sie Bildunterschriften hinzu.</li><li>Setzen Sie Marker im Manuskript: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li><li>Klicken Sie auf <strong>Scan Image Markers</strong>.</li><li>Generieren Sie Bilder.</li></ol>
+<p>Wenn Sie eine feste Größe wählen, verwenden alle Bilder diese Größe. Wenn BOLO entscheidet, werden die Größen automatisch an den Kontext angepasst, und Sie können die vorgeschlagene Größe später in der Liste noch ändern.</p>
+<div class="callout"><strong>Best Practice:</strong> Erzeugen Sie mehr Vorschläge als benötigt. Beispiel: Wenn Sie 10 Illustrationen möchten, erzeugen Sie zuerst 20–30 Vorschläge.</div>
+<p><strong>Standardverhalten:</strong> Wenn alle Spezialtypen auf 0 stehen, verwendet BOLO normale Bildvorschläge. <strong>Diagram / Timeline</strong> sind in der Regel zuverlässig. <strong>Map / Table</strong> sind experimentell.</p>
+<h3>Manuelle Marker</h3>
+<p>Sie können Marker direkt mit normalen Klammern in Ihr Manuskript schreiben. Verwenden Sie nur <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> und <strong>TABLE</strong>.</p>
+<p>Beispiele:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regel:</strong> Format = <code>(TYPE: description)</code> oder <code>(TYPE: M; description)</code>. Die Größe ist optional: <strong>S / M / L</strong>. Wenn keine Größe angegeben ist, behandelt BOLO dies als Medium.</p>
+<ol>
+<li>Laden Sie das Manuskript im Tab <strong>Illustrate</strong> hoch.</li><li>Klicken Sie auf <strong>Scan Image Markers</strong>.</li><li>Generieren Sie Bilder.</li>
+</ol>
+<h3>Eigene Bilder</h3>
+<p>Der Bereich für eigene Bilder befindet sich <strong>unten im Illustrate-Fenster</strong>. Sie können eigene Bilder hochladen, Bildunterschriften hinzufügen und passende Marker im Manuskript platzieren.</p>
+<p>Marker-Beispiele:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Diese Marker müssen exakt zur Nummer passen, einschließlich der Klammern.</p>
+<ol>
+<li>Scrollen Sie zum unteren Ende des Tabs <strong>Illustrate</strong>.</li><li>Laden Sie Ihr eigenes Bild hoch.</li><li>Fügen Sie bei Bedarf eine Bildunterschrift hinzu.</li><li>Setzen Sie den passenden Marker im Manuskript.</li><li>Klicken Sie auf <strong>Scan Image Markers</strong>.</li><li>Generieren Sie Bilder.</li>
+</ol>
+<h3>Wichtige Hinweise</h3>
+<ul>
+<li>Was Sie in der Vorschlagsliste sehen, ist so formatiert, dass es der manuellen Markerlogik entspricht.</li><li><strong>[scanned]</strong> kann in der Liste als Statusinformation erscheinen.</li><li>Nach Änderungen in der Vorschlagsliste klicken Sie auf <strong>Update marker DOCX</strong>.</li><li>Sie können Illustrationen später jederzeit verschieben, löschen, bearbeiten oder neu generieren.</li><li>Große Bilder benötigen eine ausreichende Auflösung.</li>
+</ul>
 <div class="callout"><strong>Wichtiger Workflow-Hinweis:</strong> Illustrationen beeinflussen Layout und Gesamtseitenzahl Ihres Buches. Deshalb sollte die Illustration abgeschlossen sein, bevor Sie das Cover erstellen, damit die endgültige Seitenzahl und Rückenbreite korrekt berechnet werden.</div>
 <h3>Letzter Schritt</h3>
-<p>Sobald Ihre Bilder generiert wurden, exportieren Sie das Dokument und prüfen das Ergebnis.</p>
+<p>Sobald Ihre Bilder generiert sind, exportieren Sie Ihr Dokument und prüfen das Ergebnis.</p>
 <h3>Hinweis zum Inhaltsverzeichnis</h3>
-<p>Das Hinzufügen von Bildern und das Bearbeiten von Text können das Seitenlayout beeinflussen. Da BOLO mehrere Möglichkeiten zur Inhaltsänderung erlaubt – sowohl durch Bearbeitung als auch durch Bildgenerierung –, kann eine fortlaufend automatisch aktualisierte Inhaltsübersicht instabil werden.</p>
-<p>Deshalb verwendet BOLO ein statisches Inhaltsverzeichnis ohne Seitenzahlen. Wir empfehlen, die Seitenzahlen erst im letzten Schritt manuell hinzuzufügen. Das dauert nur wenige Minuten und gewährleistet volle Kontrolle und Genauigkeit.</p>
+<p>Das Hinzufügen von Bildern und das Bearbeiten von Text können das Seitenlayout beeinflussen. Da BOLO mehrere Möglichkeiten zur Inhaltsänderung erlaubt, sowohl durch Bearbeitung als auch durch Bildgenerierung, kann eine fortlaufend automatische Aktualisierung des Inhaltsverzeichnisses instabil werden.</p>
+<p>Deshalb verwendet BOLO ein statisches Inhaltsverzeichnis ohne Seitenzahlen. Wir empfehlen, die Seitenzahlen am Ende manuell hinzuzufügen. Das dauert nur wenige Minuten und gewährleistet volle Kontrolle und Genauigkeit. Sie können das Layout des Inhaltsverzeichnisses auch selbst neu gestalten oder mit Werkzeugen wie ChatGPT eine gestaltete Version erzeugen und einfügen.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - empfohlener Workflow</h2>
@@ -1162,36 +1195,50 @@ Siguiente título de capítulo<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Puedes añadir ilustraciones fácilmente a tu libro después de generar el manuscrito.</p>
+<p>Puedes añadir ilustraciones después de generar el manuscrito. Todos los formatos de ilustración siguen la misma lógica que los marcadores de imagen. Las imágenes normales son la opción más estable. Si quieres <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> o <strong>TABLE</strong>, introduce la cantidad manualmente.</p>
+<div class="note"><strong>Flujo básico:</strong> Define el número de sugerencias, genera más sugerencias de las necesarias, conserva las mejores y luego haz clic en <strong>Update marker DOCX</strong>.
 <h3>La forma más rápida (recomendada)</h3>
-<ol><li>Ve a la pestaña <strong>Illustrate</strong>.</li><li>Sube tu manuscrito.</li><li>Elige <strong>Image size in DOCX</strong>.</li></ol>
+<ol>
+<li>Ve a la pestaña <strong>Illustrate</strong>.</li><li>Sube tu manuscrito.</li><li>Elige <strong>Image style</strong> y <strong>Image size in DOCX</strong>.</li><li>Define <strong>Number of suggestions</strong>.</li><li>Haz clic en <strong>Suggest Image Placements</strong>.</li><li>Revisa las sugerencias y conserva las mejores.</li><li>Haz clic en <strong>Update marker DOCX</strong>.</li><li>Haz clic en <strong>Generate Images</strong>.</li>
+</ol>
 <p>Puedes dejar que BOLO decida automáticamente el tamaño de la imagen (<strong>BOLO decides (mixed)</strong>) o elegir un tamaño fijo para todas las imágenes.</p>
 <p>Tamaños fijos disponibles:</p>
 <ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
-<p>Si eliges un tamaño fijo, todas las imágenes usarán ese tamaño. Si dejas que BOLO decida, los tamaños se adaptarán automáticamente al contexto; naturalmente puedes cambiar el tamaño sugerido en la lista, por ejemplo M en lugar de L.</p>
-<ol start="4"><li>Introduce el número de sugerencias.</li><li>Haz clic en <strong>Suggest Image Placement</strong>.</li></ol>
-<div class="callout"><strong>Consejo:</strong> Solicita entre 2 y 3 veces más imágenes de las que realmente necesitas. Por ejemplo, pide 30 sugerencias si quieres 10 imágenes.</div>
-<ol start="6"><li>Revisa las sugerencias.</li><li>Selecciona las que te gusten.</li><li>Haz clic en <strong>Update marker DOCX</strong>.</li></ol>
-<p>Esto elimina todos los marcadores de imagen no utilizados y conserva solo los seleccionados en el manuscrito.</p>
-<div class="callout"><strong>Importante:</strong> Si omites este paso, todos los marcadores sugeridos permanecerán en el documento — incluidos los que no hayas seleccionado — y deberán eliminarse manualmente.</div>
-<ol start="9"><li>Haz clic en <strong>Generate Images</strong>.</li></ol>
-<p>BOLO creará entonces ilustraciones relevantes de forma automática, las colocará en el libro y añadirá pies de imagen.</p>
-<h3>Opción 2: Escribir instrucciones de imagen</h3>
-<p>Puedes definir imágenes manualmente directamente en el manuscrito.</p>
-<p>Usa el siguiente formato:</p>
-<p><code>(IMAGE: lugar; año; descripción)</code></p>
-<p>Ejemplo:</p>
-<p><code>(IMAGE: muelle de Estocolmo; 1750; Muelles formales, almacenes, puentes y barcos en una capital portuaria en crecimiento)</code></p>
-<ol><li>Sube el manuscrito en la pestaña <strong>Illustrate</strong>.</li><li>Haz clic en <strong>Scan Image Markers</strong>.</li><li>Genera imágenes.</li></ol>
-<h3>Opción 3: Subir tus propias imágenes</h3>
-<p>Puedes subir tus propias imágenes con pies de foto y colocarlas en el manuscrito.</p>
-<ol><li>Desplázate hasta la parte inferior de la pestaña <strong>Illustrate</strong>.</li><li>Sube tus imágenes.</li><li>Añade pies de foto.</li><li>Coloca marcadores en el manuscrito: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li><li>Haz clic en <strong>Scan Image Markers</strong>.</li><li>Genera imágenes.</li></ol>
-<div class="callout"><strong>Nota importante sobre el flujo de trabajo:</strong> Las ilustraciones afectan al diseño y al número total de páginas del libro. Por eso, la ilustración debe completarse antes de crear el cover, para que el número final de páginas y el ancho del lomo se calculen correctamente.</div>
+<p>Si eliges un tamaño fijo, todas las imágenes usarán ese tamaño. Si dejas que BOLO decida, los tamaños se adaptan automáticamente según el contexto, y después aún puedes cambiar el tamaño sugerido en la lista.</p>
+<div class="callout"><strong>Mejor práctica:</strong> Genera más sugerencias de las necesarias. Ejemplo: si quieres 10 ilustraciones, genera primero 20–30 sugerencias.</div>
+<p><strong>Comportamiento por defecto:</strong> si todos los tipos especiales están en 0, BOLO usa sugerencias de imagen normales. <strong>Diagram / Timeline</strong> suelen ser fiables. <strong>Map / Table</strong> son experimentales.</p>
+<h3>Marcadores manuales</h3>
+<p>Puedes escribir marcadores directamente en el manuscrito usando paréntesis normales. Usa solo <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> y <strong>TABLE</strong>.</p>
+<p>Ejemplos:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regla:</strong> formato = <code>(TYPE: description)</code> o <code>(TYPE: M; description)</code>. El tamaño es opcional: <strong>S / M / L</strong>. Si no se indica el tamaño, BOLO lo trata como medium.</p>
+<ol>
+<li>Sube el manuscrito en la pestaña <strong>Illustrate</strong>.</li><li>Haz clic en <strong>Scan Image Markers</strong>.</li><li>Genera imágenes.</li>
+</ol>
+<h3>Imágenes propias</h3>
+<p>La sección de imágenes propias está en la <strong>parte inferior de la ventana Illustrate</strong>. Puedes subir tus propias imágenes, añadir pies de foto y colocar marcadores coincidentes en el manuscrito.</p>
+<p>Ejemplos de marcadores:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Estos marcadores deben coincidir exactamente con el número, incluidos los paréntesis.</p>
+<ol>
+<li>Desplázate hasta la parte inferior de la pestaña <strong>Illustrate</strong>.</li><li>Sube tu propia imagen.</li><li>Añade un pie de foto si hace falta.</li><li>Coloca el marcador correspondiente en el manuscrito.</li><li>Haz clic en <strong>Scan Image Markers</strong>.</li><li>Genera imágenes.</li>
+</ol>
+<h3>Notas importantes</h3>
+<ul>
+<li>Lo que ves en la lista de sugerencias está formateado para coincidir con la lógica de los marcadores manuales.</li><li><strong>[scanned]</strong> puede aparecer en la lista como información de estado.</li><li>Después de cualquier cambio en la lista de sugerencias, haz clic en <strong>Update marker DOCX</strong>.</li><li>Siempre puedes mover, eliminar, editar o regenerar ilustraciones más tarde.</li><li>Las imágenes grandes requieren suficiente resolución.</li>
+</ul>
+<div class="callout"><strong>Nota importante sobre el flujo de trabajo:</strong> Las ilustraciones afectan al diseño y al número total de páginas de tu libro. Por eso, la ilustración debe completarse antes de crear el cover, para que el número final de páginas y el ancho del lomo se calculen correctamente.</div>
 <h3>Paso final</h3>
 <p>Una vez generadas las imágenes, exporta el documento y revisa el resultado.</p>
 <h3>Nota sobre la tabla de contenido</h3>
-<p>Añadir imágenes y editar texto puede afectar al diseño de página. Como BOLO permite varias formas de modificar el contenido — tanto mediante edición como mediante generación de imágenes — una actualización automática y continua de la tabla de contenido puede volverse inestable.</p>
-<p>Por esta razón, BOLO utiliza una tabla de contenido estática sin números de página. Recomendamos añadir los números de página manualmente en la fase final. Solo lleva unos minutos y garantiza un control y una precisión completos.</p>
+<p>Añadir imágenes y editar texto puede afectar al diseño de página. Como BOLO permite varias formas de modificar el contenido, tanto mediante edición como mediante generación de imágenes, una actualización automática continua de la tabla de contenido puede volverse inestable.</p>
+<p>Por esta razón, BOLO utiliza una tabla de contenido estática sin números de página. Recomendamos añadir los números de página manualmente en la fase final. Solo lleva unos minutos y garantiza control y precisión completos. También puedes rediseñar tú mismo el diseño de la tabla de contenido o generar una versión con estilo con herramientas como ChatGPT y pegarla.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - flujo de trabajo recomendado</h2>
@@ -1384,36 +1431,50 @@ Titre du chapitre suivant<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Vous pouvez facilement ajouter des illustrations à votre livre après avoir généré le manuscrit.</p>
+<p>Vous pouvez ajouter des illustrations après avoir généré votre manuscrit. Tous les formats d’illustration suivent la même logique que les marqueurs d’image. Les images classiques sont l’option la plus stable. Si vous voulez <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> ou <strong>TABLE</strong>, indiquez la quantité manuellement.</p>
+<div class="note"><strong>Workflow de base :</strong> Définissez le nombre de suggestions, générez plus de suggestions que nécessaire, gardez les meilleures, puis cliquez sur <strong>Update marker DOCX</strong>.
 <h3>La méthode la plus rapide (recommandée)</h3>
-<ol><li>Allez dans l’onglet <strong>Illustrate</strong>.</li><li>Téléversez votre manuscrit.</li><li>Choisissez <strong>Image size in DOCX</strong>.</li></ol>
-<p>Vous pouvez soit laisser BOLO déterminer automatiquement la taille de l’image (<strong>BOLO decides (mixed)</strong>), soit choisir une taille fixe pour toutes les images.</p>
+<ol>
+<li>Allez dans l’onglet <strong>Illustrate</strong>.</li><li>Téléversez votre manuscrit.</li><li>Choisissez <strong>Image style</strong> et <strong>Image size in DOCX</strong>.</li><li>Définissez <strong>Number of suggestions</strong>.</li><li>Cliquez sur <strong>Suggest Image Placements</strong>.</li><li>Examinez les suggestions et gardez les meilleures.</li><li>Cliquez sur <strong>Update marker DOCX</strong>.</li><li>Cliquez sur <strong>Generate Images</strong>.</li>
+</ol>
+<p>Vous pouvez soit laisser BOLO décider automatiquement de la taille de l’image (<strong>BOLO decides (mixed)</strong>), soit choisir une taille fixe pour toutes les images.</p>
 <p>Tailles fixes disponibles :</p>
 <ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
-<p>Si vous choisissez une taille fixe, toutes les images utiliseront cette taille. Si vous laissez BOLO décider, les tailles seront adaptées automatiquement au contexte ; vous pouvez bien sûr modifier la taille suggérée dans la liste, par exemple M au lieu de L.</p>
-<ol start="4"><li>Saisissez le nombre de suggestions.</li><li>Cliquez sur <strong>Suggest Image Placement</strong>.</li></ol>
-<div class="callout"><strong>Conseil :</strong> Demandez 2 à 3 fois plus d’images que nécessaire. Par exemple, demandez 30 suggestions si vous voulez 10 images.</div>
-<ol start="6"><li>Examinez les suggestions.</li><li>Sélectionnez celles qui vous plaisent.</li><li>Cliquez sur <strong>Update marker DOCX</strong>.</li></ol>
-<p>Cela supprime tous les marqueurs d’image inutilisés et ne conserve que ceux que vous avez sélectionnés dans votre manuscrit.</p>
-<div class="callout"><strong>Important :</strong> Si vous sautez cette étape, tous les marqueurs suggérés resteront dans le document — y compris ceux que vous n’avez pas sélectionnés — et devront être supprimés manuellement.</div>
-<ol start="9"><li>Cliquez sur <strong>Generate Images</strong>.</li></ol>
-<p>BOLO crée alors automatiquement des illustrations pertinentes, les place dans votre livre et ajoute des légendes.</p>
-<h3>Option 2 : écrire des instructions d’image</h3>
-<p>Vous pouvez définir les images manuellement directement dans votre manuscrit.</p>
-<p>Utilisez le format suivant :</p>
-<p><code>(IMAGE: lieu; année; description)</code></p>
-<p>Exemple :</p>
-<p><code>(IMAGE: quais de Stockholm; 1750; Quais formels, entrepôts, ponts et navires dans une capitale portuaire en expansion)</code></p>
-<ol><li>Téléversez le manuscrit dans l’onglet <strong>Illustrate</strong>.</li><li>Cliquez sur <strong>Scan Image Markers</strong>.</li><li>Générez les images.</li></ol>
-<h3>Option 3 : téléverser vos propres images</h3>
-<p>Vous pouvez téléverser vos propres images avec légendes et les placer dans le manuscrit.</p>
-<ol><li>Faites défiler jusqu’en bas de l’onglet <strong>Illustrate</strong>.</li><li>Téléversez vos images.</li><li>Ajoutez des légendes.</li><li>Placez des marqueurs dans votre manuscrit : <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li><li>Cliquez sur <strong>Scan Image Markers</strong>.</li><li>Générez les images.</li></ol>
-<div class="callout"><strong>Note importante sur le workflow :</strong> Les illustrations influencent la mise en page et le nombre total de pages du livre. Pour cette raison, l’illustration doit être terminée avant de créer le cover, afin que le nombre final de pages et la largeur du dos soient calculés correctement.</div>
+<p>Si vous choisissez une taille fixe, toutes les images utiliseront cette taille. Si BOLO décide, les tailles sont adaptées automatiquement selon le contexte, et vous pouvez ensuite modifier la taille suggérée dans la liste.</p>
+<div class="callout"><strong>Bonne pratique :</strong> Générez plus de suggestions que nécessaire. Exemple : si vous voulez 10 illustrations, générez d’abord 20 à 30 suggestions.</div>
+<p><strong>Comportement par défaut :</strong> si tous les types spéciaux sont réglés sur 0, BOLO utilise des suggestions d’images classiques. <strong>Diagram / Timeline</strong> sont généralement fiables. <strong>Map / Table</strong> sont expérimentaux.</p>
+<h3>Marqueurs manuels</h3>
+<p>Vous pouvez écrire des marqueurs directement dans votre manuscrit avec des parenthèses normales. Utilisez uniquement <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> et <strong>TABLE</strong>.</p>
+<p>Exemples :</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Règle :</strong> format = <code>(TYPE: description)</code> ou <code>(TYPE: M; description)</code>. La taille est optionnelle : <strong>S / M / L</strong>. Si la taille est omise, BOLO la traite comme medium.</p>
+<ol>
+<li>Téléversez le manuscrit dans l’onglet <strong>Illustrate</strong>.</li><li>Cliquez sur <strong>Scan Image Markers</strong>.</li><li>Générez les images.</li>
+</ol>
+<h3>Vos propres images</h3>
+<p>La section des images personnelles se trouve <strong>en bas de la fenêtre Illustrate</strong>. Vous pouvez téléverser vos propres images, ajouter des légendes et placer les marqueurs correspondants dans le manuscrit.</p>
+<p>Exemples de marqueurs :</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Ces marqueurs doivent correspondre exactement au numéro, parenthèses comprises.</p>
+<ol>
+<li>Faites défiler jusqu’en bas de l’onglet <strong>Illustrate</strong>.</li><li>Téléversez votre propre image.</li><li>Ajoutez une légende si nécessaire.</li><li>Placez le marqueur correspondant dans le manuscrit.</li><li>Cliquez sur <strong>Scan Image Markers</strong>.</li><li>Générez les images.</li>
+</ol>
+<h3>Notes importantes</h3>
+<ul>
+<li>Ce que vous voyez dans la liste des suggestions est formaté pour correspondre à la logique des marqueurs manuels.</li><li><strong>[scanned]</strong> peut apparaître dans la liste comme information de statut.</li><li>Après toute modification dans la liste des suggestions, cliquez sur <strong>Update marker DOCX</strong>.</li><li>Vous pouvez toujours déplacer, supprimer, modifier ou régénérer des illustrations plus tard.</li><li>Les grandes images nécessitent une résolution suffisante.</li>
+</ul>
+<div class="callout"><strong>Note importante sur le workflow :</strong> Les illustrations influencent la mise en page et le nombre total de pages de votre livre. Pour cette raison, l’illustration doit être terminée avant de créer le cover, afin que le nombre final de pages et la largeur du dos soient calculés correctement.</div>
 <h3>Étape finale</h3>
 <p>Une fois les images générées, exportez votre document et vérifiez le résultat.</p>
 <h3>Note sur la table des matières</h3>
-<p>L’ajout d’images et l’édition du texte peuvent affecter la mise en page. Comme BOLO permet plusieurs façons de modifier le contenu — à la fois par l’édition et par la génération d’images — une mise à jour automatique et continue de la table des matières peut devenir instable.</p>
-<p>Pour cette raison, BOLO utilise une table des matières statique sans numéros de page. Nous recommandons d’ajouter les numéros de page manuellement à la fin. Cela ne prend que quelques minutes et garantit un contrôle et une précision complets.</p>
+<p>L’ajout d’images et l’édition du texte peuvent affecter la mise en page. Comme BOLO permet plusieurs façons de modifier le contenu, à la fois par l’édition et par la génération d’images, une mise à jour automatique continue de la table des matières peut devenir instable.</p>
+<p>Pour cette raison, BOLO utilise une table des matières statique sans numéros de page. Nous recommandons d’ajouter les numéros de page manuellement à la fin. Cela ne prend que quelques minutes et garantit un contrôle et une précision complets. Vous pouvez aussi refaire vous-même la mise en page de la table des matières ou générer une version stylisée avec des outils comme ChatGPT et la coller.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - workflow recommandé</h2>
@@ -1545,33 +1606,51 @@ Titre du chapitre suivant<br/>
 </section>
 <section class="page"><div class="topline"></div><div class="mast"><div>BOLO AI Publishing Pipeline</div><div>Guida utente</div></div>
 <div class="section">
-<h3><span class="bullet">■</span>4. Flusso di lavoro consigliato per creare un libro</h3>
-<p>Il flusso di lavoro più efficace inizia di solito con un <strong>Book Brief</strong> dettagliato. Un brief più lungo e specifico dà in genere risultati migliori.<br/><strong>Nota:</strong> Il Base Prompt serve solo a creare il tuo Book Brief. Non incollarlo direttamente in BOLO.</p>
-<p>Un flusso tipico è:</p>
-<p>1. Fai clic su <strong>Copy Base Prompt</strong> in BOLO.<br/>
-    2. Incolla il prompt in un servizio di IA come ChatGPT.<br/>
-    3. Sviluppa l'idea del libro in un Book Brief chiaro e dettagliato.<br/>
-    4. Affina il brief attraverso alcune iterazioni finché la struttura non sembra giusta.<br/>
-    5. Incolla il brief finale in BOLO.<br/>
-    6. Scegli come creare il tuo outline:<br/>
-    - <strong>AutoBook</strong>: genera un outline completo a partire dal tuo Book Brief<br/>
-    - <strong>AI Sections</strong>: usa i tuoi titoli di capitolo e lascia che BOLO crei i sottotitoli<br/>
-    - <strong>Manual Outline</strong>: usa il tuo outline completo (capitoli e sottotitoli)<br/>
-    7. Esegui <strong>Test Mode</strong> prima di generare il manoscritto completo.<br/>
-<span><strong>Suggerimento:</strong> In <strong>Test Mode</strong>, confronta il numero di pagine stimato con il tuo obiettivo (per esempio 120 contro 200 pagine). Se la stima è molto più bassa, modifica il tuo Book Brief ampliando il contenuto o dividendo gli argomenti in più capitoli. Questo è particolarmente importante per temi più ristretti.</span><br/>
-    8. Rivedi e modifica il manoscritto DOCX se necessario.<br/>
-    9. Usa <strong>Re-Export</strong> quando devi riparare o ricostruire l'esportazione dopo una modifica esterna.</p>
-<div class="note">
-Esempio di formato per <strong>Manual Outline</strong>:<br/><br/>
-    Titolo del capitolo<br/>
-    - Sottotitolo<br/>
-    - Sottotitolo<br/>
-    - Sottotitolo<br/><br/>
-    Titolo del capitolo successivo<br/>
-    - Sottotitolo<br/>
-    - Sottotitolo<br/>
+<h2><span class="bullet">■</span>4. Illustrate</h2>
+<p>Puoi aggiungere illustrazioni dopo aver generato il manoscritto. Tutti i formati di illustrazione seguono la stessa logica dei marker immagine. Le immagini normali sono l’opzione più stabile. Se vuoi <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> o <strong>TABLE</strong>, inserisci la quantità manualmente.</p>
+<div class="note"><strong>Flusso di base:</strong> Imposta il numero di suggerimenti, genera più suggerimenti del necessario, conserva i migliori e poi fai clic su <strong>Update marker DOCX</strong>.
+<h3>Il modo più rapido (consigliato)</h3>
+<ol>
+<li>Vai alla scheda <strong>Illustrate</strong>.</li><li>Carica il manoscritto.</li><li>Scegli <strong>Image style</strong> e <strong>Image size in DOCX</strong>.</li><li>Imposta <strong>Number of suggestions</strong>.</li><li>Fai clic su <strong>Suggest Image Placements</strong>.</li><li>Rivedi i suggerimenti e conserva i migliori.</li><li>Fai clic su <strong>Update marker DOCX</strong>.</li><li>Fai clic su <strong>Generate Images</strong>.</li>
+</ol>
+<p>Puoi lasciare che BOLO decida automaticamente la dimensione dell’immagine (<strong>BOLO decides (mixed)</strong>) oppure scegliere una dimensione fissa per tutte le immagini.</p>
+<p>Dimensioni fisse disponibili:</p>
+<ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
+<p>Se scegli una dimensione fissa, tutte le immagini useranno quella dimensione. Se lasci decidere a BOLO, le dimensioni vengono adattate automaticamente in base al contesto e puoi comunque cambiare la dimensione suggerita più tardi nella lista.</p>
+<div class="callout"><strong>Best practice:</strong> Genera più suggerimenti del necessario. Esempio: se vuoi 10 illustrazioni, genera prima 20–30 suggerimenti.</div>
+<p><strong>Comportamento predefinito:</strong> se tutti i tipi speciali sono impostati su 0, BOLO usa normali suggerimenti immagine. <strong>Diagram / Timeline</strong> sono di solito affidabili. <strong>Map / Table</strong> sono sperimentali.</p>
+<h3>Marker manuali</h3>
+<p>Puoi scrivere i marker direttamente nel manoscritto usando normali parentesi. Usa solo <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> e <strong>TABLE</strong>.</p>
+<p>Esempi:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regola:</strong> formato = <code>(TYPE: description)</code> oppure <code>(TYPE: M; description)</code>. La dimensione è facoltativa: <strong>S / M / L</strong>. Se la dimensione viene omessa, BOLO la considera medium.</p>
+<ol>
+<li>Carica il manoscritto nella scheda <strong>Illustrate</strong>.</li><li>Fai clic su <strong>Scan Image Markers</strong>.</li><li>Genera le immagini.</li>
+</ol>
+<h3>Immagini proprie</h3>
+<p>La sezione per le immagini proprie si trova <strong>in fondo alla finestra Illustrate</strong>. Puoi caricare le tue immagini, aggiungere didascalie e inserire nel manoscritto i marker corrispondenti.</p>
+<p>Esempi di marker:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Questi marker devono corrispondere esattamente al numero, parentesi comprese.</p>
+<ol>
+<li>Scorri fino in fondo alla scheda <strong>Illustrate</strong>.</li><li>Carica la tua immagine.</li><li>Aggiungi una didascalia se necessario.</li><li>Inserisci il marker corrispondente nel manoscritto.</li><li>Fai clic su <strong>Scan Image Markers</strong>.</li><li>Genera le immagini.</li>
+</ol>
+<h3>Note importanti</h3>
+<ul>
+<li>Ciò che vedi nella lista dei suggerimenti è formattato per corrispondere alla logica dei marker manuali.</li><li><strong>[scanned]</strong> può apparire nella lista come informazione di stato.</li><li>Dopo qualsiasi modifica nella lista dei suggerimenti, fai clic su <strong>Update marker DOCX</strong>.</li><li>Puoi sempre spostare, eliminare, modificare o rigenerare le illustrazioni in seguito.</li><li>Le immagini grandi richiedono una risoluzione sufficiente.</li>
+</ul>
+<div class="callout"><strong>Nota importante sul flusso di lavoro:</strong> Le illustrazioni influenzano il layout e il numero totale di pagine del libro. Per questo motivo, l’illustrazione dovrebbe essere completata prima di creare il cover, così il conteggio finale delle pagine e la larghezza del dorso saranno calcolati correttamente.</div>
+<h3>Passaggio finale</h3>
+<p>Una volta generate le immagini, esporta il documento e controlla il risultato.</p>
+<h3>Nota sull’indice</h3>
+<p>L’aggiunta di immagini e la modifica del testo possono influenzare il layout di pagina. Poiché BOLO consente più modi di modificare il contenuto, sia tramite editing sia tramite generazione di immagini, un aggiornamento automatico continuo dell’indice può diventare instabile.</p>
+<p>Per questo motivo, BOLO usa un indice statico senza numeri di pagina. Consigliamo di aggiungere i numeri di pagina manualmente nella fase finale. Richiede solo pochi minuti e garantisce pieno controllo e precisione. Puoi anche ridisegnare tu stesso il layout dell’indice oppure generare una versione stilizzata con strumenti come ChatGPT e incollarla.</p>
 </div>
-<p>Per argomenti più ristretti, sii esplicito su ciò che ogni capitolo deve contenere. Per argomenti molto ampi, mantieni aspettative realistiche rispetto al numero di pagine scelto. Non puoi aspettarti una storia del mondo in 50 pagine, né un libro di 500 pagine su una piccola città di 10.000 abitanti.</p>
 </div>
 <div class="section">
 <h3><span class="bullet">■</span>5. Costo</h3>
@@ -1828,65 +1907,50 @@ Next Chapter Title<br/>
 <p>For narrow subjects, be explicit about what each chapter should contain. For very broad subjects, keep expectations realistic in relation to the selected page count. You cannot expect a full world history in 50 pages, and you should not expect a 500-page book about a small town of 10,000 inhabitants.</p>
 </div><div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>You can easily add illustrations to your book after generating your manuscript.</p>
-<h3>The Fastest Way (Recommended)</h3>
+<p>Je kunt illustraties toevoegen nadat je manuscript is gegenereerd. Alle illustratieformaten volgen dezelfde logica als afbeeldingsmarkeringen. Gewone afbeeldingen zijn de meest stabiele optie. Als je <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> of <strong>TABLE</strong> wilt, voer dan het aantal handmatig in.</p>
+<div class="note"><strong>Basisworkflow:</strong> Stel het aantal suggesties in, genereer meer suggesties dan nodig, bewaar de beste en klik daarna op <strong>Update marker DOCX</strong>.
+<h3>De snelste manier (aanbevolen)</h3>
 <ol>
-<li>Go to the <strong>Illustrate</strong> tab.</li>
-<li>Upload your manuscript.</li>
-<li>Choose <strong>Image size in DOCX</strong>.</li>
+<li>Ga naar het tabblad <strong>Illustrate</strong>.</li><li>Upload je manuscript.</li><li>Kies <strong>Image style</strong> en <strong>Image size in DOCX</strong>.</li><li>Stel <strong>Number of suggestions</strong> in.</li><li>Klik op <strong>Suggest Image Placements</strong>.</li><li>Bekijk de suggesties en bewaar de beste.</li><li>Klik op <strong>Update marker DOCX</strong>.</li><li>Klik op <strong>Generate Images</strong>.</li>
 </ol>
-<p>You can either let BOLO decide the image size automatically (<strong>BOLO decides (mixed)</strong>), or choose a fixed size for all images.</p>
-<p>Available fixed sizes:</p>
+<p>Je kunt BOLO de afbeeldingsgrootte automatisch laten bepalen (<strong>BOLO decides (mixed)</strong>) of een vaste grootte kiezen voor alle afbeeldingen.</p>
+<p>Beschikbare vaste groottes:</p>
+<ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
+<p>Als je een vaste grootte kiest, gebruiken alle afbeeldingen die grootte. Als je BOLO laat beslissen, worden de groottes automatisch aangepast aan de context en kun je de voorgestelde grootte later nog in de lijst wijzigen.</p>
+<div class="callout"><strong>Beste werkwijze:</strong> Genereer meer suggesties dan nodig. Voorbeeld: als je 10 illustraties wilt, genereer dan eerst 20–30 suggesties.</div>
+<p><strong>Standaardgedrag:</strong> als alle speciale types op 0 staan, gebruikt BOLO gewone afbeeldingssuggesties. <strong>Diagram / Timeline</strong> zijn meestal betrouwbaar. <strong>Map / Table</strong> zijn experimenteel.</p>
+<h3>Handmatige markeringen</h3>
+<p>Je kunt markeringen direct in je manuscript schrijven met gewone haakjes. Gebruik alleen <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> en <strong>TABLE</strong>.</p>
+<p>Voorbeelden:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regel:</strong> formaat = <code>(TYPE: description)</code> of <code>(TYPE: M; description)</code>. Grootte is optioneel: <strong>S / M / L</strong>. Als grootte ontbreekt, behandelt BOLO dit als medium.</p>
+<ol>
+<li>Upload het manuscript in het tabblad <strong>Illustrate</strong>.</li><li>Klik op <strong>Scan Image Markers</strong>.</li><li>Genereer afbeeldingen.</li>
+</ol>
+<h3>Eigen afbeeldingen</h3>
+<p>De sectie voor eigen afbeeldingen staat <strong>onderaan het Illustrate-venster</strong>. Je kunt je eigen afbeeldingen uploaden, captions toevoegen en bijpassende markeringen in het manuscript plaatsen.</p>
+<p>Voorbeelden van markeringen:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Deze markeringen moeten exact overeenkomen met het nummer, inclusief haakjes.</p>
+<ol>
+<li>Scroll naar de onderkant van het tabblad <strong>Illustrate</strong>.</li><li>Upload je eigen afbeelding.</li><li>Voeg indien nodig een caption toe.</li><li>Plaats de bijpassende markering in het manuscript.</li><li>Klik op <strong>Scan Image Markers</strong>.</li><li>Genereer afbeeldingen.</li>
+</ol>
+<h3>Belangrijke opmerkingen</h3>
 <ul>
-<li>Thumbnail</li>
-<li>Small</li>
-<li>Medium (~45% width)</li>
-<li>Large</li>
+<li>Wat je in de suggestielijst ziet, is geformatteerd volgens dezelfde logica als handmatige markeringen.</li><li><strong>[scanned]</strong> kan in de lijst verschijnen als statusinformatie.</li><li>Klik na elke wijziging in de suggestielijst op <strong>Update marker DOCX</strong>.</li><li>Je kunt illustraties later altijd verplaatsen, verwijderen, bewerken of opnieuw genereren.</li><li>Grote afbeeldingen vereisen voldoende resolutie.</li>
 </ul>
-<p>If you choose a fixed size, all images will use that size. If you let BOLO decide, image sizes will be adapted automatically based on context, you can of course change the suggested size in the list M instead of L for example.</p>
-<ol start="4">
-<li>Enter the number of suggestions.</li>
-<li>Click <strong>Suggest Image Placement</strong>.</li>
-</ol>
-<div class="callout"><strong>Tip:</strong> Request 2–3× more images than you actually need. For example, request 30 suggestions if you want 10 images.</div>
-<ol start="6">
-<li>Review the suggestions.</li>
-<li>Select the ones you like.</li>
-<li>Click <strong>Update marker DOCX</strong>.</li>
-</ol>
-<p>This removes all unused image markers and keeps only the selected ones in your manuscript.</p>
-<div class="callout"><strong>Important:</strong> If you skip this step, all suggested markers will remain in the document — including those you did not select — and must be removed manually.</div>
-<ol start="9">
-<li>Click <strong>Generate Images</strong>.</li>
-</ol>
-<p>BOLO will automatically create relevant illustrations, place them in your book and add captions.</p>
-<h3>Option 2: Write Image Instructions</h3>
-<p>You can manually define images directly in your manuscript.</p>
-<p>Use the following format:</p>
-<p><code>(IMAGE: location; year; description)</code></p>
-<p>Example:</p>
-<p><code>(IMAGE: Stockholm waterfront; 1750; Formal quays, warehouses, bridges, and ships at a growing port-capital)</code></p>
-<ol>
-<li>Upload the manuscript in the <strong>Illustrate</strong> tab.</li>
-<li>Click <strong>Scan Image Markers</strong>.</li>
-<li>Generate images.</li>
-</ol>
-<h3>Option 3: Upload Your Own Images</h3>
-<p>You can upload your own images with captions and place them in the manuscript.</p>
-<ol>
-<li>Scroll to the bottom of the <strong>Illustrate</strong> tab.</li>
-<li>Upload your images.</li>
-<li>Add captions.</li>
-<li>Place markers in your manuscript: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li>
-<li>Click <strong>Scan Image Markers</strong>.</li>
-<li>Generate images.</li>
-</ol>
-<div class="callout"><strong>Important workflow note:</strong> Illustrations affect the layout and total page count of your book. For this reason, illustration should be completed before creating the cover, so the final page count and spine width are calculated correctly.</div>
-<h3>Final Step</h3>
-<p>Once your images are generated, export your document and review the result.</p>
-<h3>Note on Table of Contents</h3>
-<p>Adding images and editing text can affect page layout. Because BOLO allows multiple ways of modifying content — both through editing and image generation — automatically updating the table of contents continuously can become unstable.</p>
-<p>For this reason, BOLO uses a static table of contents without page numbers. We recommend adding page numbers manually at the final stage. This only takes a few minutes and ensures full control and accuracy.</p>
+<div class="callout"><strong>Belangrijke workflow-opmerking:</strong> Illustraties beïnvloeden de lay-out en het totale aantal pagina’s van je boek. Daarom moet illustratie zijn afgerond voordat je de cover maakt, zodat het definitieve paginatal en de rugbreedte correct worden berekend.</div>
+<h3>Laatste stap</h3>
+<p>Zodra je afbeeldingen zijn gegenereerd, exporteer je het document en controleer je het resultaat.</p>
+<h3>Opmerking over de inhoudsopgave</h3>
+<p>Het toevoegen van afbeeldingen en het bewerken van tekst kan de pagina-indeling beïnvloeden. Omdat BOLO meerdere manieren biedt om inhoud aan te passen, zowel via bewerking als via afbeeldingsgeneratie, kan een doorlopende automatische update van de inhoudsopgave instabiel worden.</p>
+<p>Daarom gebruikt BOLO een statische inhoudsopgave zonder paginanummers. We raden aan om paginanummers pas in de laatste fase handmatig toe te voegen. Dat kost maar een paar minuten en geeft volledige controle en nauwkeurigheid. Je kunt de lay-out van de inhoudsopgave ook zelf opnieuw ontwerpen of met tools zoals ChatGPT een gestileerde versie maken en die plakken.</p>
+</div>
 </div><div class="section">
 <h2><span class="bullet">■</span>6. Functions and Settings Explained</h2>
 <p><strong>Book Information</strong> contains metadata such as title, subtitle and author.</p>
@@ -2348,36 +2412,50 @@ Neste kapitteltittel<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Du kan enkelt legge til illustrasjoner i boken etter at du har generert manuskriptet.</p>
+<p>Du kan legge til illustrasjoner etter at manuskriptet er generert. Alle illustrasjonsformater følger samme logikk som bilde­markører. Vanlige bilder er det mest stabile alternativet. Hvis du vil ha <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> eller <strong>TABLE</strong>, må du angi antallet manuelt.</p>
+<div class="note"><strong>Grunnflyt:</strong> Sett antall forslag, generer flere forslag enn du trenger, behold de beste, og klikk deretter på <strong>Update marker DOCX</strong>.
 <h3>Den raskeste måten (anbefalt)</h3>
-<ol><li>Gå til fanen <strong>Illustrate</strong>.</li><li>Last opp manuskriptet ditt.</li><li>Velg <strong>Image size in DOCX</strong>.</li></ol>
+<ol>
+<li>Gå til fanen <strong>Illustrate</strong>.</li><li>Last opp manuskriptet.</li><li>Velg <strong>Image style</strong> og <strong>Image size in DOCX</strong>.</li><li>Angi <strong>Number of suggestions</strong>.</li><li>Klikk på <strong>Suggest Image Placements</strong>.</li><li>Gå gjennom forslagene og behold de beste.</li><li>Klikk på <strong>Update marker DOCX</strong>.</li><li>Klikk på <strong>Generate Images</strong>.</li>
+</ol>
 <p>Du kan enten la BOLO bestemme bildestørrelsen automatisk (<strong>BOLO decides (mixed)</strong>) eller velge en fast størrelse for alle bilder.</p>
 <p>Tilgjengelige faste størrelser:</p>
 <ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
-<p>Hvis du velger en fast størrelse, vil alle bilder bruke denne størrelsen. Hvis du lar BOLO bestemme, tilpasses bildestørrelsene automatisk etter konteksten; du kan selvfølgelig endre den foreslåtte størrelsen i listen, for eksempel M i stedet for L.</p>
-<ol start="4"><li>Angi antall forslag.</li><li>Klikk på <strong>Suggest Image Placement</strong>.</li></ol>
-<div class="callout"><strong>Tips:</strong> Be om 2–3 ganger flere bilder enn du faktisk trenger. Hvis du for eksempel vil ha 10 bilder, kan du be om 30 forslag.</div>
-<ol start="6"><li>Gå gjennom forslagene.</li><li>Velg dem du liker.</li><li>Klikk på <strong>Update marker DOCX</strong>.</li></ol>
-<p>Dette fjerner alle ubrukte bildemarkører og beholder bare de valgte i manuskriptet.</p>
-<div class="callout"><strong>Viktig:</strong> Hvis du hopper over dette steget, blir alle foreslåtte markører liggende i dokumentet – også de du ikke valgte – og må fjernes manuelt.</div>
-<ol start="9"><li>Klikk på <strong>Generate Images</strong>.</li></ol>
-<p>BOLO vil da automatisk lage relevante illustrasjoner, plassere dem i boken og legge til bildetekster.</p>
-<h3>Alternativ 2: Skriv bildeinstruksjoner</h3>
-<p>Du kan definere bilder manuelt direkte i manuskriptet.</p>
-<p>Bruk følgende format:</p>
-<p><code>(IMAGE: sted; år; beskrivelse)</code></p>
-<p>Eksempel:</p>
-<p><code>(IMAGE: Stockholm havnefront; 1750; Formelle kaier, varehus, broer og skip ved en voksende havne- og hovedstad)</code></p>
-<ol><li>Last opp manuskriptet i fanen <strong>Illustrate</strong>.</li><li>Klikk på <strong>Scan Image Markers</strong>.</li><li>Generer bilder.</li></ol>
-<h3>Alternativ 3: Last opp egne bilder</h3>
-<p>Du kan laste opp dine egne bilder med bildetekster og plassere dem i manuskriptet.</p>
-<ol><li>Scroll til bunnen av fanen <strong>Illustrate</strong>.</li><li>Last opp bildene dine.</li><li>Legg til bildetekster.</li><li>Plasser markører i manuskriptet: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li><li>Klikk på <strong>Scan Image Markers</strong>.</li><li>Generer bilder.</li></ol>
-<div class="callout"><strong>Viktig arbeidsflytnotat:</strong> Illustrasjoner påvirker layouten og det totale sidetallet i boken. Derfor bør illustrasjon være fullført før du lager coveret, slik at det endelige sidetallet og ryggbredden beregnes korrekt.</div>
-<h3>Siste steg</h3>
-<p>Når bildene er generert, eksporter dokumentet og gå gjennom resultatet.</p>
-<h3>Merknad om innholdsfortegnelsen</h3>
-<p>Å legge til bilder og redigere tekst kan påvirke sidelayouten. Fordi BOLO tillater flere måter å endre innhold på – både gjennom redigering og bildegenerering – kan en automatisk fortløpende oppdatering av innholdsfortegnelsen bli ustabil.</p>
-<p>Derfor bruker BOLO en statisk innholdsfortegnelse uten sidetall. Vi anbefaler å legge til sidetall manuelt i sluttfasen. Det tar bare noen få minutter og gir full kontroll og nøyaktighet.</p>
+<p>Hvis du velger en fast størrelse, bruker alle bilder den størrelsen. Hvis du lar BOLO bestemme, tilpasses størrelsene automatisk etter konteksten, og du kan fortsatt endre foreslått størrelse i listen senere.</p>
+<div class="callout"><strong>Beste praksis:</strong> Generer flere forslag enn du trenger. Eksempel: hvis du vil ha 10 illustrasjoner, generer først 20–30 forslag.</div>
+<p><strong>Standardoppførsel:</strong> hvis alle spesialtyper står på 0, bruker BOLO vanlige bildeforslag. <strong>Diagram / Timeline</strong> er vanligvis pålitelige. <strong>Map / Table</strong> er eksperimentelle.</p>
+<h3>Manuelle markører</h3>
+<p>Du kan skrive markører direkte i manuskriptet med vanlige parenteser. Bruk bare <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> og <strong>TABLE</strong>.</p>
+<p>Eksempler:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regel:</strong> format = <code>(TYPE: description)</code> eller <code>(TYPE: M; description)</code>. Størrelse er valgfri: <strong>S / M / L</strong>. Hvis størrelse utelates, tolker BOLO det som medium.</p>
+<ol>
+<li>Last opp manuskriptet i fanen <strong>Illustrate</strong>.</li><li>Klikk på <strong>Scan Image Markers</strong>.</li><li>Generer bilder.</li>
+</ol>
+<h3>Egne bilder</h3>
+<p>Seksjonen for egne bilder ligger <strong>nederst i Illustrate-vinduet</strong>. Du kan laste opp egne bilder, legge til bildetekster og plassere matchende markører i manuskriptet.</p>
+<p>Eksempler på markører:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Disse markørene må matche nummeret nøyaktig, inkludert parentesene.</p>
+<ol>
+<li>Bla til bunnen av fanen <strong>Illustrate</strong>.</li><li>Last opp ditt eget bilde.</li><li>Legg til en bildetekst ved behov.</li><li>Plasser den matchende markøren i manuskriptet.</li><li>Klikk på <strong>Scan Image Markers</strong>.</li><li>Generer bilder.</li>
+</ol>
+<h3>Viktige merknader</h3>
+<ul>
+<li>Det du ser i forslagslisten er formatert slik at det samsvarer med logikken for manuelle markører.</li><li><strong>[scanned]</strong> kan vises i listen som statusinformasjon.</li><li>Etter endringer i forslagslisten klikker du på <strong>Update marker DOCX</strong>.</li><li>Du kan alltid flytte, slette, redigere eller regenerere illustrasjoner senere.</li><li>Store bilder krever tilstrekkelig oppløsning.</li>
+</ul>
+<div class="callout"><strong>Viktig arbeidsflytmerknad:</strong> Illustrasjoner påvirker layouten og det totale sideantallet i boken. Derfor bør illustrasjonen fullføres før du lager coveret, slik at endelig sideantall og ryggbredde beregnes korrekt.</div>
+<h3>Siste trinn</h3>
+<p>Når bildene er generert, eksporterer du dokumentet og kontrollerer resultatet.</p>
+<h3>Merknad om innholdsfortegnelse</h3>
+<p>Å legge til bilder og redigere tekst kan påvirke sideoppsettet. Fordi BOLO tillater flere måter å endre innhold på, både gjennom redigering og bildegenerering, kan en kontinuerlig automatisk oppdatering av innholdsfortegnelsen bli ustabil.</p>
+<p>Derfor bruker BOLO en statisk innholdsfortegnelse uten sidetall. Vi anbefaler å legge til sidetall manuelt i sluttfasen. Det tar bare noen få minutter og sikrer full kontroll og nøyaktighet. Du kan også redesigne oppsettet for innholdsfortegnelsen selv eller generere en stylet versjon med verktøy som ChatGPT og lime den inn.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - anbefalt arbeidsflyt</h2>
@@ -2546,33 +2624,51 @@ Neste kapitteltittel<br/>
 </section>
 <section class="page"><div class="topline"></div><div class="mast"><div>BOLO AI Publishing Pipeline</div><div>Guia do utilizador</div></div>
 <div class="section">
-<h3><span class="bullet">■</span>4. Fluxo de trabalho recomendado para criar um livro</h3>
-<p>O fluxo de trabalho mais eficaz começa normalmente com um <strong>Book Brief</strong> detalhado. Um brief mais longo e específico costuma gerar melhores resultados.<br/><strong>Nota:</strong> O Base Prompt serve apenas para criar o seu Book Brief. Não o cole diretamente no BOLO.</p>
-<p>Um fluxo de trabalho comum é:</p>
-<p>1. Clique em <strong>Copy Base Prompt</strong> no BOLO.<br/>
-    2. Cole o prompt num serviço de IA como o ChatGPT.<br/>
-    3. Desenvolva a ideia do livro até obter um Book Brief claro e detalhado.<br/>
-    4. Aperfeiçoe o brief em algumas iterações até a estrutura parecer certa.<br/>
-    5. Cole o brief final no BOLO.<br/>
-    6. Escolha como pretende criar o seu outline:<br/>
-    - <strong>AutoBook</strong>: gerar um outline completo a partir do seu Book Brief<br/>
-    - <strong>AI Sections</strong>: usar os seus próprios títulos de capítulos e deixar o BOLO criar subtítulos<br/>
-    - <strong>Manual Outline</strong>: usar o seu próprio outline completo (capítulos e subtítulos)<br/>
-    7. Execute <strong>Test Mode</strong> antes de gerar o manuscrito completo.<br/>
-<span><strong>Dica:</strong> No <strong>Test Mode</strong>, compare o número estimado de páginas com o seu objetivo (por exemplo, 120 em vez de 200 páginas). Se a estimativa for claramente mais baixa, ajuste o seu Book Brief expandindo o conteúdo ou dividindo os temas em mais capítulos. Isto é especialmente importante em temas mais estreitos.</span><br/>
-    8. Reveja e edite o manuscrito DOCX, se necessário.<br/>
-    9. Use <strong>Re-Export</strong> quando precisar de reparar ou reconstruir a exportação após edição externa.</p>
-<div class="note">
-Exemplo de formato para <strong>Manual Outline</strong>:<br/><br/>
-    Título do capítulo<br/>
-    - Subtítulo<br/>
-    - Subtítulo<br/>
-    - Subtítulo<br/><br/>
-    Título do capítulo seguinte<br/>
-    - Subtítulo<br/>
-    - Subtítulo<br/>
+<h2><span class="bullet">■</span>4. Illustrate</h2>
+<p>Pode adicionar ilustrações depois de gerar o manuscrito. Todos os formatos de ilustração seguem a mesma lógica dos marcadores de imagem. As imagens normais são a opção mais estável. Se quiser <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> ou <strong>TABLE</strong>, introduza a quantidade manualmente.</p>
+<div class="note"><strong>Fluxo básico:</strong> Defina o número de sugestões, gere mais sugestões do que precisa, mantenha as melhores e depois clique em <strong>Update marker DOCX</strong>.
+<h3>A forma mais rápida (recomendada)</h3>
+<ol>
+<li>Vá para o separador <strong>Illustrate</strong>.</li><li>Carregue o seu manuscrito.</li><li>Escolha <strong>Image style</strong> e <strong>Image size in DOCX</strong>.</li><li>Defina <strong>Number of suggestions</strong>.</li><li>Clique em <strong>Suggest Image Placements</strong>.</li><li>Reveja as sugestões e mantenha as melhores.</li><li>Clique em <strong>Update marker DOCX</strong>.</li><li>Clique em <strong>Generate Images</strong>.</li>
+</ol>
+<p>Pode deixar que o BOLO decida automaticamente o tamanho da imagem (<strong>BOLO decides (mixed)</strong>) ou escolher um tamanho fixo para todas as imagens.</p>
+<p>Tamanhos fixos disponíveis:</p>
+<ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
+<p>Se escolher um tamanho fixo, todas as imagens usam esse tamanho. Se deixar o BOLO decidir, os tamanhos são adaptados automaticamente ao contexto e ainda pode alterar o tamanho sugerido na lista mais tarde.</p>
+<div class="callout"><strong>Boa prática:</strong> Gere mais sugestões do que precisa. Exemplo: se quiser 10 ilustrações, gere primeiro 20–30 sugestões.</div>
+<p><strong>Comportamento predefinido:</strong> se todos os tipos especiais estiverem a 0, o BOLO usa sugestões normais de imagem. <strong>Diagram / Timeline</strong> são normalmente fiáveis. <strong>Map / Table</strong> são experimentais.</p>
+<h3>Marcadores manuais</h3>
+<p>Pode escrever marcadores diretamente no manuscrito usando parênteses normais. Use apenas <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> e <strong>TABLE</strong>.</p>
+<p>Exemplos:</p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regra:</strong> formato = <code>(TYPE: description)</code> ou <code>(TYPE: M; description)</code>. O tamanho é opcional: <strong>S / M / L</strong>. Se o tamanho for omitido, o BOLO trata-o como medium.</p>
+<ol>
+<li>Carregue o manuscrito no separador <strong>Illustrate</strong>.</li><li>Clique em <strong>Scan Image Markers</strong>.</li><li>Gere as imagens.</li>
+</ol>
+<h3>Imagens próprias</h3>
+<p>A secção de imagens próprias fica <strong>no fundo da janela Illustrate</strong>. Pode carregar as suas próprias imagens, adicionar legendas e colocar marcadores correspondentes no manuscrito.</p>
+<p>Exemplos de marcadores:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Estes marcadores têm de corresponder exatamente ao número, incluindo os parênteses.</p>
+<ol>
+<li>Desça até ao fundo do separador <strong>Illustrate</strong>.</li><li>Carregue a sua própria imagem.</li><li>Adicione uma legenda se necessário.</li><li>Coloque o marcador correspondente no manuscrito.</li><li>Clique em <strong>Scan Image Markers</strong>.</li><li>Gere as imagens.</li>
+</ol>
+<h3>Notas importantes</h3>
+<ul>
+<li>O que vê na lista de sugestões é formatado para corresponder à lógica dos marcadores manuais.</li><li><strong>[scanned]</strong> pode aparecer na lista como informação de estado.</li><li>Depois de qualquer alteração na lista de sugestões, clique em <strong>Update marker DOCX</strong>.</li><li>Pode sempre mover, apagar, editar ou regenerar ilustrações mais tarde.</li><li>Imagens grandes requerem resolução suficiente.</li>
+</ul>
+<div class="callout"><strong>Nota importante de workflow:</strong> As ilustrações afetam o layout e o número total de páginas do seu livro. Por isso, a ilustração deve estar concluída antes de criar o cover, para que a contagem final de páginas e a largura da lombada sejam calculadas corretamente.</div>
+<h3>Passo final</h3>
+<p>Quando as imagens estiverem geradas, exporte o documento e reveja o resultado.</p>
+<h3>Nota sobre o índice</h3>
+<p>Adicionar imagens e editar texto pode afetar o layout da página. Como o BOLO permite várias formas de modificar o conteúdo, tanto através de edição como de geração de imagens, uma atualização automática contínua do índice pode tornar-se instável.</p>
+<p>Por esse motivo, o BOLO usa um índice estático sem números de página. Recomendamos adicionar os números de página manualmente na fase final. Isso leva apenas alguns minutos e garante controlo e precisão totais. Também pode redesenhar o layout do índice por conta própria ou gerar uma versão estilizada com ferramentas como o ChatGPT e colá-la.</p>
 </div>
-<p>Em temas mais estreitos, seja explícito sobre o que cada capítulo deve conter. Em temas muito amplos, mantenha expectativas realistas em relação ao número de páginas escolhido. Não se pode esperar uma história do mundo em 50 páginas, nem um livro de 500 páginas sobre uma pequena cidade com 10.000 habitantes.</p>
 </div>
 <div class="section">
 <h3><span class="bullet">■</span>5. Custo</h3>
@@ -2863,65 +2959,50 @@ Nästa kapitelrubrik<br/>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>Du kan enkelt lägga till illustrationer i din bok efter att du har genererat manuset.</p>
-<h3>Det snabbaste sättet (rekommenderas)</h3>
+<p>Du kan lägga till illustrationer efter att manuskriptet har genererats. Alla illustrationsformat följer samma logik som bildmarkörer. Vanliga bilder är det mest stabila alternativet. Om du vill ha <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> eller <strong>TABLE</strong> anger du antalet manuellt.</p>
+<div class="note"><strong>Grundflöde:</strong> Ange antal förslag, generera fler förslag än du behöver, behåll de bästa och klicka sedan på <strong>Update marker DOCX</strong>.
+<h3>Det snabbaste sättet (rekommenderat)</h3>
 <ol>
-<li>Gå till fliken <strong>Illustrate</strong>.</li>
-<li>Ladda upp ditt manus.</li>
-<li>Välj <strong>Image size in DOCX</strong>.</li>
+<li>Gå till fliken <strong>Illustrate</strong>.</li><li>Ladda upp manuskriptet.</li><li>Välj <strong>Image style</strong> och <strong>Image size in DOCX</strong>.</li><li>Ange <strong>Number of suggestions</strong>.</li><li>Klicka på <strong>Suggest Image Placements</strong>.</li><li>Granska förslagen och behåll de bästa.</li><li>Klicka på <strong>Update marker DOCX</strong>.</li><li>Klicka på <strong>Generate Images</strong>.</li>
 </ol>
 <p>Du kan antingen låta BOLO bestämma bildstorleken automatiskt (<strong>BOLO decides (mixed)</strong>) eller välja en fast storlek för alla bilder.</p>
 <p>Tillgängliga fasta storlekar:</p>
-<ul>
-<li>Thumbnail</li>
-<li>Small</li>
-<li>Medium (~45% width)</li>
-<li>Large</li>
-</ul>
-<p>Om du väljer en fast storlek kommer alla bilder att använda den storleken. Om du låter BOLO bestämma anpassas bildstorlekarna automatiskt efter sammanhanget; du kan förstås ändra det föreslagna valet i listan, till exempel M i stället för L.</p>
-<ol start="4">
-<li>Ange antal förslag.</li>
-<li>Klicka på <strong>Suggest Image Placement</strong>.</li>
-</ol>
-<div class="callout"><strong>Tips:</strong> Begär 2–3 gånger fler bilder än du faktiskt behöver. Om du till exempel vill ha 10 bilder kan du begära 30 förslag.</div>
-<ol start="6">
-<li>Granska förslagen.</li>
-<li>Välj de du gillar.</li>
-<li>Klicka på <strong>Update marker DOCX</strong>.</li>
-</ol>
-<p>Detta tar bort alla oanvända bildmarkörer och behåller bara de markerade i ditt manus.</p>
-<div class="callout"><strong>Viktigt:</strong> Om du hoppar över detta steg ligger alla föreslagna markörer kvar i dokumentet – även de du inte valde – och måste tas bort manuellt.</div>
-<ol start="9">
-<li>Klicka på <strong>Generate Images</strong>.</li>
-</ol>
-<p>BOLO skapar då automatiskt relevanta illustrationer, placerar dem i boken och lägger till bildtexter.</p>
-<h3>Alternativ 2: Skriv bildinstruktioner</h3>
-<p>Du kan definiera bilder manuellt direkt i manuset.</p>
-<p>Använd följande format:</p>
-<p><code>(IMAGE: plats; år; beskrivning)</code></p>
+<ul><li>Thumbnail</li><li>Small</li><li>Medium (~45% width)</li><li>Large</li></ul>
+<p>Om du väljer en fast storlek använder alla bilder den storleken. Om du låter BOLO bestämma anpassas storlekarna automatiskt efter sammanhanget, och du kan fortfarande ändra den föreslagna storleken i listan senare.</p>
+<div class="callout"><strong>Bästa arbetssätt:</strong> Generera fler förslag än du behöver. Exempel: om du vill ha 10 illustrationer, generera först 20–30 förslag.</div>
+<p><strong>Standardbeteende:</strong> om alla specialtyper står på 0 använder BOLO vanliga bildförslag. <strong>Diagram / Timeline</strong> är vanligtvis pålitliga. <strong>Map / Table</strong> är experimentella.</p>
+<h3>Manuella markörer</h3>
+<p>Du kan skriva markörer direkt i manuskriptet med vanliga parenteser. Använd bara <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> och <strong>TABLE</strong>.</p>
 <p>Exempel:</p>
-<p><code>(IMAGE: Stockholms kajer; 1750; Formella kajer, magasin, broar och fartyg vid en växande port- och huvudstad)</code></p>
+<div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
+<code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
+<code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
+<code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
+<code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
+<code>(TABLE: Climate patterns across regions)</code></div>
+<p><strong>Regel:</strong> format = <code>(TYPE: description)</code> eller <code>(TYPE: M; description)</code>. Storlek är valfri: <strong>S / M / L</strong>. Om storlek utelämnas behandlar BOLO det som medium.</p>
 <ol>
-<li>Ladda upp manuset i fliken <strong>Illustrate</strong>.</li>
-<li>Klicka på <strong>Scan Image Markers</strong>.</li>
-<li>Generera bilder.</li>
+<li>Ladda upp manuskriptet i fliken <strong>Illustrate</strong>.</li><li>Klicka på <strong>Scan Image Markers</strong>.</li><li>Generera bilder.</li>
 </ol>
-<h3>Alternativ 3: Ladda upp egna bilder</h3>
-<p>Du kan ladda upp dina egna bilder med bildtexter och placera dem i manuset.</p>
+<h3>Egna bilder</h3>
+<p>Sektionen för egna bilder finns <strong>längst ner i Illustrate-fönstret</strong>. Du kan ladda upp egna bilder, lägga till bildtexter och placera matchande markörer i manuskriptet.</p>
+<p>Exempel på markörer:</p>
+<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
+<p>Dessa markörer måste matcha numret exakt, inklusive parenteserna.</p>
 <ol>
-<li>Scrolla längst ned i fliken <strong>Illustrate</strong>.</li>
-<li>Ladda upp dina bilder.</li>
-<li>Lägg till bildtexter.</li>
-<li>Placera markörer i manuset: <code>(picture 1)</code>, <code>(picture 2)</code>, <code>(picture 3)</code>.</li>
-<li>Klicka på <strong>Scan Image Markers</strong>.</li>
-<li>Generera bilder.</li>
+<li>Scrolla längst ner i fliken <strong>Illustrate</strong>.</li><li>Ladda upp din egen bild.</li><li>Lägg till en bildtext vid behov.</li><li>Placera den matchande markören i manuskriptet.</li><li>Klicka på <strong>Scan Image Markers</strong>.</li><li>Generera bilder.</li>
 </ol>
-<div class="callout"><strong>Viktig arbetsflödesnot:</strong> Illustrationer påverkar layouten och det totala sidantalet i boken. Därför bör illustrationerna vara klara innan du skapar omslaget, så att slutligt sidantal och ryggbredd räknas ut korrekt.</div>
-<h3>Sista steg</h3>
+<h3>Viktiga noter</h3>
+<ul>
+<li>Det du ser i förslagslistan är formaterat så att det matchar logiken för manuella markörer.</li><li><strong>[scanned]</strong> kan visas i listan som statusinformation.</li><li>Efter ändringar i förslagslistan klickar du på <strong>Update marker DOCX</strong>.</li><li>Du kan alltid flytta, ta bort, redigera eller regenerera illustrationer senare.</li><li>Stora bilder kräver tillräcklig upplösning.</li>
+</ul>
+<div class="callout"><strong>Viktig arbetsflödesnot:</strong> Illustrationer påverkar layouten och det totala sidantalet i din bok. Därför bör illustrationerna vara klara innan du skapar cover, så att slutligt sidantal och ryggbredd kan beräknas korrekt.</div>
+<h3>Sista steget</h3>
 <p>När bilderna har genererats exporterar du dokumentet och granskar resultatet.</p>
-<h3>Om innehållsförteckningen</h3>
-<p>Att lägga till bilder och redigera text kan påverka sidlayouten. Eftersom BOLO tillåter flera sätt att ändra innehåll – både genom redigering och bildgenerering – kan en kontinuerligt automatiskt uppdaterad innehållsförteckning bli instabil.</p>
-<p>Därför använder BOLO en statisk innehållsförteckning utan sidnummer. Vi rekommenderar att du lägger till sidnummer manuellt i slutskedet. Det tar bara några minuter och ger full kontroll och noggrannhet.</p>
+<h3>Not om innehållsförteckningen</h3>
+<p>Att lägga till bilder och redigera text kan påverka sidlayouten. Eftersom BOLO tillåter flera sätt att ändra innehåll, både genom redigering och bildgenerering, kan en löpande automatisk uppdatering av innehållsförteckningen bli instabil.</p>
+<p>Därför använder BOLO en statisk innehållsförteckning utan sidnummer. Vi rekommenderar att du lägger till sidnummer manuellt i slutskedet. Det tar bara några minuter och ger full kontroll och noggrannhet. Du kan också själv ändra layouten för innehållsförteckningen eller generera en stylad version med verktyg som ChatGPT och klistra in den.</p>
+</div>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - rekommenderat arbetsflöde</h2>
