@@ -66,6 +66,7 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
 .demo-overlay-wrap{
   margin:2px 0 2px;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
 }
@@ -159,6 +160,43 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
   display:block;
   color:var(--muted);
   font-size:0.92rem;
+}
+
+.demo-youtube-label{
+  display:block;
+  margin-top:8px;
+  color:#10233f;
+  font-size:0.94rem;
+  font-weight:700;
+}
+
+.demo-youtube-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:6px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:#eaf2ff;
+  border:1px solid rgba(45,108,223,0.22);
+  color:var(--blue-dark);
+  text-decoration:none;
+  font-size:0.9rem;
+  font-weight:700;
+  line-height:1.25;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  box-shadow:0 4px 14px rgba(45,108,223,0.08);
+  transition:all .15s ease;
+}
+
+.demo-youtube-link:hover{
+  background:#eef5ff;
+  border-color:rgba(45,108,223,0.40);
+  color:var(--blue);
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(45,108,223,0.12);
+  text-decoration:none;
 }
 
 @media (max-width: 920px){
@@ -319,7 +357,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Log ind</a>
 <a class="auth-pill" href="/sign-up.html">Opret konto</a>
-<span class="auth-pill is-static">Kommer snart</span>
 </div>
 <h1>
       BOLO AI Publishing Pipeline
@@ -372,11 +409,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Se hvordan BOLO genererer en bog i realtid</strong>
-<span>Se den fulde uklippede demo på 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -476,7 +514,7 @@ SE
   </div>
 <h3>
     Individuelle licenser
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanceringstilbud</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanceringstilbud -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -656,7 +694,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Anmelden</a>
 <a class="auth-pill" href="/sign-up.html">Konto erstellen</a>
-<span class="auth-pill is-static">Kommt bald</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -709,11 +746,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Sehen Sie, wie BOLO ein Buch in Echtzeit erstellt</strong>
-<span>Sehen Sie die vollständige ungeschnittene 2:45-Demo</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -813,7 +851,7 @@ SE
   </div>
 <h3>
     Einzellizenzen
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Einführungsangebot</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Einführungsangebot -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -993,7 +1031,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Iniciar sesión</a>
 <a class="auth-pill" href="/sign-up.html">Crear cuenta</a>
-<span class="auth-pill is-static">Próximamente</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -1046,11 +1083,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Mira cómo BOLO genera un libro en tiempo real</strong>
-<span>Mira la demo completa sin cortes de 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -1150,7 +1188,7 @@ SE
   </div>
 <h3>
     Licencias individuales
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Oferta de lanzamiento</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Oferta de lanzamiento -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -1330,7 +1368,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Se connecter</a>
 <a class="auth-pill" href="/sign-up.html">Créer un compte</a>
-<span class="auth-pill is-static">Bientôt disponible</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -1383,11 +1420,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Découvrez comment BOLO génère un livre en temps réel</strong>
-<span>Regardez la démo complète non coupée de 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -1487,7 +1525,7 @@ SE
   </div>
 <h3>
     Licences individuelles
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Offre de lancement</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Offre de lancement -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -1667,7 +1705,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Accedi</a>
 <a class="auth-pill" href="/sign-up.html">Crea account</a>
-<span class="auth-pill is-static">Prossimamente</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -1720,11 +1757,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Scopri come BOLO genera un libro in tempo reale</strong>
-<span>Guarda la demo completa non tagliata di 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -1824,7 +1862,7 @@ SE
   </div>
 <h3>
     Licenze individuali
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Offerta di lancio</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Offerta di lancio -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -2004,7 +2042,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Inloggen</a>
 <a class="auth-pill" href="/sign-up.html">Account aanmaken</a>
-<span class="auth-pill is-static">Binnenkort beschikbaar</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -2057,11 +2094,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Zie hoe BOLO een boek in realtime genereert</strong>
-<span>Bekijk de volledige onbewerkte demo van 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -2161,7 +2199,7 @@ SE
   </div>
 <h3>
     Individuele licenties
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanceringsoffer</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanceringsoffer -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -2341,7 +2379,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Logg inn</a>
 <a class="auth-pill" href="/sign-up.html">Opprett konto</a>
-<span class="auth-pill is-static">Kommer snart</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -2394,11 +2431,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Se hvordan BOLO genererer en bok i sanntid</strong>
-<span>Se hele den uklippede demoen på 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -2498,7 +2536,7 @@ SE
   </div>
 <h3>
     Individuelle lisenser
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanseringstilbud</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanseringstilbud -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -2678,7 +2716,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Logga in</a>
 <a class="auth-pill" href="/sign-up.html">Skapa konto</a>
-<span class="auth-pill is-static">Lanseras snart</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -2731,11 +2768,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Se hur BOLO genererar en bok i realtid</strong>
-<span>Se hela oklippta demon på 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -2835,7 +2873,7 @@ SE
   </div>
 <h3>
     Individuella licenser
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanseringserbjudande</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Lanseringserbjudande -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
@@ -3015,7 +3053,6 @@ SE
 <div class="auth-strip">
 <a class="auth-pill" href="/sign-in.html">Iniciar sessão</a>
 <a class="auth-pill" href="/sign-up.html">Criar conta</a>
-<span class="auth-pill is-static">Disponível em breve</span>
 </div>
 <h1>
     BOLO AI Publishing Pipeline
@@ -3068,11 +3105,12 @@ SE
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>Veja como o BOLO gera um livro em tempo real</strong>
-<span>Veja a demonstração completa sem cortes de 2:45</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -3175,7 +3213,7 @@ SE
   </div>
 <h3>
     Licenças individuais
-  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Oferta de lançamento</span></h3>
+  <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Oferta de lançamento -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">
