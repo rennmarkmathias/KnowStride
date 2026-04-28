@@ -444,7 +444,7 @@
     }
 
     .demo-overlay-wrap{
-      margin:2px 0 2px;
+      margin:2px 0 16px;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -474,7 +474,7 @@
 
     .demo-thumb{
       position:relative;
-      aspect-ratio:16 / 9;
+      aspect-ratio:2.92 / 1;
       background:url('/BOLO-thumbnail.png') center/cover no-repeat;
       display:flex;
       align-items:center;
@@ -525,6 +525,7 @@
     }
 
     .demo-caption{
+      margin-top:4px;
       padding:4px 2px 2px;
       text-align:center;
     }
@@ -581,7 +582,11 @@
 
     @media (max-width: 920px){
       .demo-overlay-wrap{
-        margin:0 0 6px;
+        margin:0 0 14px;
+      }
+
+      .demo-caption{
+        margin-top:4px;
       }
 
       .demo-thumb{
