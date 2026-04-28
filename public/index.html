@@ -446,6 +446,7 @@
     .demo-overlay-wrap{
       margin:2px 0 2px;
       display:flex;
+      flex-direction:column;
       justify-content:center;
       align-items:center;
     }
@@ -539,6 +540,43 @@
       display:block;
       color:var(--muted);
       font-size:0.92rem;
+    }
+
+    .demo-youtube-label{
+      display:block;
+      margin-top:8px;
+      color:#10233f;
+      font-size:0.94rem;
+      font-weight:700;
+    }
+
+    .demo-youtube-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:6px;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#eaf2ff;
+      border:1px solid rgba(45,108,223,0.22);
+      color:var(--blue-dark);
+      text-decoration:none;
+      font-size:0.9rem;
+      font-weight:700;
+      line-height:1.25;
+      max-width:100%;
+      overflow-wrap:anywhere;
+      box-shadow:0 4px 14px rgba(45,108,223,0.08);
+      transition:all .15s ease;
+    }
+
+    .demo-youtube-link:hover{
+      background:#eef5ff;
+      border-color:rgba(45,108,223,0.40);
+      color:var(--blue);
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(45,108,223,0.12);
+      text-decoration:none;
     }
 
     @media (max-width: 920px){
@@ -659,7 +697,6 @@
 <div aria-label="Account actions" class="auth-strip">
 <a class="auth-chip" href="/sign-in.html">Sign in</a>
 <a class="auth-chip" href="/sign-up.html">Create account</a>
-<span class="auth-chip is-status">Launching soon</span>
 </div>
 <nav aria-label="Language navigation" class="language-nav">
 <a href="/landing/BOLO_Landing_Multilingual.html#german-top">DE</a>
@@ -693,11 +730,12 @@
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
-<div class="demo-caption">
-<strong>See BOLO generate a book in real time</strong>
-<span>Watch the full uncut 2:45 demo</span>
-</div>
 </a>
+<div class="demo-caption">
+<strong>BOLO presentation video · 4:40 min</strong>
+<span class="demo-youtube-label">More videos on YouTube</span>
+<a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
+</div>
 </section>
 <section class="grid">
 <article class="card">
@@ -758,7 +796,7 @@
 <div class="note">
 <strong>Low monthly cost, pay for generation only when needed.</strong> Unlike many AI writing services with high monthly subscriptions, BOLO uses your own OpenAI API key. Typical costs are around <strong>$1–4 for nonfiction books</strong>. Fiction books can cost <strong>3–10x more depending on complexity and narrative depth</strong>.
         </div>
-<h3>Individual licenses <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Launch offer</span></h3>
+<h3>Individual licenses <span style="display:inline-block;margin-left:10px;padding:5px 10px;border-radius:999px;background:#fff3cd;color:#7a5d00;border:1px solid #ffe69c;font-size:0.84rem;font-weight:700;vertical-align:middle;">Launch offer -15.05</span></h3>
 <div class="pricing">
 <div class="price-card">
 <span class="tag">Trial to paid</span>
