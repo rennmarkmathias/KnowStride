@@ -679,6 +679,186 @@
 
     .price.discounted{color:#d32f2f;}
 
+
+    .price-comparison-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:8px;
+      padding:6px 10px;
+      border:1px solid rgba(45,108,223,0.28);
+      border-radius:999px;
+      background:#eaf2ff;
+      color:var(--blue-dark);
+      font:inherit;
+      font-size:0.9rem;
+      font-weight:700;
+      line-height:1.2;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:0 4px 12px rgba(45,108,223,0.08);
+      transition:all .15s ease;
+    }
+
+    .price-comparison-link:hover,
+    .price-comparison-link:focus-visible{
+      background:#eef5ff;
+      border-color:rgba(45,108,223,0.46);
+      color:var(--blue);
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(45,108,223,0.12);
+      outline:none;
+    }
+
+    .price-comparison-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(10,18,34,0.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:10000;
+      backdrop-filter:blur(2px);
+    }
+
+    .price-comparison-modal.is-open{
+      display:flex;
+    }
+
+    .price-comparison-dialog{
+      width:min(860px, 100%);
+      max-height:90vh;
+      overflow:auto;
+      background:#9fc1f0;
+      border:1px solid rgba(45,108,223,0.32);
+      border-radius:12px;
+      padding:16px;
+      color:#001c43;
+      box-shadow:0 24px 60px rgba(0,0,0,0.28);
+      position:relative;
+    }
+
+    .price-comparison-dialog h2{
+      margin:0 0 12px;
+      font-size:1rem;
+      line-height:1.3;
+      color:#001c43;
+    }
+
+    .price-comparison-panel{
+      background:rgba(246,249,255,0.78);
+      border:1px solid rgba(45,108,223,0.70);
+      padding:10px 12px;
+      margin-bottom:12px;
+    }
+
+    .price-comparison-panel h3{
+      margin:0 0 8px;
+      font-size:0.9rem;
+      line-height:1.3;
+      color:#001c43;
+    }
+
+    .price-comparison-table-wrap{
+      overflow-x:auto;
+    }
+
+    .price-comparison-table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:620px;
+      font-size:0.84rem;
+      color:#001c43;
+    }
+
+    .price-comparison-table th,
+    .price-comparison-table td{
+      padding:6px 4px;
+      text-align:center;
+      vertical-align:middle;
+      white-space:nowrap;
+    }
+
+    .price-comparison-table th:first-child,
+    .price-comparison-table td:first-child{
+      text-align:left;
+      width:18%;
+    }
+
+    .price-comparison-table thead th{
+      font-weight:700;
+      border-bottom:1px solid rgba(45,108,223,0.80);
+    }
+
+    .price-comparison-table.is-reference{
+      width:58%;
+      min-width:460px;
+    }
+
+    .price-comparison-note{
+      margin:4px 0 14px 4px;
+      font-size:0.78rem;
+      font-weight:700;
+      color:#001c43;
+    }
+
+    .price-comparison-actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:6px;
+    }
+
+    .price-comparison-modal-button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:172px;
+      padding:12px 16px;
+      border:0;
+      border-radius:0;
+      background:#2d63df;
+      color:#fff;
+      font:inherit;
+      font-weight:400;
+      text-decoration:none;
+      cursor:pointer;
+      line-height:1.1;
+    }
+
+    .price-comparison-modal-button:hover,
+    .price-comparison-modal-button:focus-visible{
+      background:#1f4ea3;
+      color:#fff;
+      outline:none;
+      text-decoration:none;
+    }
+
+    @media (max-width: 920px){
+      .price-comparison-dialog{
+        padding:14px;
+      }
+
+      .price-comparison-table{
+        font-size:0.8rem;
+      }
+
+      .price-comparison-table.is-reference{
+        width:100%;
+      }
+
+      .price-comparison-actions{
+        align-items:stretch;
+        flex-direction:column;
+      }
+
+      .price-comparison-modal-button{
+        width:100%;
+      }
+    }
+
     .price-old{
       font-size:1rem;
       color:#6b7280;
@@ -771,6 +951,8 @@
 <li>
             Go to:<br/>
 <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">https://platform.openai.com/api-keys</a>
+<br/>
+<button class="price-comparison-link" data-price-comparison-open="true" type="button">Price comparison</button>
 </li>
 <li>
             Sign in if needed (you can use Google, Apple, Microsoft or email).
@@ -900,6 +1082,83 @@
 </div>
 </footer>
 </main>
+
+<div aria-hidden="true" class="price-comparison-modal" id="price-comparison-modal">
+<div aria-label="Price comparison" aria-modal="true" class="price-comparison-dialog" role="dialog">
+<h2>Price comparison</h2>
+<div class="price-comparison-panel">
+<div class="price-comparison-table-wrap">
+<table class="price-comparison-table">
+<thead>
+<tr>
+<th scope="col">Model</th>
+<th scope="col">6×9 text / page — 307 words/page</th>
+<th scope="col">Pocket text / page — 253 words/page</th>
+<th scope="col">Image</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-5.5</td>
+<td>approx. 1.29 cents</td>
+<td>approx. 1.06 cents</td>
+<td>approx. 20 cents</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>approx. 0.65 cents</td>
+<td>approx. 0.53 cents</td>
+<td>approx. 20 cents</td>
+</tr>
+<tr>
+<td>GPT-5.2</td>
+<td>approx. 0.60 cents</td>
+<td>approx. 0.49 cents</td>
+<td>approx. 20 cents</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="price-comparison-panel">
+<h3>OpenAI API pricing reference · checked 29 April 2026</h3>
+<div class="price-comparison-table-wrap">
+<table class="price-comparison-table is-reference">
+<thead>
+<tr>
+<th scope="col">Model</th>
+<th scope="col">Input / 1M tokens</th>
+<th scope="col">Output / 1M tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-5.5</td>
+<td>$5.00</td>
+<td>$30.00</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>$2.50</td>
+<td>$15.00</td>
+</tr>
+<tr>
+<td>GPT-5.2</td>
+<td>$1.75</td>
+<td>$14.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class="price-comparison-note">Note: Estimates in USD.</p>
+<div class="price-comparison-actions">
+<a class="price-comparison-modal-button" href="https://developers.openai.com/api/docs/pricing/" rel="noopener" target="_blank">Open OpenAI pricing</a>
+<button class="price-comparison-modal-button" data-price-comparison-close="true" type="button">Close</button>
+</div>
+</div>
+</div>
+
 <div aria-hidden="true" class="video-modal" id="demo-video-modal">
 <div aria-label="BOLO demo video" aria-modal="true" class="video-modal-dialog" role="dialog">
 <button aria-label="Close video" class="video-modal-close" type="button">×</button>
@@ -935,6 +1194,49 @@
 
       trigger.addEventListener('click', openModal);
       closeBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', function(event){
+        if(event.target === modal){
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', function(event){
+        if(event.key === 'Escape' && modal.classList.contains('is-open')){
+          closeModal();
+        }
+      });
+    })();
+  </script>
+
+<script>
+    (function(){
+      const triggers = document.querySelectorAll('[data-price-comparison-open="true"]');
+      const modal = document.getElementById('price-comparison-modal');
+      if(!triggers.length || !modal) return;
+
+      const closeTriggers = modal.querySelectorAll('[data-price-comparison-close="true"]');
+
+      function openModal(event){
+        event.preventDefault();
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(){
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      triggers.forEach(function(trigger){
+        trigger.addEventListener('click', openModal);
+      });
+
+      closeTriggers.forEach(function(trigger){
+        trigger.addEventListener('click', closeModal);
+      });
 
       modal.addEventListener('click', function(event){
         if(event.target === modal){
