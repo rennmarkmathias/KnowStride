@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BOLO for Education – create handouts, teaching material and course books with AI</title>
+<meta name="description" content="BOLO helps schools, teachers and educational organizations create structured handouts, teaching material and course books with text, illustrations, quality control and export to DOCX, PDF and EPUB." />
+<style>
+  :root{
+    --bg:#f5f9ff;
+    --card:#ffffff;
+    --text:#102033;
+    --muted:#58677f;
+    --blue:#2d6cdf;
+    --blue-dark:#174190;
+    --cyan:#7ec8e3;
+    --gold:#f2c300;
+    --orange:#f47a20;
+    --green:#0f9d58;
+    --line:#dfe7f3;
+    --soft:#eef5ff;
+    --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%);
+    --shadow:0 14px 34px rgba(45,108,223,0.10);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.18), transparent 60%),
+      radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.15), transparent 60%),
+      linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%);
+    line-height:1.55;
+  }
+
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .hero{
+    background:var(--grad);
+    padding:28px 18px 34px;
+    text-align:center;
+  }
+
+  .hero-inner{
+    max-width:1100px;
+    margin:0 auto;
+  }
+
+  .logo{
+    width:520px;
+    max-width:92%;
+    height:auto;
+    display:block;
+    margin:0 auto 10px;
+    filter:drop-shadow(0 8px 18px rgba(0,0,0,.10));
+  }
+
+  .container{
+    max-width:1120px;
+    margin:0 auto;
+    padding:24px 18px 64px;
+  }
+
+  .panel{
+    background:linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(247,251,255,0.98) 100%);
+    border:1px solid rgba(45,108,223,0.12);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+
+  .topbar{height:6px;background:var(--grad)}
+
+  .intro{
+    padding:34px 30px 24px;
+    text-align:center;
+  }
+
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#eaf2ff;
+    color:var(--blue-dark);
+    font-size:.92rem;
+    font-weight:700;
+    border:1px solid rgba(45,108,223,0.18);
+    margin-bottom:14px;
+  }
+
+  h1{
+    margin:0 0 10px;
+    font-size:clamp(2rem, 4.4vw, 3.25rem);
+    line-height:1.08;
+    letter-spacing:-.03em;
+  }
+
+  .subtitle{
+    max-width:850px;
+    margin:0 auto;
+    color:#425066;
+    font-size:1.12rem;
+  }
+
+  .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+    margin-top:22px;
+  }
+
+  .button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:13px 22px;
+    border-radius:12px;
+    background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%);
+    color:#fff;
+    font-weight:800;
+    text-decoration:none;
+    box-shadow:0 9px 20px rgba(45,108,223,.20);
+    border:1px solid rgba(31,78,163,.12);
+  }
+
+  .button:hover{
+    text-decoration:none;
+    background:linear-gradient(180deg, #3769d3 0%, #1f4ea3 100%);
+    transform:translateY(-1px);
+  }
+
+  .button.secondary{
+    background:#fff;
+    color:var(--blue);
+    border:1px solid rgba(45,108,223,.45);
+    box-shadow:none;
+  }
+
+  .button.secondary:hover{
+    background:#f0f6ff;
+  }
+
+  .youtube-inline{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:0 4px;
+    color:var(--blue-dark);
+    font-weight:800;
+    text-decoration:none;
+  }
+
+  .youtube-inline:hover{
+    text-decoration:underline;
+  }
+
+  .badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    justify-content:center;
+    margin:20px auto 0;
+    max-width:900px;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:7px 11px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid rgba(45,108,223,.18);
+    color:#234687;
+    font-size:.9rem;
+    font-weight:700;
+    white-space:nowrap;
+  }
+
+  .section{
+    padding:22px 30px;
+    border-top:1px solid rgba(45,108,223,.10);
+  }
+
+  .section h2{
+    margin:0 0 12px;
+    font-size:1.55rem;
+    line-height:1.2;
+    letter-spacing:-.01em;
+  }
+
+  .section-lede{
+    margin:0 0 18px;
+    color:#425066;
+    max-width:870px;
+  }
+
+  .grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+
+  .grid-2{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+  }
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 8px 20px rgba(45,108,223,.05);
+  }
+
+  .card h3{
+    margin:0 0 8px;
+    font-size:1.08rem;
+    line-height:1.25;
+  }
+
+  .card p{
+    margin:0;
+    color:#334155;
+    font-size:.96rem;
+  }
+
+  .card ul{
+    margin:0;
+    padding-left:18px;
+    color:#334155;
+  }
+
+  .card li{
+    margin-bottom:8px;
+    font-size:.95rem;
+  }
+
+  .highlight{
+    color:var(--blue-dark);
+    font-weight:800;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+  }
+
+  .stat{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 8px 20px rgba(45,108,223,.05);
+  }
+
+  .stat strong{
+    display:block;
+    font-size:1.42rem;
+    line-height:1.08;
+    color:#14243d;
+    margin-bottom:7px;
+  }
+
+  .stat span{
+    display:block;
+    color:var(--muted);
+    font-size:.91rem;
+  }
+
+  .workflow{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
+  }
+
+  .step{
+    background:linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    border:1px solid var(--line);
+    border-top:4px solid transparent;
+    border-radius:14px;
+    padding:13px 10px;
+    text-align:center;
+    font-weight:800;
+    font-size:.9rem;
+    line-height:1.18;
+    min-height:92px;
+  }
+
+  .step:nth-child(1){border-top-color:#f47a20}
+  .step:nth-child(2){border-top-color:#f2c300}
+  .step:nth-child(3){border-top-color:#d7d91f}
+  .step:nth-child(4){border-top-color:#7ec8e3}
+  .step:nth-child(5){border-top-color:#2d6cdf}
+  .step:nth-child(6){border-top-color:#7c3aed}
+
+  .step small{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-weight:400;
+    font-size:.77rem;
+  }
+
+  .quality{
+    background:
+      radial-gradient(520px 190px at 15% 10%, rgba(126,200,227,.18), transparent 60%),
+      linear-gradient(180deg, #f7fbff 0%, #edf5ff 100%);
+    border:1px solid rgba(45,108,223,.14);
+    border-radius:18px;
+    padding:22px;
+  }
+
+  .quality-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:14px;
+  }
+
+  .quality-point{
+    background:rgba(255,255,255,.86);
+    border:1px solid rgba(45,108,223,.12);
+    border-radius:14px;
+    padding:14px;
+  }
+
+  .quality-point strong{
+    display:block;
+    margin-bottom:4px;
+    color:#10233f;
+  }
+
+  .video-card{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:18px;
+    align-items:center;
+  }
+
+  .demo-actions{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    justify-content:center;
+    align-items:stretch;
+    min-height:260px;
+    padding:26px;
+    border-radius:18px;
+    background:
+      radial-gradient(420px 180px at 15% 20%, rgba(126,200,227,.20), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+    border:1px solid var(--line);
+    box-shadow:0 10px 28px rgba(31,41,55,.08);
+  }
+
+  .demo-actions .button{
+    width:100%;
+  }
+
+  .thumb{
+    display:block;
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid rgba(31,41,55,.08);
+    box-shadow:0 10px 28px rgba(31,41,55,.12);
+    background:#fff;
+    line-height:0;
+  }
+
+  .thumb img{
+    width:100%;
+    display:block;
+    height:auto;
+  }
+
+  .play{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:72px;
+    height:72px;
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+
+  .play:before{
+    content:"";
+    position:absolute;
+    left:28px;
+    top:21px;
+    width:0;
+    height:0;
+    border-top:15px solid transparent;
+    border-bottom:15px solid transparent;
+    border-left:23px solid var(--blue);
+  }
+
+  .license-box{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:18px;
+    align-items:center;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 20px rgba(45,108,223,.05);
+  }
+
+  .fineprint{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:.9rem;
+  }
+
+  .footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:.92rem;
+    padding:24px 18px 8px;
+  }
+
+  @media (max-width: 960px){
+    .grid-3,.grid-2,.video-card,.license-box{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .workflow{grid-template-columns:repeat(3,1fr)}
+    .section,.intro{padding-left:20px;padding-right:20px}
+    .license-box{align-items:start}
+  }
+
+  @media (max-width: 640px){
+    .container{padding:16px 12px 44px}
+    .hero{padding:22px 12px 28px}
+    .intro{padding:26px 16px 20px}
+    .section{padding:20px 16px}
+    .stats,.workflow,.quality-grid{grid-template-columns:1fr}
+    .button{width:100%}
+    .badge{white-space:normal;text-align:center}
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <img class="logo" src="BOLO-logo.png" alt="BOLO logo" />
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="panel">
+      <div class="topbar"></div>
+
+      <section class="intro">
+        <div class="kicker">For schools, teachers and educational organizations</div>
+        <h1>BOLO for Education</h1>
+        <p class="subtitle">
+          Create illustrated handouts, teaching material, course packs and textbooks with a structured AI workflow — from brief and outline to text, images, captions and finished export.
+        </p>
+        <div class="cta-row">
+          <a class="button" href="https://bolowriter.com/">See licenses and buy BOLO</a>
+          <a class="button secondary" href="Bolo-education.mp4">Watch demo video</a>
+          <a class="youtube-inline" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">More videos on YouTube</a>
+        </div>
+        <div class="badges">
+          <span class="badge">From primary school to university</span>
+          <span class="badge">DOCX, PDF and EPUB</span>
+          <span class="badge">Automatic illustrations</span>
+          <span class="badge">Your own OpenAI API key</span>
+          <span class="badge">Very low AI cost</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Ready-to-use teaching material in minutes, not days</h2>
+        <p class="section-lede">
+          BOLO is built for teachers and educational environments that need clear, usable and level-adapted material quickly. Start with a simple brief covering the subject, age group, knowledge level and learning goals — and let BOLO build a coherent production with structure, text, illustrations and export.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Short handouts and worksheets</h3>
+            <p>Create A4/letter-style handouts, lesson support, exercises and explanations for a specific topic, unit or exam area.</p>
+          </div>
+          <div class="card">
+            <h3>Longer course packs and textbooks</h3>
+            <p>Build larger material with chapter structure, consistent level, clear terminology and export to formats that can be edited or printed.</p>
+          </div>
+          <div class="card">
+            <h3>Illustrated material</h3>
+            <p>Choose the number of images, let BOLO suggest illustrations, generate them and place them in the material with captions.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Example cost and time estimates</h2>
+        <p class="section-lede">
+          BOLO uses the user’s own OpenAI API key (instructions are available further down the page). This keeps the license cost low (from about $2.66 per user/month) and means the school only pays AI cost when material is actually produced.
+        </p>
+        <p class="section-lede">
+          Many comparable AI services are based on monthly subscriptions per user, where part of the price covers included AI usage that may not be fully used. If a teacher mainly creates material when needed — for example a couple of handouts or worksheets per month — BOLO is often significantly more cost-effective, because the actual AI cost is normally only a few dollars per month with that level of use.
+        </p>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>about $0.05–$0.25</strong>
+            <span>short handout with text, depending on length and model choice.</span>
+          </div>
+          <div class="stat">
+            <strong>under about $1.10</strong>
+            <span>many short illustrated handouts can be produced with several images.</span>
+          </div>
+          <div class="stat">
+            <strong>about 30 min</strong>
+            <span>for a clean, usable handout with brief, generation and quick review.</span>
+          </div>
+          <div class="stat">
+            <strong>about 2 hours</strong>
+            <span>for more complete material or a longer textbook with refinement.</span>
+          </div>
+        </div>
+
+        <p class="fineprint">
+          Costs are approximate and depend on the selected model, text length, number of images and how many regenerations are made. Licenses are purchased via Stripe; a paid invoice/receipt is provided after purchase.
+        </p>
+      </section>
+
+      <section class="section">
+        <div class="quality">
+          <h2>Quality control: not just “AI text”</h2>
+          <p class="section-lede">
+            BOLO is built as a production system, not as a simple prompt box. Several layers help turn the brief into a consistent and usable result, so the output does not become loose, generic AI text.
+          </p>
+
+          <div class="quality-grid">
+            <div class="quality-point">
+              <strong>Structure engine</strong>
+              The material is built around chapters, headings and content flow instead of separate chat responses.
+            </div>
+            <div class="quality-point">
+              <strong>Volume and balance control</strong>
+              BOLO helps keep text length, chapter scope and information level more proportionate.
+            </div>
+            <div class="quality-point">
+              <strong>Terminology and factual consistency</strong>
+              Concepts, names, facts and tone are kept more consistent throughout the material.
+            </div>
+            <div class="quality-point">
+              <strong>Export and editing workflow</strong>
+              The result can be exported to DOCX, PDF or EPUB and then reviewed, edited and used in the school’s normal workflow.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Workflow</h2>
+        <p class="section-lede">
+          BOLO keeps the full production in one clear workflow. This makes the process easier to repeat, review and adapt for different ages, subjects and learning goals.
+        </p>
+
+        <div class="workflow">
+          <div class="step">1. Book Brief<small>subject, level, audience and focus</small></div>
+          <div class="step">2. Outline<small>chapters and headings</small></div>
+          <div class="step">3. Text<small>structured generation</small></div>
+          <div class="step">4. Images<small>suggestions, generation and captions</small></div>
+          <div class="step">5. Review<small>check, adjust and edit</small></div>
+          <div class="step">6. Export<small>DOCX, PDF and EPUB</small></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Why BOLO instead of a regular AI chat?</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Regular AI chat</h3>
+            <ul>
+              <li>Often produces separate answers that must be manually assembled.</li>
+              <li>Can lead to uneven level, repetition and inconsistent terminology.</li>
+              <li>Has no natural workflow for illustrations, captions and export.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>BOLO</h3>
+            <ul>
+              <li>Builds the material as one coherent project from brief to export.</li>
+              <li>Keeps structure, level, terminology and content flow more consistent.</li>
+              <li>Creates text, illustrations, captions and publishable files in the same pipeline.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="demo">
+        <h2>See how it works</h2>
+        <div class="video-card">
+          <div class="demo-actions">
+            <a class="button" href="Bolo-education.mp4">Watch demo video</a>
+            <a class="button secondary" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">More videos on YouTube</a>
+            <a class="button secondary" href="https://bolowriter.com/">Buy license / get API key</a>
+          </div>
+          <div>
+            <h3>Demo for educational material</h3>
+            <p>
+              Watch how BOLO creates educational material live: brief, outline, text, illustrations and export.
+            </p>
+            <p class="fineprint">
+              The license page also includes instructions for how to get an OpenAI API key and get started.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        BOLO helps schools create clear, structured and affordable educational material — from quick classroom handouts to larger learning resources.
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
