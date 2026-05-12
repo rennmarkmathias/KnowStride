@@ -147,6 +147,28 @@
     background:#f0f6ff;
   }
 
+  .video-button-stack{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:260px;
+  }
+
+  .video-button-stack .button{
+    width:100%;
+    flex-direction:column;
+    line-height:1.18;
+    gap:3px;
+    text-align:center;
+  }
+
+  .button small{
+    display:block;
+    font-size:.78rem;
+    font-weight:700;
+    opacity:.82;
+  }
+
   .youtube-inline{
     display:inline-flex;
     align-items:center;
@@ -460,6 +482,7 @@
     .section{padding:20px 16px}
     .stats,.workflow,.quality-grid{grid-template-columns:1fr}
     .button{width:100%}
+    .video-button-stack{width:100%;min-width:0}
     .badge{white-space:normal;text-align:center}
   }
 </style>
@@ -483,7 +506,10 @@
         </p>
         <div class="cta-row">
           <a class="button" href="https://bolowriter.com/landing/BOLO_Landing_Multilingual#swedish-top">Se licenser och köp BOLO</a>
-          <a class="button secondary" href="Bolo-utbildning.mp4">Se demonstrationsvideo</a>
+          <div class="video-button-stack">
+            <a class="button secondary" href="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4">Presentationsvideo</a>
+            <a class="button secondary" href="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4">Demonstrationsvideo<small>Se hur ett häfte görs i realtid</small></a>
+          </div>
           <a class="youtube-inline" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler videos på YouTube</a>
         </div>
         <div class="badges">
@@ -619,17 +645,18 @@
       </section>
 
       <section class="section" id="demo">
-        <h2>Se hur det fungerar</h2>
+        <h2>Se BOLO för utbildning i två videor</h2>
         <div class="video-card">
           <div class="demo-actions">
-            <a class="button" href="Bolo-utbildning.mp4">Se demonstrationsvideo</a>
+            <a class="button" href="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4">Presentationsvideo</a>
+            <a class="button secondary" href="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4">Demonstrationsvideo<small>Se hur ett häfte görs i realtid</small></a>
             <a class="button secondary" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler videos på YouTube</a>
             <a class="button secondary" href="https://bolowriter.com/landing/BOLO_Landing_Multilingual#swedish-top">Köp licens / skaffa API-nyckel</a>
           </div>
           <div>
-            <h3>Demonstration för utbildningsmaterial</h3>
+            <h3>Presentation och demonstration</h3>
             <p>
-              Se hur BOLO skapar utbildningsmaterial live: brief, disposition, text, illustrationer och export.
+              Börja med en kort presentation av hur BOLO kan användas för utbildningsmaterial. Titta sedan på en praktisk demonstrationsvideo där ett häfte skapas i realtid.
             </p>
             <p class="fineprint">
               På licenssidan finns även instruktioner för hur du skaffar en OpenAI API-nyckel och kommer igång.
