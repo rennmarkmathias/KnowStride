@@ -1,9 +1,9 @@
 // functions/api/book-onboarding.js
 // Cloudflare Pages Function endpoint used by the onboarding popup.
-// Requires a Resend API key and a verified sender domain.
+// Sends one booking email to BOLO and one confirmation email to the person who booked.
 // Environment variables:
 //   RESEND_API_KEY=...
-//   BOOKING_FROM=BOLO <onboarding@bolowriter.com>
+//   BOOKING_FROM=BOLO <info@bolowriter.com>
 //   BOOKING_TO=info@bolowriter.com
 
 export async function onRequestPost(context) {
@@ -19,15 +19,15 @@ export async function onRequestPost(context) {
     }
 
     const resendApiKey = env.RESEND_API_KEY;
-    const from = env.BOOKING_FROM || "BOLO <onboarding@bolowriter.com>";
+    const from = env.BOOKING_FROM || "BOLO <info@bolowriter.com>";
     const to = env.BOOKING_TO || "info@bolowriter.com";
 
     if (!resendApiKey) {
       return json({ ok: false, error: "RESEND_API_KEY is not configured" }, 500);
     }
 
-    const subject = `BOLO onboarding bokad: ${data.slot_label}`;
-    const text = [
+    const bookingSubject = `BOLO onboarding bokad: ${data.slot_label}`;
+    const bookingText = [
       "Ny onboardingbokning via BOLO utbildningssida",
       "",
       `Tid: ${data.slot_label}`,
@@ -42,24 +42,47 @@ export async function onRequestPost(context) {
       `Källa: ${data.source || "-"}`
     ].join("\n");
 
-    const emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${resendApiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from,
-        to,
-        reply_to: data.email,
-        subject,
-        text
-      })
+    const confirmationSubject = `Din BOLO-onboarding är mottagen: ${data.slot_label}`;
+    const confirmationText = [
+      `Hej ${data.name},`,
+      "",
+      "Tack för din bokning av BOLO-onboarding via Teams.",
+      "",
+      `Önskad tid: ${data.slot_label}`,
+      `Skola/organisation: ${data.organization}`,
+      "",
+      "Vi återkommer med bekräftelse och Teams-länk via e-post.",
+      "",
+      "Om tiden behöver justeras kontaktar vi dig.",
+      "",
+      "Vänliga hälsningar,",
+      "BOLO"
+    ].join("\n");
+
+    const internalResponse = await sendEmail(resendApiKey, {
+      from,
+      to,
+      reply_to: data.email,
+      subject: bookingSubject,
+      text: bookingText
     });
 
-    if (!emailResponse.ok) {
-      const details = await emailResponse.text();
-      return json({ ok: false, error: "Email provider failed", details }, 502);
+    if (!internalResponse.ok) {
+      const details = await internalResponse.text();
+      return json({ ok: false, error: "Internal booking email failed", details }, 502);
+    }
+
+    const confirmationResponse = await sendEmail(resendApiKey, {
+      from,
+      to: data.email,
+      reply_to: to,
+      subject: confirmationSubject,
+      text: confirmationText
+    });
+
+    if (!confirmationResponse.ok) {
+      const details = await confirmationResponse.text();
+      return json({ ok: false, error: "Confirmation email failed", details }, 502);
     }
 
     return json({ ok: true });
@@ -72,6 +95,17 @@ export async function onRequestOptions() {
   return new Response(null, {
     status: 204,
     headers: corsHeaders()
+  });
+}
+
+function sendEmail(apiKey, payload) {
+  return fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
   });
 }
 
