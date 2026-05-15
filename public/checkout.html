@@ -273,7 +273,62 @@
         seats: 10,
         period: "36 months",
         amount: "$958"
+      },
+      sv_solo_6m: {
+        name: "Individuell licens – 6 månader",
+        seats: 1,
+        period: "6 månader",
+        amount: "359 kr"
+      },
+      sv_solo_12m: {
+        name: "Individuell licens – 12 månader",
+        seats: 1,
+        period: "12 månader",
+        amount: "539 kr"
+      },
+      sv_solo_36m: {
+        name: "Individuell licens – 36 månader",
+        seats: 1,
+        period: "36 månader",
+        amount: "1 179 kr"
+      },
+      sv_team_3: {
+        name: "Team – 3 användare",
+        seats: 3,
+        period: "12 månader",
+        amount: "1 639 kr"
+      },
+      sv_team_5: {
+        name: "Team – 5 användare",
+        seats: 5,
+        period: "12 månader",
+        amount: "2 549 kr"
+      },
+      sv_team_10: {
+        name: "Organisation – 10 användare",
+        seats: 10,
+        period: "12 månader",
+        amount: "4 379 kr"
+      },
+      sv_team_3_36m: {
+        name: "Team – 3 användare – 36 månader",
+        seats: 3,
+        period: "36 månader",
+        amount: "3 279 kr"
+      },
+      sv_team_5_36m: {
+        name: "Team – 5 användare – 36 månader",
+        seats: 5,
+        period: "36 månader",
+        amount: "5 099 kr"
+      },
+      sv_team_10_36m: {
+        name: "Organisation – 10 användare – 36 månader",
+        seats: 10,
+        period: "36 månader",
+        amount: "8 759 kr"
       }
+
     };
 
     function getPlanFromUrl() {
@@ -287,15 +342,18 @@
         throw new Error("Missing #plans container");
       }
 
+      const isSwedish = String(active || "").startsWith("sv_");
+
       wrap.innerHTML = Object.entries(PLAN_MAP)
+        .filter(([k]) => isSwedish ? k.startsWith("sv_") : !k.startsWith("sv_"))
         .map(([k, p]) => `
           <article class="plan-card ${k === active ? "active" : ""}">
-            <span class="pill">${p.seats > 1 ? "Team license" : "Individual license"}</span>
+            <span class="pill">${p.seats > 1 ? (isSwedish ? "Teamlicens" : "Team license") : (isSwedish ? "Individuell licens" : "Individual license")}</span>
             <h3>${p.name}</h3>
             <div class="plan-price">${p.amount}</div>
-            <p class="muted plan-meta">Seats: ${p.seats}<br>Period: ${p.period}</p>
+            <p class="muted plan-meta">${isSwedish ? "Användare" : "Seats"}: ${p.seats}<br>${isSwedish ? "Period" : "Period"}: ${p.period}</p>
             <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
-              ${k === active ? "Selected" : "Select this plan"}
+              ${k === active ? (isSwedish ? "Vald" : "Selected") : (isSwedish ? "Välj denna licens" : "Select this plan")}
             </button>
           </article>
         `)
@@ -321,6 +379,12 @@
       document.getElementById("selectedSeats").textContent = String(p.seats);
       document.getElementById("selectedPeriod").textContent = p.period;
       document.getElementById("selectedPrice").textContent = p.amount;
+
+      const isSwedish = String(k || "").startsWith("sv_");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      if (checkoutBtn && isSwedish) {
+        checkoutBtn.textContent = "Fortsätt till Stripe";
+      }
     }
 
     window.addEventListener("load", async () => {
