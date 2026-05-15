@@ -31,6 +31,15 @@ function planLabel(plan) {
     team_3_36m: "BOLO Team — 3 users — 36 months",
     team_5_36m: "BOLO Team — 5 users — 36 months",
     team_10_36m: "BOLO Team — 10 users — 36 months",
+    sv_solo_6m: "BOLO Individual — 6 months",
+    sv_solo_12m: "BOLO Individual — 12 months",
+    sv_solo_36m: "BOLO Individual — 36 months",
+    sv_team_3: "BOLO Team — 3 users — 12 months",
+    sv_team_5: "BOLO Team — 5 users — 12 months",
+    sv_team_10: "BOLO Team — 10 users — 12 months",
+    sv_team_3_36m: "BOLO Team — 3 users — 36 months",
+    sv_team_5_36m: "BOLO Team — 5 users — 36 months",
+    sv_team_10_36m: "BOLO Team — 10 users — 36 months",
   };
   return labels[key] || key || "BOLO License";
 }
