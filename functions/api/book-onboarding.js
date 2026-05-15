@@ -42,18 +42,16 @@ export async function onRequestPost(context) {
       `Källa: ${data.source || "-"}`
     ].join("\n");
 
-    const confirmationSubject = `Din BOLO-onboarding är mottagen: ${data.slot_label}`;
+    const confirmationSubject = `Din BOLO-onboarding är bokad: ${data.slot_label}`;
     const confirmationText = [
       `Hej ${data.name},`,
       "",
       "Tack för din bokning av BOLO-onboarding via Teams.",
       "",
-      `Önskad tid: ${data.slot_label}`,
+      `Tiden är bokad: ${data.slot_label}`,
       `Skola/organisation: ${data.organization}`,
       "",
-      "Vi återkommer med bekräftelse och Teams-länk via e-post.",
-      "",
-      "Om tiden behöver justeras kontaktar vi dig.",
+      "Teams-länken skickas i god tid innan mötet.",
       "",
       "Vänliga hälsningar,",
       "BOLO"
