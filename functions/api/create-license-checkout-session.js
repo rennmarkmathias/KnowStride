@@ -28,15 +28,26 @@ export async function onRequestPost(context) {
     const { plan } = body || {};
 
     const plans = {
-      solo_6m: { amount: 3900, months: 6, seats: 1 },
-      solo_12m: { amount: 5900, months: 12, seats: 1 },
-      solo_36m: { amount: 12900, months: 36, seats: 1 },
-      team_3: { amount: 17900, months: 12, seats: 3 },
-      team_5: { amount: 27900, months: 12, seats: 5 },
-      team_10: { amount: 47900, months: 12, seats: 10 },
-      team_3_36m: { amount: 35800, months: 36, seats: 3 },
-      team_5_36m: { amount: 55800, months: 36, seats: 5 },
-      team_10_36m: { amount: 95800, months: 36, seats: 10 }
+      solo_6m: { amount: 3900, currency: 'usd', months: 6, seats: 1 },
+      solo_12m: { amount: 5900, currency: 'usd', months: 12, seats: 1 },
+      solo_36m: { amount: 12900, currency: 'usd', months: 36, seats: 1 },
+      team_3: { amount: 17900, currency: 'usd', months: 12, seats: 3 },
+      team_5: { amount: 27900, currency: 'usd', months: 12, seats: 5 },
+      team_10: { amount: 47900, currency: 'usd', months: 12, seats: 10 },
+      team_3_36m: { amount: 35800, currency: 'usd', months: 36, seats: 3 },
+      team_5_36m: { amount: 55800, currency: 'usd', months: 36, seats: 5 },
+      team_10_36m: { amount: 95800, currency: 'usd', months: 36, seats: 10 },
+
+      // Swedish SEK checkout variants. These are used from the Swedish section of /landing/.
+      sv_solo_6m: { amount: 35900, currency: 'sek', months: 6, seats: 1 },
+      sv_solo_12m: { amount: 53900, currency: 'sek', months: 12, seats: 1 },
+      sv_solo_36m: { amount: 117900, currency: 'sek', months: 36, seats: 1 },
+      sv_team_3: { amount: 163900, currency: 'sek', months: 12, seats: 3 },
+      sv_team_5: { amount: 254900, currency: 'sek', months: 12, seats: 5 },
+      sv_team_10: { amount: 437900, currency: 'sek', months: 12, seats: 10 },
+      sv_team_3_36m: { amount: 327900, currency: 'sek', months: 36, seats: 3 },
+      sv_team_5_36m: { amount: 509900, currency: 'sek', months: 36, seats: 5 },
+      sv_team_10_36m: { amount: 875900, currency: 'sek', months: 36, seats: 10 }
     };
 
     const selected = plans[plan];
@@ -63,9 +74,9 @@ export async function onRequestPost(context) {
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: selected.currency || 'usd',
             product_data: {
-              name: `BOLO License (${plan})`
+              name: `BOLO License (${plan.replace(/^sv_/, '')})`
             },
             unit_amount: selected.amount
           },
