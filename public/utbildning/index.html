@@ -462,6 +462,133 @@
     width:100%;
   }
 
+  .booking-modal{
+    position:fixed;
+    inset:0;
+    background:rgba(10,18,34,0.68);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    z-index:10001;
+    backdrop-filter:blur(2px);
+  }
+
+  .booking-modal.is-open{
+    display:flex;
+  }
+
+  .booking-dialog{
+    width:min(680px,100%);
+    max-height:92vh;
+    overflow:auto;
+    background:#ffffff;
+    border-radius:20px;
+    border:1px solid rgba(45,108,223,0.18);
+    box-shadow:0 24px 60px rgba(0,0,0,0.28);
+    padding:24px;
+    position:relative;
+  }
+
+  .booking-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:999px;
+    background:#eef5ff;
+    color:#10233f;
+    font-size:1.35rem;
+    line-height:1;
+    cursor:pointer;
+  }
+
+  .booking-close:hover{
+    background:#dfeeff;
+  }
+
+  .booking-dialog h2{
+    margin:0 46px 8px 0;
+    font-size:1.55rem;
+    line-height:1.2;
+  }
+
+  .booking-intro{
+    margin:0 0 16px;
+    color:#425066;
+  }
+
+  .booking-form{
+    display:grid;
+    gap:12px;
+  }
+
+  .booking-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .booking-form label{
+    display:grid;
+    gap:5px;
+    color:#10233f;
+    font-size:.92rem;
+    font-weight:800;
+  }
+
+  .booking-form input,
+  .booking-form select,
+  .booking-form textarea{
+    width:100%;
+    border:1px solid rgba(45,108,223,0.24);
+    border-radius:10px;
+    padding:11px 12px;
+    font:inherit;
+    color:#102033;
+    background:#fff;
+  }
+
+  .booking-form textarea{
+    min-height:84px;
+    resize:vertical;
+  }
+
+  .booking-note{
+    margin:0;
+    color:#58677f;
+    font-size:.88rem;
+  }
+
+  .booking-status{
+    margin:2px 0 0;
+    color:#174190;
+    font-size:.92rem;
+    font-weight:700;
+    min-height:1.3em;
+  }
+
+  .booking-status.is-error{
+    color:#b42318;
+  }
+
+  @media (max-width: 640px){
+    .booking-modal{
+      padding:14px;
+    }
+
+    .booking-dialog{
+      padding:20px 16px;
+      border-radius:16px;
+    }
+
+    .booking-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
   .fineprint{
     margin-top:12px;
     color:#58677f;
@@ -737,7 +864,7 @@
           </div>
           <div class="final-actions">
             <a class="button" href="https://bolowriter.com/landing/#swedish-top">Testa BOLO / köp licens / skaffa API-nyckel</a>
-            <a class="button secondary" href="mailto:info@bolowriter.com?subject=Boka%20onboarding%20via%20Teams&body=Hej%2C%0A%0AVi%20vill%20boka%20en%20kort%20onboarding%20via%20Teams%20f%C3%B6r%20BOLO.%0A%0ANamn%3A%0AE-post%3A%0ASkola/organisation%3A%0ARoll%3A%0A%C3%96nskad%20tid%3A%0AKommentar%3A%0A%0A">Boka onboarding via Teams</a>
+            <a class="button secondary" href="#onboarding" data-booking-open="true">Boka onboarding via Teams</a>
           </div>
         </div>
       </section>
@@ -764,6 +891,52 @@
     </article>
   </main>
 
+
+<div aria-hidden="true" class="booking-modal" id="onboarding-modal">
+  <div aria-label="Boka onboarding via Teams" aria-modal="true" class="booking-dialog" role="dialog">
+    <button aria-label="Stäng bokning" class="booking-close" type="button">×</button>
+    <h2>Boka onboarding via Teams</h2>
+    <p class="booking-intro">
+      Boka en kostnadsfri genomgång på 30 minuter. Välj en ledig tid, fyll i uppgifterna och skicka bokningen direkt på sidan.
+    </p>
+    <form class="booking-form" id="onboarding-form">
+      <label>
+        Välj tid
+        <select name="slot" id="booking-slot" required>
+          <option value="">Laddar lediga tider...</option>
+        </select>
+      </label>
+      <div class="booking-grid">
+        <label>
+          Namn
+          <input name="name" autocomplete="name" required />
+        </label>
+        <label>
+          E-post
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
+      </div>
+      <div class="booking-grid">
+        <label>
+          Skola / organisation
+          <input name="organization" autocomplete="organization" required />
+        </label>
+        <label>
+          Roll
+          <input name="role" placeholder="t.ex. rektor, lärare, skolchef" />
+        </label>
+      </div>
+      <label>
+        Kommentar
+        <textarea name="message" placeholder="Skriv gärna vad ni vill se under genomgången."></textarea>
+      </label>
+      <p class="booking-note">Tiderna visas i svensk tid. Svenska helgdagar hoppas över automatiskt.</p>
+      <button class="button" type="submit">Skicka bokning</button>
+      <p class="booking-status" id="booking-status" role="status"></p>
+    </form>
+  </div>
+</div>
+
 <div aria-hidden="true" class="video-modal" id="education-video-modal">
   <div aria-label="BOLO utbildningsvideo" aria-modal="true" class="video-modal-dialog" role="dialog">
     <button aria-label="Stäng video" class="video-modal-close" type="button">×</button>
@@ -772,6 +945,257 @@
     </video>
   </div>
 </div>
+
+<script>
+  (function(){
+    const onboardingModal = document.getElementById('onboarding-modal');
+    const bookingOpenTriggers = document.querySelectorAll('[data-booking-open="true"]');
+    const bookingForm = document.getElementById('onboarding-form');
+    const bookingSlot = document.getElementById('booking-slot');
+    const bookingStatus = document.getElementById('booking-status');
+
+    if(!onboardingModal || !bookingOpenTriggers.length || !bookingForm || !bookingSlot) return;
+
+    const closeBtn = onboardingModal.querySelector('.booking-close');
+
+    function getEasterSunday(year){
+      const a = year % 19;
+      const b = Math.floor(year / 100);
+      const c = year % 100;
+      const d = Math.floor(b / 4);
+      const e = b % 4;
+      const f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4);
+      const k = c % 4;
+      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const month = Math.floor((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+      return new Date(year, month - 1, day);
+    }
+
+    function addDays(date, days){
+      const copy = new Date(date);
+      copy.setDate(copy.getDate() + days);
+      return copy;
+    }
+
+    function dateKey(date){
+      return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+    }
+
+    function getSwedishHolidayKeys(year){
+      const easter = getEasterSunday(year);
+      const keys = new Set();
+
+      [
+        [0,1],   // Nyårsdagen
+        [0,6],   // Trettondedag jul
+        [4,1],   // Första maj
+        [5,6],   // Nationaldagen
+        [11,24], // Julafton
+        [11,25], // Juldagen
+        [11,26], // Annandag jul
+        [11,31]  // Nyårsafton
+      ].forEach(function(parts){
+        keys.add(dateKey(new Date(year, parts[0], parts[1])));
+      });
+
+      [
+        -2, // Långfredagen
+        1,  // Annandag påsk
+        39, // Kristi himmelsfärdsdag
+        50  // Annandag pingst är inte allmän helgdag, men blockeras som marginal vid bokning
+      ].forEach(function(offset){
+        keys.add(dateKey(addDays(easter, offset)));
+      });
+
+      // Midsommarafton: fredagen mellan 19 och 25 juni.
+      for(let day = 19; day <= 25; day++){
+        const d = new Date(year, 5, day);
+        if(d.getDay() === 5){
+          keys.add(dateKey(d));
+          keys.add(dateKey(addDays(d, 1))); // Midsommardagen
+          break;
+        }
+      }
+
+      // Alla helgons dag: lördagen mellan 31 okt och 6 nov.
+      for(let day = 31; day <= 37; day++){
+        const d = new Date(year, 9, day);
+        if(d.getDay() === 6){
+          keys.add(dateKey(d));
+          break;
+        }
+      }
+
+      return keys;
+    }
+
+    function isSwedishHoliday(date){
+      const holidays = getSwedishHolidayKeys(date.getFullYear());
+      return holidays.has(dateKey(date));
+    }
+
+    function weekStartMonday(date){
+      const d = new Date(date);
+      d.setHours(0,0,0,0);
+      const day = d.getDay() || 7;
+      d.setDate(d.getDate() - day + 1);
+      return d;
+    }
+
+    function buildSlots(){
+      const now = new Date();
+      const allSlots = [];
+      const weeklyTimes = [
+        {day:2, hour:10, minute:0},  // tisdag
+        {day:2, hour:14, minute:0},  // tisdag
+        {day:3, hour:11, minute:30}, // onsdag
+        {day:4, hour:13, minute:30}  // torsdag
+      ];
+
+      let start = weekStartMonday(now);
+
+      for(let week = 0; week < 8; week++){
+        const monday = addDays(start, week * 7);
+
+        weeklyTimes.forEach(function(slot){
+          const d = addDays(monday, slot.day - 1);
+          d.setHours(slot.hour, slot.minute, 0, 0);
+
+          if(d <= addDays(now, 1)) return;
+          if(isSwedishHoliday(d)) return;
+
+          allSlots.push(d);
+        });
+      }
+
+      return allSlots.slice(0, 16);
+    }
+
+    function formatSlot(date){
+      const datePart = new Intl.DateTimeFormat('sv-SE', {
+        weekday:'long',
+        day:'numeric',
+        month:'long'
+      }).format(date);
+
+      const timePart = new Intl.DateTimeFormat('sv-SE', {
+        hour:'2-digit',
+        minute:'2-digit'
+      }).format(date);
+
+      return datePart.charAt(0).toUpperCase() + datePart.slice(1) + ' kl. ' + timePart + '–' + new Intl.DateTimeFormat('sv-SE', {
+        hour:'2-digit',
+        minute:'2-digit'
+      }).format(new Date(date.getTime() + 30 * 60000));
+    }
+
+    function populateSlots(){
+      const slots = buildSlots();
+      bookingSlot.innerHTML = '';
+
+      if(!slots.length){
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Inga lediga tider visas just nu';
+        bookingSlot.appendChild(option);
+        bookingSlot.disabled = true;
+        return;
+      }
+
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = 'Välj en ledig tid';
+      bookingSlot.appendChild(placeholder);
+
+      slots.forEach(function(date){
+        const option = document.createElement('option');
+        option.value = date.toISOString();
+        option.textContent = formatSlot(date);
+        bookingSlot.appendChild(option);
+      });
+
+      bookingSlot.disabled = false;
+    }
+
+    function openBooking(event){
+      event.preventDefault();
+      populateSlots();
+      bookingStatus.textContent = '';
+      bookingStatus.classList.remove('is-error');
+      onboardingModal.classList.add('is-open');
+      onboardingModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBooking(){
+      onboardingModal.classList.remove('is-open');
+      onboardingModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+
+    bookingOpenTriggers.forEach(function(trigger){
+      trigger.addEventListener('click', openBooking);
+    });
+
+    closeBtn.addEventListener('click', closeBooking);
+
+    onboardingModal.addEventListener('click', function(event){
+      if(event.target === onboardingModal){
+        closeBooking();
+      }
+    });
+
+    document.addEventListener('keydown', function(event){
+      if(event.key === 'Escape' && onboardingModal.classList.contains('is-open')){
+        closeBooking();
+      }
+    });
+
+    bookingForm.addEventListener('submit', async function(event){
+      event.preventDefault();
+      bookingStatus.textContent = 'Skickar bokning...';
+      bookingStatus.classList.remove('is-error');
+
+      const formData = new FormData(bookingForm);
+      const selectedOption = bookingSlot.options[bookingSlot.selectedIndex];
+      const payload = {
+        slot: formData.get('slot'),
+        slot_label: selectedOption ? selectedOption.textContent : '',
+        name: formData.get('name'),
+        email: formData.get('email'),
+        organization: formData.get('organization'),
+        role: formData.get('role'),
+        message: formData.get('message'),
+        source: 'BOLO utbildningssida'
+      };
+
+      try{
+        const response = await fetch('/api/book-onboarding', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+
+        if(!response.ok){
+          throw new Error('Booking endpoint returned ' + response.status);
+        }
+
+        bookingStatus.textContent = 'Tack! Bokningen är skickad. Du får en bekräftelse via e-post.';
+        bookingForm.reset();
+        populateSlots();
+      }catch(error){
+        bookingStatus.textContent = 'Bokningen kunde inte skickas automatiskt just nu. Försök igen om en stund.';
+        bookingStatus.classList.add('is-error');
+      }
+    });
+  })();
+</script>
+
 <script>
   (function(){
     const triggers = document.querySelectorAll('[data-video-open="true"]');
