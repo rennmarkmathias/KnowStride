@@ -1094,8 +1094,30 @@
       }).format(new Date(date.getTime() + 30 * 60000));
     }
 
-    function populateSlots(){
-      const slots = buildSlots();
+    async function getBookedSlots(){
+      try{
+        const response = await fetch('/api/book-onboarding', { method:'GET' });
+        if(!response.ok) return new Set();
+        const data = await response.json();
+        return new Set(Array.isArray(data.booked_slots) ? data.booked_slots : []);
+      }catch(error){
+        return new Set();
+      }
+    }
+
+    async function populateSlots(){
+      bookingSlot.innerHTML = '';
+      const loading = document.createElement('option');
+      loading.value = '';
+      loading.textContent = 'Laddar lediga tider...';
+      bookingSlot.appendChild(loading);
+      bookingSlot.disabled = true;
+
+      const bookedSlots = await getBookedSlots();
+      const slots = buildSlots().filter(function(date){
+        return !bookedSlots.has(date.toISOString());
+      });
+
       bookingSlot.innerHTML = '';
 
       if(!slots.length){
@@ -1122,9 +1144,9 @@
       bookingSlot.disabled = false;
     }
 
-    function openBooking(event){
+    async function openBooking(event){
       event.preventDefault();
-      populateSlots();
+      await populateSlots();
       bookingStatus.textContent = '';
       bookingStatus.classList.remove('is-error');
       onboardingModal.classList.add('is-open');
@@ -1185,9 +1207,9 @@
           throw new Error('Booking endpoint returned ' + response.status);
         }
 
-        bookingStatus.textContent = 'Tack! Bokningen är skickad. Du får en bekräftelse via e-post.';
+        bookingStatus.textContent = 'Tack! Tiden är bokad. Du får en bekräftelse via e-post.';
         bookingForm.reset();
-        populateSlots();
+        await populateSlots();
       }catch(error){
         bookingStatus.textContent = 'Bokningen kunde inte skickas automatiskt just nu. Försök igen om en stund.';
         bookingStatus.classList.add('is-error');
