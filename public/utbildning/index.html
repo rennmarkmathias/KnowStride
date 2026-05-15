@@ -16,11 +16,10 @@
     --cyan:#7ec8e3;
     --gold:#f2c300;
     --orange:#f47a20;
-    --green:#0f9d58;
     --line:#dfe7f3;
     --soft:#eef5ff;
     --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%);
-    --shadow:0 14px 34px rgba(45,108,223,0.10);
+    --shadow:0 18px 46px rgba(45,108,223,0.13);
   }
 
   *{box-sizing:border-box}
@@ -31,7 +30,7 @@
     color:var(--text);
     background:
       radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.18), transparent 60%),
-      radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.15), transparent 60%),
+      radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.16), transparent 60%),
       linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%);
     line-height:1.55;
   }
@@ -41,13 +40,8 @@
 
   .hero{
     background:var(--grad);
-    padding:26px 16px 34px;
+    padding:26px 16px 30px;
     text-align:center;
-  }
-
-  .hero-inner{
-    max-width:1100px;
-    margin:0 auto;
   }
 
   .logo{
@@ -55,7 +49,7 @@
     max-width:92%;
     height:auto;
     display:block;
-    margin:0 auto 10px;
+    margin:0 auto;
   }
 
   .container{
@@ -65,69 +59,99 @@
   }
 
   .panel{
-    background:linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(247,251,255,0.98) 100%);
+    background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(247,251,255,0.98) 100%);
     border:1px solid rgba(45,108,223,0.12);
-    border-radius:20px;
+    border-radius:22px;
     box-shadow:var(--shadow);
     overflow:hidden;
   }
 
   .topbar{height:6px;background:var(--grad)}
 
-  .intro{
-    padding:34px 30px 24px;
-    text-align:center;
+  .hero-panel{
+    padding:36px 32px 28px;
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:28px;
+    align-items:center;
   }
 
   .kicker{
     display:inline-flex;
     align-items:center;
-    gap:8px;
     padding:7px 12px;
     border-radius:999px;
     background:#eaf2ff;
     color:var(--blue-dark);
     font-size:.92rem;
-    font-weight:700;
+    font-weight:800;
     border:1px solid rgba(45,108,223,0.18);
     margin-bottom:14px;
   }
 
   h1{
-    margin:0 0 10px;
-    font-size:clamp(2rem, 4.4vw, 3.25rem);
-    line-height:1.08;
-    letter-spacing:-.03em;
+    margin:0 0 12px;
+    font-size:clamp(2.2rem, 4.8vw, 3.6rem);
+    line-height:1.04;
+    letter-spacing:-.04em;
   }
 
   .subtitle{
-    max-width:850px;
-    margin:0 auto;
+    margin:0;
     color:#425066;
-    font-size:1.12rem;
+    font-size:1.15rem;
+    max-width:760px;
   }
 
-  .cta-row{
+  .product-line{
+    margin:15px 0 0;
+    max-width:760px;
+    color:#234687;
+    font-size:.98rem;
+    font-weight:800;
+  }
+
+  .trial-callout{
+    margin-top:18px;
+    padding:16px 18px;
+    border:1px solid rgba(45,108,223,.18);
+    border-left:5px solid var(--orange);
+    border-radius:16px;
+    background:linear-gradient(180deg,#fff 0%,#f7fbff 100%);
+    color:#24344d;
+    box-shadow:0 8px 22px rgba(45,108,223,.06);
+  }
+
+  .trial-callout strong{
+    display:block;
+    color:#10233f;
+    font-size:1.05rem;
+    margin-bottom:4px;
+  }
+
+  .hero-actions{
     display:flex;
     flex-wrap:wrap;
-    justify-content:center;
     gap:12px;
-    margin-top:22px;
+    margin-top:20px;
+    align-items:center;
   }
 
   .button{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-height:48px;
+    min-height:50px;
     padding:13px 22px;
     border-radius:12px;
     background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%);
     color:#fff;
-    font-weight:800;
+    font-weight:850;
     text-decoration:none;
-    box-shadow:0 9px 20px rgba(45,108,223,.20);
+    box-shadow:0 9px 20px rgba(45,108,223,.22);
     border:1px solid rgba(31,78,163,.12);
+    text-align:center;
+    line-height:1.2;
   }
 
   .button:hover{
@@ -143,54 +167,61 @@
     box-shadow:none;
   }
 
-  .button.secondary:hover{
-    background:#f0f6ff;
-  }
-
-  .video-button-stack{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    min-width:260px;
-  }
-
-  .video-button-stack .button{
-    width:100%;
-    flex-direction:column;
-    line-height:1.18;
-    gap:3px;
-    text-align:center;
-  }
+  .button.secondary:hover{background:#f0f6ff}
 
   .button small{
     display:block;
     font-size:.78rem;
     font-weight:700;
-    opacity:.82;
+    opacity:.84;
+    margin-top:2px;
   }
 
-  .youtube-inline{
+  .button.stacked{
+    flex-direction:column;
+  }
+
+  .hero-video-box{
+    background:
+      radial-gradient(420px 180px at 15% 20%, rgba(126,200,227,.22), transparent 60%),
+      linear-gradient(180deg,#fff 0%,#f4f8ff 100%);
+    border:1px solid rgba(45,108,223,.14);
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 12px 30px rgba(31,41,55,.08);
+  }
+
+  .hero-video-box h2{
+    margin:0 0 8px;
+    font-size:1.15rem;
+    line-height:1.2;
+  }
+
+  .hero-video-box p{
+    margin:0 0 14px;
+    color:#425066;
+    font-size:.94rem;
+  }
+
+  .video-buttons{
+    display:grid;
+    gap:10px;
+  }
+
+  .youtube-link{
     display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:48px;
-    padding:0 4px;
+    margin-top:12px;
     color:var(--blue-dark);
+    font-size:.9rem;
     font-weight:800;
-    text-decoration:none;
-  }
-
-  .youtube-inline:hover{
-    text-decoration:underline;
+    opacity:.82;
   }
 
   .badges{
     display:flex;
     flex-wrap:wrap;
     gap:9px;
-    justify-content:center;
-    margin:20px auto 0;
-    max-width:900px;
+    margin:22px 0 0;
   }
 
   .badge{
@@ -203,26 +234,55 @@
     border:1px solid rgba(45,108,223,.18);
     color:#234687;
     font-size:.9rem;
-    font-weight:700;
+    font-weight:800;
     white-space:nowrap;
   }
 
+  .trust-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    padding:0 32px 30px;
+  }
+
+  .trust-card{
+    background:linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    border:1px solid rgba(45,108,223,.16);
+    border-radius:16px;
+    padding:17px;
+    box-shadow:0 8px 20px rgba(45,108,223,.06);
+  }
+
+  .trust-card strong{
+    display:block;
+    margin-bottom:6px;
+    color:#10233f;
+    font-size:1rem;
+  }
+
+  .trust-card span{
+    display:block;
+    color:#425066;
+    font-size:.92rem;
+    line-height:1.45;
+  }
+
   .section{
-    padding:22px 30px;
+    padding:28px 32px;
     border-top:1px solid rgba(45,108,223,.10);
   }
 
   .section h2{
     margin:0 0 12px;
-    font-size:1.55rem;
-    line-height:1.2;
-    letter-spacing:-.01em;
+    font-size:1.65rem;
+    line-height:1.18;
+    letter-spacing:-.02em;
   }
 
   .section-lede{
-    margin:0 0 18px;
+    margin:0 0 20px;
     color:#425066;
-    max-width:870px;
+    max-width:910px;
   }
 
   .grid-3{
@@ -241,7 +301,7 @@
     background:#fff;
     border:1px solid var(--line);
     border-radius:16px;
-    padding:18px;
+    padding:19px;
     box-shadow:0 8px 20px rgba(45,108,223,.05);
   }
 
@@ -257,22 +317,6 @@
     font-size:.96rem;
   }
 
-  .card ul{
-    margin:0;
-    padding-left:18px;
-    color:#334155;
-  }
-
-  .card li{
-    margin-bottom:8px;
-    font-size:.95rem;
-  }
-
-  .highlight{
-    color:var(--blue-dark);
-    font-weight:800;
-  }
-
   .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -283,7 +327,7 @@
     background:#fff;
     border:1px solid var(--line);
     border-radius:16px;
-    padding:16px;
+    padding:17px;
     box-shadow:0 8px 20px rgba(45,108,223,.05);
   }
 
@@ -297,14 +341,14 @@
 
   .stat span{
     display:block;
-    color:var(--muted);
-    font-size:.91rem;
+    color:#58677f;
+    font-size:.92rem;
   }
 
   .stat-detail{
     display:block;
-    margin-top:7px;
-    padding-top:7px;
+    margin-top:8px;
+    padding-top:8px;
     border-top:1px solid rgba(45,108,223,.12);
     color:#58677f;
     font-size:.82rem;
@@ -322,12 +366,12 @@
     border:1px solid var(--line);
     border-top:4px solid transparent;
     border-radius:14px;
-    padding:13px 10px;
+    padding:14px 10px;
     text-align:center;
-    font-weight:800;
+    font-weight:850;
     font-size:.9rem;
     line-height:1.18;
-    min-height:92px;
+    min-height:108px;
   }
 
   .step:nth-child(1){border-top-color:#f47a20}
@@ -339,8 +383,8 @@
 
   .step small{
     display:block;
-    margin-top:6px;
-    color:var(--muted);
+    margin-top:7px;
+    color:#58677f;
     font-weight:400;
     font-size:.77rem;
   }
@@ -362,10 +406,10 @@
   }
 
   .quality-point{
-    background:rgba(255,255,255,.86);
+    background:rgba(255,255,255,.88);
     border:1px solid rgba(45,108,223,.12);
     border-radius:14px;
-    padding:14px;
+    padding:15px;
   }
 
   .quality-point strong{
@@ -374,74 +418,51 @@
     color:#10233f;
   }
 
-  .video-card{
+  .card ul{
+    margin:0;
+    padding-left:18px;
+    color:#334155;
+  }
+
+  .card li{
+    margin-bottom:8px;
+    font-size:.95rem;
+  }
+
+  .final-cta{
     display:grid;
-    grid-template-columns:1.15fr .85fr;
+    grid-template-columns:1fr auto;
     gap:18px;
     align-items:center;
-  }
-
-  .demo-actions{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-    justify-content:center;
-    align-items:stretch;
-    min-height:260px;
-    padding:26px;
-    border-radius:18px;
     background:
-      radial-gradient(420px 180px at 15% 20%, rgba(126,200,227,.20), transparent 60%),
-      linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
-    border:1px solid var(--line);
-    box-shadow:0 10px 28px rgba(31,41,55,.08);
+      radial-gradient(540px 220px at 0% 0%, rgba(126,200,227,.25), transparent 60%),
+      linear-gradient(180deg,#ffffff 0%,#f2f7ff 100%);
+    border:1px solid rgba(45,108,223,.18);
+    border-radius:20px;
+    padding:24px;
   }
 
-  .demo-actions .button{
-    width:100%;
+  .final-cta h2{
+    margin:0 0 8px;
   }
 
-  .thumb{
-    display:block;
-    position:relative;
-    border-radius:18px;
-    overflow:hidden;
-    border:1px solid rgba(31,41,55,.08);
-    box-shadow:0 10px 28px rgba(31,41,55,.12);
-    background:#fff;
-    line-height:0;
+  .final-cta p{
+    margin:0;
+    color:#425066;
   }
 
-  .thumb img{
-    width:100%;
-    display:block;
-    height:auto;
+  .fineprint{
+    margin-top:12px;
+    color:#58677f;
+    font-size:.9rem;
   }
 
-  .play{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:72px;
-    height:72px;
-    border-radius:999px;
-    background:rgba(255,255,255,.92);
-    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  .footer{
+    text-align:center;
+    color:#58677f;
+    font-size:.92rem;
+    padding:24px 18px 12px;
   }
-
-  .play:before{
-    content:"";
-    position:absolute;
-    left:28px;
-    top:21px;
-    width:0;
-    height:0;
-    border-top:15px solid transparent;
-    border-bottom:15px solid transparent;
-    border-left:23px solid var(--blue);
-  }
-
 
   .video-modal{
     position:fixed;
@@ -455,9 +476,7 @@
     backdrop-filter:blur(2px);
   }
 
-  .video-modal.is-open{
-    display:flex;
-  }
+  .video-modal.is-open{display:flex}
 
   .video-modal-dialog{
     position:relative;
@@ -485,9 +504,7 @@
     box-shadow:0 8px 20px rgba(0,0,0,0.18);
   }
 
-  .video-modal-close:hover{
-    background:#ffffff;
-  }
+  .video-modal-close:hover{background:#ffffff}
 
   .video-modal video{
     display:block;
@@ -497,100 +514,89 @@
     background:#000;
   }
 
-  .license-box{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:18px;
-    align-items:center;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:22px;
-    box-shadow:0 8px 20px rgba(45,108,223,.05);
-  }
-
-  .fineprint{
-    margin-top:10px;
-    color:var(--muted);
-    font-size:.9rem;
-  }
-
-  .footer{
-    text-align:center;
-    color:var(--muted);
-    font-size:.92rem;
-    padding:24px 18px 8px;
-  }
-
   @media (max-width: 960px){
-    .grid-3,.grid-2,.video-card,.license-box{grid-template-columns:1fr}
+    .hero-panel,
+    .grid-3,
+    .grid-2,
+    .final-cta{
+      grid-template-columns:1fr;
+    }
+
+    .trust-strip{
+      grid-template-columns:1fr;
+      padding-left:22px;
+      padding-right:22px;
+    }
+
     .stats{grid-template-columns:repeat(2,1fr)}
     .workflow{grid-template-columns:repeat(3,1fr)}
-    .section,.intro{padding-left:20px;padding-right:20px}
-    .license-box{align-items:start}
+    .section,.hero-panel{padding-left:22px;padding-right:22px}
 
-    .video-modal{
-      padding:14px;
+    .final-cta .button{
+      width:100%;
     }
-
-    .video-modal-dialog{
-      border-radius:14px;
-    }
-
-    .video-modal-close{
-      top:8px;
-      right:8px;
-      width:38px;
-      height:38px;
-    }
-
   }
 
   @media (max-width: 640px){
     .container{padding:16px 12px 44px}
-    .hero{padding:22px 12px 28px}
-    .intro{padding:26px 16px 20px}
-    .section{padding:20px 16px}
+    .hero{padding:22px 12px 26px}
+    .hero-panel{padding:28px 16px 22px}
+    .section{padding:22px 16px}
     .stats,.workflow,.quality-grid{grid-template-columns:1fr}
     .button{width:100%}
-    .video-button-stack{width:100%;min-width:0}
+    .hero-actions{flex-direction:column;align-items:stretch}
+    .badges{justify-content:center}
     .badge{white-space:normal;text-align:center}
+    .video-modal{padding:14px}
+    .video-modal-dialog{border-radius:14px}
+    .video-modal-close{top:8px;right:8px;width:38px;height:38px}
   }
 </style>
 </head>
 <body>
   <header class="hero">
-    <div class="hero-inner">
-      <img class="logo" src="/BOLO-logo.png" alt="BOLO logo" />
-    </div>
+    <img class="logo" src="/BOLO-logo.png" alt="BOLO logo" />
   </header>
 
   <main class="container">
     <article class="panel">
       <div class="topbar"></div>
 
-      <section class="intro">
-        <div class="kicker">För skolor, lärare och utbildningsorganisationer</div>
-        <h1>BOLO för utbildning</h1>
-        <p class="subtitle">
-          Skapa illustrerade häften, arbetsmaterial, kompendier och läroböcker med ett strukturerat AI-arbetsflöde — från brief och disposition till text, bilder, bildtexter och färdig export.
-        </p>
-        <div class="cta-row">
-          <a class="button" href="https://bolowriter.com/landing/BOLO_Landing_Multilingual#swedish-top">Se licenser och köp BOLO</a>
-          <div class="video-button-stack">
-            <a class="button secondary" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4" data-video-title="Presentationsvideo">Presentationsvideo</a>
-            <a class="button secondary" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4" data-video-title="Demonstrationsvideo">Demonstrationsvideo<small>Se hur ett häfte görs i realtid</small></a>
+      <section class="hero-panel">
+        <div>
+          <div class="kicker">För skolor, lärare och utbildningsorganisationer</div>
+          <h1>BOLO för utbildning</h1>
+          <p class="subtitle">
+            Skapa illustrerade häften, arbetsmaterial, kompendier och läroböcker med ett strukturerat AI-arbetsflöde — från brief och disposition till text, bilder, bildtexter och färdig export.
+          </p>
+          <p class="product-line">BOLO AI Publishing Pipeline är ett desktopbaserat arbetsflöde för strukturerad AI-produktion av utbildningsmaterial.</p>
+          <div class="trial-callout">
+            <strong>Testa BOLO gratis i 7 dagar — utan registrering.</strong>
+            Ladda ner programmet och installera det. Testperioden är öppen direkt, så skolan kan prova arbetsflödet innan licens köps.
           </div>
-          <a class="youtube-inline" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler videos på YouTube</a>
+          <div class="hero-actions">
+            <a class="button" href="https://bolowriter.com/landing/">Testa BOLO / köp licens</a>
+          </div>
+          <div class="badges">
+            <span class="badge">Från lågstadiet till universitet</span>
+            <span class="badge">DOCX, PDF och EPUB</span>
+            <span class="badge">Automatiska illustrationer</span>
+            <span class="badge">Egen OpenAI API-nyckel</span>
+            <span class="badge">Mycket låg AI-kostnad</span>
+          </div>
         </div>
-        <div class="badges">
-          <span class="badge">Från lågstadiet till universitet</span>
-          <span class="badge">DOCX, PDF och EPUB</span>
-          <span class="badge">Automatiska illustrationer</span>
-          <span class="badge">Egen OpenAI API-nyckel</span>
-          <span class="badge">Mycket låg AI-kostnad</span>
-        </div>
+
+        <aside class="hero-video-box" id="demo">
+          <h2>Se BOLO på sidan</h2>
+          <p>Två korta videor visar först helheten och sedan hur ett häfte skapas i realtid. Videorna öppnas direkt på sidan.</p>
+          <div class="video-buttons">
+            <a class="button stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4" data-video-title="Presentationsvideo">Presentationsvideo · 9:31<small>Spelas direkt på sidan</small></a>
+            <a class="button secondary stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4" data-video-title="Demonstrationsvideo">Demonstrationsvideo · 9:45<small>Se hur ett häfte görs i realtid</small></a>
+          </div>
+          <a class="youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler BOLO-videor på YouTube</a>
+        </aside>
       </section>
+
 
       <section class="section">
         <h2>Färdigt undervisningsmaterial på minuter, inte dagar</h2>
@@ -609,20 +615,32 @@
           </div>
           <div class="card">
             <h3>Illustrerat material</h3>
-            <p>Välj antal bilder, låt BOLO föreslå illustrationer, generera dem och placera dem i materialet med bildtexter.</p>
+            <p>Välj hur många bilder du vill ha. BOLO föreslår illustrationer, genererar de bilder du väljer och placerar dem automatiskt i dokumentet med bildtexter.</p>
           </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Arbetsflöde</h2>
+        <p class="section-lede">
+          Du lägger in en Book Brief med ämne, nivå, målgrupp och fokus. Därefter skapar BOLO disposition, text, bildförslag, illustrationer, bildtexter och export för häften, handouts, kompendier och böcker. Du väljer vilka bilder du vill generera, och BOLO lägger automatiskt in dem i dokumentet med bildtexter. Läraren kan granska och redigera innan slutlig PDF-export.
+        </p>
+
+        <div class="workflow">
+          <div class="step">1. Lägg in Book Brief<small>ämne, nivå, målgrupp och fokus</small></div>
+          <div class="step">2. BOLO skapar disposition<small>för häfte, kompendium eller bok</small></div>
+          <div class="step">3. BOLO genererar text<small>strukturerad produktion</small></div>
+          <div class="step">4. BOLO föreslår bilder<small>välj och generera<br/>läggs in automatiskt<br/>med bildtexter</small></div>
+          <div class="step">5. Redigera<small>granska, justera och komplettera</small></div>
+          <div class="step">6. BOLO exporterar<small>DOCX, PDF och EPUB</small></div>
         </div>
       </section>
 
       <section class="section">
         <h2>Exempel på kostnad och tidsåtgång</h2>
         <p class="section-lede">
-          BOLO använder användarens egen OpenAI API-nyckel (instruktion finns längre ner på sidan). Det gör att licenskostnaden hålls låg (från ca 25 kr per användare och månad) och att skolan bara betalar AI-kostnad när material faktiskt produceras.
+          BOLO använder användarens egen OpenAI API-nyckel. Det gör att licenskostnaden hålls låg (från ca 25 kr per användare och månad). Utöver licensavgiften betalar skolan AI-användningen direkt via sin egen OpenAI API-nyckel, utan BOLO-påslag. Man betalar alltså bara för AI när den faktiskt används, inte en schablonmässig månadskostnad med inkluderad API-användning.
         </p>
-        <p class="section-lede">
-          Många jämförbara AI-tjänster bygger på månadsabonnemang per användare, där en del av priset motsvarar inkluderad AI-användning som kanske inte utnyttjas fullt ut. Om en lärare främst skapar material vid behov — till exempel ett par häften eller arbetsmaterial per månad — blir BOLO ofta betydligt mer kostnadseffektivt, eftersom den faktiska AI-kostnaden normalt bara blir några få tior per månad vid sådan användning.
-        </p>
-
         <div class="stats">
           <div class="stat">
             <strong>ca 0,5–2 kr</strong>
@@ -643,9 +661,8 @@
             <span>för ett mer komplett material eller en längre lärobok med finjustering.</span>
           </div>
         </div>
-
         <p class="fineprint">
-          Kostnaderna är ungefärliga och beror på vald modell, textlängd, antal bilder och hur många omgenereringar som görs. Licenser köps via Stripe; betald faktura/kvitto finns efter köp.
+          Kostnaderna är ungefärliga och beror på vald modell, textlängd, antal bilder och hur många omgenereringar som görs. Faktura/kvitto och licens erhålls direkt efter köp.
         </p>
       </section>
 
@@ -663,33 +680,17 @@
             </div>
             <div class="quality-point">
               <strong>Volym- och balanskontroll</strong>
-              BOLO hjälper till att hålla textmängd, kapitelomfång och informationsnivå mer proportionerlig.
+              BOLO hjälper till att hålla textmängd, kapitelomfång och informationsnivå i balans.
             </div>
             <div class="quality-point">
               <strong>Terminologi och faktakonsistens</strong>
-              Begrepp, namn, fakta och ton hålls mer konsekventa genom hela materialet.
+              Begrepp, namn, fakta och ton hålls konsekventa genom hela materialet.
             </div>
             <div class="quality-point">
               <strong>Export- och redigeringsflöde</strong>
-              Resultatet kan exporteras till DOCX, PDF eller EPUB och därefter granskas, redigeras och användas i skolans vanliga arbetsflöde.
+              Resultatet kan exporteras till DOCX, PDF eller EPUB. Eftersom DOCX är redigerbart kan läraren lägga in en egen sida med anvisningar, instruktioner eller kommentarer innan den slutliga PDF-exporten.
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Arbetsflöde</h2>
-        <p class="section-lede">
-          BOLO samlar hela produktionen i ett tydligt flöde. Det gör processen lättare att upprepa, granska och anpassa för olika årskurser, ämnen och undervisningsmål.
-        </p>
-
-        <div class="workflow">
-          <div class="step">1. Book Brief<small>ämne, nivå, målgrupp och fokus</small></div>
-          <div class="step">2. Disposition<small>kapitel och rubriker</small></div>
-          <div class="step">3. Text<small>strukturerad generering</small></div>
-          <div class="step">4. Bilder<small>förslag, generering och bildtexter</small></div>
-          <div class="step">5. Kontroll<small>granska, justera och redigera</small></div>
-          <div class="step">6. Export<small>DOCX, PDF och EPUB</small></div>
         </div>
       </section>
 
@@ -708,33 +709,40 @@
             <h3>BOLO</h3>
             <ul>
               <li>Bygger materialet som ett sammanhållet projekt från brief till export.</li>
-              <li>Håller struktur, nivå, terminologi och innehållsflöde mer konsekvent.</li>
+              <li>Håller struktur, nivå, terminologi och innehållsflöde konsekvent.</li>
               <li>Skapar text, illustrationer, bildtexter och publicerbara filer i samma pipeline.</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="section" id="demo">
-        <h2>Se BOLO för utbildning i två videor</h2>
-        <div class="video-card">
-          <div class="demo-actions">
-            <a class="button" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4" data-video-title="Presentationsvideo">Presentationsvideo</a>
-            <a class="button secondary" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4" data-video-title="Demonstrationsvideo">Demonstrationsvideo<small>Se hur ett häfte görs i realtid</small></a>
-            <a class="button secondary" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler videos på YouTube</a>
-            <a class="button secondary" href="https://bolowriter.com/landing/BOLO_Landing_Multilingual#swedish-top">Köp licens / skaffa API-nyckel</a>
-          </div>
+      <section class="section">
+        <div class="final-cta">
           <div>
-            <h3>Presentation och demonstration</h3>
+            <h2>Testa BOLO innan ni bestämmer er</h2>
             <p>
-              Börja med en kort presentation av hur BOLO kan användas för utbildningsmaterial. Titta sedan på en praktisk demonstrationsvideo där ett häfte skapas i realtid.
-            </p>
-            <p class="fineprint">
-              På licenssidan finns även instruktioner för hur du skaffar en OpenAI API-nyckel och kommer igång.
+              Det krävs ingen registrering för testet: ladda bara ner programmet och installera det, så är det öppet för testning i sju dagar. På samma sida finns även licenser och instruktioner för hur du skaffar en OpenAI API-nyckel.
             </p>
           </div>
+          <a class="button" href="https://bolowriter.com/landing/">Testa BOLO / köp licens / skaffa API-nyckel</a>
         </div>
       </section>
+
+
+      <div class="trust-strip" aria-label="Praktisk information för skolor">
+        <div class="trust-card">
+          <strong>Faktura utan tysk moms</strong>
+          <span>BOLO är registrerat i Tyskland. Svenska skolor, kommuner och utbildningsorganisationer får faktura utan tysk moms vid organisationsköp enligt EU:s regler för omvänd betalningsskyldighet.</span>
+        </div>
+        <div class="trust-card">
+          <strong>Så fungerar EU-köpet</strong>
+          <span>Ange organisationens fakturauppgifter och eventuell VAT/momsinformation i checkouten. Ni betalar fakturabeloppet som visas. Eventuell svensk momshantering sköts i Sverige av skolans huvudman eller ekonomiavdelning enligt vanliga rutiner för EU-köp.</span>
+        </div>
+        <div class="trust-card">
+          <strong>Licens direkt efter köp</strong>
+          <span>Licensen levereras direkt via e-post och finns även i kundkontot. Checkout sker säkert via Stripe.</span>
+        </div>
+      </div>
 
       <footer class="footer">
         BOLO hjälper skolor att skapa tydliga, strukturerade och prisvärda utbildningsmaterial — från snabba klassrumshäften till större lärresurser.
