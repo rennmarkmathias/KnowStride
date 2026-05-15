@@ -1,10 +1,30 @@
 // functions/api/book-onboarding.js
 // Cloudflare Pages Function endpoint used by the onboarding popup.
 // Sends one booking email to BOLO and one confirmation email to the person who booked.
+// Stores booked slots in Cloudflare KV so booked times disappear from the popup.
 // Environment variables:
 //   RESEND_API_KEY=...
 //   BOOKING_FROM=BOLO <info@bolowriter.com>
 //   BOOKING_TO=info@bolowriter.com
+// Binding:
+//   BOOKING_KV = Cloudflare KV namespace binding
+
+export async function onRequestGet(context) {
+  try {
+    const { env } = context;
+
+    if (!env.BOOKING_KV) {
+      return json({ ok: true, booked_slots: [] });
+    }
+
+    const list = await env.BOOKING_KV.list({ prefix: "slot:" });
+    const booked_slots = list.keys.map((item) => item.name.replace(/^slot:/, ""));
+
+    return json({ ok: true, booked_slots });
+  } catch (error) {
+    return json({ ok: false, error: error.message || "Unknown error" }, 500);
+  }
+}
 
 export async function onRequestPost(context) {
   try {
@@ -24,6 +44,16 @@ export async function onRequestPost(context) {
 
     if (!resendApiKey) {
       return json({ ok: false, error: "RESEND_API_KEY is not configured" }, 500);
+    }
+
+    if (!env.BOOKING_KV) {
+      return json({ ok: false, error: "BOOKING_KV binding is not configured" }, 500);
+    }
+
+    const slotKey = `slot:${data.slot}`;
+    const existingBooking = await env.BOOKING_KV.get(slotKey);
+    if (existingBooking) {
+      return json({ ok: false, error: "Slot already booked" }, 409);
     }
 
     const bookingSubject = `BOLO onboarding bokad: ${data.slot_label}`;
@@ -83,6 +113,18 @@ export async function onRequestPost(context) {
       return json({ ok: false, error: "Confirmation email failed", details }, 502);
     }
 
+    await env.BOOKING_KV.put(slotKey, JSON.stringify({
+      slot: data.slot,
+      slot_label: data.slot_label,
+      name: data.name,
+      email: data.email,
+      organization: data.organization,
+      role: data.role || "",
+      message: data.message || "",
+      source: data.source || "",
+      created_at: new Date().toISOString()
+    }));
+
     return json({ ok: true });
   } catch (error) {
     return json({ ok: false, error: error.message || "Unknown error" }, 500);
@@ -120,7 +162,7 @@ function json(body, status = 200) {
 function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": "https://bolowriter.com",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   };
 }
