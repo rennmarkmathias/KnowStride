@@ -107,7 +107,10 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
 }
 
 .demo-thumb.demo-thumb-sv{
+  aspect-ratio:7 / 4;
   background-image:url('thumb-sv.png');
+  background-position:center center;
+  background-size:cover;
 }
 
 .demo-play{
@@ -3560,13 +3563,13 @@ SE
 </div>
 </section>
 <section aria-label="BOLO demo video" class="demo-overlay-wrap">
-<a aria-label="Open BOLO demo video" class="demo-overlay" data-video-open="true" href="#demo-video">
+<a aria-label="Open BOLO Swedish presentation video" class="demo-overlay" data-video-open="true" data-video-src="Pres1sv.mp4" data-video-poster="thumb-sv.png" href="#demo-video">
 <div class="demo-thumb demo-thumb-sv">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
 </a>
 <div class="demo-caption">
-<strong>BOLO presentation video · 4:40 min</strong>
+<strong>BOLO presentationsvideo · 8:42 min</strong>
 <span class="demo-youtube-label">More videos on YouTube</span>
 <a class="demo-youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" rel="noopener" target="_blank" aria-label="Open the BOLO Writer YouTube channel">YouTube</a>
 </div>
@@ -4475,9 +4478,26 @@ SE
 
     const closeBtn = modal.querySelector('.video-modal-close');
     const video = modal.querySelector('video');
+    const source = video ? video.querySelector('source') : null;
+    const defaultSrc = source ? source.getAttribute('src') : '';
+    const defaultPoster = video ? video.getAttribute('poster') : '';
 
     function openModal(event){
       event.preventDefault();
+
+      const trigger = event.currentTarget;
+      const nextSrc = trigger.getAttribute('data-video-src') || defaultSrc;
+      const nextPoster = trigger.getAttribute('data-video-poster') || defaultPoster;
+
+      if(source && nextSrc && source.getAttribute('src') !== nextSrc){
+        source.setAttribute('src', nextSrc);
+        if(video){ video.load(); }
+      }
+
+      if(video && nextPoster){
+        video.setAttribute('poster', nextPoster);
+      }
+
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
