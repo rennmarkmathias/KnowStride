@@ -462,6 +462,18 @@
     width:100%;
   }
 
+  .onboarding-email{
+    margin:0;
+    color:#58677f;
+    font-size:.9rem;
+    text-align:center;
+    line-height:1.35;
+  }
+
+  .onboarding-email a{
+    font-weight:800;
+  }
+
   .booking-modal{
     position:fixed;
     inset:0;
@@ -728,8 +740,8 @@
           <h2>Se BOLO på sidan</h2>
           <p>Två korta videor visar först helheten och sedan hur ett häfte skapas i realtid. Videorna öppnas direkt på sidan.</p>
           <div class="video-buttons">
-            <a class="button stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4" data-video-title="Presentationsvideo">Presentationsvideo · 10:18<small>Spelas direkt på sidan</small></a>
-            <a class="button secondary stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4" data-video-title="Demonstrationsvideo">Demonstrationsvideo · 10:10<small>Se hur ett häfte görs i realtid</small></a>
+            <a class="button stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/presentationsvideo.mp4" data-video-title="Presentationsvideo">Presentationsvideo · 9:31<small>Spelas direkt på sidan</small></a>
+            <a class="button secondary stacked" href="#education-video" data-video-open="true" data-video-src="https://files.bolowriter.com/testboloapp/demonstrationsvideo.mp4" data-video-title="Demonstrationsvideo">Demonstrationsvideo · 9:45<small>Se hur ett häfte görs i realtid</small></a>
           </div>
           <a class="youtube-link" href="https://www.youtube.com/channel/UCYmX_TKzWSyJt8irD_aGYiQ" target="_blank" rel="noopener">Fler BOLO-videor på YouTube</a>
         </aside>
@@ -788,7 +800,7 @@
           <div class="stat">
             <strong>under 10 kr</strong>
             <span>många korta illustrerade häften kan produceras med flera bilder.</span>
-            <small class="stat-detail">Bildgenerering: cirka 1,50–2.50 kr per bild, beroende på bildtyp.</small>
+            <small class="stat-detail">Bildgenerering: cirka 1,50–2 kr per bild, beroende på bildtyp.</small>
           </div>
           <div class="stat">
             <strong>ca 30 min</strong>
@@ -808,13 +820,21 @@
         <div class="quality">
           <h2>Kvalitetssäkring: inte bara “AI-text”</h2>
           <p class="section-lede">
-            BOLO är byggt som ett produktionssystem, inte som en vanlig prompt-ruta. Det finns flera lager som hjälper till att omsätta briefen till ett konsekvent och användbart resultat, så att materialet inte blir lösryckt AI-text.
+            BOLO arbetar inte som en vanlig AI-chatt där varje svar blir ett fristående textstycke. När du skriver en Book Brief bryter BOLO ner den till en intern produktionsplan med disposition, kapitelmål, textvolym, nivå, ton och återkommande begrepp. Under produktionen används planen som en röd tråd, så att varje kapitel fortsätter på samma projekt i stället för att börja om från noll.
           </p>
 
           <div class="quality-grid">
             <div class="quality-point">
               <strong>Strukturmotor</strong>
               Materialet byggs runt kapitel, rubriker och innehållsflöde i stället för separata chatt-svar.
+            </div>
+            <div class="quality-point">
+              <strong>Briefstyrning genom hela materialet</strong>
+              Book Brief används som projektets källa. Ämne, målgrupp, nivå, ton och begränsningar följer med genom hela produktionen.
+            </div>
+            <div class="quality-point">
+              <strong>Kapitelmål och intern kontroll</strong>
+              Varje kapitel får en tydlig roll i helheten. BOLO försöker hålla rätt omfattning, minska upprepningar och bygga vidare på tidigare delar.
             </div>
             <div class="quality-point">
               <strong>Volym- och balanskontroll</strong>
@@ -847,6 +867,7 @@
             <h3>BOLO</h3>
             <ul>
               <li>Bygger materialet som ett sammanhållet projekt från brief till export.</li>
+              <li>Använder en intern produktionsplan som håller brief, struktur, nivå och textflöde samman genom hela materialet.</li>
               <li>Håller struktur, nivå, terminologi och innehållsflöde konsekvent.</li>
               <li>Skapar text, illustrationer, bildtexter och publicerbara filer i samma pipeline.</li>
             </ul>
@@ -865,6 +886,7 @@
           <div class="final-actions">
             <a class="button" href="https://bolowriter.com/landing/#swedish-top">Testa BOLO / köp licens / skaffa API-nyckel</a>
             <a class="button secondary" href="#onboarding" data-booking-open="true">Boka onboarding via Teams</a>
+            <p class="onboarding-email">Alternativa tider kan bokas via e-post:<br><a href="mailto:info@bolowriter.com">info@bolowriter.com</a></p>
           </div>
         </div>
       </section>
@@ -886,7 +908,27 @@
       </div>
 
       <footer class="footer">
-        BOLO hjälper skolor att skapa tydliga, strukturerade och prisvärda utbildningsmaterial — från snabba klassrumshäften till större lärresurser.
+        <p>BOLO hjälper skolor att skapa tydliga, strukturerade och prisvärda utbildningsmaterial — från snabba klassrumshäften till större lärresurser.</p>
+        <p>
+          Frågor, feedback, partnerskap, marknadsföring eller investerarfrågor:
+          <a href="mailto:info@bolowriter.com">info@bolowriter.com</a><br/>
+          <span style="color:#6b7280;font-size:0.9rem;">Vi försöker svara inom 24 timmar på arbetsdagar.</span>
+        </p>
+        <div style="margin-top:20px; text-align:center;">
+          <details style="max-width:700px;margin:0 auto;text-align:left;">
+            <summary style="cursor:pointer;font-weight:600;color:#2d6cdf;">
+              Integritet &amp; villkor
+            </summary>
+            <div style="margin-top:10px;font-size:0.9rem;color:#4b5563;line-height:1.5;">
+              <p><strong>Integritet</strong><br/>
+              Den här webbplatsen samlar inte in eller lagrar personuppgifter direkt. Inga cookies eller spårningsskript används av själva webbplatsen.</p>
+              <p>Vissa externa tjänster, till exempel OpenAI API, betalningsleverantörer eller annonsplattformar som Google eller Meta, kan behandla data självständigt enligt sina egna policyer.</p>
+              <p><strong>Användarvillkor</strong><br/>
+              BOLO AI Publishing Pipeline är ett programverktyg för strukturerad innehållsgenerering. Användare ansvarar för sin egen API-användning, genererat innehåll och efterlevnad av tillämpliga lagar och plattformspolicyer.</p>
+              <p>Programvaran är utformad för att ge ett tillförlitligt och strukturerat arbetsflöde för innehållsgenerering. Vi förbättrar systemet kontinuerligt, men kan inte garantera att det alltid är felfritt eller oavbrutet.</p>
+            </div>
+          </details>
+        </div>
       </footer>
     </article>
   </main>
