@@ -12,6 +12,21 @@
       :root{ --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --blue:#2d6cdf; --blue-dark:#1f4ea3; --line:#e5e7eb; --green:#0f9d58; --grad:linear-gradient(90deg,#f47a20 0%, #f2c300 24%, #d7d91f 40%, #7ec8e3 58%, #2d6cdf 78%, #1f4ea3 100%); } *{box-sizing:border-box} body{ margin:0; font-family:Arial, Helvetica, sans-serif; background: radial-gradient(900px 340px at -5% 18%, rgba(126,200,227,0.16), transparent 60%), radial-gradient(900px 340px at 105% 22%, rgba(45,108,223,0.14), transparent 60%), linear-gradient(180deg, #f5f9ff 0%, #eef4ff 100%); color:var(--text); line-height:1.6; } .hero{ background:var(--grad); padding:26px 16px 34px; text-align:center; scroll-margin-top:0; } .hero-inner{ max-width:1100px; margin:0 auto; } .logo{ width:520px; max-width:92%; height:auto; display:block; margin:0 auto 10px; } .container{ max-width:1080px; margin:0 auto; padding:20px 16px 60px; position:relative; } .intro{ text-align:center; margin-bottom:28px; background:linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(247,251,255,0.96) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:18px; padding:26px 26px 18px; box-shadow:0 10px 28px rgba(45,108,223,0.06); position:relative; overflow:hidden; } .intro::before{ content:""; position:absolute; left:0; right:0; top:0; height:4px; background:var(--grad); opacity:0.95; } h1{ margin:0 0 8px; font-size:clamp(2rem, 5vw, 3rem); line-height:1.15; } .subtitle{ margin:0 auto; max-width:860px; color:var(--muted); font-size:1.08rem; } .sales-copy{ margin:18px auto 0; max-width:860px; color:#334155; font-size:1rem; } .sales-copy p{ margin:0 0 10px; } .education-cta-wrap{ display:flex; justify-content:center; align-items:center; margin:-10px 0 16px; }
 .education-cta{ display:inline-flex; align-items:center; justify-content:center; padding:10px 18px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; text-decoration:none; font-size:0.98rem; font-weight:800; box-shadow:0 6px 16px rgba(242,195,0,0.16); transition:all .15s ease; }
 .education-cta:hover{ background:#fff7df; color:#6a5100; text-decoration:none; transform:translateY(-1px); box-shadow:0 8px 18px rgba(242,195,0,0.22); }
+
+.quick-value{ margin:0 0 18px; padding:20px; background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(247,251,255,0.98) 100%); border:1px solid rgba(45,108,223,0.12); border-radius:16px; box-shadow:0 10px 26px rgba(45,108,223,0.06); }
+.quick-value-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:18px; align-items:start; }
+.quick-value h2{ margin:0 0 10px; font-size:1.26rem; line-height:1.25; letter-spacing:-0.01em; }
+.quick-value ul{ margin:0; padding-left:18px; color:#334155; }
+.quick-value li{ margin:0 0 8px; }
+.quick-costs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.quick-cost{ background:#fff; border:1px solid rgba(45,108,223,0.14); border-radius:12px; padding:13px 14px; box-shadow:0 6px 18px rgba(45,108,223,0.05); }
+.quick-cost strong{ display:block; color:#10233f; font-size:1.16rem; line-height:1.1; margin-bottom:5px; }
+.quick-cost span{ display:block; color:#334155; font-size:.9rem; line-height:1.35; }
+.quick-license-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+.quick-license{ background:#eef5ff; border:1px solid rgba(45,108,223,0.18); border-radius:12px; padding:12px 14px; color:#234687; font-size:.92rem; font-weight:700; line-height:1.35; }
+.quick-note{ margin:10px 0 0; color:#6b7280; font-size:.86rem; text-align:center; }
+@media (max-width: 920px){ .quick-value-grid, .quick-costs, .quick-license-row{ grid-template-columns:1fr; } }
+
 .pipeline{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:8px; margin:20px 0 16px; } .pipe-step{ background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.98) 100%); border:1px solid var(--line); border-top:4px solid transparent; border-radius:12px; padding:12px 8px; text-align:center; font-weight:700; font-size:0.87rem; line-height:1.2; box-shadow:0 6px 18px rgba(45,108,223,0.06); min-width:0; } .pipe-step:nth-child(1){border-top-color:#f47a20;} .pipe-step:nth-child(2){border-top-color:#f2c300;} .pipe-step:nth-child(3){border-top-color:#d7d91f;} .pipe-step:nth-child(4){border-top-color:#7ec8e3;} .pipe-step:nth-child(5){border-top-color:#2d6cdf;} .pipe-step:nth-child(6){border-top-color:#7c3aed;} .pipe-step small{ display:block; margin-top:4px; font-weight:400; color:var(--muted); font-size:0.76rem; line-height:1.2; } .grid{ display:grid; grid-template-columns:1fr 1fr; gap:22px; } .card{ background:linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,251,255,0.98) 100%); border:1px solid rgba(45,108,223,0.10); border-radius:14px; padding:26px; box-shadow:0 10px 26px rgba(45,108,223,0.06); } .card h2{ margin-top:0; margin-bottom:10px; font-size:1.45rem; } .card h3{ margin-top:18px; margin-bottom:8px; font-size:1.08rem; } .button-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; } .button{ display:inline-block; padding:14px 24px; background:linear-gradient(180deg, #3f77ea 0%, #2d6cdf 100%); color:#fff; text-decoration:none; border-radius:10px; font-weight:700; transition:background .15s ease, transform .15s ease, box-shadow .15s ease; box-shadow:0 8px 18px rgba(45,108,223,0.18); } .button:hover{ background:linear-gradient(180deg, #3769d3 0%, #1f4ea3 100%); transform:translateY(-1px); box-shadow:0 10px 22px rgba(45,108,223,0.24); } .button.secondary{ background:#ffffff; color:var(--blue); border:1px solid rgba(45,108,223,0.50); box-shadow:none; } .button.secondary:hover{ background:#f0f6ff; }
 .top-actions{ max-width:1100px; margin:0 auto; padding:14px 16px 0; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
 .button.small{ padding:10px 16px; font-size:0.95rem; border-radius:999px; }
@@ -50,7 +65,7 @@
   cursor:default;
 }
 
-ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin:8px 0 12px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:repeat(2,minmax(0,1fr)); } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; }
+ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ margin-top:16px; padding:14px 16px; background:#eef5ff; border-left:4px solid var(--blue); border-radius:10px; color:#334155; } .muted{ color:var(--muted); } .full{ grid-column:1 / -1; } .pricing{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px; } .price-card{ border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; } .price-card h3{ margin:0 0 6px; font-size:1.12rem; } .price{ font-size:2rem; line-height:1.1; font-weight:700; margin-bottom:8px; } .price small{ font-size:0.95rem; color:var(--muted); font-weight:400; } .tag{ display:inline-block; margin-bottom:12px; padding:5px 10px; border-radius:999px; background:#eaf2ff; color:var(--blue-dark); font-size:0.84rem; font-weight:700; } .price-month{ font-size:0.95rem; color:var(--blue-dark); font-weight:700; margin:-2px 0 10px; } .price-total{ font-size:0.92rem; color:var(--muted); font-weight:700; margin:-2px 0 10px; line-height:1.4; } .price-total .price-old{ font-size:0.92rem; margin-left:6px; } .price-subnote{ font-size:0.88rem; color:var(--muted); margin:8px 0 12px; line-height:1.45; } .footer{ text-align:center; padding-top:18px; color:var(--muted); font-size:0.95rem; } .footer a{ color:var(--blue); text-decoration:none; } .footer a:hover{ text-decoration:underline; } .links{ margin-top:8px; } @media (max-width: 920px){ .grid, .pricing{ grid-template-columns:1fr; } .pipeline{ grid-template-columns:repeat(2,minmax(0,1fr)); } .card{ padding:20px; } .button-row{ flex-direction:column; } .button{ width:100%; text-align:center; }
 .top-actions{ justify-content:center; } } .language-nav{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin:18px auto 12px; max-width:1080px; padding:0 16px; } .language-nav a{ display:inline-flex; align-items:center; justify-content:center; min-width:48px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,0.88); border:1px solid rgba(45,108,223,0.22); box-shadow:0 4px 14px rgba(45,108,223,0.08); color:var(--blue-dark); text-decoration:none; font-size:1rem; font-weight:800; letter-spacing:0.4px; line-height:1; white-space:nowrap; transition:all .15s ease; } .language-nav a:hover{ background:#eef5ff; border-color:rgba(45,108,223,0.40); color:var(--blue); transform:translateY(-1px); box-shadow:0 6px 16px rgba(45,108,223,0.12); } .lang-section{ margin-top:32px; scroll-margin-top:24px; } .section-back{ text-align:center; margin:18px 0 8px; font-size:0.94rem; } .section-back a{ color:var(--blue); text-decoration:none; font-weight:700; } .section-back a:hover{ text-decoration:underline; } .section-divider{ height:1px; background:linear-gradient(90deg, rgba(45,108,223,0), rgba(45,108,223,0.22), rgba(45,108,223,0)); margin:22px 0 8px; } .intro::before{ top:6px; } @media (max-width: 920px){ .language-nav{ gap:8px; margin:16px auto 10px; } .language-nav a{ min-width:44px; padding:7px 10px; font-size:0.95rem; } } .logo-separator{ margin:30px 0 26px; padding:34px 16px; border-top:1px solid rgba(45,108,223,0.18); border-bottom:1px solid rgba(45,108,223,0.18); background:linear-gradient(180deg, rgba(233,242,255,0.95) 0%, rgba(243,248,255,0.98) 100%); border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(45,108,223,0.05) inset; } .logo-separator img{ width:220px; max-width:70%; height:auto; opacity:0.96; display:inline-block; }
 .section-hero{
   margin:30px 0 10px;
@@ -648,6 +663,43 @@ SE
     </p>
 <div class="sales-copy"><p>BOLO gør det muligt for forfattere, undervisere og organisationer at skabe bøger, guider, manualer og vidensmateriale i et kontrolleret workflow — fra outline og generering til redigering, illustration, oversættelse og publicerbar eksport.</p><p>BOLO omfatter også Fiction Mode for forfattere, der ønsker komplette førsteudkast til manuskripter fra en struktureret Book Brief, med en afsluttende menneskelig redigering anbefalet før udgivelse.</p><p>Fra long-tail-publicering af faglitteratur — stabile indtægter fra mange specialiserede nichetitler — til undervisningsmateriale, virksomhedsdokumentation, rejseguider og specialiserede vidensbøger omsætter BOLO idéer til strukturerede, publicerbare bøger.</p><p>BOLO fungerer som et AI-orkestreringslag til bogproduktion. I stedet for at generere isoleret tekst styrer det struktur, indholdsflow, terminologi og outputkvalitet på tværs af hele publiceringsprocessen.</p><p>Derudover kan BOLO automatisk foreslå illustrationer baseret på dit indhold. Du vælger, hvor mange billeder du vil have, og BOLO klarer resten — genererer dem og placerer dem korrekt i bogen med billedtekster uden manuel prompting.</p><p>BOLO er designet som et system, ikke et promptbaseret værktøj — hvilket muliggør konsistent, skalerbar og produktionsklar output frem for isoleret tekstgenerering.</p></div>
 </section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-danish">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Struktureret output, ikke løs AI-chat</h2>
+      <ul>
+        <li>Book Brief bliver projektets kilde: emne, målgruppe, niveau, tone og begrænsninger følger hele produktionen.</li>
+        <li>BOLO bygger omkring kapitler, overskrifter og indholdsflow i stedet for separate chat-svar.</li>
+        <li>Hvert kapitel får en tydelig rolle i helheden, med omfang, gentagelser og kontinuitet kontrolleret under genereringen.</li>
+        <li>Terminologi, fakta, tone, tekstlængde og informationsniveau holdes i balance gennem materialet.</li>
+        <li>Tekst, illustrationer, billedtekster og DOCX/PDF/EPUB-eksport håndteres i ét workflow, med redigerbar DOCX før endelig PDF-eksport.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Tydelige omkostningseksempler</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>ca. $0,60</strong>
+          <span>skolehæfte, ca. 5 A4-sider</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. $1,60</strong>
+          <span>illustreret skolehæfte</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. $2</strong>
+          <span>300-siders fagbog, standardformat 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Individuelle licenser fra 3,58 $/måned med en 36-måneders licens.</div>
+        <div class="quick-license">Teamlicenser fra 2,66 $/bruger/måned for 10 brugere med en 36-måneders licens.</div>
+      </div>
+      <p class="quick-note">AI-generering bruger din egen OpenAI API-nøgle. Pris-eksemplerne er baseret på GPT-5.4. Omkostninger varierer efter model, længde, billedtype og regenereringer.</p>
+    </div>
+  </div>
+</section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
       Indsæt Book Brief
@@ -804,8 +856,8 @@ SE
 <h3>
         6 måneder
       </h3>
-<div class="price discounted">$39 <small>/ licens</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / måned</div>
+<div class="price discounted">6,50 $ <small>/ måned</small></div>
+<div class="price-total">$39 betales én gang for 6 måneder <span class="price-old">$49</span></div>
 <p class="muted">
         En enkel løsning for førstegangsbrugere og kortere publiceringsprojekter.
       </p>
@@ -823,8 +875,8 @@ SE
 <h3>
       12 måneder
     </h3>
-<div class="price discounted">$59 <small>/ licens</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / måned</div>
+<div class="price discounted">4,92 $ <small>/ måned</small></div>
+<div class="price-total">$59 betales én gang for 12 måneder <span class="price-old">$69</span></div>
 <p class="muted">
       Hovedvalget til løbende faglitterært arbejde og gentagne bogprojekter.
     </p>
@@ -842,8 +894,8 @@ SE
 <h3>
     36 måneder
   </h3>
-<div class="price discounted">$129 <small>/ licens</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / måned</div>
+<div class="price discounted">3,58 $ <small>/ måned</small></div>
+<div class="price-total">$129 betales én gang for 36 måneder <span class="price-old">$149</span></div>
 <p class="muted">
     Bedst til langvarig brug, flere bøger og lavere effektiv årlig omkostning.
   </p>
@@ -866,15 +918,8 @@ SE
 <h3>
       3 brugere · 36 måneder
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 måneder
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / bruger / måned
-    </div>
+<div class="price discounted">3,31 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$358 betales én gang for 3 brugere · 36 måneder <span class="price-old">$537</span></div>
 <p class="muted">
       Betal én gang og hav BOLO til rådighed i tre år for et lille team.
     </p>
@@ -892,15 +937,8 @@ SE
 <h3>
     5 brugere · 36 måneder
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 måneder
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / bruger / måned
-  </div>
+<div class="price discounted">3,10 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$558 betales én gang for 5 brugere · 36 måneder <span class="price-old">$837</span></div>
 <p class="muted">
     Bedst til teams, der planlægger tilbagevendende bøger, manualer eller undervisningsmateriale.
   </p>
@@ -918,15 +956,8 @@ SE
 <h3>
     10 brugere · 36 måneder
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 måneder
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / bruger / måned
-  </div>
+<div class="price discounted">2,66 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$958 betales én gang for 10 brugere · 36 måneder <span class="price-old">$1,437</span></div>
 <p class="muted">
     Den laveste langsigtede pris pr. bruger for afdelinger og struktureret publicering i større skala.
   </p>
@@ -949,15 +980,8 @@ SE
 <h3>
       3 brugere
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 måneder
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / bruger / måned
-    </div>
+<div class="price">4,97 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$179 betales én gang for 3 brugere · 12 måneder</div>
 <p class="muted">
       Velegnet til mindre redaktionelle teams, kursusskabere eller kompakte publiceringsworkflows.
     </p>
@@ -975,15 +999,8 @@ SE
 <h3>
     5 brugere
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 måneder
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / bruger / måned
-  </div>
+<div class="price">4,65 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$279 betales én gang for 5 brugere · 12 måneder</div>
 <p class="muted">
     En afbalanceret plan for organisationer, der producerer bøger, manualer eller undervisningsmateriale.
   </p>
@@ -1001,15 +1018,8 @@ SE
 <h3>
     10 brugere
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 måneder
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / bruger / måned
-  </div>
+<div class="price">3,99 $ <small>/ bruger / måned</small></div>
+<div class="price-total">$479 betales én gang for 10 brugere · 12 måneder</div>
 <p class="muted">
     Bedst til større afdelinger eller organisationer, der arbejder med struktureret publicering i større skala.
   </p>
@@ -1072,6 +1082,43 @@ SE
     Strukturierte KI-Publishing-Software für Sachbücher und wissensbasierte Inhalte.
   </p>
 <div class="sales-copy"><p>BOLO ermöglicht Autoren, Lehrenden und Organisationen, Bücher, Ratgeber, Handbücher und Wissensmaterial in einem kontrollierten Workflow zu erstellen — von Gliederung und Generierung über Bearbeitung, Illustration, Übersetzung bis hin zum veröffentlichungsfertigen Export.</p><p>BOLO enthält außerdem Fiction Mode für Autorinnen und Autoren, die vollständige Erstentwurfs-Manuskripte aus einem strukturierten Book Brief erstellen möchten; eine abschließende menschliche Bearbeitung vor der Veröffentlichung wird empfohlen.</p><p>Von Long-Tail-Sachbuchveröffentlichungen — stabile Einnahmen aus vielen spezialisierten Nischentiteln — bis zu Lehrmaterial, Unternehmensdokumentation, Reiseführern und spezialisierten Wissensbüchern verwandelt BOLO Ideen in strukturierte, veröffentlichbare Bücher.</p><p>BOLO fungiert als KI-Orchestrierungsschicht für die Buchproduktion. Anstatt isolierten Text zu generieren, steuert es Struktur, Inhaltsfluss, Terminologie und Ausgabequalität über die gesamte Publishing-Pipeline hinweg.</p><p>Darüber hinaus kann BOLO automatisch Illustrationen auf Grundlage Ihrer Inhalte vorschlagen. Sie wählen, wie viele Bilder Sie möchten, und BOLO übernimmt den Rest — generiert sie und fügt sie mit Bildunterschriften korrekt in das Buch ein, ohne manuelles Prompting.</p><p>BOLO ist als System konzipiert, nicht als promptbasiertes Tool — und ermöglicht dadurch konsistente, skalierbare und produktionsreife Ergebnisse statt isolierter Textgenerierung.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-german">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Strukturierte Ausgabe, kein loser KI-Chat</h2>
+      <ul>
+        <li>Der Book Brief wird zur Projektquelle: Thema, Zielgruppe, Niveau, Ton und Einschränkungen tragen durch die gesamte Produktion.</li>
+        <li>BOLO arbeitet mit Kapiteln, Überschriften und Inhaltsfluss statt mit separaten Chat-Antworten.</li>
+        <li>Jedes Kapitel erhält eine klare Rolle im Gesamtwerk; Umfang, Wiederholungen und Kontinuität werden während der Generierung geprüft.</li>
+        <li>Terminologie, Fakten, Ton, Textlänge und Informationsniveau bleiben über das Material hinweg ausgewogen.</li>
+        <li>Text, Illustrationen, Bildunterschriften und DOCX/PDF/EPUB-Export werden in einem Workflow verarbeitet, mit bearbeitbarer DOCX vor dem finalen PDF-Export.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Klare Kostenbeispiele</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>ca. 0,60 $</strong>
+          <span>Schulhandout, ca. 5 A4-Seiten</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. 1,60 $</strong>
+          <span>illustriertes Schulhandout</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. 2 $</strong>
+          <span>300-seitiges Sachbuch, Standardformat 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Einzellizenzen ab 3,58 $/Monat bei einer 36-Monats-Lizenz.</div>
+        <div class="quick-license">Teamlizenzen ab 2,66 $/Nutzer/Monat für 10 Nutzer bei einer 36-Monats-Lizenz.</div>
+      </div>
+      <p class="quick-note">Die KI-Generierung nutzt Ihren eigenen OpenAI API-Schlüssel. Die Preisbeispiele basieren auf GPT-5.4. Kosten variieren je nach Modell, Länge, Bildtyp und Neugenerierungen.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -1229,8 +1276,8 @@ SE
 <h3>
         6 Monate
       </h3>
-<div class="price discounted">$39 <small>/ Lizenz</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / Monat</div>
+<div class="price discounted">6,50 $ <small>/ Monat</small></div>
+<div class="price-total">$39 einmalig für 6 Monate <span class="price-old">$49</span></div>
 <p class="muted">
         Eine unkomplizierte Option für Erstnutzer und kürzere Publishing-Projekte.
       </p>
@@ -1248,8 +1295,8 @@ SE
 <h3>
       12 Monate
     </h3>
-<div class="price discounted">$59 <small>/ Lizenz</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / Monat</div>
+<div class="price discounted">4,92 $ <small>/ Monat</small></div>
+<div class="price-total">$59 einmalig für 12 Monate <span class="price-old">$69</span></div>
 <p class="muted">
       Die Hauptoption für laufende Sachbucharbeit und wiederkehrende Buchprojekte.
     </p>
@@ -1267,8 +1314,8 @@ SE
 <h3>
     36 Monate
   </h3>
-<div class="price discounted">$129 <small>/ Lizenz</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / Monat</div>
+<div class="price discounted">3,58 $ <small>/ Monat</small></div>
+<div class="price-total">$129 einmalig für 36 Monate <span class="price-old">$149</span></div>
 <p class="muted">
     Am besten für die langfristige Nutzung, mehrere Bücher und niedrigere effektive Jahreskosten.
   </p>
@@ -1291,15 +1338,8 @@ SE
 <h3>
       3 Nutzer · 36 Monate
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 Monate
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / Nutzer / Monat
-    </div>
+<div class="price discounted">3,31 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$358 einmalig für 3 Nutzer · 36 Monate <span class="price-old">$537</span></div>
 <p class="muted">
       Einmal bezahlen und BOLO drei Jahre lang für ein kleines Team verfügbar halten.
     </p>
@@ -1317,15 +1357,8 @@ SE
 <h3>
     5 Nutzer · 36 Monate
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 Monate
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / Nutzer / Monat
-  </div>
+<div class="price discounted">3,10 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$558 einmalig für 5 Nutzer · 36 Monate <span class="price-old">$837</span></div>
 <p class="muted">
     Am besten für Teams, die wiederkehrende Bücher, Handbücher oder Lehrmaterial planen.
   </p>
@@ -1343,15 +1376,8 @@ SE
 <h3>
     10 Nutzer · 36 Monate
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 Monate
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / Nutzer / Monat
-  </div>
+<div class="price discounted">2,66 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$958 einmalig für 10 Nutzer · 36 Monate <span class="price-old">$1,437</span></div>
 <p class="muted">
     Die niedrigsten langfristigen Sitzplatzkosten für Abteilungen und strukturiertes Publishing im größeren Maßstab.
   </p>
@@ -1374,15 +1400,8 @@ SE
 <h3>
       3 Nutzer
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 Monate
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / Nutzer / Monat
-    </div>
+<div class="price">4,97 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$179 einmalig für 3 Nutzer · 12 Monate</div>
 <p class="muted">
       Geeignet für kleinere Redaktionsteams, Kursersteller oder kompakte Publishing-Workflows.
     </p>
@@ -1400,15 +1419,8 @@ SE
 <h3>
     5 Nutzer
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 Monate
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / Nutzer / Monat
-  </div>
+<div class="price">4,65 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$279 einmalig für 5 Nutzer · 12 Monate</div>
 <p class="muted">
     Ein ausgewogener Tarif für Organisationen, die Bücher, Handbücher oder Lehrmaterial erstellen.
   </p>
@@ -1426,15 +1438,8 @@ SE
 <h3>
     10 Nutzer
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 Monate
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / Nutzer / Monat
-  </div>
+<div class="price">3,99 $ <small>/ Nutzer / Monat</small></div>
+<div class="price-total">$479 einmalig für 10 Nutzer · 12 Monate</div>
 <p class="muted">
     Am besten für größere Abteilungen oder Organisationen, die strukturiertes Publishing im größeren Maßstab betreiben.
   </p>
@@ -1497,6 +1502,43 @@ SE
     Software estructurado de publicación con IA para libros de no ficción y contenido de conocimiento.
   </p>
 <div class="sales-copy"><p>BOLO permite a autores, educadores y organizaciones crear libros, guías, manuales y material de conocimiento en un flujo de trabajo controlado — desde el esquema y la generación hasta la edición, la ilustración, la traducción y la exportación lista para publicar.</p><p>BOLO también incluye Fiction Mode para autores que desean manuscritos completos de primer borrador a partir de un Book Brief estructurado, con una revisión humana final recomendada antes de la publicación.</p><p>Desde la publicación long-tail de no ficción — ingresos estables de muchos títulos de nicho especializados — hasta material educativo, documentación empresarial, guías de viaje y libros de conocimiento especializado, BOLO convierte ideas en libros estructurados y publicables.</p><p>BOLO actúa como una capa de orquestación de IA para la producción de libros. En lugar de generar texto aislado, controla la estructura, el flujo de contenido, la terminología y la calidad del resultado en todo el proceso de publicación.</p><p>Además, BOLO puede sugerir automáticamente ilustraciones basadas en tu contenido. Tú eliges cuántas imágenes quieres, y BOLO se encarga del resto — generándolas y colocándolas correctamente en el libro con pies de imagen, sin necesidad de escribir prompts manualmente.</p><p>BOLO está diseñado como un sistema, no como una herramienta basada en prompts — lo que permite una producción consistente, escalable y lista para publicar en lugar de generación de texto aislado.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-spanish">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Salida estructurada, no chat de IA suelto</h2>
+      <ul>
+        <li>El Book Brief se convierte en la fuente del proyecto: tema, público objetivo, nivel, tono y restricciones se mantienen durante toda la producción.</li>
+        <li>BOLO construye el material alrededor de capítulos, títulos y flujo de contenido, no de respuestas de chat separadas.</li>
+        <li>Cada capítulo tiene una función clara dentro del conjunto, con control de alcance, repetición y continuidad durante la generación.</li>
+        <li>Terminología, hechos, tono, extensión del texto y nivel de información se mantienen equilibrados en todo el material.</li>
+        <li>Texto, ilustraciones, pies de imagen y exportación DOCX/PDF/EPUB se gestionan en un único flujo, con DOCX editable antes del PDF final.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Ejemplos claros de coste</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>aprox. 0,60 $</strong>
+          <span>material escolar, unas 5 páginas A4</span>
+        </div>
+        <div class="quick-cost">
+          <strong>aprox. 1,60 $</strong>
+          <span>material escolar ilustrado</span>
+        </div>
+        <div class="quick-cost">
+          <strong>aprox. 2 $</strong>
+          <span>libro de no ficción de 300 páginas, formato estándar 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Licencias individuales desde 3,58 $/mes con una licencia de 36 meses.</div>
+        <div class="quick-license">Licencias de equipo desde 2,66 $/usuario/mes para 10 usuarios con una licencia de 36 meses.</div>
+      </div>
+      <p class="quick-note">La generación con IA utiliza tu propia clave API de OpenAI. Los ejemplos de precio se basan en GPT-5.4. Los costes varían según el modelo, la longitud, el tipo de imagen y las regeneraciones.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -1654,8 +1696,8 @@ SE
 <h3>
         6 meses
       </h3>
-<div class="price discounted">$39 <small>/ licencia</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / mes</div>
+<div class="price discounted">6,50 $ <small>/ mes</small></div>
+<div class="price-total">$39 facturados una vez por 6 meses <span class="price-old">$49</span></div>
 <p class="muted">
         Una opción con poca fricción para usuarios nuevos y proyectos de publicación más cortos.
       </p>
@@ -1673,8 +1715,8 @@ SE
 <h3>
       12 meses
     </h3>
-<div class="price discounted">$59 <small>/ licencia</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / mes</div>
+<div class="price discounted">4,92 $ <small>/ mes</small></div>
+<div class="price-total">$59 facturados una vez por 12 meses <span class="price-old">$69</span></div>
 <p class="muted">
       La opción principal para trabajo continuo de no ficción y proyectos de libros repetidos.
     </p>
@@ -1692,8 +1734,8 @@ SE
 <h3>
     36 meses
   </h3>
-<div class="price discounted">$129 <small>/ licencia</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / mes</div>
+<div class="price discounted">3,58 $ <small>/ mes</small></div>
+<div class="price-total">$129 facturados una vez por 36 meses <span class="price-old">$149</span></div>
 <p class="muted">
     La mejor para uso a largo plazo, múltiples libros y un menor coste anual efectivo.
   </p>
@@ -1716,15 +1758,8 @@ SE
 <h3>
       3 usuarios · 36 meses
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 meses
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / usuario / mes
-    </div>
+<div class="price discounted">3,31 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$358 facturados una vez por 3 usuarios · 36 meses <span class="price-old">$537</span></div>
 <p class="muted">
       Paga una vez y mantén BOLO disponible durante tres años para un equipo pequeño.
     </p>
@@ -1742,15 +1777,8 @@ SE
 <h3>
     5 usuarios · 36 meses
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 meses
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / usuario / mes
-  </div>
+<div class="price discounted">3,10 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$558 facturados una vez por 5 usuarios · 36 meses <span class="price-old">$837</span></div>
 <p class="muted">
     La mejor opción para equipos que planifican libros, manuales o material educativo de forma recurrente.
   </p>
@@ -1768,15 +1796,8 @@ SE
 <h3>
     10 usuarios · 36 meses
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 meses
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / usuario / mes
-  </div>
+<div class="price discounted">2,66 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$958 facturados una vez por 10 usuarios · 36 meses <span class="price-old">$1,437</span></div>
 <p class="muted">
     El menor coste por usuario a largo plazo para departamentos y publicación estructurada a escala.
   </p>
@@ -1799,15 +1820,8 @@ SE
 <h3>
       3 usuarios
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 meses
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / usuario / mes
-    </div>
+<div class="price">4,97 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$179 facturados una vez por 3 usuarios · 12 meses</div>
 <p class="muted">
       Adecuado para equipos editoriales pequeños, creadores de cursos o flujos de publicación compactos.
     </p>
@@ -1825,15 +1839,8 @@ SE
 <h3>
     5 usuarios
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 meses
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / usuario / mes
-  </div>
+<div class="price">4,65 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$279 facturados una vez por 5 usuarios · 12 meses</div>
 <p class="muted">
     Un plan equilibrado para organizaciones que producen libros, manuales o material educativo.
   </p>
@@ -1851,15 +1858,8 @@ SE
 <h3>
     10 usuarios
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 meses
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / usuario / mes
-  </div>
+<div class="price">3,99 $ <small>/ usuario / mes</small></div>
+<div class="price-total">$479 facturados una vez por 10 usuarios · 12 meses</div>
 <p class="muted">
     La mejor opción para departamentos más grandes u organizaciones que trabajan con publicación estructurada a escala.
   </p>
@@ -1922,6 +1922,43 @@ SE
     Logiciel structuré de publication IA pour livres de non-fiction et contenus de connaissance.
   </p>
 <div class="sales-copy"><p>BOLO permet aux auteurs, formateurs et organisations de créer des livres, guides, manuels et contenus de connaissance dans un workflow contrôlé — de l’outline et de la génération jusqu’à l’édition, l’illustration, la traduction et l’export prêt à publier.</p><p>BOLO inclut également Fiction Mode pour les auteurs qui souhaitent créer des manuscrits complets de premier jet à partir d’un Book Brief structuré, avec une dernière révision humaine recommandée avant publication.</p><p>De l’édition long-tail de non-fiction — revenus stables issus de nombreux titres de niche spécialisés — aux supports pédagogiques, à la documentation d’entreprise, aux guides de voyage et aux ouvrages de connaissance spécialisés, BOLO transforme les idées en livres structurés et publiables.</p><p>BOLO agit comme une couche d’orchestration IA pour la production de livres. Au lieu de générer du texte isolé, il contrôle la structure, le flux de contenu, la terminologie et la qualité de sortie sur l’ensemble du processus de publication.</p><p>De plus, BOLO peut automatiquement suggérer des illustrations en fonction de votre contenu. Vous choisissez le nombre d’images souhaité, et BOLO s’occupe du reste — en les générant et en les plaçant correctement dans le livre avec des légendes, sans prompting manuel.</p><p>BOLO est conçu comme un système, et non comme un outil basé sur des prompts — permettant une production cohérente, évolutive et prête à être publiée, plutôt qu’une génération de texte isolée.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-french">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Production structurée, pas un simple chat IA</h2>
+      <ul>
+        <li>Le Book Brief devient la source du projet : sujet, public cible, niveau, ton et contraintes suivent toute la production.</li>
+        <li>BOLO construit le contenu autour des chapitres, des titres et du flux d’information plutôt qu’avec des réponses de chat séparées.</li>
+        <li>Chaque chapitre reçoit un rôle clair dans l’ensemble, avec contrôle du périmètre, des répétitions et de la continuité pendant la génération.</li>
+        <li>Terminologie, faits, ton, longueur du texte et niveau d’information restent équilibrés dans tout le matériau.</li>
+        <li>Texte, illustrations, légendes et export DOCX/PDF/EPUB sont traités dans un seul workflow, avec un DOCX modifiable avant l’export PDF final.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Exemples de coûts clairs</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>env. 0,60 $</strong>
+          <span>support scolaire, environ 5 pages A4</span>
+        </div>
+        <div class="quick-cost">
+          <strong>env. 1,60 $</strong>
+          <span>support scolaire illustré</span>
+        </div>
+        <div class="quick-cost">
+          <strong>env. 2 $</strong>
+          <span>livre de non-fiction de 300 pages, format standard 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Licences individuelles à partir de 3,58 $/mois avec une licence de 36 mois.</div>
+        <div class="quick-license">Licences équipe à partir de 2,66 $/utilisateur/mois pour 10 utilisateurs avec une licence de 36 mois.</div>
+      </div>
+      <p class="quick-note">La génération IA utilise votre propre clé API OpenAI. Les exemples de prix sont basés sur GPT-5.4. Les coûts varient selon le modèle, la longueur, le type d’image et les régénérations.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -2079,8 +2116,8 @@ SE
 <h3>
         6 mois
       </h3>
-<div class="price discounted">$39 <small>/ licence</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / mois</div>
+<div class="price discounted">6,50 $ <small>/ mois</small></div>
+<div class="price-total">$39 facturés une fois pour 6 mois <span class="price-old">$49</span></div>
 <p class="muted">
         Une option simple pour les nouveaux utilisateurs et les projets d’édition plus courts.
       </p>
@@ -2098,8 +2135,8 @@ SE
 <h3>
       12 mois
     </h3>
-<div class="price discounted">$59 <small>/ licence</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / mois</div>
+<div class="price discounted">4,92 $ <small>/ mois</small></div>
+<div class="price-total">$59 facturés une fois pour 12 mois <span class="price-old">$69</span></div>
 <p class="muted">
       L’option principale pour un travail continu de non-fiction et des projets de livres répétés.
     </p>
@@ -2117,8 +2154,8 @@ SE
 <h3>
     36 mois
   </h3>
-<div class="price discounted">$129 <small>/ licence</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / mois</div>
+<div class="price discounted">3,58 $ <small>/ mois</small></div>
+<div class="price-total">$129 facturés une fois pour 36 mois <span class="price-old">$149</span></div>
 <p class="muted">
     La meilleure option pour un usage à long terme, plusieurs livres et un coût annuel effectif plus bas.
   </p>
@@ -2141,15 +2178,8 @@ SE
 <h3>
       3 utilisateurs · 36 mois
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 mois
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / utilisateur / mois
-    </div>
+<div class="price discounted">3,31 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$358 facturés une fois pour 3 utilisateurs · 36 mois <span class="price-old">$537</span></div>
 <p class="muted">
       Payez une fois et gardez BOLO disponible pendant trois ans pour une petite équipe.
     </p>
@@ -2167,15 +2197,8 @@ SE
 <h3>
     5 utilisateurs · 36 mois
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 mois
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / utilisateur / mois
-  </div>
+<div class="price discounted">3,10 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$558 facturés une fois pour 5 utilisateurs · 36 mois <span class="price-old">$837</span></div>
 <p class="muted">
     Idéal pour les équipes qui prévoient des livres, manuels ou supports pédagogiques récurrents.
   </p>
@@ -2193,15 +2216,8 @@ SE
 <h3>
     10 utilisateurs · 36 mois
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 mois
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / utilisateur / mois
-  </div>
+<div class="price discounted">2,66 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$958 facturés une fois pour 10 utilisateurs · 36 mois <span class="price-old">$1,437</span></div>
 <p class="muted">
     Le coût par utilisateur le plus bas à long terme pour les départements et la publication structurée à grande échelle.
   </p>
@@ -2224,15 +2240,8 @@ SE
 <h3>
       3 utilisateurs
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 mois
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / utilisateur / mois
-    </div>
+<div class="price">4,97 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$179 facturés une fois pour 3 utilisateurs · 12 mois</div>
 <p class="muted">
       Adapté aux petites équipes éditoriales, créateurs de cours ou workflows de publication compacts.
     </p>
@@ -2250,15 +2259,8 @@ SE
 <h3>
     5 utilisateurs
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 mois
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / utilisateur / mois
-  </div>
+<div class="price">4,65 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$279 facturés une fois pour 5 utilisateurs · 12 mois</div>
 <p class="muted">
     Une formule équilibrée pour les organisations qui produisent des livres, des manuels ou du matériel pédagogique.
   </p>
@@ -2276,15 +2278,8 @@ SE
 <h3>
     10 utilisateurs
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 mois
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / utilisateur / mois
-  </div>
+<div class="price">3,99 $ <small>/ utilisateur / mois</small></div>
+<div class="price-total">$479 facturés une fois pour 10 utilisateurs · 12 mois</div>
 <p class="muted">
     Idéal pour les départements plus importants ou les organisations travaillant à grande échelle avec une publication structurée.
   </p>
@@ -2347,6 +2342,43 @@ SE
     Software strutturato di publishing AI per libri di saggistica e contenuti di conoscenza.
   </p>
 <div class="sales-copy"><p>BOLO consente ad autori, educatori e organizzazioni di creare libri, guide, manuali e materiali di conoscenza in un workflow controllato — dall’outline e dalla generazione fino all’editing, all’illustrazione, alla traduzione e all’export pronto per la pubblicazione.</p><p>BOLO include anche Fiction Mode per autori che desiderano manoscritti completi di prima bozza a partire da un Book Brief strutturato, con una revisione umana finale consigliata prima della pubblicazione.</p><p>Dalla pubblicazione long-tail di saggistica — reddito stabile da molti titoli di nicchia specializzati — fino a materiali educativi, documentazione aziendale, guide di viaggio e libri di conoscenza specialistica, BOLO trasforma le idee in libri strutturati e pubblicabili.</p><p>BOLO funziona come un livello di orchestrazione AI per la produzione di libri. Invece di generare testo isolato, controlla la struttura, il flusso dei contenuti, la terminologia e la qualità dell’output lungo l’intero processo di pubblicazione.</p><p>Inoltre, BOLO può suggerire automaticamente illustrazioni in base al contenuto. Tu scegli quante immagini vuoi, e BOLO si occupa del resto — generandole e inserendole correttamente nel libro con didascalie, senza bisogno di prompting manuale.</p><p>BOLO è progettato come un sistema, non come uno strumento basato su prompt — consentendo output coerenti, scalabili e pronti per la produzione invece di semplice generazione di testo isolato.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-italian">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Output strutturato, non semplice chat AI</h2>
+      <ul>
+        <li>Il Book Brief diventa la fonte del progetto: argomento, pubblico target, livello, tono e vincoli seguono tutta la produzione.</li>
+        <li>BOLO costruisce il materiale intorno a capitoli, titoli e flusso dei contenuti invece che a risposte di chat separate.</li>
+        <li>Ogni capitolo ha un ruolo chiaro nell’insieme, con controllo di ambito, ripetizioni e continuità durante la generazione.</li>
+        <li>Terminologia, fatti, tono, lunghezza del testo e livello informativo restano bilanciati in tutto il materiale.</li>
+        <li>Testo, illustrazioni, didascalie ed export DOCX/PDF/EPUB sono gestiti in un unico workflow, con DOCX modificabile prima del PDF finale.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Esempi di costo chiari</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>circa 0,60 $</strong>
+          <span>dispensa scolastica, circa 5 pagine A4</span>
+        </div>
+        <div class="quick-cost">
+          <strong>circa 1,60 $</strong>
+          <span>dispensa scolastica illustrata</span>
+        </div>
+        <div class="quick-cost">
+          <strong>circa 2 $</strong>
+          <span>libro di saggistica di 300 pagine, formato standard 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Licenze individuali da 3,58 $/mese con una licenza di 36 mesi.</div>
+        <div class="quick-license">Licenze team da 2,66 $/utente/mese per 10 utenti con una licenza di 36 mesi.</div>
+      </div>
+      <p class="quick-note">La generazione AI usa la tua chiave API OpenAI. Gli esempi di prezzo sono basati su GPT-5.4. I costi variano in base a modello, lunghezza, tipo di immagine e rigenerazioni.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -2504,8 +2536,8 @@ SE
 <h3>
         6 mesi
       </h3>
-<div class="price discounted">$39 <small>/ licenza</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / mese</div>
+<div class="price discounted">6,50 $ <small>/ mese</small></div>
+<div class="price-total">$39 fatturati una volta per 6 mesi <span class="price-old">$49</span></div>
 <p class="muted">
         Un’opzione semplice per i nuovi utenti e per progetti editoriali più brevi.
       </p>
@@ -2523,8 +2555,8 @@ SE
 <h3>
       12 mesi
     </h3>
-<div class="price discounted">$59 <small>/ licenza</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / mese</div>
+<div class="price discounted">4,92 $ <small>/ mese</small></div>
+<div class="price-total">$59 fatturati una volta per 12 mesi <span class="price-old">$69</span></div>
 <p class="muted">
       L’opzione principale per un lavoro continuativo di saggistica e progetti di libri ripetuti.
     </p>
@@ -2542,8 +2574,8 @@ SE
 <h3>
     36 mesi
   </h3>
-<div class="price discounted">$129 <small>/ licenza</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / mese</div>
+<div class="price discounted">3,58 $ <small>/ mese</small></div>
+<div class="price-total">$129 fatturati una volta per 36 mesi <span class="price-old">$149</span></div>
 <p class="muted">
     La scelta migliore per uso a lungo termine, più libri e un costo annuo effettivo più basso.
   </p>
@@ -2566,15 +2598,8 @@ SE
 <h3>
       3 utenti · 36 mesi
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 mesi
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / utente / mese
-    </div>
+<div class="price discounted">3,31 $ <small>/ utente / mese</small></div>
+<div class="price-total">$358 fatturati una volta per 3 utenti · 36 mesi <span class="price-old">$537</span></div>
 <p class="muted">
       Paga una volta e mantieni BOLO disponibile per tre anni per un piccolo team.
     </p>
@@ -2592,15 +2617,8 @@ SE
 <h3>
     5 utenti · 36 mesi
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 mesi
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / utente / mese
-  </div>
+<div class="price discounted">3,10 $ <small>/ utente / mese</small></div>
+<div class="price-total">$558 fatturati una volta per 5 utenti · 36 mesi <span class="price-old">$837</span></div>
 <p class="muted">
     Ideale per team che pianificano libri, manuali o materiale educativo ricorrenti.
   </p>
@@ -2618,15 +2636,8 @@ SE
 <h3>
     10 utenti · 36 mesi
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 mesi
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / utente / mese
-  </div>
+<div class="price discounted">2,66 $ <small>/ utente / mese</small></div>
+<div class="price-total">$958 fatturati una volta per 10 utenti · 36 mesi <span class="price-old">$1,437</span></div>
 <p class="muted">
     Il costo per utente più basso a lungo termine per dipartimenti e publishing strutturato su larga scala.
   </p>
@@ -2649,15 +2660,8 @@ SE
 <h3>
       3 utenti
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 mesi
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / utente / mese
-    </div>
+<div class="price">4,97 $ <small>/ utente / mese</small></div>
+<div class="price-total">$179 fatturati una volta per 3 utenti · 12 mesi</div>
 <p class="muted">
       Adatta a piccoli team editoriali, creatori di corsi o workflow editoriali compatti.
     </p>
@@ -2675,15 +2679,8 @@ SE
 <h3>
     5 utenti
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 mesi
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / utente / mese
-  </div>
+<div class="price">4,65 $ <small>/ utente / mese</small></div>
+<div class="price-total">$279 fatturati una volta per 5 utenti · 12 mesi</div>
 <p class="muted">
     Un piano equilibrato per organizzazioni che producono libri, manuali o materiale educativo.
   </p>
@@ -2701,15 +2698,8 @@ SE
 <h3>
     10 utenti
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 mesi
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / utente / mese
-  </div>
+<div class="price">3,99 $ <small>/ utente / mese</small></div>
+<div class="price-total">$479 fatturati una volta per 10 utenti · 12 mesi</div>
 <p class="muted">
     La scelta migliore per dipartimenti più grandi o organizzazioni che lavorano con publishing strutturato su larga scala.
   </p>
@@ -2772,6 +2762,43 @@ SE
     Gestructureerde AI-publishingsoftware voor non-fictieboeken en kennisinhoud.
   </p>
 <div class="sales-copy"><p>BOLO stelt auteurs, docenten en organisaties in staat om boeken, gidsen, handleidingen en kennismateriaal te maken in een gecontroleerde workflow — van outline en generatie tot bewerking, illustratie, vertaling en publiceerbare export.</p><p>BOLO bevat ook Fiction Mode voor auteurs die complete eerste conceptmanuscripten willen maken vanuit een gestructureerde Book Brief, waarbij een laatste menselijke redactie vóór publicatie wordt aanbevolen.</p><p>Van long-tail non-fictiepublicatie — stabiele inkomsten uit veel gespecialiseerde nichetitels — tot educatief materiaal, bedrijfsdocumentatie, reisgidsen en gespecialiseerde kennisboeken: BOLO zet ideeën om in gestructureerde, publiceerbare boeken.</p><p>BOLO fungeert als een AI-orkestratielaag voor boekproductie. In plaats van losse tekst te genereren, stuurt het structuur, contentflow, terminologie en outputkwaliteit over de volledige publicatiepipeline.</p><p>Daarnaast kan BOLO automatisch illustraties voorstellen op basis van je inhoud. Jij kiest hoeveel afbeeldingen je wilt, en BOLO regelt de rest — door ze te genereren en correct in het boek te plaatsen met bijschriften, zonder handmatig prompten.</p><p>BOLO is ontworpen als een systeem, niet als een promptgebaseerde tool — waardoor consistente, schaalbare en productieklare output mogelijk wordt in plaats van geïsoleerde tekstgeneratie.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-dutch">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Gestructureerde output, geen losse AI-chat</h2>
+      <ul>
+        <li>De Book Brief wordt de bron van het project: onderwerp, doelgroep, niveau, toon en beperkingen lopen door de hele productie.</li>
+        <li>BOLO bouwt rond hoofdstukken, koppen en contentflow in plaats van losse chatantwoorden.</li>
+        <li>Elk hoofdstuk krijgt een duidelijke rol in het geheel, met controle op scope, herhaling en continuïteit tijdens de generatie.</li>
+        <li>Terminologie, feiten, toon, tekstlengte en informatieniveau blijven in balans door het hele materiaal.</li>
+        <li>Tekst, illustraties, bijschriften en DOCX/PDF/EPUB-export worden in één workflow afgehandeld, met bewerkbare DOCX vóór de definitieve PDF-export.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Duidelijke kostenvoorbeelden</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>ongeveer $0,60</strong>
+          <span>schoolhandout, ongeveer 5 A4-pagina’s</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ongeveer $1,60</strong>
+          <span>geïllustreerde schoolhandout</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ongeveer $2</strong>
+          <span>non-fictieboek van 300 pagina’s, standaardformaat 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Individuele licenties vanaf $3,58/maand met een licentie van 36 maanden.</div>
+        <div class="quick-license">Teamlicenties vanaf $2,66/gebruiker/maand voor 10 gebruikers met een licentie van 36 maanden.</div>
+      </div>
+      <p class="quick-note">AI-generatie gebruikt je eigen OpenAI API key. De prijsvoorbeelden zijn gebaseerd op GPT-5.4. Kosten variëren per model, lengte, afbeeldingstype en regeneraties.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -2929,8 +2956,8 @@ SE
 <h3>
         6 maanden
       </h3>
-<div class="price discounted">$39 <small>/ licentie</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ $6,50 / maand</div>
+<div class="price discounted">$6,50 <small>/ maand</small></div>
+<div class="price-total">$39 eenmalig gefactureerd voor 6 maanden <span class="price-old">$49</span></div>
 <p class="muted">
         Een laagdrempelige optie voor nieuwe gebruikers en kortere publicatieprojecten.
       </p>
@@ -2948,8 +2975,8 @@ SE
 <h3>
       12 maanden
     </h3>
-<div class="price discounted">$59 <small>/ licentie</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ $4,92 / maand</div>
+<div class="price discounted">$4,92 <small>/ maand</small></div>
+<div class="price-total">$59 eenmalig gefactureerd voor 12 maanden <span class="price-old">$69</span></div>
 <p class="muted">
       De belangrijkste optie voor doorlopend non-fictiewerk en terugkerende boekprojecten.
     </p>
@@ -2967,8 +2994,8 @@ SE
 <h3>
     36 maanden
   </h3>
-<div class="price discounted">$129 <small>/ licentie</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ $3,58 / maand</div>
+<div class="price discounted">$3,58 <small>/ maand</small></div>
+<div class="price-total">$129 eenmalig gefactureerd voor 36 maanden <span class="price-old">$149</span></div>
 <p class="muted">
     Het beste voor langdurig gebruik, meerdere boeken en lagere effectieve jaarkosten.
   </p>
@@ -2991,15 +3018,8 @@ SE
 <h3>
       3 gebruikers · 36 maanden
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 maanden
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ $3,31 / gebruiker / maand
-    </div>
+<div class="price discounted">$3,31 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$358 eenmalig gefactureerd voor 3 gebruikers · 36 maanden <span class="price-old">$537</span></div>
 <p class="muted">
       Betaal één keer en houd BOLO drie jaar beschikbaar voor een klein team.
     </p>
@@ -3017,15 +3037,8 @@ SE
 <h3>
     5 gebruikers · 36 maanden
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 maanden
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ $3,10 / gebruiker / maand
-  </div>
+<div class="price discounted">$3,10 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$558 eenmalig gefactureerd voor 5 gebruikers · 36 maanden <span class="price-old">$837</span></div>
 <p class="muted">
     Het beste voor teams die terugkerende boeken, handleidingen of educatief materiaal plannen.
   </p>
@@ -3043,15 +3056,8 @@ SE
 <h3>
     10 gebruikers · 36 maanden
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 maanden
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ $2,66 / gebruiker / maand
-  </div>
+<div class="price discounted">$2,66 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$958 eenmalig gefactureerd voor 10 gebruikers · 36 maanden <span class="price-old">$1,437</span></div>
 <p class="muted">
     De laagste langetermijnkosten per gebruiker voor afdelingen en gestructureerd publiceren op schaal.
   </p>
@@ -3074,15 +3080,8 @@ SE
 <h3>
       3 gebruikers
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 maanden
-      </small>
-</div>
-<div class="price-month">
-      ≈ $4,97 / gebruiker / maand
-    </div>
+<div class="price">$4,97 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$179 eenmalig gefactureerd voor 3 gebruikers · 12 maanden</div>
 <p class="muted">
       Geschikt voor kleinere redactieteams, cursusmakers of compacte publicatieworkflows.
     </p>
@@ -3100,15 +3099,8 @@ SE
 <h3>
     5 gebruikers
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 maanden
-    </small>
-</div>
-<div class="price-month">
-    ≈ $4,65 / gebruiker / maand
-  </div>
+<div class="price">$4,65 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$279 eenmalig gefactureerd voor 5 gebruikers · 12 maanden</div>
 <p class="muted">
     Een gebalanceerd plan voor organisaties die boeken, handleidingen of educatief materiaal produceren.
   </p>
@@ -3126,15 +3118,8 @@ SE
 <h3>
     10 gebruikers
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 maanden
-    </small>
-</div>
-<div class="price-month">
-    ≈ $3,99 / gebruiker / maand
-  </div>
+<div class="price">$3,99 <small>/ gebruiker / maand</small></div>
+<div class="price-total">$479 eenmalig gefactureerd voor 10 gebruikers · 12 maanden</div>
 <p class="muted">
     Het beste voor grotere afdelingen of organisaties die op schaal met gestructureerd publiceren werken.
   </p>
@@ -3197,6 +3182,43 @@ SE
     Strukturert AI-publiseringsprogramvare for sakprosabøker og kunnskapsinnhold.
   </p>
 <div class="sales-copy"><p>BOLO gjør det mulig for forfattere, undervisere og organisasjoner å lage bøker, guider, manualer og kunnskapsmateriale i en kontrollert arbeidsflyt — fra outline og generering til redigering, illustrasjon, oversettelse og publiserbar eksport.</p><p>BOLO inkluderer også Fiction Mode for forfattere som ønsker komplette førsteutkast til manuskripter fra en strukturert Book Brief, med en avsluttende menneskelig redigering anbefalt før publisering.</p><p>Fra long-tail-publisering av sakprosa — stabile inntekter fra mange spesialiserte nisjetitler — til undervisningsmateriale, bedriftsdokumentasjon, reiseguider og spesialiserte kunnskapsbøker, gjør BOLO ideer om til strukturerte, publiserbare bøker.</p><p>BOLO fungerer som et AI-orkestreringslag for bokproduksjon. I stedet for å generere isolert tekst, styrer det struktur, innholdsflyt, terminologi og outputkvalitet gjennom hele publiseringsprosessen.</p><p>I tillegg kan BOLO automatisk foreslå illustrasjoner basert på innholdet ditt. Du velger hvor mange bilder du vil ha, og BOLO tar seg av resten — genererer dem og plasserer dem korrekt i boken med bildetekster, uten manuell prompting.</p><p>BOLO er designet som et system, ikke et promptbasert verktøy — noe som muliggjør konsistent, skalerbar og produksjonsklar output i stedet for isolert tekstgenerering.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-norwegian">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Strukturert output, ikke løs AI-chat</h2>
+      <ul>
+        <li>Book Brief blir prosjektkilden: tema, målgruppe, nivå, tone og begrensninger følger hele produksjonen.</li>
+        <li>BOLO bygger rundt kapitler, overskrifter og innholdsflyt i stedet for separate chat-svar.</li>
+        <li>Hvert kapittel får en tydelig rolle i helheten, med omfang, repetisjon og kontinuitet kontrollert under genereringen.</li>
+        <li>Terminologi, fakta, tone, tekstlengde og informasjonsnivå holdes balansert gjennom materialet.</li>
+        <li>Tekst, illustrasjoner, bildetekster og DOCX/PDF/EPUB-eksport håndteres i én arbeidsflyt, med redigerbar DOCX før endelig PDF-eksport.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Tydelige kostnadseksempler</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>ca. $0,60</strong>
+          <span>skolehefte, ca. 5 A4-sider</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. $1,60</strong>
+          <span>illustrert skolehefte</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca. $2</strong>
+          <span>300-siders sakprosabok, standardformat 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Individuelle lisenser fra $3,58/måned med en 36-måneders lisens.</div>
+        <div class="quick-license">Teamlisenser fra $2,66/bruker/måned for 10 brukere med en 36-måneders lisens.</div>
+      </div>
+      <p class="quick-note">AI-generering bruker din egen OpenAI API key. Pris-eksemplene er basert på GPT-5.4. Kostnader varierer etter modell, lengde, bildetype og regenereringer.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -3354,8 +3376,8 @@ SE
 <h3>
         6 måneder
       </h3>
-<div class="price discounted">$39 <small>/ lisens</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ $6,50 / måned</div>
+<div class="price discounted">$6,50 <small>/ måned</small></div>
+<div class="price-total">$39 betales én gang for 6 måneder <span class="price-old">$49</span></div>
 <p class="muted">
         Et enkelt valg for førstegangsbrukere og kortere publiseringsprosjekter.
       </p>
@@ -3373,8 +3395,8 @@ SE
 <h3>
       12 måneder
     </h3>
-<div class="price discounted">$59 <small>/ lisens</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ $4,92 / måned</div>
+<div class="price discounted">$4,92 <small>/ måned</small></div>
+<div class="price-total">$59 betales én gang for 12 måneder <span class="price-old">$69</span></div>
 <p class="muted">
       Hovedalternativet for løpende sakprosapublisering og gjentatte bokprosjekter.
     </p>
@@ -3392,8 +3414,8 @@ SE
 <h3>
     36 måneder
   </h3>
-<div class="price discounted">$129 <small>/ lisens</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ $3,58 / måned</div>
+<div class="price discounted">$3,58 <small>/ måned</small></div>
+<div class="price-total">$129 betales én gang for 36 måneder <span class="price-old">$149</span></div>
 <p class="muted">
     Best for langvarig bruk, flere bøker og lavere effektiv årskostnad.
   </p>
@@ -3416,15 +3438,8 @@ SE
 <h3>
       3 brukere · 36 måneder
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 måneder
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ $3,31 / bruker / måned
-    </div>
+<div class="price discounted">$3,31 <small>/ bruker / måned</small></div>
+<div class="price-total">$358 betales én gang for 3 brukere · 36 måneder <span class="price-old">$537</span></div>
 <p class="muted">
       Betal én gang og hold BOLO tilgjengelig i tre år for et lite team.
     </p>
@@ -3442,15 +3457,8 @@ SE
 <h3>
     5 brukere · 36 måneder
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 måneder
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ $3,10 / bruker / måned
-  </div>
+<div class="price discounted">$3,10 <small>/ bruker / måned</small></div>
+<div class="price-total">$558 betales én gang for 5 brukere · 36 måneder <span class="price-old">$837</span></div>
 <p class="muted">
     Best for team som planlegger gjentatte bøker, manualer eller undervisningsmateriale.
   </p>
@@ -3468,15 +3476,8 @@ SE
 <h3>
     10 brukere · 36 måneder
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 måneder
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ $2,66 / bruker / måned
-  </div>
+<div class="price discounted">$2,66 <small>/ bruker / måned</small></div>
+<div class="price-total">$958 betales én gang for 10 brukere · 36 måneder <span class="price-old">$1,437</span></div>
 <p class="muted">
     Den laveste langsiktige kostnaden per bruker for avdelinger og strukturert publisering i større skala.
   </p>
@@ -3499,15 +3500,8 @@ SE
 <h3>
       3 brukere
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 måneder
-      </small>
-</div>
-<div class="price-month">
-      ≈ $4,97 / bruker / måned
-    </div>
+<div class="price">$4,97 <small>/ bruker / måned</small></div>
+<div class="price-total">$179 betales én gang for 3 brukere · 12 måneder</div>
 <p class="muted">
       Passer for mindre redaksjonelle team, kursskapere eller kompakte publiseringsarbeidsflyter.
     </p>
@@ -3525,15 +3519,8 @@ SE
 <h3>
     5 brukere
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 måneder
-    </small>
-</div>
-<div class="price-month">
-    ≈ $4,65 / bruker / måned
-  </div>
+<div class="price">$4,65 <small>/ bruker / måned</small></div>
+<div class="price-total">$279 betales én gang for 5 brukere · 12 måneder</div>
 <p class="muted">
     En balansert plan for organisasjoner som produserer bøker, manualer eller undervisningsmateriale.
   </p>
@@ -3551,15 +3538,8 @@ SE
 <h3>
     10 brukere
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 måneder
-    </small>
-</div>
-<div class="price-month">
-    ≈ $3,99 / bruker / måned
-  </div>
+<div class="price">$3,99 <small>/ bruker / måned</small></div>
+<div class="price-total">$479 betales én gang for 10 brukere · 12 måneder</div>
 <p class="muted">
     Best for større avdelinger eller organisasjoner som arbeider med strukturert publisering i større skala.
   </p>
@@ -3626,6 +3606,43 @@ SE
 <div class="education-cta-wrap">
 <a class="education-cta" href="/utbildning/">BOLO för Utbildning</a>
 </div>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-swedish">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Strukturerad output, inte lös AI-chatt</h2>
+      <ul>
+        <li>Book Brief blir projektets källa: ämne, målgrupp, nivå, ton och begränsningar följer med genom hela produktionen.</li>
+        <li>BOLO bygger materialet kring kapitel, rubriker och innehållsflöde i stället för separata chattsvar.</li>
+        <li>Varje kapitel får en tydlig roll i helheten, med kontroll av omfång, upprepningar och kontinuitet under genereringen.</li>
+        <li>Terminologi, fakta, ton, textlängd och informationsnivå hålls balanserade genom hela materialet.</li>
+        <li>Text, illustrationer, bildtexter och DOCX/PDF/EPUB-export hanteras i ett arbetsflöde, med redigerbar DOCX före slutlig PDF-export.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Tydliga kostnadsexempel</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>ca 6 kr</strong>
+          <span>skolhäfte, cirka 5 A4-sidor</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca 15 kr</strong>
+          <span>illustrerat skolhäfte</span>
+        </div>
+        <div class="quick-cost">
+          <strong>ca 19 kr</strong>
+          <span>300-sidors fackbok, standardformat 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Individuella licenser från ca 33 kr/månad med en 36-månaderslicens.</div>
+        <div class="quick-license">Teamlicenser från ca 25 kr/användare/månad för 10 användare med en 36-månaderslicens.</div>
+      </div>
+      <p class="quick-note">AI-generering använder din egen OpenAI API key. Prisexemplen är baserade på GPT-5.4 och 1 USD ≈ 9,29 kr. Kostnader varierar beroende på modell, längd, bildtyp och omgenereringar.</p>
+    </div>
+  </div>
+</section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
     Klistra in Book Brief
@@ -3671,7 +3688,7 @@ SE
 </div>
 </a>
 <div class="demo-caption">
-<strong>BOLO presentationsvideo · 16:04 min</strong>
+<strong>BOLO presentationsvideo · 8:42 min</strong>
 </div>
 </section>
 <section class="grid">
@@ -3782,8 +3799,8 @@ SE
 <h3>
         6 månader
       </h3>
-<div class="price discounted">359 kr <small>/ licens</small><span class="price-old">449 kr</span></div>
-<div class="price-month">≈ 59,8 kr / månad</div>
+<div class="price discounted">59,8 kr <small>/ månad</small></div>
+<div class="price-total">359 kr betalas en gång för 6 månader <span class="price-old">449 kr</span></div>
 <p class="muted">
         Ett lågtröskelalternativ för nya användare och kortare publiceringsprojekt.
       </p>
@@ -3801,8 +3818,8 @@ SE
 <h3>
       12 månader
     </h3>
-<div class="price discounted">539 kr <small>/ licens</small><span class="price-old">629 kr</span></div>
-<div class="price-month">≈ 44,9 kr / månad</div>
+<div class="price discounted">44,9 kr <small>/ månad</small></div>
+<div class="price-total">539 kr betalas en gång för 12 månader <span class="price-old">629 kr</span></div>
 <p class="muted">
       Huvudalternativet för löpande fackpublicering och återkommande bokprojekt.
     </p>
@@ -3820,8 +3837,8 @@ SE
 <h3>
     36 månader
   </h3>
-<div class="price discounted">1 179 kr <small>/ licens</small><span class="price-old">1 369 kr</span></div>
-<div class="price-month">≈ 32,8 kr / månad</div>
+<div class="price discounted">32,8 kr <small>/ månad</small></div>
+<div class="price-total">1 179 kr betalas en gång för 36 månader <span class="price-old">1 369 kr</span></div>
 <p class="muted">
     Bäst för långvarig användning, flera böcker och lägre effektiv årskostnad.
   </p>
@@ -3844,15 +3861,8 @@ SE
 <h3>
       3 användare · 36 månader
     </h3>
-<div class="price discounted">
-      3 279 kr
-      <small>
-        / 36 månader
-      </small><span class="price-old">4 919 kr</span>
-</div>
-<div class="price-month">
-      ≈ 30,4 kr / användare / månad
-    </div>
+<div class="price discounted">30,4 kr <small>/ användare / månad</small></div>
+<div class="price-total">3 279 kr betalas en gång för 3 användare · 36 månader <span class="price-old">4 919 kr</span></div>
 <p class="muted">
       Betala en gång och ha BOLO tillgängligt i tre år för ett litet team.
     </p>
@@ -3870,15 +3880,8 @@ SE
 <h3>
     5 användare · 36 månader
   </h3>
-<div class="price discounted">
-    5 099 kr
-    <small>
-      / 36 månader
-    </small><span class="price-old">7 649 kr</span>
-</div>
-<div class="price-month">
-    ≈ 28,3 kr / användare / månad
-  </div>
+<div class="price discounted">28,3 kr <small>/ användare / månad</small></div>
+<div class="price-total">5 099 kr betalas en gång för 5 användare · 36 månader <span class="price-old">7 649 kr</span></div>
 <p class="muted">
     Bäst för team som planerar återkommande böcker, manualer eller utbildningsmaterial.
   </p>
@@ -3896,15 +3899,8 @@ SE
 <h3>
     10 användare · 36 månader
   </h3>
-<div class="price discounted">
-    8 759 kr
-    <small>
-      / 36 månader
-    </small><span class="price-old">13 139 kr</span>
-</div>
-<div class="price-month">
-    ≈ 24,3 kr / användare / månad
-  </div>
+<div class="price discounted">24,3 kr <small>/ användare / månad</small></div>
+<div class="price-total">8 759 kr betalas en gång för 10 användare · 36 månader <span class="price-old">13 139 kr</span></div>
 <p class="muted">
     Den lägsta långsiktiga kostnaden per användare för avdelningar och strukturerad publicering i större skala.
   </p>
@@ -3927,15 +3923,8 @@ SE
 <h3>
       3 användare
     </h3>
-<div class="price">
-      1 639 kr
-      <small>
-        / 12 månader
-      </small>
-</div>
-<div class="price-month">
-      ≈ 45,5 kr / användare / månad
-    </div>
+<div class="price">45,5 kr <small>/ användare / månad</small></div>
+<div class="price-total">1 639 kr betalas en gång för 3 användare · 12 månader</div>
 <p class="muted">
       Passar mindre redaktionella team, kurskapare eller kompakta publiceringsflöden.
     </p>
@@ -3953,15 +3942,8 @@ SE
 <h3>
     5 användare
   </h3>
-<div class="price">
-    2 549 kr
-    <small>
-      / 12 månader
-    </small>
-</div>
-<div class="price-month">
-    ≈ 42,5 kr / användare / månad
-  </div>
+<div class="price">42,5 kr <small>/ användare / månad</small></div>
+<div class="price-total">2 549 kr betalas en gång för 5 användare · 12 månader</div>
 <p class="muted">
     Ett balanserat alternativ för organisationer som producerar böcker, manualer eller utbildningsmaterial.
   </p>
@@ -3979,15 +3961,8 @@ SE
 <h3>
     10 användare
   </h3>
-<div class="price">
-    4 379 kr
-    <small>
-      / 12 månader
-    </small>
-</div>
-<div class="price-month">
-    ≈ 36,5 kr / användare / månad
-  </div>
+<div class="price">36,5 kr <small>/ användare / månad</small></div>
+<div class="price-total">4 379 kr betalas en gång för 10 användare · 12 månader</div>
 <p class="muted">
     Bäst för större avdelningar eller organisationer som arbetar med strukturerad publicering i större skala.
   </p>
@@ -4050,6 +4025,43 @@ SE
     Software estruturado de publicação com IA para livros de não ficção e conteúdo de conhecimento.
   </p>
 <div class="sales-copy"><p>O BOLO permite a autores, educadores e organizações criar livros, guias, manuais e material de conhecimento num fluxo de trabalho controlado — desde o outline e a geração até à edição, ilustração, tradução e exportação pronta para publicação.</p><p>O BOLO também inclui Fiction Mode para autores que pretendem criar manuscritos completos de primeira versão a partir de um Book Brief estruturado, com uma revisão humana final recomendada antes da publicação.</p><p>Desde a publicação long-tail de não ficção — rendimento estável de muitos títulos de nicho especializados — até material educativo, documentação empresarial, guias de viagem e livros de conhecimento especializado, o BOLO transforma ideias em livros estruturados e publicáveis.</p><p>O BOLO funciona como uma camada de orquestração de IA para a produção de livros. Em vez de gerar texto isolado, controla a estrutura, o fluxo de conteúdo, a terminologia e a qualidade do output ao longo de todo o processo de publicação.</p><p>Além disso, o BOLO pode sugerir automaticamente ilustrações com base no seu conteúdo. Escolhe quantas imagens quer, e o BOLO trata do resto — gerando-as e colocando-as corretamente no livro com legendas, sem necessidade de prompting manual.</p><p>O BOLO é concebido como um sistema, e não como uma ferramenta baseada em prompts — permitindo uma produção consistente, escalável e pronta para publicação, em vez de geração de texto isolado.</p></div>
+</section>
+
+<section aria-label="BOLO key benefits and cost examples" class="quick-value quick-value-portuguese">
+  <div class="quick-value-grid">
+    <div>
+      <h2>Output estruturado, não respostas soltas de chat de IA</h2>
+      <ul>
+        <li>O Book Brief torna-se a fonte do projeto: assunto, público-alvo, nível, tom e restrições acompanham toda a produção.</li>
+        <li>O BOLO constrói o material em torno de capítulos, títulos e fluxo de conteúdo, em vez de respostas de chat separadas.</li>
+        <li>Cada capítulo recebe uma função clara no todo, com âmbito, repetição e continuidade verificados durante a geração.</li>
+        <li>Terminologia, factos, tom, extensão do texto e nível de informação mantêm-se equilibrados em todo o material.</li>
+        <li>Texto, ilustrações, legendas e exportação DOCX/PDF/EPUB são tratados num único fluxo de trabalho, com DOCX editável antes do PDF final.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Exemplos claros de custos</h2>
+      <div class="quick-costs">
+        <div class="quick-cost">
+          <strong>cerca de $0,60</strong>
+          <span>material escolar, cerca de 5 páginas A4</span>
+        </div>
+        <div class="quick-cost">
+          <strong>cerca de $1,60</strong>
+          <span>material escolar ilustrado</span>
+        </div>
+        <div class="quick-cost">
+          <strong>cerca de $2</strong>
+          <span>livro de não ficção de 300 páginas, formato standard 6×9 in / 15×23 cm</span>
+        </div>
+      </div>
+      <div class="quick-license-row">
+        <div class="quick-license">Licenças individuais a partir de $3,58/mês com uma licença de 36 meses.</div>
+        <div class="quick-license">Licenças de equipa a partir de $2,66/utilizador/mês para 10 utilizadores com uma licença de 36 meses.</div>
+      </div>
+      <p class="quick-note">A geração com IA utiliza a sua própria chave API OpenAI. Os exemplos de preço são baseados no GPT-5.4. Os custos variam consoante o modelo, a extensão, o tipo de imagem e as regenerações.</p>
+    </div>
+  </div>
 </section>
 <section aria-label="BOLO workflow" class="pipeline">
 <div class="pipe-step">
@@ -4210,8 +4222,8 @@ SE
 <h3>
         6 meses
       </h3>
-<div class="price discounted">$39 <small>/ licença</small><span class="price-old">$49</span></div>
-<div class="price-month">≈ 6,50 $ / mês</div>
+<div class="price discounted">6,50 $ <small>/ mês</small></div>
+<div class="price-total">$39 cobrados uma vez por 6 meses <span class="price-old">$49</span></div>
 <p class="muted">
         Uma opção simples para novos utilizadores e projetos de publicação mais curtos.
       </p>
@@ -4229,8 +4241,8 @@ SE
 <h3>
       12 meses
     </h3>
-<div class="price discounted">$59 <small>/ licença</small><span class="price-old">$69</span></div>
-<div class="price-month">≈ 4,92 $ / mês</div>
+<div class="price discounted">4,92 $ <small>/ mês</small></div>
+<div class="price-total">$59 cobrados uma vez por 12 meses <span class="price-old">$69</span></div>
 <p class="muted">
       A principal opção para trabalho contínuo de não ficção e projetos de livros repetidos.
     </p>
@@ -4248,8 +4260,8 @@ SE
 <h3>
     36 meses
   </h3>
-<div class="price discounted">$129 <small>/ licença</small><span class="price-old">$149</span></div>
-<div class="price-month">≈ 3,58 $ / mês</div>
+<div class="price discounted">3,58 $ <small>/ mês</small></div>
+<div class="price-total">$129 cobrados uma vez por 36 meses <span class="price-old">$149</span></div>
 <p class="muted">
     Melhor para uso a longo prazo, vários livros e menor custo anual efetivo.
   </p>
@@ -4272,15 +4284,8 @@ SE
 <h3>
       3 utilizadores · 36 meses
     </h3>
-<div class="price discounted">
-      $358
-      <small>
-        / 36 meses
-      </small><span class="price-old">$537</span>
-</div>
-<div class="price-month">
-      ≈ 3,31 $ / utilizador / mês
-    </div>
+<div class="price discounted">3,31 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$358 cobrados uma vez por 3 utilizadores · 36 meses <span class="price-old">$537</span></div>
 <p class="muted">
       Pague uma vez e mantenha o BOLO disponível durante três anos para uma equipa pequena.
     </p>
@@ -4298,15 +4303,8 @@ SE
 <h3>
     5 utilizadores · 36 meses
   </h3>
-<div class="price discounted">
-    $558
-    <small>
-      / 36 meses
-    </small><span class="price-old">$837</span>
-</div>
-<div class="price-month">
-    ≈ 3,10 $ / utilizador / mês
-  </div>
+<div class="price discounted">3,10 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$558 cobrados uma vez por 5 utilizadores · 36 meses <span class="price-old">$837</span></div>
 <p class="muted">
     Melhor para equipas que planeiam livros, manuais ou material educativo recorrentes.
   </p>
@@ -4324,17 +4322,10 @@ SE
 <h3>
     10 utilizadores · 36 meses
   </h3>
-<div class="price discounted">
-    $958
-    <small>
-      / 36 meses
-    </small><span class="price-old">$1,437</span>
-</div>
-<div class="price-month">
-    ≈ 2,66 $ / utilizador / mês
-  </div>
+<div class="price discounted">2,66 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$958 cobrados uma vez por 10 utilizadores · 36 meses <span class="price-old">$1,437</span></div>
 <p class="muted">
-    O menor custo por utilizador a longo prazo para departamentos e publicação estruturada em escala.
+    O menor custo por utilizador a longo prazo para departamentos e publicação estruturada à escala.
   </p>
 <div class="price-subnote">
     A geração com IA é paga separadamente através da sua própria chave API da OpenAI.
@@ -4355,15 +4346,8 @@ SE
 <h3>
       3 utilizadores
     </h3>
-<div class="price">
-      $179
-      <small>
-        / 12 meses
-      </small>
-</div>
-<div class="price-month">
-      ≈ 4,97 $ / utilizador / mês
-    </div>
+<div class="price">4,97 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$179 cobrados uma vez por 3 utilizadores · 12 meses</div>
 <p class="muted">
       Adequado para pequenas equipas editoriais, criadores de cursos ou fluxos de publicação compactos.
     </p>
@@ -4381,15 +4365,8 @@ SE
 <h3>
     5 utilizadores
   </h3>
-<div class="price">
-    $279
-    <small>
-      / 12 meses
-    </small>
-</div>
-<div class="price-month">
-    ≈ 4,65 $ / utilizador / mês
-  </div>
+<div class="price">4,65 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$279 cobrados uma vez por 5 utilizadores · 12 meses</div>
 <p class="muted">
     Um plano equilibrado para organizações que produzem livros, manuais ou material educativo.
   </p>
@@ -4407,17 +4384,10 @@ SE
 <h3>
     10 utilizadores
   </h3>
-<div class="price">
-    $479
-    <small>
-      / 12 meses
-    </small>
-</div>
-<div class="price-month">
-    ≈ 3,99 $ / utilizador / mês
-  </div>
+<div class="price">3,99 $ <small>/ utilizador / mês</small></div>
+<div class="price-total">$479 cobrados uma vez por 10 utilizadores · 12 meses</div>
 <p class="muted">
-    Melhor para departamentos maiores ou organizações que trabalham com publicação estruturada em escala.
+    Melhor para departamentos maiores ou organizações que trabalham com publicação estruturada à escala.
   </p>
 <div class="price-subnote">
       A geração com IA é paga separadamente através da sua própria chave API da OpenAI.
