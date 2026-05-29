@@ -681,6 +681,26 @@
       font-size:0.92rem;
     }
 
+    .demo-secondary-link{
+      display:inline-block;
+      margin-top:8px;
+      color:#2d6cdf;
+      font-size:0.98rem;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    .demo-secondary-link:hover{
+      text-decoration:underline;
+    }
+
+    .demo-secondary-note{
+      display:block;
+      margin-top:2px;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+
     .demo-youtube-label{
       display:block;
       margin-top:8px;
@@ -1142,13 +1162,15 @@
 <div class="pipe-step">BOLO creates full cover<small>with your front and back images</small></div>
 </section>
 <section aria-label="BOLO demo video" class="demo-overlay-wrap">
-<a aria-label="Open BOLO demo video" class="demo-overlay" data-video-open="true" href="#demo-video">
+<a aria-label="Open BOLO demonstration video" class="demo-overlay" data-video-modal-target="demo-video-modal" href="#demo-video">
 <div class="demo-thumb">
 <div aria-hidden="true" class="demo-play"></div>
 </div>
 </a>
 <div class="demo-caption">
-<strong>BOLO presentation video · 10:57 min</strong>
+<strong>BOLO demonstration video · 10:57 min</strong>
+<a aria-label="Open BOLO install and setup video" class="demo-secondary-link" data-video-modal-target="setup-video-modal" href="#setup-video">BOLO install and setup video · 08:15 min</a>
+<span class="demo-secondary-note">Installation, OpenAI API key setup and first project setup.</span>
 </div>
 </section>
 <section class="grid">
@@ -1423,51 +1445,72 @@
 </div>
 
 <div aria-hidden="true" class="video-modal" id="demo-video-modal">
-<div aria-label="BOLO demo video" aria-modal="true" class="video-modal-dialog" role="dialog">
+<div aria-label="BOLO demonstration video" aria-modal="true" class="video-modal-dialog" role="dialog">
 <button aria-label="Close video" class="video-modal-close" type="button">×</button>
 <video controls="" playsinline="" poster="/BOLO-thumbnail.png" preload="metadata">
 <source src="https://files.bolowriter.com/testboloapp/BOLO-Demo.mp4" type="video/mp4"/>
 </video>
 </div>
 </div>
+<div aria-hidden="true" class="video-modal" id="setup-video-modal">
+<div aria-label="BOLO install and setup video" aria-modal="true" class="video-modal-dialog" role="dialog">
+<button aria-label="Close video" class="video-modal-close" type="button">×</button>
+<video controls="" playsinline="" preload="metadata">
+<source src="https://files.bolowriter.com/testboloapp/BOLO-Install-Setup.mp4" type="video/mp4"/>
+</video>
+</div>
+</div>
 <script>
     (function(){
-      const trigger = document.querySelector('[data-video-open="true"]');
-      const modal = document.getElementById('demo-video-modal');
-      if(!trigger || !modal) return;
+      const triggers = document.querySelectorAll('[data-video-modal-target]');
+      if(!triggers.length) return;
 
-      const closeBtn = modal.querySelector('.video-modal-close');
-      const video = modal.querySelector('video');
-
-      function openModal(event){
-        event.preventDefault();
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeModal(){
+      function closeModal(modal){
         modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        const video = modal.querySelector('video');
         if(video){
           video.pause();
         }
       }
 
-      trigger.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
+      function openModal(modal){
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
 
-      modal.addEventListener('click', function(event){
-        if(event.target === modal){
-          closeModal();
+      triggers.forEach(function(trigger){
+        const targetId = trigger.getAttribute('data-video-modal-target');
+        const modal = document.getElementById(targetId);
+        if(!modal) return;
+
+        const closeBtn = modal.querySelector('.video-modal-close');
+
+        trigger.addEventListener('click', function(event){
+          event.preventDefault();
+          openModal(modal);
+        });
+
+        if(closeBtn){
+          closeBtn.addEventListener('click', function(){
+            closeModal(modal);
+          });
         }
+
+        modal.addEventListener('click', function(event){
+          if(event.target === modal){
+            closeModal(modal);
+          }
+        });
       });
 
       document.addEventListener('keydown', function(event){
-        if(event.key === 'Escape' && modal.classList.contains('is-open')){
-          closeModal();
-        }
+        if(event.key !== 'Escape') return;
+        document.querySelectorAll('.video-modal.is-open').forEach(function(modal){
+          closeModal(modal);
+        });
       });
     })();
   </script>
