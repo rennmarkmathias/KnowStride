@@ -304,11 +304,11 @@
 </div>
 <div class="card">
 <strong>Quick overview</strong>
-    BOLO combines the full workflow for AI-assisted book production: brief creation, structure generation, manuscript drafting, illustration, cover production and export.
-  </div>
+BOLO combines the full workflow for AI-assisted book production: brief creation, outline generation, manuscript drafting, illustration, cover production and final export. For a quick visual walkthrough, see the demonstration and installation/setup videos on the <a href="https://bolowriter.com/" rel="noopener" target="_blank">BOLO website</a>.
+</div>
 <div class="lang-jump">
 <strong><a href="#english">English</a></strong> |
-    <strong>Other Languages:</strong>
+<strong>Other Languages:</strong>
 <a href="#danish">Dansk</a>
 <a href="#german">Deutsch</a>
 <a href="#spanish">Español</a>
@@ -320,39 +320,42 @@
 <a href="#swedish">Svenska</a>
 </div>
 <div class="lang-note">Function names are kept in English so the guide matches the software interface in every language.</div>
+
 <div class="section">
 <h2><span class="bullet">■</span>System Requirements</h2>
-<p><strong>Tip:</strong> If you are new, start with a small test project (1–3 chapters) to understand the workflow.</p><p><strong>OpenAI API key:</strong> Go to <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">https://platform.openai.com/api-keys</a>, sign in if needed (you can use Google, Apple, Microsoft or email), click <strong>Create new secret key</strong> and save it (you will only see it once), open <strong>Billing</strong> in the left menu and add a small amount (for example $5 to start), then paste the key into BOLO and start generating.</p>
+<p><strong>Tip:</strong> If you are new, start with a few small test runs to understand the workflow.</p>
+<p><strong>OpenAI API key:</strong> Go to <a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank">https://platform.openai.com/api-keys</a>, sign in if needed (you can use Google, Apple, Microsoft, or register an account with your e-mail), click <strong>Create new secret key</strong> and save it. You will only see the key once. Then open <strong>Billing</strong>, add a small amount to your account, paste the key into BOLO and start generating.</p>
 <p>BOLO is a Windows desktop application and requires Windows 10 or Windows 11.</p>
-<p>You also need <a href="https://www.microsoft.com/en-us/microsoft-365/word" rel="noopener" target="_blank">Microsoft Word</a> or <a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> (free) installed, plus your own OpenAI API key.</p>
-<p>DOCX manuscripts are usually opened in <a href="https://www.microsoft.com/en-us/microsoft-365/word" rel="noopener" target="_blank">Word</a> or <a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> for review and editing after generation.</p>
-<p><a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> can be downloaded free of charge from the official website.</p>
+<p>You also need <a href="https://www.microsoft.com/en-us/microsoft-365/word" rel="noopener" target="_blank">Microsoft Word</a> or <a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> installed, plus your own OpenAI API key.</p>
+<p><a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> is the recommended free solution when BOLO needs to convert or rebuild documents in the background.</p>
+<p>If you prefer <a href="https://www.openoffice.org/download/" rel="noopener" target="_blank">Apache OpenOffice</a> for manual editing, you can use it as your editor: open the DOCX manuscript, make your changes, save again as DOCX, and then run <strong>Re-Export</strong> in BOLO so the document is rebuilt as a clean DOCX structure.</p>
 </div>
+
 <div class="section">
 <h2><span class="bullet">■</span>1. Introduction</h2>
-<p>BOLO is designed for AI-assisted creation of books, especially nonfiction, guidebooks and research-based projects.</p>
-<p>An experimental <strong>Fiction Mode</strong> also exists, but the system is primarily optimized for nonfiction workflows.</p>
+<p>BOLO is designed for AI-assisted creation of books, guidebooks, research-based projects, teaching material, illustrated manuscripts, covers and launch material.</p>
+<p>A <strong>Fiction Mode</strong> is also available. It can write a first-draft manuscript for narrative projects, which can then be reviewed and, if necessary, edited.</p>
 <p>BOLO is usually used after the concept and research phase is complete. The most important preparation step is a clear and detailed <strong>Book Brief</strong>.</p>
-<p>The software is then used to generate the outline, draft the manuscript, illustrate, export files and produce the cover.</p>
 <p>The program should normally be used in fullscreen mode. If the window is too small, some controls and buttons may not be visible. You can also zoom the interface with <strong>Ctrl +</strong> and <strong>Ctrl -</strong> if needed.</p>
 </div>
+
 <div class="section">
-<h2><span class="bullet">■</span>2. Recommended Workflow for Creating a Book</h2>
-<p>The most effective workflow usually starts with a detailed <strong>Book Brief</strong>. A longer and more specific brief generally gives better results.<br/><strong>Note:</strong> The Base Prompt is only used to create your Book Brief. Do not paste it directly into BOLO.</p>
-<p>A common workflow is:</p>
-<p>1. Click <strong>Copy Base Prompt</strong> in BOLO.<br/>
-    2. Paste the prompt into an AI service such as ChatGPT.<br/>
-    3. Develop the book idea into a clear and detailed Book Brief.<br/>
-    4. Refine the brief through a few iterations until the structure feels right.<br/>
-    5. Paste the finished brief into BOLO.<br/>
-    6. Choose how to create your outline:<br/>
-    - <strong>AutoBook</strong>: generate a full outline from your Book Brief<br/>
-    - <strong>AI Sections</strong>: use your own chapter titles and let BOLO create subheadings<br/>
-    - <strong>Manual Outline</strong>: use your own complete outline (chapters and subheadings)<br/>
-    7. Run <strong>Test Mode</strong> before generating the full manuscript.<br/>
-<span><strong>Tip:</strong> In Test Mode, compare the estimated page count with your target (for example 120 vs 200 pages). If the estimate is significantly lower, adjust your Book Brief by expanding the content or splitting topics into more chapters. This is most relevant for narrower subjects.</span><br/>
-    8. Review and edit the DOCX manuscript if needed.<br/>
-    9. Use <strong>Re-Export</strong> when you need a repaired or refreshed export after external editing.</p>
+<h2><span class="bullet">■</span>2. Recommended Workflow</h2>
+<p>The best results usually start with a detailed <strong>Book Brief</strong>. A longer and more specific brief gives BOLO clearer instructions about scope, audience, tone and must-cover content.</p>
+<div class="quick"><ol>
+<li>Click <strong>Copy Base Prompt</strong> in BOLO.</li>
+<li>Paste the prompt into ChatGPT or another AI tool.</li>
+<li>Develop your idea into a clear Book Brief.</li>
+<li>Paste the finished brief into BOLO.</li>
+<li>Choose <strong>AutoBook</strong>, <strong>AI Sections</strong> or <strong>Manual Outline</strong>.</li>
+<li>Run <strong>Test Mode</strong> before generating a full manuscript.</li>
+<li>Generate the manuscript.</li>
+<li>Edit the DOCX manuscript if needed.</li>
+<li>Add illustrations if wanted.</li>
+<li>Go back to <strong>Generate Main</strong> and run <strong>Re-Export</strong> to create the final DOCX, EPUB and PRINT PDF files.</li>
+</ol></div>
+<p><strong>Note:</strong> The Base Prompt is only used to create your Book Brief. Do not paste the Base Prompt directly into BOLO as the final brief.</p>
+<p><strong>Test run advice:</strong> For a project you plan to publish, start with one to three chapters. Read at least one chapter yourself, and consider asking an AI chat to compare the test text with your Book Brief. This makes it easier to see whether the brief, outline, tone, length or settings should be adjusted before generating the full book.</p>
 <div class="note">
 <strong>Manual Outline</strong> format example:<br/><br/>
 Chapter Title<br/>
@@ -361,24 +364,24 @@ Chapter Title<br/>
 - Subheading<br/><br/>
 Next Chapter Title<br/>
 - Subheading<br/>
-- Subheading<br/>
+- Subheading
 </div>
-<p>For narrow subjects, be explicit about what each chapter should contain. For very broad subjects, keep expectations realistic in relation to the selected page count. You cannot expect a full world history in 50 pages, and you should not expect a 500-page book about a small town of 10,000 inhabitants.</p>
+<p>For narrow subjects, be explicit about what each chapter should contain. For very broad subjects, keep expectations realistic in relation to the selected page count.</p>
 </div>
+
 <div class="section">
 <h2><span class="bullet">■</span>3. Cost</h2>
-<p>A rough guideline is that a page of approximately 300 words costs around $0.01 to generate.</p>
-<p>Typical costs are around $1–4 for nonfiction books. Fiction books can cost 3–10x more depending on complexity and narrative depth.</p>
-<p>It is recommended to use <strong>Test Mode</strong> before generating a full manuscript.</p>
-<p><strong>Example (Full Book Cost):</strong> A 300-page book in standard 6×9 inch format typically costs around $3 to generate.</p>
-<p>Image generation costs approximately $0.20 per image. If you want 20 images and regenerate 10 of them, you generate 30 images in total, which costs about $6.</p>
-<p><strong>Total example cost:</strong> $3 (text) + $6 (images) = approximately $9 for a fully illustrated book.</p>
+<p>Text generation is usually low cost. A rough guideline is that one page of approximately 300 words costs about one cent to generate, depending on model choice and current API pricing.</p>
+<p>Typical nonfiction projects often cost only a few dollars to draft. Fiction projects can cost more because they require deeper continuity, longer scenes and more revision.</p>
+<p>Image generation is priced separately. If you plan an illustrated book, count both text generation and image generation.</p>
+<p>Use <strong>Test Mode</strong> before a full run. BOLO also includes a <strong>Price comparison</strong> tool in the <strong>Key / License</strong> tab, and the website contains a price comparison reference for planning.</p>
 </div>
+
 <div class="section">
 <h2><span class="bullet">■</span>4. Illustrate</h2>
-<p>You can add illustrations after generating your manuscript. All illustration formats follow the same logic as image markers. Regular images are the most stable option. If you want <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> or <strong>TABLE</strong>, enter the amount manually.</p>
-<div class="note"><strong>Basic workflow:</strong> Set the number of suggestions, generate more suggestions than needed, keep the best ones, then click <strong>Update marker DOCX</strong>. The illustrated DOCX becomes your new working source.</div>
-<h3>The Fastest Way (Recommended)</h3>
+<p>You can add illustrations after generating your manuscript. Regular images are the most stable option. If you want <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> or <strong>TABLE</strong>, enter the amount manually.</p>
+<div class="note"><strong>Basic workflow:</strong> Generate more suggestions than needed, keep the best ones, click <strong>Update marker DOCX</strong>, then click <strong>Generate Images</strong>. The updated DOCX becomes your new working source.</div>
+<h3>The Fastest Way</h3>
 <ol>
 <li>Go to the <strong>Illustrate</strong> tab.</li>
 <li>Upload your manuscript.</li>
@@ -389,120 +392,70 @@ Next Chapter Title<br/>
 <li>Click <strong>Update marker DOCX</strong>.</li>
 <li>Click <strong>Generate Images</strong>.</li>
 </ol>
-<p>You can either let BOLO decide the image size automatically (<strong>BOLO decides (mixed)</strong>) or choose a fixed size for all images.</p>
-<p>Available fixed sizes:</p>
-<ul>
-<li>Thumbnail</li>
-<li>Small</li>
-<li>Medium (~45% width)</li>
-<li>Large</li>
-</ul>
-<p>If you choose a fixed size, all images use that size. If you let BOLO decide, sizes are adapted automatically based on context, and you can still change the suggested size in the list later.</p>
-<div class="callout"><strong>Best practice:</strong> Generate more suggestions than needed. Example: if you want 10 illustrations, generate 20–30 suggestions first.</div>
-<p><strong>Default behaviour:</strong> if all specialty types are set to 0, BOLO uses regular image suggestions. <strong>Diagram / Timeline</strong> are usually reliable. <strong>Map / Table</strong> are experimental.</p>
-<p>This removes all unused markers and keeps only the selected ones in your manuscript.</p>
-<div class="callout"><strong>Important:</strong> If you skip <strong>Update marker DOCX</strong>, all suggested markers remain in the document, including the ones you did not select, and must be removed manually.</div>
+<p>Available fixed sizes are <strong>Extra small (handout)</strong>, <strong>Small</strong>, <strong>Medium</strong> and <strong>Large</strong>. You can also let BOLO decide a mixed layout automatically.</p>
+<div class="callout"><strong>Best practice:</strong> If you want 10 illustrations, generate 20–30 suggestions first and keep the strongest placements.</div>
 <h3>Manual Markers</h3>
 <p>You can write markers directly in your manuscript using normal parentheses. Use only <strong>IMAGE</strong>, <strong>DIAGRAM</strong>, <strong>TIMELINE</strong>, <strong>MAP</strong> and <strong>TABLE</strong>.</p>
-<p>Examples:</p>
 <div class="note"><code>(IMAGE: A glacier moving through a mountain valley)</code><br/><br/>
 <code>(IMAGE: M; A glacier moving through a mountain valley)</code><br/><br/>
 <code>(DIAGRAM: Plate boundaries showing divergence, subduction, and transform motion)</code><br/><br/>
 <code>(TIMELINE: Development of river deltas over time)</code><br/><br/>
 <code>(MAP: Mountain ranges and river systems in Central Europe)</code><br/><br/>
 <code>(TABLE: Climate patterns across regions)</code></div>
-<p><strong>Rule:</strong> format = <code>(TYPE: description)</code> or <code>(TYPE: M; description)</code>. Size is optional: <strong>S / M / L</strong>. If size is omitted, BOLO treats it as medium.</p>
-<ol>
-<li>Upload the manuscript in the <strong>Illustrate</strong> tab.</li>
-<li>Click <strong>Scan Image Markers</strong>.</li>
-<li>Generate images.</li>
-</ol>
+<p><strong>Rule:</strong> format = <code>(TYPE: description)</code> or <code>(TYPE: M; description)</code>. Size is optional: <strong>XS / S / M / L</strong>. If size is omitted, BOLO treats it as medium.</p>
 <h3>Own Images</h3>
-<p>The own-image section is at the <strong>bottom of the Illustrate window</strong>. You can upload your own images, add captions, and place matching markers in the manuscript.</p>
-<p>Marker examples:</p>
-<div class="note"><code>(PICTURE 1)</code><br/><code>(PICTURE 2)</code></div>
-<p>These markers must match the number exactly, including parentheses.</p>
-<ol>
-<li>Scroll to the bottom of the <strong>Illustrate</strong> tab.</li>
-<li>Upload your own image.</li>
-<li>Add a caption if needed.</li>
-<li>Place the matching marker in the manuscript.</li>
-<li>Click <strong>Scan Image Markers</strong>.</li>
-<li>Generate images.</li>
-</ol>
-<h3>Important Notes</h3>
-<ul>
-<li>What you see in the suggestion list is formatted to match the manual marker logic.</li>
-<li><strong>[scanned]</strong> may appear in the list as status information.</li>
-<li>After any changes in the suggestion list, click <strong>Update marker DOCX</strong>.</li>
-<li>You can always move, delete, edit or regenerate illustrations later.</li>
-<li>Large images require enough image resolution.</li>
-</ul>
-<div class="callout"><strong>Important workflow note:</strong> Illustrations affect the layout and total page count of your book. For this reason, illustration should be completed before creating the cover, so the final page count and spine width are calculated correctly.</div>
-<h3>Final Step</h3>
-<p>Once your images are generated, export your document and review the result.</p>
-<h3>Note on Table of Contents</h3>
-<p>Adding images and editing text can affect page layout. Because BOLO allows multiple ways of modifying content, both through editing and image generation, automatically updating the table of contents continuously can become unstable.</p>
-<p>For this reason, BOLO uses a static table of contents without page numbers. We recommend adding page numbers manually at the final stage. This only takes a few minutes and ensures full control and accuracy.</p>
+<p>The own-image section is at the <strong>bottom of the Illustrate window</strong>. You can upload your own images, add captions, and place matching markers such as <code>(PICTURE 1)</code> and <code>(PICTURE 2)</code> in the manuscript.</p>
+<div class="callout"><strong>Important workflow note:</strong> Illustrations affect layout and total page count. Complete illustrations before creating the cover so the final page count and spine width are calculated correctly.</div>
 </div>
+
 <div class="section">
-<h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator - Recommended Workflow</h2>
-<p><strong>Cover Generator</strong> creates a complete cover layout. Upload the DOCX manuscript, a front cover image and a back cover image.</p>
-<p>The program calculates the spine automatically based on the manuscript length. You can then adjust <strong>Spine Position</strong>, title color, subtitle color, author color and spine color.</p>
-<p>It is recommended to make a few test exports before final production.<br/><br/>The program automatically generates cover text. You can use it as is or shorten it manually or with AI tools like ChatGPT.<br/>You can also generate front and back cover images using AI tools. A resolution of 300 DPI is recommended for print.<br/><br/>If the cover is converted to PDF, do not open it immediately. Wait about 20 seconds for the file to be fully processed.</p>
+<h2><span class="bullet">■</span>5. <strong>Cover</strong> Generator</h2>
+<p><strong>Cover Generator</strong> creates a complete wraparound cover layout. Upload the DOCX manuscript, a front cover image, a back cover image and, if wanted, a spine image.</p>
+<p>BOLO calculates the spine width from the manuscript length. You can adjust <strong>Spine Position</strong>, title color, subtitle color, author color and spine color.</p>
+<p>When creating cover images in ChatGPT or another AI tool, ask for <strong>300 DPI</strong> and specify the <strong>trim size</strong>. For a spine image, also specify the <strong>page count</strong>, since spine width depends on the final manuscript length.</p>
+<p>BOLO can adapt a reasonably sized spine image to the cover spine. If you upload strong front, back and spine images, the cover result is usually straightforward. Test exports are mainly useful when you write the spine manually with text, adjust manual positioning or want to check small visual details before final production.</p>
+<p>The program can also generate cover text. You can use it as is or shorten it manually or with an AI tool.</p>
+<p>If the cover is converted to PDF, do not open it immediately. Wait about 20 seconds for the file to be fully processed.</p>
 </div>
+
 <div class="section">
-<h2><span class="bullet">■</span>6. Functions and Settings Explained</h2>
+<h2><span class="bullet">■</span>6. Functions and Settings</h2>
 <p><strong>Book Information</strong> contains metadata such as title, subtitle and author.</p>
 <p><strong>Book Brief</strong> is the main instruction used by the AI and is the most important input in the workflow.</p>
-<p><strong>Copy Base Prompt</strong> copies a prompt template that can be used in ChatGPT or another AI tool to build a strong brief.</p>
-<p><strong>Save Setup</strong> stores your current settings so you can continue later without rebuilding the project.</p>
-<p><strong>AutoBook</strong> generates a complete outline automatically.</p>
+<p><strong>AutoBook</strong> generates a complete outline automatically from your Book Brief.</p>
 <p><strong>AI Sections</strong> creates subheadings when you already have chapter titles.</p>
-<p><strong>Manual Outline</strong> gives you full manual control of the structure.</p>
-<p><strong>Book Size &amp; Length</strong> defines the number of volumes and pages per volume.</p>
-<p><strong>Writing Style &amp; AI Control</strong> influences tone, style and how closely the AI follows the instructions.</p>
-<p><strong>Units</strong> switches between metric and imperial systems.</p>
+<p><strong>Manual Outline</strong> gives you full manual control of chapters and subheadings.</p>
+<p><strong>Book Size &amp; Length</strong> defines trim size, volumes and target length.</p>
+<p><strong>TOC contents</strong> controls the table of contents: choose <strong>Chapters only</strong> or <strong>Chapters + subheadings</strong>. The same choice is used during the first export and during Re-Export. The first export shows the selected table of contents structure, but page numbers are finalized through <strong>Re-Export</strong>. In the <strong>A4 School Handout</strong> format, the table of contents is placed on its own page between the cover page and the body text. For educational handouts, this page can also be used for brief teacher instructions or comments.</p>
+<p><strong>Writing Style &amp; AI Control</strong> influences tone, style and how closely the AI follows instructions.</p>
+<p><strong>Units</strong> switches between metric, imperial and mixed unit handling.</p>
 <p><strong>Anchor Data Density</strong> controls how many concrete facts, figures and data points appear in the text.</p>
-<p><strong>Test Mode</strong> generates a limited number of chapters for evaluation before a full run.</p>
-<p><strong>Fiction Mode:</strong> When enabled, only <strong>Book Size &amp; Length</strong> is relevant in Publishing Setup. Writing Style, AI Control and Smart Enhancement have limited effect in this mode.</p>
+<p><strong>Test Mode</strong> generates a limited test run before full production.</p>
+<p><strong>Save Setup</strong> stores your current settings so you can continue later.</p>
 </div>
+
 <div class="section">
 <h2><span class="bullet">■</span>7. Export and Re-Export</h2>
-<p>After a full generation, BOLO can produce <strong>DOCX</strong>, <strong>EPUB</strong> and, when needed, <strong>PRINT PDF</strong>.</p>
-<p>DOCX is the main working format. EPUB is intended for e-book publishing. PRINT PDF is mainly used for specific print workflows or local printing, while DOCX is commonly used for platforms such as Amazon KDP. It is therefore not always needed in the first step.</p>
-<p>If you edit the manuscript in <a href="https://www.microsoft.com/en-us/microsoft-365/word" rel="noopener" target="_blank">Microsoft Word</a>, <a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> or another editor, the document structure may change. Save the file again as <strong>.docx</strong> and run <strong>Re-Export</strong> in BOLO to rebuild the internal structure and improve compatibility with publishing platforms such as Amazon KDP.</p>
-<p><strong>Note (<a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> / OpenOffice):</strong> If you do not use <a href="https://www.microsoft.com/en-us/microsoft-365/word" rel="noopener" target="_blank">Microsoft Word</a>, you can still edit the manuscript. Open the DOCX file in <a href="https://www.libreoffice.org/download/" rel="noopener" target="_blank">LibreOffice</a> or a similar tool, make your changes, then save the file and ensure it is saved as .docx. After that, use <strong>Re-Export</strong> in BOLO to repair and rebuild the document structure.</p>
+<p>After generation, BOLO can produce <strong>DOCX</strong>, <strong>EPUB</strong> and <strong>PRINT PDF</strong>.</p>
+<p><strong>DOCX</strong> is the main working format for review and editing. <strong>EPUB</strong> is for e-book publishing. <strong>PRINT PDF</strong> is the final production format normally used for print.</p>
+<p>If you edit the manuscript in Word, LibreOffice, OpenOffice or another editor, save the file again as <strong>.docx</strong>. Then go back to <strong>Generate Main</strong> and run <strong>Re-Export</strong>. BOLO rebuilds the document structure and creates fresh DOCX, EPUB and PRINT PDF export files.</p>
+<p><strong>Table of contents note:</strong> To get a numbered table of contents, run <strong>Re-Export</strong>. Normally you do this after all manuscript edits and any illustrations are finished. If you do not plan to change anything after generation, simply run <strong>Re-Export</strong> once to create the final numbered table of contents.</p>
 <h3>Practical Use and Testing</h3>
-<p>The best way to learn BOLO is through testing and experimentation.</p>
-<p>We recommend running small test generations before full production, testing illustrations and image sizes, and trying different cover layouts.</p>
-<p>As long as you keep your original generated manuscript file, you cannot break or damage your project. This allows you to test different approaches, regenerate content and images, and create multiple versions.</p>
+<p>The best way to learn BOLO is through a few small test runs. Generate one to three chapters, read at least one chapter yourself, and let an AI chat compare the result with your Book Brief. This is especially useful before producing a complete book for publication.</p>
+<p>As long as you keep your original generated manuscript file, you can safely create new versions and try different approaches.</p>
 <h3>System Feedback and Log</h3>
-<p>At the bottom of the program, there is always a log window that shows what the system is doing.</p>
-<p>If you click a function and nothing seems to happen, check the log. It shows current progress, confirms that processes are running, and helps you understand what the system is doing.</p>
-<h3>Cost Note</h3>
-<p>Running small tests and experimenting with images or layouts is very low cost. This makes it practical to learn the system through real usage.</p>
+<p>At the bottom of the program, the log window shows what the system is doing. If a button seems to do nothing, check the log first.</p>
 </div>
+
 <div class="section">
-<h2><span class="bullet">■</span>8. Presentation</h2>
-<p><strong>Generate Presentation</strong> is an additional tool and not the primary purpose of the software. It creates presentation material based on the <strong>Brief</strong>.</p>
-<p>Presentation includes two modes:</p>
-<p><strong>Standard</strong> - generates a presentation directly from the Brief.</p>
-<p><strong>Website Overview</strong> - allows you to generate a presentation from a website.<br/>1. Open <strong>Generate Presentation</strong><br/>2. Start Presentation Mode<br/>3. Select Website Overview<br/>4. Enter the website URL<br/>5. Click <strong>Generate</strong></p>
+<h2><span class="bullet">■</span>8. Presentation and Flyer</h2>
+<p><strong>Generate Presentation</strong> creates presentation material from the <strong>Brief</strong>. It includes <strong>Standard presentation</strong> and <strong>Website overview</strong>.</p>
+<p><strong>Generate Flyer</strong> creates a short informational sheet based on the <strong>Brief</strong>. It can be used for summaries, project descriptions or simple promotional material.</p>
 </div>
+
 <div class="section">
-<h2><span class="bullet">■</span>9. Flyer</h2>
-<p><strong>Generate Flyer</strong> creates a short informational sheet based on the <strong>Brief</strong>.</p>
-<p>The flyer can be used for quick summaries, project descriptions or simple promotional material.</p>
-</div>
-<div class="section">
-<h2><span class="bullet">■</span>10. Feedback</h2>
-<p>If you have suggestions for improvements to the software or documentation, please contact: info@bolowriter.com</p>
-</div>
-<div class="section">
-<h2><span class="bullet">■</span>11. Formats and Typical Use Cases</h2>
-<p>This section is meant as a practical reference. The program shows exact sizes in millimetres and inches, but many users understand the formats faster when they are compared with familiar things such as a pocket book, a standard nonfiction book, a workbook or a coffee table style book.</p>
-<p>BOLO includes the following book trim presets: <strong>A5, A4, B5, Royal, Crown, Pocket, 152 × 229 mm (6 × 9 in), 127 × 203 mm (5 × 8 in), 178 × 254 mm (7 × 10 in) and 216 × 279 mm (8.5 × 11 in)</strong>. The program also includes <strong>Standard presentation</strong> and <strong>Website overview</strong> in the presentation tool, and flyer generation that adapts to different flyer types.</p>
+<h2><span class="bullet">■</span>9. Formats and Typical Use Cases</h2>
+<p>This section is a practical reference. BOLO shows exact sizes in millimetres and inches, but many users understand the formats faster when they are compared with familiar use cases.</p>
 </div>
 <div class="section">
 <h2><span class="bullet">■</span>Book Formats at a Glance</h2>
@@ -510,116 +463,39 @@ Next Chapter Title<br/>
 <div class="format-card">
 <h4>Small handheld formats</h4>
 <div class="format-dims">Pocket · 110 × 178 mm · 127 × 203 mm (5 × 8 in)</div>
-<div class="book-cover shape-pocket">
-<div class="cover-spine"></div>
-<div class="cover-inner">
-<div class="cover-title">Sample Title</div>
-<div class="cover-subtitle">Subtitle</div>
-<div class="lines"><span></span><span></span><span></span></div>
-</div>
-</div>
-<ul class="format-list">
-<li><strong>Pocket</strong> feels like a small paperback you can hold in one hand.</li>
-<li><strong>5 × 8 in</strong> is still compact, but slightly larger and more comfortable for nonfiction text.</li>
-<li>Best for shorter guidebooks, travel notes, compact biographies and smaller reference books.</li>
-</ul>
+<div class="book-cover shape-pocket"><div class="cover-spine"></div><div class="cover-inner"><div class="cover-title">Sample Title</div><div class="cover-subtitle">Subtitle</div><div class="lines"><span></span><span></span><span></span></div></div></div>
+<ul class="format-list"><li><strong>Pocket</strong> feels like a small paperback you can hold in one hand.</li><li><strong>5 × 8 in</strong> is compact but comfortable for shorter nonfiction.</li><li>Best for short guidebooks, compact biographies and smaller reference books.</li></ul>
 </div>
 <div class="format-card">
 <h4>Standard book formats</h4>
 <div class="format-dims">A5 · 148 × 210 mm · 152 × 229 mm (6 × 9 in) · Royal</div>
-<div class="book-cover shape-standard">
-<div class="cover-spine"></div>
-<div class="cover-inner">
-<div class="cover-title">Sample Title</div>
-<div class="cover-subtitle">Subtitle</div>
-<div class="lines"><span></span><span></span><span></span></div>
-</div>
-</div>
-<ul class="format-list">
-<li><strong>A5</strong> feels like a common smaller nonfiction book or workbook.</li>
-<li><strong>6 × 9 in</strong> is one of the most typical standard book sizes for nonfiction.</li>
-<li><strong>Royal</strong> feels similar to a trade paperback: a normal bookshop-style format.</li>
-</ul>
+<div class="book-cover shape-standard"><div class="cover-spine"></div><div class="cover-inner"><div class="cover-title">Sample Title</div><div class="cover-subtitle">Subtitle</div><div class="lines"><span></span><span></span><span></span></div></div></div>
+<ul class="format-list"><li><strong>A5</strong> feels like a common smaller nonfiction book or workbook.</li><li><strong>6 × 9 in</strong> is one of the most typical nonfiction book sizes.</li><li><strong>Royal</strong> feels similar to a trade paperback.</li></ul>
 </div>
 <div class="format-card">
 <h4>Larger workbook and illustrated formats</h4>
 <div class="format-dims">B5 · Crown · 178 × 254 mm (7 × 10 in)</div>
-<div class="book-cover shape-large">
-<div class="cover-spine"></div>
-<div class="cover-inner">
-<div class="cover-title">Sample Title</div>
-<div class="cover-subtitle">Subtitle</div>
-<div class="lines"><span></span><span></span><span></span></div>
-</div>
-</div>
-<ul class="format-list">
-<li><strong>B5</strong> works well for educational books, illustrated books and more spacious layouts.</li>
-<li><strong>Crown</strong> feels like a larger trade-format book with more visual breathing room.</li>
-<li><strong>7 × 10 in</strong> is useful for manuals, workbooks and training material.</li>
-</ul>
+<div class="book-cover shape-large"><div class="cover-spine"></div><div class="cover-inner"><div class="cover-title">Sample Title</div><div class="cover-subtitle">Subtitle</div><div class="lines"><span></span><span></span><span></span></div></div></div>
+<ul class="format-list"><li><strong>B5</strong> works well for educational and illustrated books.</li><li><strong>Crown</strong> gives more visual breathing room.</li><li><strong>7 × 10 in</strong> is useful for manuals, workbooks and training material.</li></ul>
 </div>
 <div class="format-card">
 <h4>Document and report formats</h4>
 <div class="format-dims">A4 · 210 × 297 mm · 216 × 279 mm (8.5 × 11 in)</div>
-<div class="book-cover shape-a4">
-<div class="cover-spine"></div>
-<div class="cover-inner">
-<div class="cover-title">Sample Title</div>
-<div class="cover-subtitle">Subtitle</div>
-<div class="lines"><span></span><span></span><span></span></div>
-</div>
-</div>
-<ul class="format-list">
-<li><strong>A4</strong> feels like normal office paper and is ideal for reports, manuals and teaching material.</li>
-<li><strong>8.5 × 11 in</strong> is the US Letter equivalent, common for worksheets and US print workflows.</li>
-<li>These formats feel more like documents or binders than like a traditional bookstore book.</li>
-</ul>
+<div class="book-cover shape-a4"><div class="cover-spine"></div><div class="cover-inner"><div class="cover-title">Sample Title</div><div class="cover-subtitle">Subtitle</div><div class="lines"><span></span><span></span><span></span></div></div></div>
+<ul class="format-list"><li><strong>A4</strong> feels like normal office paper and is ideal for reports and teaching material.</li><li><strong>8.5 × 11 in</strong> is the US Letter equivalent.</li><li>These formats feel more like documents or binders than traditional bookstore books.</li></ul>
 </div>
 </div>
 </div>
-<div class="section">
-<h2><span class="bullet">■</span>Simple Format Logic</h2>
-<div class="three-col">
-<div class="simple-box">
-<h4>Think “Pocket”</h4>
-<p>Small, compact, easy to hold. Good when you want a real paperback feel.</p>
-</div>
-<div class="simple-box">
-<h4>Think “Normal book”</h4>
-<p>A5, 6 × 9 and Royal are your safest choices for standard nonfiction books.</p>
-</div>
-<div class="simple-box">
-<h4>Think “Workbook / report”</h4>
-<p>B5, 7 × 10, A4 and 8.5 × 11 are best when layout space matters more than a bookstore feel.</p>
-</div>
-</div>
-</div>
-<div class="section">
-<h2><span class="bullet">■</span>Presentation Formats</h2>
-<p>BOLO has two main presentation modes:</p>
-<ul class="format-list">
-<li><strong>Standard presentation</strong> – builds the presentation directly from your <strong>Brief</strong>.</li>
-<li><strong>Website overview</strong> – creates a presentation from a website URL in a structured format.</li>
-</ul>
-<p>In practical terms, think of this as the difference between “make slides from my topic” and “summarise this website as a presentation”.</p>
-</div>
-<div class="section">
-<h2><span class="bullet">■</span>Flyer Formats</h2>
-<p>The flyer tool creates a one-page informational flyer. In practice, that can feel like one of these familiar types:</p>
-<ul class="format-list">
-<li><strong>Company / service flyer</strong> – like a simple company information sheet.</li>
-<li><strong>Product flyer</strong> – like a product handout or one-page sales sheet.</li>
-<li><strong>Event flyer</strong> – similar to an invitation, event leaflet or simple poster-style information page.</li>
-<li><strong>Destination / place flyer</strong> – like a tourist leaflet or place overview.</li>
-<li><strong>Educational / informational flyer</strong> – like a museum handout, school sheet or public information page.</li>
-</ul>
-</div>
-<div class="note"><strong>Practical advice:</strong> If you want the result to feel like a normal book, start with <strong>A5</strong>, <strong>6 × 9 in</strong> or <strong>Royal</strong>. If you want more space for visuals, tables or workbook-style layouts, choose <strong>B5</strong>, <strong>7 × 10 in</strong>, <strong>A4</strong> or <strong>8.5 × 11 in</strong>.</div>
+<div class="note"><strong>Practical advice:</strong> For a normal book feel, start with <strong>A5</strong>, <strong>6 × 9 in</strong> or <strong>Royal</strong>. For more space for visuals, tables or workbook layouts, choose <strong>B5</strong>, <strong>7 × 10 in</strong>, <strong>A4</strong> or <strong>8.5 × 11 in</strong>.</div>
 <div class="workflow">
 <strong>BOLO AI Publishing Pipeline</strong><br/>
-    Brief -&gt; <strong>Outline</strong> -&gt; <strong>Generate</strong> -&gt; Edit -&gt; Translate -&gt; <strong>Illustrate</strong> -&gt; <strong>Cover</strong> -&gt; Export
-  </div>
-<div class="footer"><div>Cartographica Hamburg | BOLO AI Publishing Pipeline</div><div>English Layout Draft</div></div>
+Brief -&gt; <strong>Outline</strong> -&gt; <strong>Generate</strong> -&gt; Edit -&gt; <strong>Illustrate</strong> -&gt; <strong>Re-Export</strong> -&gt; <strong>Cover</strong> -&gt; PRINT PDF
+</div>
+<div class="section">
+<h2><span class="bullet">■</span>10. Feedback</h2>
+<p>If you have suggestions for improvements to the software or documentation, please contact: info@bolowriter.com</p>
+</div>
+<div class="footer"><div>Cartographica Hamburg | BOLO AI Publishing Pipeline</div><div>English User Guide</div></div>
 </section>
 <section class="page" id="danish">
 <div class="topline"></div>
