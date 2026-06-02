@@ -107,6 +107,15 @@
 
   <script>
     function formatPlan(plan) {
+      const key = String(plan || "");
+      const dynamic = key.match(/^(sv_)?team_(\d+)_(12|36)m_dynamic$/);
+      if (dynamic) {
+        const seats = dynamic[2];
+        const months = dynamic[3];
+        return dynamic[1]
+          ? `Team / Skola — ${seats} användare — ${months} månader`
+          : `Team / School — ${seats} users — ${months} months`;
+      }
       return {
         solo_6m: "Individual — 6 months",
         solo_12m: "Individual — 12 months",
@@ -205,6 +214,11 @@
                 </div>
 
                 <div class="row">
+                  <span>Activated seats</span>
+                  <strong>${l.activated_seats || 0} / ${l.seats || 1}</strong>
+                </div>
+
+                <div class="row">
                   <span>Issued</span>
                   <strong>${l.issued_at || "—"}</strong>
                 </div>
@@ -220,6 +234,7 @@
                 </div>
 
                 <div style="margin-top:12px;font-weight:700;">License key</div>
+                <p class="muted" style="margin:4px 0 8px;">Paste this key into BOLO under Key/License. BOLO activates one seat for each computer during online validation.</p>
 
                 <div class="license-key">${l.license_key}</div>
 
