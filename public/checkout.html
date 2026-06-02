@@ -117,6 +117,48 @@
       margin-bottom: 0;
     }
 
+
+
+    .seat-selector {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #eef4ff;
+      border: 1px solid rgba(37, 99, 235, 0.16);
+    }
+
+    .seat-selector label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .seat-selector input[type="range"] {
+      width: 100%;
+    }
+
+    .seat-selector input[type="number"] {
+      width: 90px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.18);
+      font: inherit;
+      font-weight: 800;
+    }
+
+    .seat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .savings-line {
+      margin-top: 8px;
+      color: #1d4ed8;
+      font-weight: 800;
+    }
+
     @media (max-width: 980px) {
       .checkout-wrap {
         grid-template-columns: 1fr;
@@ -154,6 +196,16 @@
         <div class="checkout-wrap" style="margin-top:18px;">
           <div>
             <div class="plans" id="plans"></div>
+            <div class="seat-selector" id="seatSelector" style="display:none;">
+              <label for="seatCount">Team / School users</label>
+              <div class="seat-row">
+                <input id="seatRange" type="range" min="2" max="30" step="1" value="10" />
+                <input id="seatCount" type="number" min="2" max="30" step="1" value="10" />
+                <strong id="seatHelp">10 users</strong>
+              </div>
+              <div class="savings-line" id="savingsLine"></div>
+              <p class="muted" style="margin:8px 0 0;">Choose the exact number of users. The server calculates the final Stripe price from the current BOLO discount ladder.</p>
+            </div>
           </div>
 
           <aside class="card summary-card">
@@ -220,184 +272,177 @@
 
   <script>
     const PLAN_MAP = {
-      solo_6m: {
-        name: "Individual – 6 months",
-        seats: 1,
-        period: "6 months",
-        amount: "$39"
-      },
-      solo_12m: {
-        name: "Individual – 12 months",
-        seats: 1,
-        period: "12 months",
-        amount: "$59"
-      },
-      solo_36m: {
-        name: "Individual – 36 months",
-        seats: 1,
-        period: "36 months",
-        amount: "$129"
-      },
-      team_3: {
-        name: "Team – 3 seats",
-        seats: 3,
-        period: "12 months",
-        amount: "$179"
-      },
-      team_5: {
-        name: "Team – 5 seats",
-        seats: 5,
-        period: "12 months",
-        amount: "$279"
-      },
-      team_10: {
-        name: "Organization – 10 seats",
-        seats: 10,
-        period: "12 months",
-        amount: "$479"
-      },
-      team_3_36m: {
-        name: "Team – 3 seats – 36 months",
-        seats: 3,
-        period: "36 months",
-        amount: "$358"
-      },
-      team_5_36m: {
-        name: "Team – 5 seats – 36 months",
-        seats: 5,
-        period: "36 months",
-        amount: "$558"
-      },
-      team_10_36m: {
-        name: "Organization – 10 seats – 36 months",
-        seats: 10,
-        period: "36 months",
-        amount: "$958"
-      },
-      sv_solo_6m: {
-        name: "Individuell licens – 6 månader",
-        seats: 1,
-        period: "6 månader",
-        amount: "359 kr"
-      },
-      sv_solo_12m: {
-        name: "Individuell licens – 12 månader",
-        seats: 1,
-        period: "12 månader",
-        amount: "539 kr"
-      },
-      sv_solo_36m: {
-        name: "Individuell licens – 36 månader",
-        seats: 1,
-        period: "36 månader",
-        amount: "1 179 kr"
-      },
-      sv_team_3: {
-        name: "Team – 3 användare",
-        seats: 3,
-        period: "12 månader",
-        amount: "1 639 kr"
-      },
-      sv_team_5: {
-        name: "Team – 5 användare",
-        seats: 5,
-        period: "12 månader",
-        amount: "2 549 kr"
-      },
-      sv_team_10: {
-        name: "Organisation – 10 användare",
-        seats: 10,
-        period: "12 månader",
-        amount: "4 379 kr"
-      },
-      sv_team_3_36m: {
-        name: "Team – 3 användare – 36 månader",
-        seats: 3,
-        period: "36 månader",
-        amount: "3 279 kr"
-      },
-      sv_team_5_36m: {
-        name: "Team – 5 användare – 36 månader",
-        seats: 5,
-        period: "36 månader",
-        amount: "5 099 kr"
-      },
-      sv_team_10_36m: {
-        name: "Organisation – 10 användare – 36 månader",
-        seats: 10,
-        period: "36 månader",
-        amount: "8 759 kr"
-      }
+      solo_6m: { name: "Individual – 6 months", seats: 1, period: "6 months", amount: "$39" },
+      solo_12m: { name: "Individual – 12 months", seats: 1, period: "12 months", amount: "$59" },
+      solo_36m: { name: "Individual – 36 months", seats: 1, period: "36 months", amount: "$129" },
+      team_dynamic_12m: { name: "Team / School – choose seats", seats: 10, period: "12 months", dynamic: true },
+      team_dynamic_36m: { name: "Team / School – choose seats – 36 months", seats: 10, period: "36 months", dynamic: true, best: true },
 
+      sv_solo_6m: { name: "Individuell licens – 6 månader", seats: 1, period: "6 månader", amount: "359 kr" },
+      sv_solo_12m: { name: "Individuell licens – 12 månader", seats: 1, period: "12 månader", amount: "539 kr" },
+      sv_solo_36m: { name: "Individuell licens – 36 månader", seats: 1, period: "36 månader", amount: "1 179 kr" },
+      sv_team_dynamic_12m: { name: "Team / Skola – välj antal", seats: 10, period: "12 månader", dynamic: true },
+      sv_team_dynamic_36m: { name: "Team / Skola – välj antal – 36 månader", seats: 10, period: "36 månader", dynamic: true, best: true }
     };
 
+    function clampSeats(value) {
+      const n = Math.floor(Number(value || 0));
+      if (!Number.isFinite(n)) return 10;
+      return Math.max(2, Math.min(30, n));
+    }
+
+    function discountFactor(seats) {
+      const n = clampSeats(seats);
+      if (n >= 20) return 0.68;
+      if (n >= 10) return 0.812;
+      if (n >= 5) return 0.946;
+      return 1.0;
+    }
+
+    function formatAmount(amount, isSwedish) {
+      if (isSwedish) return `${Math.round(amount).toLocaleString("sv-SE")} kr`;
+      return `$${Math.round(amount).toLocaleString("en-US")}`;
+    }
+
+    function dynamicAmount(planKey, seats) {
+      const isSwedish = String(planKey || "").startsWith("sv_");
+      const is36 = String(planKey || "").includes("36m");
+      const baseYear = isSwedish ? 539 : 59;
+      const chargedYears = is36 ? 2 : 1;
+      const n = clampSeats(seats);
+      const amount = Math.round(baseYear * n * discountFactor(n) * chargedYears);
+      const perUserMonth = amount / n / (is36 ? 36 : 12);
+      return { amount, perUserMonth, isSwedish, months: is36 ? 36 : 12 };
+    }
+
+    function displayAmount(planKey, seats) {
+      const d = dynamicAmount(planKey, seats);
+      return formatAmount(d.amount, d.isSwedish);
+    }
+
+    function getUrlParams() {
+      return new URLSearchParams(location.search);
+    }
+
     function getPlanFromUrl() {
-      const p = new URLSearchParams(location.search);
+      const p = getUrlParams();
       return p.get("plan") || "solo_12m";
+    }
+
+    function getSeatsFromUrl() {
+      const p = getUrlParams();
+      return clampSeats(p.get("seats") || 10);
+    }
+
+    function setUrl(plan, seats) {
+      const url = new URL(location.href);
+      url.searchParams.set("plan", plan);
+      if (PLAN_MAP[plan]?.dynamic) url.searchParams.set("seats", String(clampSeats(seats)));
+      else url.searchParams.delete("seats");
+      history.replaceState(null, "", url.toString());
     }
 
     function renderPlans(active) {
       const wrap = document.getElementById("plans");
-      if (!wrap) {
-        throw new Error("Missing #plans container");
-      }
+      if (!wrap) throw new Error("Missing #plans container");
 
       const isSwedish = String(active || "").startsWith("sv_");
+      const seats = getSeatsFromUrl();
 
       wrap.innerHTML = Object.entries(PLAN_MAP)
         .filter(([k]) => isSwedish ? k.startsWith("sv_") : !k.startsWith("sv_"))
-        .map(([k, p]) => `
-          <article class="plan-card ${k === active ? "active" : ""}">
-            <span class="pill">${p.seats > 1 ? (isSwedish ? "Teamlicens" : "Team license") : (isSwedish ? "Individuell licens" : "Individual license")}</span>
-            <h3>${p.name}</h3>
-            <div class="plan-price">${p.amount}</div>
-            <p class="muted plan-meta">${isSwedish ? "Användare" : "Seats"}: ${p.seats}<br>${isSwedish ? "Period" : "Period"}: ${p.period}</p>
-            <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
-              ${k === active ? (isSwedish ? "Vald" : "Selected") : (isSwedish ? "Välj denna licens" : "Select this plan")}
-            </button>
-          </article>
-        `)
+        .map(([k, p]) => {
+          const amount = p.dynamic ? displayAmount(k, seats) : p.amount;
+          const tag = p.dynamic ? (isSwedish ? "Flexibel teamlicens" : "Flexible team license") : (isSwedish ? "Individuell licens" : "Individual license");
+          return `
+            <article class="plan-card ${k === active ? "active" : ""}">
+              <span class="pill">${tag}</span>
+              <h3>${p.name}</h3>
+              <div class="plan-price">${amount}</div>
+              <p class="muted plan-meta">${isSwedish ? "Användare" : "Seats"}: ${p.dynamic ? `${seats} (2–30)` : p.seats}<br>${isSwedish ? "Period" : "Period"}: ${p.period}</p>
+              <button class="btn ${k === active ? "" : "ghost"}" data-plan="${k}" type="button">
+                ${k === active ? (isSwedish ? "Vald" : "Selected") : (isSwedish ? "Välj denna licens" : "Select this plan")}
+              </button>
+            </article>
+          `;
+        })
         .join("");
 
       wrap.querySelectorAll("[data-plan]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const plan = btn.getAttribute("data-plan");
-          const url = new URL(location.href);
-          url.searchParams.set("plan", plan);
-          location.href = url.toString();
+          setUrl(plan, getSeatsFromUrl());
+          renderPlans(plan);
+          updateSummary(plan);
+          updateSeatSelector(plan);
         });
       });
     }
 
+    function updateSeatSelector(planKey) {
+      const sel = document.getElementById("seatSelector");
+      if (!sel) return;
+      const active = PLAN_MAP[planKey];
+      const show = Boolean(active?.dynamic);
+      sel.style.display = show ? "block" : "none";
+      if (!show) return;
+
+      const seats = getSeatsFromUrl();
+      const range = document.getElementById("seatRange");
+      const count = document.getElementById("seatCount");
+      const help = document.getElementById("seatHelp");
+      const savings = document.getElementById("savingsLine");
+      range.value = String(seats);
+      count.value = String(seats);
+      help.textContent = `${seats} ${String(planKey).startsWith("sv_") ? "användare" : "users"}`;
+      const d = dynamicAmount(planKey, seats);
+      const perUser = d.isSwedish ? `${d.perUserMonth.toFixed(0)} kr` : `$${d.perUserMonth.toFixed(2)}`;
+      const pct = Math.round((1 - discountFactor(seats)) * 100);
+      savings.textContent = `${pct}% volume discount · ${perUser} / user / month`;
+
+      const onChange = () => {
+        const n = clampSeats(count.value || range.value);
+        count.value = String(n);
+        range.value = String(n);
+        setUrl(planKey, n);
+        renderPlans(planKey);
+        updateSummary(planKey);
+        updateSeatSelector(planKey);
+      };
+      range.oninput = () => { count.value = range.value; onChange(); };
+      count.onchange = onChange;
+    }
+
     function updateSummary(k) {
       const p = PLAN_MAP[k];
-      if (!p) {
-        throw new Error(`Unknown plan: ${k}`);
-      }
+      if (!p) throw new Error(`Unknown plan: ${k}`);
+      const seats = p.dynamic ? getSeatsFromUrl() : p.seats;
+      const amount = p.dynamic ? displayAmount(k, seats) : p.amount;
+      const name = p.dynamic ? p.name.replace("choose seats", `${seats} seats`).replace("välj antal", `${seats} användare`) : p.name;
 
-      document.getElementById("selectedPlan").textContent = p.name;
-      document.getElementById("selectedSeats").textContent = String(p.seats);
+      document.getElementById("selectedPlan").textContent = name;
+      document.getElementById("selectedSeats").textContent = String(seats);
       document.getElementById("selectedPeriod").textContent = p.period;
-      document.getElementById("selectedPrice").textContent = p.amount;
+      document.getElementById("selectedPrice").textContent = amount;
 
       const isSwedish = String(k || "").startsWith("sv_");
       const checkoutBtn = document.getElementById("checkoutBtn");
-      if (checkoutBtn && isSwedish) {
-        checkoutBtn.textContent = "Fortsätt till Stripe";
-      }
+      if (checkoutBtn && isSwedish) checkoutBtn.textContent = "Fortsätt till Stripe";
     }
 
     window.addEventListener("load", async () => {
       const planKey = getPlanFromUrl();
       renderPlans(planKey);
       updateSummary(planKey);
+      updateSeatSelector(planKey);
 
       try {
         await Clerk.load();
 
         const user = Clerk.user;
         if (!user) {
-          location.href = `/sign-in.html?plan=${encodeURIComponent(planKey)}`;
+          const params = new URLSearchParams(location.search);
+          location.href = `/sign-in.html?${params.toString()}`;
           return;
         }
 
@@ -411,6 +456,8 @@
         document.getElementById("checkoutBtn").addEventListener("click", async () => {
           const msg = document.getElementById("msg");
           const err = document.getElementById("err");
+          const currentPlan = getPlanFromUrl();
+          const seats = getSeatsFromUrl();
 
           msg.textContent = "Creating secure checkout session…";
           err.textContent = "";
@@ -423,25 +470,14 @@
                 "content-type": "application/json",
                 "authorization": `Bearer ${token}`
               },
-              body: JSON.stringify({ plan: planKey })
+              body: JSON.stringify({ plan: currentPlan, seats })
             });
 
             const contentType = res.headers.get("content-type") || "";
-            const data = contentType.includes("application/json")
-              ? await res.json()
-              : { error: await res.text() };
+            const data = contentType.includes("application/json") ? await res.json() : { error: await res.text() };
 
-            if (!res.ok) {
-              throw new Error(
-                data?.message ||
-                data?.error ||
-                `Could not create checkout session (${res.status}).`
-              );
-            }
-
-            if (!data?.url) {
-              throw new Error("Missing Stripe checkout URL.");
-            }
+            if (!res.ok) throw new Error(data?.message || data?.error || `Could not create checkout session (${res.status}).`);
+            if (!data?.url) throw new Error("Missing Stripe checkout URL.");
 
             location.href = data.url;
           } catch (e) {
