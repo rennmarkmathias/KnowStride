@@ -66,7 +66,8 @@ export async function onRequestGet({ request, env }) {
         expires_at,
         license_key,
         stripe_session_id,
-        stripe_invoice_url
+        stripe_invoice_url,
+        (SELECT COUNT(*) FROM license_activations a WHERE a.license_id = licenses.id AND a.revoked_at IS NULL) AS activated_seats
       FROM licenses
       WHERE clerk_user_id = ?
          OR (clerk_user_id IS NULL AND email IN (${placeholders || "NULL"}))
