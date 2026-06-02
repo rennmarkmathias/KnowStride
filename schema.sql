@@ -83,3 +83,22 @@ CREATE INDEX IF NOT EXISTS idx_licenses_email ON licenses(email);
 CREATE INDEX IF NOT EXISTS idx_licenses_expires_at ON licenses(expires_at);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_licenses_stripe_session_id ON licenses(stripe_session_id);
 CREATE UNIQUE INDEX IF NOT EXISTS ux_licenses_fingerprint ON licenses(license_fingerprint);
+
+
+-- BOLO license seat activations
+CREATE TABLE IF NOT EXISTS license_activations (
+  id TEXT PRIMARY KEY,
+  license_id TEXT NOT NULL,
+  machine_id TEXT NOT NULL,
+  activation_fingerprint TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  last_seen_at TEXT DEFAULT (datetime('now')),
+  revoked_at TEXT,
+  app_version TEXT,
+  user_agent TEXT,
+  FOREIGN KEY (license_id) REFERENCES licenses(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_license_activations_license_id ON license_activations(license_id);
+CREATE INDEX IF NOT EXISTS idx_license_activations_machine_id ON license_activations(machine_id);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_license_activations_license_machine ON license_activations(license_id, machine_id);
