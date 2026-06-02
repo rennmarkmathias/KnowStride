@@ -98,23 +98,30 @@
     src="https://unpkg.com/@clerk/clerk-js@5/dist/clerk.browser.js"></script>
 
   <script>
+    function getCheckoutQuery() {
+      const params = new URLSearchParams(location.search);
+      const keep = new URLSearchParams();
+      ["plan", "seats"].forEach((key) => {
+        const value = params.get(key);
+        if (value) keep.set(key, value);
+      });
+      return keep.toString();
+    }
+
     function getPlanFromUrl() {
       const p = new URLSearchParams(location.search);
       return p.get("plan") || "";
     }
 
     function buildCheckoutRedirect() {
-      const plan = getPlanFromUrl();
-      return plan
-        ? `/checkout.html?plan=${encodeURIComponent(plan)}`
-        : "/account.html";
+      const q = getCheckoutQuery();
+      return q ? `/checkout.html?${q}` : "/account.html";
     }
 
     function buildSignInLink() {
       const plan = getPlanFromUrl();
-      return plan
-        ? `/sign-in.html?plan=${encodeURIComponent(plan)}`
-        : "/sign-in.html";
+      const q = getCheckoutQuery();
+      return q ? `/sign-in.html?${q}` : "/sign-in.html";
     }
 
     window.addEventListener("load", async () => {
