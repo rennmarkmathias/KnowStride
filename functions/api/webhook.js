@@ -21,6 +21,14 @@ function asText(v) {
 
 function planLabel(plan) {
   const key = String(plan || "").trim();
+  const dynamic = key.match(/^(sv_)?team_(\d+)_(12|36)m_dynamic$/);
+  if (dynamic) {
+    const seats = dynamic[2];
+    const months = dynamic[3];
+    return dynamic[1]
+      ? `BOLO Team / Skola — ${seats} användare — ${months} månader`
+      : `BOLO Team / School — ${seats} users — ${months} months`;
+  }
   const labels = {
     solo_6m: "BOLO Individual — 6 months",
     solo_12m: "BOLO Individual — 12 months",
