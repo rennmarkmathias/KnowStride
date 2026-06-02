@@ -207,6 +207,8 @@ Expires: ${expiresAt || "-"}
 Your license key:
 ${licenseKey || ""}
 
+Paste this key into BOLO under Key/License. BOLO will activate one seat for that computer the first time it validates the key online.
+
 You can also view your licenses here:
 ${safeAccountUrl}`;
 
@@ -223,6 +225,7 @@ ${safeAccountUrl}`;
 
       <p style="margin:12px 0 6px 0;"><strong>License key</strong></p>
       <pre style="white-space:pre-wrap;word-break:break-all;padding:12px;border:1px solid #eee;border-radius:10px;background:#fafafa;">${escapeHtml(licenseKey || "")}</pre>
+      <p style="margin:10px 0 0 0;color:#555;">Paste this key into BOLO under <strong>Key/License</strong>. BOLO will activate one seat for that computer the first time it validates the key online.</p>
 
       <p style="margin:12px 0 0 0;">
         View your account: <a href="${escapeHtml(safeAccountUrl)}">${escapeHtml(safeAccountUrl)}</a>
