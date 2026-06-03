@@ -343,8 +343,10 @@
     function setUrl(plan, seats) {
       const url = new URL(location.href);
       url.searchParams.set("plan", plan);
-      if (PLAN_MAP[plan]?.dynamic) url.searchParams.set("seats", String(clampSeats(seats)));
-      else url.searchParams.delete("seats");
+      // Keep the seat value in the URL for all plans. The selector is visible on
+      // both individual and team selections so users can inspect team pricing
+      // without first selecting a team card.
+      url.searchParams.set("seats", String(clampSeats(seats)));
       history.replaceState(null, "", url.toString());
     }
 
@@ -385,16 +387,24 @@
       });
     }
 
+    function getTeamPlanForSelector(planKey) {
+      const active = PLAN_MAP[planKey];
+      if (active?.dynamic) return planKey;
+      return String(planKey || "").startsWith("sv_") ? "sv_team_dynamic_36m" : "team_dynamic_36m";
+    }
+
     function updateSeatSelector(planKey) {
       const sel = document.getElementById("seatSelector");
       if (!sel) return;
-      const active = PLAN_MAP[planKey];
-      const show = Boolean(active?.dynamic);
-      sel.style.display = show ? "block" : "none";
-      if (!show) return;
+
+      // Always show the team seat selector. This keeps the checkout page
+      // consistent whether the user arrived through an individual license or a
+      // team license link, and makes the 2–30 seat option visible immediately.
+      sel.style.display = "block";
 
       const seats = getSeatsFromUrl();
       const isSwedish = String(planKey).startsWith("sv_");
+      const teamPlanKey = getTeamPlanForSelector(planKey);
       const range = document.getElementById("seatRange");
       const count = document.getElementById("seatCount");
       const help = document.getElementById("seatHelp");
@@ -408,7 +418,7 @@
         ? "Välj exakt antal användare. Servern beräknar det slutliga Stripe-priset från den aktuella BOLO-rabattstegen."
         : "Choose the exact number of users. The server calculates the final Stripe price from the current BOLO discount ladder.";
       help.textContent = `${seats} ${isSwedish ? "användare" : "users"}`;
-      const d = dynamicAmount(planKey, seats);
+      const d = dynamicAmount(teamPlanKey, seats);
       const perUser = d.isSwedish ? `${d.perUserMonth.toFixed(0)} kr` : `$${d.perUserMonth.toFixed(2)}`;
       const pct = Math.round((1 - discountFactor(seats)) * 100);
       savings.textContent = isSwedish
