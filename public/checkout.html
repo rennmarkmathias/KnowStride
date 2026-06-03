@@ -197,14 +197,14 @@
           <div>
             <div class="plans" id="plans"></div>
             <div class="seat-selector" id="seatSelector" style="display:none;">
-              <label for="seatCount">Team / School users</label>
+              <label id="seatSelectorLabel" for="seatCount">Team / School users</label>
               <div class="seat-row">
                 <input id="seatRange" type="range" min="2" max="30" step="1" value="10" />
                 <input id="seatCount" type="number" min="2" max="30" step="1" value="10" />
                 <strong id="seatHelp">10 users</strong>
               </div>
               <div class="savings-line" id="savingsLine"></div>
-              <p class="muted" style="margin:8px 0 0;">Choose the exact number of users. The server calculates the final Stripe price from the current BOLO discount ladder.</p>
+              <p class="muted" id="seatSelectorNote" style="margin:8px 0 0;">Choose the exact number of users. The server calculates the final Stripe price from the current BOLO discount ladder.</p>
             </div>
           </div>
 
@@ -334,6 +334,12 @@
       return clampSeats(p.get("seats") || 10);
     }
 
+    function normalizePlanKey(planKey) {
+      const key = String(planKey || "").trim();
+      if (PLAN_MAP[key]) return key;
+      return "solo_12m";
+    }
+
     function setUrl(plan, seats) {
       const url = new URL(location.href);
       url.searchParams.set("plan", plan);
@@ -388,17 +394,26 @@
       if (!show) return;
 
       const seats = getSeatsFromUrl();
+      const isSwedish = String(planKey).startsWith("sv_");
       const range = document.getElementById("seatRange");
       const count = document.getElementById("seatCount");
       const help = document.getElementById("seatHelp");
       const savings = document.getElementById("savingsLine");
+      const label = document.getElementById("seatSelectorLabel");
+      const note = document.getElementById("seatSelectorNote");
       range.value = String(seats);
       count.value = String(seats);
-      help.textContent = `${seats} ${String(planKey).startsWith("sv_") ? "användare" : "users"}`;
+      if (label) label.textContent = isSwedish ? "Team / Skola – användare" : "Team / School users";
+      if (note) note.textContent = isSwedish
+        ? "Välj exakt antal användare. Servern beräknar det slutliga Stripe-priset från den aktuella BOLO-rabattstegen."
+        : "Choose the exact number of users. The server calculates the final Stripe price from the current BOLO discount ladder.";
+      help.textContent = `${seats} ${isSwedish ? "användare" : "users"}`;
       const d = dynamicAmount(planKey, seats);
       const perUser = d.isSwedish ? `${d.perUserMonth.toFixed(0)} kr` : `$${d.perUserMonth.toFixed(2)}`;
       const pct = Math.round((1 - discountFactor(seats)) * 100);
-      savings.textContent = `${pct}% volume discount · ${perUser} / user / month`;
+      savings.textContent = isSwedish
+        ? `${pct}% mängdrabatt · ${perUser} / användare / månad`
+        : `${pct}% volume discount · ${perUser} / user / month`;
 
       const onChange = () => {
         const n = clampSeats(count.value || range.value);
@@ -431,7 +446,8 @@
     }
 
     window.addEventListener("load", async () => {
-      const planKey = getPlanFromUrl();
+      const planKey = normalizePlanKey(getPlanFromUrl());
+      if (planKey !== getPlanFromUrl()) setUrl(planKey, getSeatsFromUrl());
       renderPlans(planKey);
       updateSummary(planKey);
       updateSeatSelector(planKey);
@@ -456,7 +472,7 @@
         document.getElementById("checkoutBtn").addEventListener("click", async () => {
           const msg = document.getElementById("msg");
           const err = document.getElementById("err");
-          const currentPlan = getPlanFromUrl();
+          const currentPlan = normalizePlanKey(getPlanFromUrl());
           const seats = getSeatsFromUrl();
 
           msg.textContent = "Creating secure checkout session…";
