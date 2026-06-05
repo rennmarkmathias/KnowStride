@@ -1082,6 +1082,103 @@
   font-size:.88rem;
 }
 
+
+
+/* Team price preview shown before sign-in */
+.team-price-estimator{
+  margin:14px 0 4px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(45,108,223,0.20);
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(45,108,223,0.07);
+}
+.team-estimator-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.team-estimator-head strong{
+  color:#10233f;
+  font-size:0.98rem;
+}
+.team-estimator-head span{
+  color:var(--muted);
+  font-size:0.86rem;
+  line-height:1.35;
+  max-width:520px;
+}
+.team-seat-row{
+  display:grid;
+  grid-template-columns:auto minmax(160px,1fr) 84px;
+  gap:10px;
+  align-items:center;
+  margin:6px 0 10px;
+}
+.team-seat-row label{
+  font-weight:800;
+  color:#10233f;
+  white-space:nowrap;
+}
+.team-seat-row input[type="range"]{
+  width:100%;
+}
+.team-seat-row input[type="number"]{
+  width:84px;
+  padding:7px 8px;
+  border:1px solid rgba(15,23,42,0.18);
+  border-radius:10px;
+  font:inherit;
+  font-weight:800;
+  background:#fff;
+}
+.team-estimator-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.team-estimate-card{
+  background:#fff;
+  border:1px solid rgba(45,108,223,0.16);
+  border-radius:12px;
+  padding:11px 12px;
+}
+.team-estimate-card span{
+  display:block;
+  color:#334155;
+  font-size:0.86rem;
+  font-weight:800;
+  margin-bottom:3px;
+}
+.team-estimate-card strong{
+  display:block;
+  color:#d32f2f;
+  font-size:1.18rem;
+  line-height:1.15;
+}
+.team-estimate-card small{
+  display:block;
+  color:#475569;
+  font-size:0.80rem;
+  line-height:1.35;
+  margin-top:3px;
+}
+@media (max-width: 720px){
+  .team-seat-row{
+    grid-template-columns:1fr 82px;
+  }
+  .team-seat-row label,
+  .team-seat-row input[type="range"]{
+    grid-column:1 / -1;
+  }
+  .team-estimator-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 <style>
 </style></head>
@@ -1267,6 +1364,19 @@
 <h3 id="team-36m-offer" style="margin-top:24px;">Flexible Team / School license</h3>
 <div class="note">
   Choose the exact number of users your school or organization needs, from <strong>2 to 30 seats</strong>. Pricing uses a progressive volume discount. The best long-term price is available on the 36-month license.
+
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="billed once" data-per-user="/ user / month" data-discount-label="volume discount">
+    <div class="team-estimator-head"><strong>Team price preview</strong></div>
+    <div class="team-seat-row">
+      <label>Seats: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Seats" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Seats" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 months · 3 years for the price of 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 months</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Choose exact number of seats · 36 months</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Choose exact number of seats · 12 months</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -1505,5 +1615,80 @@
       });
     })();
   </script>
+
+<script>
+  (function(){
+    function clampSeats(value){
+      var n = Math.floor(Number(value || 0));
+      if(!Number.isFinite(n)) return 10;
+      return Math.max(2, Math.min(30, n));
+    }
+    function discountFactor(seats){
+      var n = clampSeats(seats);
+      if(n >= 20) return 0.68;
+      if(n >= 10) return 0.812;
+      if(n >= 5) return 0.946;
+      return 1.0;
+    }
+    function formatAmount(amount, currency, decimals){
+      var rounded = Number(decimals) > 0 ? Number(amount).toFixed(decimals) : Math.round(Number(amount));
+      if(currency === 'sek'){
+        return Math.round(Number(amount)).toLocaleString('sv-SE') + ' kr';
+      }
+      return '$' + Number(rounded).toLocaleString('en-US', {minimumFractionDigits:Number(decimals)||0, maximumFractionDigits:Number(decimals)||0});
+    }
+    function calc(currency, months, seats){
+      var n = clampSeats(seats);
+      var baseYear = currency === 'sek' ? 539 : 59;
+      var chargedYears = Number(months) === 36 ? 2 : 1;
+      var amount = Math.round(baseYear * n * discountFactor(n) * chargedYears);
+      var perUserMonth = amount / n / (Number(months) === 36 ? 36 : 12);
+      return {amount:amount, perUserMonth:perUserMonth};
+    }
+    function updateCheckoutLinks(est, seats){
+      var scope = est.closest('.note') || est.parentElement || document;
+      scope.querySelectorAll('a[href*="team_dynamic_36m"], a[href*="team_dynamic_12m"], a[href*="sv_team_dynamic_36m"], a[href*="sv_team_dynamic_12m"]').forEach(function(link){
+        try{
+          var url = new URL(link.getAttribute('href'), window.location.origin);
+          url.searchParams.set('seats', String(seats));
+          link.setAttribute('href', url.pathname + '?' + url.searchParams.toString());
+        }catch(e){}
+      });
+    }
+    function refresh(est){
+      var range = est.querySelector('[data-team-seat-range]');
+      var number = est.querySelector('[data-team-seat-number]');
+      var seats = clampSeats((number && number.value) || (range && range.value) || est.getAttribute('data-seats') || 10);
+      if(range) range.value = String(seats);
+      if(number) number.value = String(seats);
+      var seatCount = est.querySelector('[data-team-seat-count]');
+      if(seatCount) seatCount.textContent = String(seats);
+      var currency = est.getAttribute('data-currency') || 'usd';
+      var billedOnce = est.getAttribute('data-billed-once') || 'billed once';
+      var perUser = est.getAttribute('data-per-user') || '/ user / month';
+      var discountLabel = est.getAttribute('data-discount-label') || 'volume discount';
+      var pct = Math.round((1 - discountFactor(seats)) * 100);
+      [36,12].forEach(function(months){
+        var data = calc(currency, months, seats);
+        var price = est.querySelector('[data-team-price-' + months + ']');
+        var detail = est.querySelector('[data-team-detail-' + months + ']');
+        if(price) price.textContent = formatAmount(data.amount, currency, 0);
+        if(detail){
+          var perDecimals = currency === 'sek' ? 0 : 2;
+          detail.textContent = billedOnce + ' · ' + formatAmount(data.perUserMonth, currency, perDecimals) + ' ' + perUser + ' · ' + pct + '% ' + discountLabel;
+        }
+      });
+      updateCheckoutLinks(est, seats);
+    }
+    document.querySelectorAll('.team-price-estimator').forEach(function(est){
+      var range = est.querySelector('[data-team-seat-range]');
+      var number = est.querySelector('[data-team-seat-number]');
+      if(range){ range.addEventListener('input', function(){ if(number) number.value = range.value; refresh(est); }); }
+      if(number){ number.addEventListener('input', function(){ refresh(est); }); number.addEventListener('change', function(){ refresh(est); }); }
+      refresh(est);
+    });
+  })();
+</script>
+
 </body>
 </html>
