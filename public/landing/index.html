@@ -602,6 +602,103 @@ ol{ padding-left:20px; margin:10px 0 0; } ul{ margin:8px 0 10px 18px; } .note{ m
   font-size:.88rem;
 }
 
+
+
+/* Team price preview shown before sign-in */
+.team-price-estimator{
+  margin:14px 0 4px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(45,108,223,0.20);
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(45,108,223,0.07);
+}
+.team-estimator-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.team-estimator-head strong{
+  color:#10233f;
+  font-size:0.98rem;
+}
+.team-estimator-head span{
+  color:var(--muted);
+  font-size:0.86rem;
+  line-height:1.35;
+  max-width:520px;
+}
+.team-seat-row{
+  display:grid;
+  grid-template-columns:auto minmax(160px,1fr) 84px;
+  gap:10px;
+  align-items:center;
+  margin:6px 0 10px;
+}
+.team-seat-row label{
+  font-weight:800;
+  color:#10233f;
+  white-space:nowrap;
+}
+.team-seat-row input[type="range"]{
+  width:100%;
+}
+.team-seat-row input[type="number"]{
+  width:84px;
+  padding:7px 8px;
+  border:1px solid rgba(15,23,42,0.18);
+  border-radius:10px;
+  font:inherit;
+  font-weight:800;
+  background:#fff;
+}
+.team-estimator-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.team-estimate-card{
+  background:#fff;
+  border:1px solid rgba(45,108,223,0.16);
+  border-radius:12px;
+  padding:11px 12px;
+}
+.team-estimate-card span{
+  display:block;
+  color:#334155;
+  font-size:0.86rem;
+  font-weight:800;
+  margin-bottom:3px;
+}
+.team-estimate-card strong{
+  display:block;
+  color:#d32f2f;
+  font-size:1.18rem;
+  line-height:1.15;
+}
+.team-estimate-card small{
+  display:block;
+  color:#475569;
+  font-size:0.80rem;
+  line-height:1.35;
+  margin-top:3px;
+}
+@media (max-width: 720px){
+  .team-seat-row{
+    grid-template-columns:1fr 82px;
+  }
+  .team-seat-row label,
+  .team-seat-row input[type="range"]{
+    grid-column:1 / -1;
+  }
+  .team-estimator-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 <style>
 </style></head>
@@ -910,6 +1007,19 @@ SE
 <h3 style="margin-top:24px;">Fleksibel team- / skolelicens</h3>
 <div class="note">
   Vælg det præcise antal brugere, som din skole eller organisation har brug for, fra <strong>2 til 30 brugere</strong>. Prisen bruger en progressiv mængderabat. Den bedste langsigtede pris findes på 36-måneders licensen.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="betales én gang" data-per-user="/ bruger / måned" data-discount-label="mængderabat">
+    <div class="team-estimator-head"><strong>Teampris – hurtigt overblik</strong></div>
+    <div class="team-seat-row">
+      <label>Brugere: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Brugere" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Brugere" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 måneder · 3 år for prisen af 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 måneder</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Vælg præcist antal brugere · 36 måneder</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Vælg præcist antal brugere · 12 måneder</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -1214,6 +1324,19 @@ SE
 <h3 style="margin-top:24px;">Flexible Team- / Schullizenz</h3>
 <div class="note">
   Wählen Sie die genaue Anzahl der Nutzer, die Ihre Schule oder Organisation benötigt, von <strong>2 bis 30 Nutzern</strong>. Die Preisgestaltung nutzt einen progressiven Mengenrabatt. Der beste langfristige Preis gilt für die 36-Monats-Lizenz.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="einmalig berechnet" data-per-user="/ Nutzer / Monat" data-discount-label="Mengenrabatt">
+    <div class="team-estimator-head"><strong>Team-Preisvorschau</strong></div>
+    <div class="team-seat-row">
+      <label>Nutzer: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Nutzer" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Nutzer" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 Monate · 3 Jahre zum Preis von 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 Monate</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Genaue Nutzerzahl wählen · 36 Monate</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Genaue Nutzerzahl wählen · 12 Monate</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -1518,6 +1641,19 @@ SE
 <h3 style="margin-top:24px;">Licencia flexible para equipo / escuela</h3>
 <div class="note">
   Elige el número exacto de usuarios que necesita tu escuela u organización, de <strong>2 a 30 usuarios</strong>. El precio usa un descuento progresivo por volumen. El mejor precio a largo plazo está en la licencia de 36 meses.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="pago único" data-per-user="/ usuario / mes" data-discount-label="descuento por volumen">
+    <div class="team-estimator-head"><strong>Vista previa del precio de equipo</strong></div>
+    <div class="team-seat-row">
+      <label>Usuarios: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Usuarios" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Usuarios" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 meses · 3 años por el precio de 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 meses</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Elegir número exacto de usuarios · 36 meses</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Elegir número exacto de usuarios · 12 meses</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -1822,6 +1958,19 @@ SE
 <h3 style="margin-top:24px;">Licence flexible équipe / établissement</h3>
 <div class="note">
   Choisissez le nombre exact d’utilisateurs dont votre établissement ou organisation a besoin, de <strong>2 à 30 utilisateurs</strong>. Le prix utilise une remise progressive au volume. Le meilleur prix à long terme est disponible avec la licence de 36 mois.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="facturé une fois" data-per-user="/ utilisateur / mois" data-discount-label="remise de volume">
+    <div class="team-estimator-head"><strong>Aperçu du prix équipe</strong></div>
+    <div class="team-seat-row">
+      <label>Utilisateurs: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Utilisateurs" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Utilisateurs" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 mois · 3 ans pour le prix de 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 mois</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Choisir le nombre exact d’utilisateurs · 36 mois</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Choisir le nombre exact d’utilisateurs · 12 mois</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -2126,6 +2275,19 @@ SE
 <h3 style="margin-top:24px;">Licenza flessibile team / scuola</h3>
 <div class="note">
   Scegli il numero esatto di utenti di cui la tua scuola o organizzazione ha bisogno, da <strong>2 a 30 utenti</strong>. Il prezzo usa uno sconto progressivo per volume. Il miglior prezzo a lungo termine è disponibile con la licenza da 36 mesi.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="fatturato una volta" data-per-user="/ utente / mese" data-discount-label="sconto volume">
+    <div class="team-estimator-head"><strong>Anteprima prezzo team</strong></div>
+    <div class="team-seat-row">
+      <label>Utenti: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Utenti" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Utenti" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 mesi · 3 anni al prezzo di 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 mesi</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Scegli il numero esatto di utenti · 36 mesi</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Scegli il numero esatto di utenti · 12 mesi</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -2430,6 +2592,19 @@ SE
 <h3 style="margin-top:24px;">Flexibele team- / schoollicentie</h3>
 <div class="note">
   Kies het exacte aantal gebruikers dat je school of organisatie nodig heeft, van <strong>2 tot 30 gebruikers</strong>. De prijs gebruikt een progressieve volumekorting. De beste langetermijnprijs is beschikbaar bij de licentie van 36 maanden.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="eenmalig gefactureerd" data-per-user="/ gebruiker / maand" data-discount-label="volumekorting">
+    <div class="team-estimator-head"><strong>Teamprijsvoorbeeld</strong></div>
+    <div class="team-seat-row">
+      <label>Gebruikers: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Gebruikers" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Gebruikers" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 maanden · 3 jaar voor de prijs van 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 maanden</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Kies exact aantal gebruikers · 36 maanden</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Kies exact aantal gebruikers · 12 maanden</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -2734,6 +2909,19 @@ SE
 <h3 style="margin-top:24px;">Fleksibel team- / skolelisens</h3>
 <div class="note">
   Velg nøyaktig antall brukere skolen eller organisasjonen trenger, fra <strong>2 til 30 brukere</strong>. Prisen bruker en progressiv volumrabatt. Den beste langsiktige prisen får du med 36-måneders lisens.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="betales én gang" data-per-user="/ bruker / måned" data-discount-label="volumrabatt">
+    <div class="team-estimator-head"><strong>Teampris – rask oversikt</strong></div>
+    <div class="team-seat-row">
+      <label>Brukere: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Brukere" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Brukere" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 måneder · 3 år for prisen av 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 måneder</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Velg nøyaktig antall brukere · 36 måneder</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Velg nøyaktig antall brukere · 12 måneder</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -3041,6 +3229,19 @@ SE
 <h3 style="margin-top:24px;">Flexibel team- / skollicens</h3>
 <div class="note">
   Välj exakt antal användare som din skola eller organisation behöver, från <strong>2 till 30 användare</strong>. Priset använder en progressiv mängdrabatt. Det bästa långsiktiga priset finns på 36-månaderslicensen.
+  <div class="team-price-estimator" data-currency="sek" data-seats="10" data-billed-once="betalas en gång" data-per-user="/ användare / månad" data-discount-label="mängdrabatt">
+    <div class="team-estimator-head"><strong>Teampris – snabb översikt</strong></div>
+    <div class="team-seat-row">
+      <label>Användare: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Användare" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Användare" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 månader · 3 år för priset av 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 månader</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=sv_team_dynamic_36m&amp;seats=10">Välj exakt antal användare · 36 månader</a><a class="button secondary" href="/sign-up.html?plan=sv_team_dynamic_12m&amp;seats=10">Välj exakt antal användare · 12 månader</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -3348,6 +3549,19 @@ SE
 <h3 style="margin-top:24px;">Licença flexível para equipa / escola</h3>
 <div class="note">
   Escolha o número exato de utilizadores de que a sua escola ou organização precisa, de <strong>2 a 30 utilizadores</strong>. O preço usa um desconto progressivo por volume. O melhor preço a longo prazo está disponível na licença de 36 meses.
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="cobrado uma vez" data-per-user="/ utilizador / mês" data-discount-label="desconto por volume">
+    <div class="team-estimator-head"><strong>Pré-visualização do preço de equipa</strong></div>
+    <div class="team-seat-row">
+      <label>Utilizadores: <strong data-team-seat-count>10</strong></label>
+      <input data-team-seat-range type="range" min="2" max="30" step="1" value="10" aria-label="Utilizadores" />
+      <input data-team-seat-number type="number" min="2" max="30" step="1" value="10" aria-label="Utilizadores" />
+    </div>
+    <div class="team-estimator-grid">
+      <div class="team-estimate-card"><span>36 meses · 3 anos pelo preço de 2</span><strong data-team-price-36></strong><small data-team-detail-36></small></div>
+      <div class="team-estimate-card"><span>12 meses</span><strong data-team-price-12></strong><small data-team-detail-12></small></div>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top:12px;"><a class="button" href="/sign-up.html?plan=team_dynamic_36m&amp;seats=10">Escolher número exato de utilizadores · 36 meses</a><a class="button secondary" href="/sign-up.html?plan=team_dynamic_12m&amp;seats=10">Escolher número exato de utilizadores · 12 meses</a></div>
 </div>
 <div style="margin:12px auto 0; padding:9px 16px; max-width:720px; border-radius:999px; background:#fff3cd; border:1px solid #ffe69c; color:#7a5d00; font-weight:800; text-align:center; line-height:1.35;">
@@ -3597,5 +3811,80 @@ SE
       });
     })();
   </script>
+
+<script>
+  (function(){
+    function clampSeats(value){
+      var n = Math.floor(Number(value || 0));
+      if(!Number.isFinite(n)) return 10;
+      return Math.max(2, Math.min(30, n));
+    }
+    function discountFactor(seats){
+      var n = clampSeats(seats);
+      if(n >= 20) return 0.68;
+      if(n >= 10) return 0.812;
+      if(n >= 5) return 0.946;
+      return 1.0;
+    }
+    function formatAmount(amount, currency, decimals){
+      var rounded = Number(decimals) > 0 ? Number(amount).toFixed(decimals) : Math.round(Number(amount));
+      if(currency === 'sek'){
+        return Math.round(Number(amount)).toLocaleString('sv-SE') + ' kr';
+      }
+      return '$' + Number(rounded).toLocaleString('en-US', {minimumFractionDigits:Number(decimals)||0, maximumFractionDigits:Number(decimals)||0});
+    }
+    function calc(currency, months, seats){
+      var n = clampSeats(seats);
+      var baseYear = currency === 'sek' ? 539 : 59;
+      var chargedYears = Number(months) === 36 ? 2 : 1;
+      var amount = Math.round(baseYear * n * discountFactor(n) * chargedYears);
+      var perUserMonth = amount / n / (Number(months) === 36 ? 36 : 12);
+      return {amount:amount, perUserMonth:perUserMonth};
+    }
+    function updateCheckoutLinks(est, seats){
+      var scope = est.closest('.note') || est.parentElement || document;
+      scope.querySelectorAll('a[href*="team_dynamic_36m"], a[href*="team_dynamic_12m"], a[href*="sv_team_dynamic_36m"], a[href*="sv_team_dynamic_12m"]').forEach(function(link){
+        try{
+          var url = new URL(link.getAttribute('href'), window.location.origin);
+          url.searchParams.set('seats', String(seats));
+          link.setAttribute('href', url.pathname + '?' + url.searchParams.toString());
+        }catch(e){}
+      });
+    }
+    function refresh(est){
+      var range = est.querySelector('[data-team-seat-range]');
+      var number = est.querySelector('[data-team-seat-number]');
+      var seats = clampSeats((number && number.value) || (range && range.value) || est.getAttribute('data-seats') || 10);
+      if(range) range.value = String(seats);
+      if(number) number.value = String(seats);
+      var seatCount = est.querySelector('[data-team-seat-count]');
+      if(seatCount) seatCount.textContent = String(seats);
+      var currency = est.getAttribute('data-currency') || 'usd';
+      var billedOnce = est.getAttribute('data-billed-once') || 'billed once';
+      var perUser = est.getAttribute('data-per-user') || '/ user / month';
+      var discountLabel = est.getAttribute('data-discount-label') || 'volume discount';
+      var pct = Math.round((1 - discountFactor(seats)) * 100);
+      [36,12].forEach(function(months){
+        var data = calc(currency, months, seats);
+        var price = est.querySelector('[data-team-price-' + months + ']');
+        var detail = est.querySelector('[data-team-detail-' + months + ']');
+        if(price) price.textContent = formatAmount(data.amount, currency, 0);
+        if(detail){
+          var perDecimals = currency === 'sek' ? 0 : 2;
+          detail.textContent = billedOnce + ' · ' + formatAmount(data.perUserMonth, currency, perDecimals) + ' ' + perUser + ' · ' + pct + '% ' + discountLabel;
+        }
+      });
+      updateCheckoutLinks(est, seats);
+    }
+    document.querySelectorAll('.team-price-estimator').forEach(function(est){
+      var range = est.querySelector('[data-team-seat-range]');
+      var number = est.querySelector('[data-team-seat-number]');
+      if(range){ range.addEventListener('input', function(){ if(number) number.value = range.value; refresh(est); }); }
+      if(number){ number.addEventListener('input', function(){ refresh(est); }); number.addEventListener('change', function(){ refresh(est); }); }
+      refresh(est);
+    });
+  })();
+</script>
+
 </body>
 </html>
