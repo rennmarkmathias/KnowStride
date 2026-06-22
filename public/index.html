@@ -1278,7 +1278,7 @@
         </p>
 <div class="button-row">
 <a class="button" download="" href="https://files.bolowriter.com/testboloapp/bolo-setup.exe">
-            Download BOLO, latest 17.06.26
+            Download BOLO, latest 07.05.26
           </a>
 <a class="button secondary" href="/user-guide/#english">User Guide</a>
 </div>
@@ -1402,7 +1402,7 @@
         Questions, feedback, partnership, marketing or investor inquiries:
         <span class="footer-contact">
           <span>Email: <a href="mailto:info@bolowriter.com">info@bolowriter.com</a> <span class="footer-contact-note">We aim to respond within 24 hours on business days.</span></span>
-          <span>Phone: <a href="tel:+4915208581087">+49 1520 8581087 - Mo-Fri 09:00-18:00 CET</a> <span class="footer-contact-note">(German mobile number · SE/DE/EN)</span></span>
+          <span>Phone: <a href="tel:+4915208581087">+49 1520 8581087 - Mo-Fri 08:00-18:00 CET</a> <span class="footer-contact-note">(German mobile number · SE/DE/EN)</span></span>
           <span><a href="https://wa.me/4915208581087" rel="noopener" target="_blank">WhatsApp</a></span>
         </span>
 </p>
@@ -1672,10 +1672,12 @@
         var data = calc(currency, months, seats);
         var price = est.querySelector('[data-team-price-' + months + ']');
         var detail = est.querySelector('[data-team-detail-' + months + ']');
-        if(price) price.textContent = formatAmount(data.amount, currency, 0);
-        if(detail){
+        if(price){
           var perDecimals = currency === 'sek' ? 0 : 2;
-          detail.textContent = billedOnce + ' · ' + formatAmount(data.perUserMonth, currency, perDecimals) + ' ' + perUser + ' · ' + pct + '% ' + discountLabel;
+          price.textContent = formatAmount(data.perUserMonth, currency, perDecimals) + ' ' + perUser;
+        }
+        if(detail){
+          detail.textContent = formatAmount(data.amount, currency, 0) + ' ' + billedOnce + ' · ' + pct + '% ' + discountLabel;
         }
       });
       updateCheckoutLinks(est, seats);
