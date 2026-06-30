@@ -1243,7 +1243,7 @@
         </div>
       </div>
       <div class="quick-license-row">
-        <div class="quick-license">Individual licenses from $3.58/month with a 36-month license.</div>
+        <div class="quick-license">Individual licenses from $3.28/month with a 36-month license.</div>
         <div class="quick-license">Team licenses from $2.23/user/month with a 36-month license.</div>
       </div>
       <p class="quick-note">AI generation uses your own OpenAI API key. Price examples are based on GPT-5.4. Costs vary by model, length, image type and regenerations.</p>
@@ -1354,8 +1354,8 @@
 <div class="price-card">
 <span class="tag" style="background:#2d6cdf;color:#fff;">Best value</span>
 <h3>36 months</h3>
-<div class="price discounted">$3.58 <small>/ month</small></div>
-<div class="price-total">$129 billed once for 36 months <span class="price-old">$149</span></div>
+<div class="price discounted">$3.28 <small>/ month</small></div>
+<div class="price-total">$118 billed once for 36 months <span class="price-old">$149</span></div>
 <p class="muted">Best for long-term use, multiple books and a lower effective annual cost.</p>
 <div class="price-subnote">AI generation paid separately via your own OpenAI API key.</div>
 <a class="button" href="/sign-up.html?plan=solo_36m">Start with 36 months</a>
@@ -1365,7 +1365,7 @@
 <div class="note">
   Choose the number of users your school or organization needs, from <strong>2 to 30 seats</strong>. Pricing uses a progressive volume discount. If a computer is replaced, contact support and we can release the old activation so the license can be activated on the new machine.
 
-  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="billed once" data-per-user="/ user / month" data-discount-label="volume discount">
+  <div class="team-price-estimator" data-currency="usd" data-seats="10" data-billed-once="billed once" data-per-user="/ user / month" data-discount-label="volume discount" data-total-discount-label="total discount for term and volume">
     <div class="team-estimator-head"><strong>Team price preview</strong></div>
     <div class="team-seat-row">
       <label>Seats: <strong data-team-seat-count>10</strong></label>
@@ -1623,8 +1623,17 @@
       if(!Number.isFinite(n)) return 10;
       return Math.max(2, Math.min(30, n));
     }
-    function discountFactor(seats){
+    function discountFactor(seats, months){
       var n = clampSeats(seats);
+      // A 36-month individual licence is already priced as 3 years for the
+      // price of 2. Team licences then receive an additional volume discount.
+      if(Number(months) === 36){
+        if(n >= 20) return 0.68;
+        if(n >= 10) return 0.80;
+        if(n >= 5) return 0.90;
+        return 0.95;
+      }
+      // The existing 12-month team price ladder remains unchanged.
       if(n >= 20) return 0.68;
       if(n >= 10) return 0.812;
       if(n >= 5) return 0.946;
@@ -1641,9 +1650,18 @@
       var n = clampSeats(seats);
       var baseYear = currency === 'sek' ? 539 : 59;
       var chargedYears = Number(months) === 36 ? 2 : 1;
-      var amount = Math.round(baseYear * n * discountFactor(n) * chargedYears);
+      var amount = Math.round(baseYear * n * discountFactor(n, months) * chargedYears);
       var perUserMonth = amount / n / (Number(months) === 36 ? 36 : 12);
       return {amount:amount, perUserMonth:perUserMonth};
+    }
+    // Show the full saving against buying the same number of individual
+    // 12-month licences for the full period. The 36-month offer therefore
+    // combines "3 years for the price of 2" with the normal volume tier.
+    function referenceAmount(currency, months, seats){
+      var n = clampSeats(seats);
+      var baseYear = currency === 'sek' ? 539 : 59;
+      var referenceYears = Number(months) === 36 ? 3 : 1;
+      return baseYear * n * referenceYears;
     }
     function updateCheckoutLinks(est, seats){
       var scope = est.closest('.note') || est.parentElement || document;
@@ -1666,10 +1684,13 @@
       var currency = est.getAttribute('data-currency') || 'usd';
       var billedOnce = est.getAttribute('data-billed-once') || 'billed once';
       var perUser = est.getAttribute('data-per-user') || '/ user / month';
-      var discountLabel = est.getAttribute('data-discount-label') || 'volume discount';
-      var pct = Math.round((1 - discountFactor(seats)) * 100);
+      var volumeDiscountLabel = est.getAttribute('data-discount-label') || 'volume discount';
+      var totalDiscountLabel = est.getAttribute('data-total-discount-label') || 'total discount';
       [36,12].forEach(function(months){
         var data = calc(currency, months, seats);
+        var reference = referenceAmount(currency, months, seats);
+        var pct = Math.max(0, Math.round((1 - (data.amount / reference)) * 100));
+        var label = Number(months) === 36 ? totalDiscountLabel : volumeDiscountLabel;
         var price = est.querySelector('[data-team-price-' + months + ']');
         var detail = est.querySelector('[data-team-detail-' + months + ']');
         if(price){
@@ -1677,7 +1698,7 @@
           price.textContent = formatAmount(data.perUserMonth, currency, perDecimals) + ' ' + perUser;
         }
         if(detail){
-          detail.textContent = formatAmount(data.amount, currency, 0) + ' ' + billedOnce + ' · ' + pct + '% ' + discountLabel;
+          detail.textContent = formatAmount(data.amount, currency, 0) + ' ' + pct + '% ' + label;
         }
       });
       updateCheckoutLinks(est, seats);
