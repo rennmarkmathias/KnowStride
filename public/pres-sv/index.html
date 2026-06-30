@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BOLO AI Publishing Pipeline – Från brief till publicerbara filer</title>
+<style>
+  :root{
+    --text:#17233a;
+    --muted:#5b6b84;
+    --blue:#2d6cdf;
+    --blue-dark:#1f4ea3;
+    --line:#dfe7f3;
+    --soft:#f5f8fe;
+    --card:#ffffff;
+    --grad:linear-gradient(90deg,#f47a20 0%,#f2c300 24%,#d7d91f 40%,#7ec8e3 58%,#2d6cdf 78%,#1f4ea3 100%);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 420px at -10% 8%,rgba(126,200,227,.18),transparent 63%),
+      radial-gradient(900px 440px at 110% 18%,rgba(45,108,223,.15),transparent 61%),
+      linear-gradient(180deg,#f6f9ff 0%,#edf4ff 100%);
+    line-height:1.48;
+  }
+
+  .hero{
+    padding:14px 18px 18px;
+    background:var(--grad);
+    text-align:center;
+  }
+  .logo{width:360px;max-width:76%;height:auto;display:block;margin:0 auto}
+
+  .container{max-width:1360px;margin:0 auto;padding:16px 18px 34px}
+  .page-card{
+    overflow:hidden;
+    background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,251,255,.98));
+    border:1px solid rgba(45,108,223,.14);
+    border-radius:20px;
+    box-shadow:0 14px 34px rgba(45,108,223,.08);
+  }
+  .top-rule{height:5px;background:var(--grad)}
+  .intro{padding:25px 30px 22px}
+
+  h1{
+    max-width:1060px;
+    margin:0 auto 8px;
+    text-align:center;
+    font-size:clamp(2.1rem,4.1vw,3.35rem);
+    line-height:1.06;
+    letter-spacing:-.03em;
+  }
+  .subtitle{
+    max-width:920px;
+    margin:0 auto;
+    text-align:center;
+    color:var(--muted);
+    font-size:clamp(1rem,1.55vw,1.18rem);
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:18px;
+    margin-top:22px;
+  }
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:21px 22px;
+    box-shadow:0 7px 20px rgba(45,108,223,.045);
+  }
+  .panel h2,.cost-copy h2{margin:0 0 9px;font-size:1.27rem;line-height:1.2}
+  .panel p{margin:0 0 10px;color:#30415c}
+  .panel p:last-child{margin-bottom:0}
+  .lead{font-size:1.09rem;font-weight:700;color:var(--text)!important}
+
+  .brief-points{display:grid;gap:10px;margin-top:14px}
+  .brief-point{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+  .num{
+    width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    background:#e8f0ff;color:var(--blue-dark);font-weight:800;font-size:.88rem;
+  }
+  .brief-point strong{display:block;margin-bottom:1px;font-size:1rem}
+  .brief-point span{display:block;color:var(--muted);font-size:.95rem}
+
+  .tool-list{margin:0;padding-left:20px}
+  .tool-list li{margin:0 0 10px;font-size:1rem;font-weight:700;line-height:1.35}
+  .tool-list li:last-child{margin-bottom:0}
+  .tool-list em{display:block;margin-top:2px;font-style:normal;color:var(--muted);font-size:.9rem;font-weight:400}
+  .chat-note{
+    margin-top:15px!important;padding:11px 12px;border-radius:10px;
+    background:#f1f6ff;border-left:4px solid var(--blue);font-size:.94rem;
+  }
+
+  .workflow-wrap{padding:0 30px 22px}
+  .section-heading{text-align:center;margin:0 0 10px;font-size:1.33rem}
+  .section-intro{text-align:center;max-width:880px;margin:0 auto 15px;color:var(--muted)}
+  .workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+  .step{
+    min-width:0;padding:12px 8px 11px;text-align:center;background:linear-gradient(180deg,#fff,#f7faff);
+    border:1px solid var(--line);border-top:4px solid transparent;border-radius:12px;
+    font-size:.87rem;font-weight:800;line-height:1.19;box-shadow:0 6px 16px rgba(45,108,223,.045);
+  }
+  .step small{display:block;margin-top:4px;color:var(--muted);font-size:.72rem;font-weight:400;line-height:1.18}
+  .step:nth-child(1){border-top-color:#f47a20}
+  .step:nth-child(2){border-top-color:#f2c300}
+  .step:nth-child(3){border-top-color:#d7d91f}
+  .step:nth-child(4){border-top-color:#7ec8e3}
+  .step:nth-child(5){border-top-color:#2d6cdf}
+  .step:nth-child(6){border-top-color:#7c3aed}
+
+  .cost-section{
+    display:grid;grid-template-columns:1.13fr .87fr;gap:20px;align-items:center;
+    padding:24px 30px 25px;background:linear-gradient(100deg,#eaf2ff 0%,#f5f9ff 52%,#eef7f2 100%);
+    border-top:1px solid var(--line);
+  }
+  .cost-copy p{max-width:760px;margin:0;color:#30415c;font-size:1.02rem}
+  .cost-badges{display:grid;grid-template-columns:1fr;gap:9px}
+  .cost-badge{
+    padding:11px 13px;border:1px solid #cddcf4;border-radius:11px;background:rgba(255,255,255,.78);
+  }
+  .cost-badge strong{display:block;font-size:.96rem;margin-bottom:2px}
+  .cost-badge span{display:block;color:var(--muted);font-size:.89rem;line-height:1.28}
+
+
+  .team-price-box{
+    margin-top:15px;
+    padding:14px 15px 13px;
+    border:1px solid rgba(45,108,223,.20);
+    border-radius:13px;
+    background:rgba(255,255,255,.76);
+  }
+  .team-price-box h3{
+    margin:0 0 4px;
+    font-size:1rem;
+    line-height:1.25;
+  }
+  .team-intro{
+    margin:0 0 10px!important;
+    color:var(--muted)!important;
+    font-size:.91rem!important;
+    line-height:1.35;
+  }
+  .team-tier-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .team-tier{
+    padding:8px 9px;
+    border:1px solid rgba(45,108,223,.15);
+    border-radius:10px;
+    background:#fff;
+  }
+  .team-tier span{
+    display:block;
+    color:#334155;
+    font-size:.82rem;
+    font-weight:800;
+    line-height:1.2;
+  }
+  .team-tier strong{
+    display:block;
+    margin-top:3px;
+    color:#10233f;
+    font-size:1rem;
+    line-height:1.15;
+  }
+  .team-tier small{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:.75rem;
+    line-height:1.2;
+  }
+  .team-examples{
+    margin:10px 0 0!important;
+    color:#30415c!important;
+    font-size:.9rem!important;
+    line-height:1.38;
+  }
+  .team-examples strong{color:#10233f;}
+
+  .cta-wrap{text-align:center;padding:21px 30px 26px}
+  .cta{
+    display:inline-block;padding:12px 25px;border-radius:999px;background:linear-gradient(180deg,#3f77ea,#2d6cdf);
+    color:white;text-decoration:none;font-size:1.08rem;font-weight:800;box-shadow:0 8px 18px rgba(45,108,223,.2);
+  }
+  .cta:hover{background:linear-gradient(180deg,#3769d3,#1f4ea3)}
+  .cta-note{margin:10px 0 0;color:var(--muted);font-size:.92rem}
+
+  @media (max-width:1040px){
+    .workflow{grid-template-columns:repeat(3,minmax(0,1fr))}
+  }
+  @media (max-width:820px){
+    .hero-grid,.cost-section{grid-template-columns:1fr}
+    .intro,.workflow-wrap,.cost-section,.cta-wrap{padding-left:18px;padding-right:18px}
+    .hero{padding:15px 12px 18px}.logo{width:330px;max-width:88%}
+  }
+  @media (max-width:560px){
+    .container{padding:10px 10px 24px}.page-card{border-radius:15px}
+    .intro{padding-top:21px}.workflow{grid-template-columns:1fr}
+    .panel{padding:17px}.step{padding:12px 10px}
+    .team-tier-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <img class="logo" src="/BOLO-logo.png" alt="BOLO logo" />
+</header>
+
+<main class="container">
+  <section class="page-card" aria-label="BOLO video presentation page">
+    <div class="top-rule"></div>
+
+    <div class="intro">
+      <h1>Från en tydlig brief till kompletta böcker och utbildningsmaterial</h1>
+      <p class="subtitle">BOLO omvandlar en tydlig Book Brief till kompletta, strukturerade och exportklara böcker och utbildningsmaterial – i en och samma desktopmiljö.</p>
+
+      <div class="hero-grid">
+        <article class="panel">
+          <h2>Så fungerar BOLO</h2>
+          <p class="lead">Du börjar med en Book Brief – inte med en hög fristående prompts.</p>
+          <p>Beskriv ämne, målgrupp, kunskapsnivå, syfte och ton. BOLO använder briefen som grund för hela projektet, oavsett om du skapar en komplett bok, ett utbildningshäfte eller en kort illustrerad guide.</p>
+
+          <div class="brief-points">
+            <div class="brief-point">
+              <div class="num">1</div>
+              <div><strong>Definiera projektet</strong><span>Ge BOLO ämne, målgrupp, nivå, mål och fokus.</span></div>
+            </div>
+            <div class="brief-point">
+              <div class="num">2</div>
+              <div><strong>Bygg en sammanhållen produktion</strong><span>BOLO skapar plan, disposition, kapitel och innehållsflöde som ett sammanhållet projekt.</span></div>
+            </div>
+            <div class="brief-point">
+              <div class="num">3</div>
+              <div><strong>Få användbara filer direkt</strong><span>När genereringen är klar får du redigerbar DOCX samt tryckklar PDF och EPUB. Efter en kort kontroll kan du redigera, illustrera eller publicera.</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h2>Ett program för hela arbetsflödet</h2>
+          <ul class="tool-list">
+            <li>Kompletta böcker, guider och manualer<em>Fackböcker, skönlitteratur och specialiserat kunskapsmaterial, byggt från en sammanhållen brief.</em></li>
+            <li>Utbildningshäften och undervisningsmaterial<em>Häften, arbetsblad, kompendier, läroböcker och nivåanpassat material för undervisning och utbildning.</em></li>
+            <li>Planering, skrivande och förfining<em>Disposition, kapitelgenerering, redigering, kvalitetskontroll och översättning.</em></li>
+            <li>Illustrationer, bildtexter och kompletta omslag<em>Gör strukturerat innehåll till visuellt, färdigt material.</em></li>
+            <li>Presentationer, flyers och lanseringsmaterial<em>Skapa kompletterande material utan att lämna samma arbetsyta.</em></li>
+            <li>Redigerbar och publicerbar export<em>DOCX för redigering, tryckklar PDF och EPUB för digital publicering.</em></li>
+          </ul>
+          <p class="chat-note"><strong>BOLO Chat, Dictate och Clean Dictate</strong> hjälper dig att ta fram bättre Book Briefs, bifoga och analysera källmaterial, jämföra en text med briefen, skapa eller förfina idéer för omslagsbilder och omvandla talade anteckningar till tydliga projektinstruktioner – i samma arbetsyta.</p>
+        </article>
+      </div>
+    </div>
+
+    <section class="workflow-wrap" aria-label="BOLO workflow">
+      <h2 class="section-heading">En strukturerad väg från idé till färdigt material</h2>
+      <p class="section-intro">BOLO håller brief, struktur, text, visuellt material och exportfiler samman från början till slut.</p>
+      <div class="workflow">
+        <div class="step">1. Skriv Book Brief<small>ämne, målgrupp, nivå och mål</small></div>
+        <div class="step">2. BOLO bygger planen<small>disposition, kapitel och innehållsflöde</small></div>
+        <div class="step">3. Generera första versionen<small>bok, guide, häfte eller undervisningsmaterial</small></div>
+        <div class="step">4. Få användbara filer<small>DOCX, tryckklar PDF och EPUB direkt</small></div>
+        <div class="step">5. Granska och färdigställ<small>redigering, kvalitetskontroll, illustrationer och omslag</small></div>
+        <div class="step">6. Publicera och lansera<small>exportera på nytt, skriv ut, dela eller distribuera</small></div>
+      </div>
+    </section>
+
+    <section class="cost-section" aria-label="BOLO kostnadsmodell">
+      <div class="cost-copy">
+        <h2>Låg licenskostnad. Tydliga teampriser för varje storlek.</h2>
+        <p>BOLO håller programkostnaden låg och använder din egen OpenAI API-nyckel. Du betalar OpenAI direkt bara när du genererar text eller bilder; BOLO lägger inget påslag på den användningen.</p>
+
+        <div class="team-price-box">
+          <h3>Team- / skollicens – 36 månader</h3>
+          <p class="team-intro">Tre år för priset av två. Det effektiva priset per användare och månad ändras vid 5, 10 och 20 användare.</p>
+          <div class="team-tier-grid">
+            <div class="team-tier"><span>2–4 användare</span><strong>30 kr</strong><small>per användare / månad</small></div>
+            <div class="team-tier"><span>5–9 användare</span><strong>28 kr</strong><small>per användare / månad</small></div>
+            <div class="team-tier"><span>10–19 användare</span><strong>24 kr</strong><small>per användare / månad</small></div>
+            <div class="team-tier"><span>20–30 användare</span><strong>20 kr</strong><small>per användare / månad</small></div>
+          </div>
+          <p class="team-examples"><strong>Exempel:</strong> 10 användare: 8 753 kr betalas en gång. 20 användare: 14 661 kr betalas en gång. Exemplen visar 36-månaderserbjudandet; ett 12-månadersalternativ finns också.</p>
+        </div>
+      </div>
+      <div class="cost-badges">
+        <div class="cost-badge"><strong>Din egen OpenAI API-nyckel</strong><span>Du behåller direkt kontroll över AI-användning och kostnad.</span></div>
+        <div class="cost-badge"><strong>Betala bara när du genererar</strong><span>AI-kostnaden följer den text och de bilder du faktiskt skapar, i stället för ett högt fast AI-abonnemang.</span></div>
+        <div class="cost-badge"><strong>Individuell 36-månaderslicens</strong><span>32,8 kr per månad – 1 179 kr betalas en gång.</span></div>
+      </div>
+    </section>
+
+    <div class="cta-wrap">
+      <a class="cta" href="https://bolowriter.com" target="_blank" rel="noopener">Se demonstrationen på bolowriter.com</a>
+      <p class="cta-note">Prova desktopprogrammet utan kostnad i 7 dagar – ingen registrering krävs.</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
